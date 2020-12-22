@@ -1,5 +1,6 @@
 package io.github.mooy1.infinitylib.items;
 
+import io.github.mooy1.infinitylib.PluginUtils;
 import io.github.thebusybiscuit.slimefun4.core.services.CustomItemDataService;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import lombok.NonNull;
@@ -8,9 +9,12 @@ import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.plugin.Plugin;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -86,6 +90,19 @@ public final class StackUtils {
         }
 
         return null;
+    }
+
+    private final NamespacedKey key = PluginUtils.getKey("unique_item");
+
+    @Nonnull
+    private ItemStack getUnique(@Nonnull ItemStack item) {
+        ItemMeta meta = item.getItemMeta();
+        if (meta != null) {
+            meta.getPersistentDataContainer().set(this.key, PersistentDataType.BYTE, (byte) 1);
+        }
+        ItemStack unique = item.clone();
+        unique.setItemMeta(meta);
+        return unique;
     }
     
     public static void removeEnchants(@Nonnull ItemStack item) {

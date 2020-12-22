@@ -3,6 +3,7 @@ package io.github.mooy1.infinitylib;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import lombok.Setter;
 import org.apache.commons.lang.Validate;
+import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.Plugin;
 
 import javax.annotation.Nonnull;
@@ -22,6 +23,10 @@ public final class PluginUtils {
         plugin.saveDefaultConfig();
         plugin.getConfig().options().copyDefaults(true).copyHeader(true);
         plugin.saveConfig();
+    }
+    
+    public static NamespacedKey getKey(@Nonnull String key) {
+        return new NamespacedKey(plugin, key);
     }
 
     public static void log(@Nonnull Level level , @Nonnull String... logs) {
