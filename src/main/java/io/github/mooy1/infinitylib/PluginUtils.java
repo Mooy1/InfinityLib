@@ -40,7 +40,7 @@ public final class PluginUtils {
         plugin.getServer().getScheduler().runTaskLater(plugin, runnable, delay);
     }
 
-    public static void scheduleRepeatingSync(@Nonnull Runnable runnable, long delay) {
+    public static void scheduleRepeatingSync(@Nonnull Runnable runnable, long delay, long interval) {
         validate();
         Validate.notNull(runnable, "Cannot run null");
         Validate.isTrue(delay >= 0, "The delay cannot be negative");
@@ -49,7 +49,7 @@ public final class PluginUtils {
             return;
         }
 
-        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, runnable);
+        plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, runnable, delay, interval);
     }
 
     public static void runSync(@Nonnull Runnable runnable) {
