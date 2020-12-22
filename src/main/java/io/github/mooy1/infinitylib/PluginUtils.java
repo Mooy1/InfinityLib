@@ -40,6 +40,18 @@ public final class PluginUtils {
         plugin.getServer().getScheduler().runTaskLater(plugin, runnable, delay);
     }
 
+    public static void scheduleRepeatingSync(@Nonnull Runnable runnable, long delay) {
+        validate();
+        Validate.notNull(runnable, "Cannot run null");
+        Validate.isTrue(delay >= 0, "The delay cannot be negative");
+
+        if (!plugin.isEnabled()) {
+            return;
+        }
+
+        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, runnable);
+    }
+
     public static void runSync(@Nonnull Runnable runnable) {
         validate();
         Validate.notNull(runnable, "Cannot run null");

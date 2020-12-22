@@ -75,7 +75,9 @@ public abstract class AbstractContainer extends SlimefunItem {
 
     public abstract void setupInv(@Nonnull BlockMenuPreset blockMenuPreset);
 
-    public abstract int[] getTransportSlots(@Nonnull ItemTransportFlow flow);
+    public int[] getTransportSlots(@Nonnull ItemTransportFlow flow) {
+        return new int[0];
+    }
 
     public int[] getTransportSlots(@Nonnull DirtyChestMenu menu, @Nonnull ItemTransportFlow flow, @Nonnull ItemStack item) {
         return getTransportSlots(flow);
