@@ -1,5 +1,6 @@
 package io.github.mooy1.infinitylib;
 
+import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import lombok.Setter;
 import org.apache.commons.lang.Validate;
 import org.bukkit.plugin.Plugin;
@@ -11,6 +12,9 @@ public final class PluginUtils {
 
     @Setter
     private static Plugin plugin = null;
+    
+    public static final int TICKER_DELAY = SlimefunPlugin.getCfg().getInt("URID.custom-ticker-delay");
+    public static final float TICK_RATIO = 20F / PluginUtils.TICKER_DELAY;
 
     public static void setupConfig() {
         validate();

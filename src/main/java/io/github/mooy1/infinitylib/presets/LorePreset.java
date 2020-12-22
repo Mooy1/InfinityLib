@@ -1,6 +1,6 @@
 package io.github.mooy1.infinitylib.presets;
 
-import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
+import io.github.mooy1.infinitylib.PluginUtils;
 
 import javax.annotation.Nonnull;
 import java.text.DecimalFormat;
@@ -13,10 +13,9 @@ import java.text.DecimalFormat;
  */
 public final class LorePreset {
     
-    public static final float TICK_RATIO = 20F / SlimefunPlugin.getCfg().getInt("URID.custom-ticker-delay");
-    
+    @Nonnull
     public static String energyPerSecond(int energy) {
-        return "&8\u21E8 &e\u26A1 &7" + format(Math.round(energy * TICK_RATIO)) + " J/s";
+        return "&8\u21E8 &e\u26A1 &7" + format(Math.round(energy * PluginUtils.TICK_RATIO)) + " J/s";
     }
     
     @Nonnull
