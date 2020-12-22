@@ -47,6 +47,10 @@ public final class CommandLib implements CommandExecutor, Listener, TabCompleter
     @Override
     public boolean onCommand(@Nonnull CommandSender sender, @Nonnull Command command, @Nonnull String label, @Nonnull String[] args) {
         if (args.length > 0) {
+            if (args[0].equalsIgnoreCase("help")) {
+                sendHelp(sender);
+                return true;
+            }
             for (LibCommand libCommand : commands) {
                 if (args[0].equalsIgnoreCase(libCommand.getName())) {
                     if (!libCommand.isOp() || sender.hasPermission(permission)) {
@@ -94,6 +98,7 @@ public final class CommandLib implements CommandExecutor, Listener, TabCompleter
         if (args.length == 1) {
 
             List<String> subCommands = new ArrayList<>();
+            subCommands.add("help");
             for (LibCommand libCommand : commands) {
                 if (!libCommand.isOp() || sender.hasPermission(permission)) {
                     subCommands.add(command.getName());
