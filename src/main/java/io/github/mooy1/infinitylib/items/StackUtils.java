@@ -46,7 +46,13 @@ public final class StackUtils {
         }
 
         if (vanilla) {
-            return item.getType().toString();
+            String id = item.getType().toString();
+            
+            if (id.equals("COPPER_INGOT")) {
+                return "MC_COPPER_INGOT";
+            }
+            
+            return id;
         }
 
         return null;
@@ -65,14 +71,12 @@ public final class StackUtils {
             return new CustomItem(sfItem.getItem(), amount);
 
         } else {
-
-            String changedID = id;
-
+            
             if (id.equals("MC_COPPER_INGOT")) {
-                changedID = "COPPER_INGOT";
+                id = "COPPER_INGOT";
             }
 
-            Material material = Material.getMaterial(changedID);
+            Material material = Material.getMaterial(id);
 
             if (material != null){
 
