@@ -92,13 +92,13 @@ public final class StackUtils {
         return null;
     }
 
-    private final NamespacedKey key = PluginUtils.getKey("unique_item");
+    private static final NamespacedKey key = PluginUtils.getKey("unique_item");
 
     @Nonnull
-    private ItemStack getUnique(@Nonnull ItemStack item) {
+    public static ItemStack getUnique(@Nonnull ItemStack item) {
         ItemMeta meta = item.getItemMeta();
         if (meta != null) {
-            meta.getPersistentDataContainer().set(this.key, PersistentDataType.BYTE, (byte) 1);
+            meta.getPersistentDataContainer().set(key, PersistentDataType.BYTE, (byte) 1);
         }
         ItemStack unique = item.clone();
         unique.setItemMeta(meta);
