@@ -21,20 +21,20 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
 
-public class CommandLib implements CommandExecutor, Listener, TabCompleter {
+public final class CommandLib implements CommandExecutor, Listener, TabCompleter {
 
     private static final Set<LibCommand> commands = new HashSet<>();
     
-    private final String permission;
-    private final String aliases;
-    private final JavaPlugin plugin;
-    private final String help;
+    private static String permission;
+    private static String aliases;
+    private static JavaPlugin plugin;
+    private static String help;
     
-    public CommandLib(JavaPlugin plugin, String command, String permission, String aliases) {
-        this.permission = permission;
-        this.aliases = aliases;
-        this.plugin = plugin;
-        this.help = "/help " + command; 
+    public void setup(JavaPlugin plugin, String command, String permission, String aliases) {
+        CommandLib.permission = permission;
+        CommandLib.aliases = aliases;
+        CommandLib.plugin = plugin;
+        CommandLib.help = "/help " + command; 
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
         Objects.requireNonNull(plugin.getCommand(command)).setExecutor(this);
         Objects.requireNonNull(plugin.getCommand(command)).setTabCompleter(this);
@@ -49,7 +49,7 @@ public class CommandLib implements CommandExecutor, Listener, TabCompleter {
         if (args.length > 0) {
             for (LibCommand libCommand : commands) {
                 if (args[0].equalsIgnoreCase(libCommand.getName())) {
-                    if (!libCommand.isOp() || sender.hasPermission(this.permission)) {
+                    if (!libCommand.isOp() || sender.hasPermission(permission)) {
                         libCommand.onExecute(sender, args);
                     } else {
                         sendNoPerm(sender);
@@ -63,17 +63,17 @@ public class CommandLib implements CommandExecutor, Listener, TabCompleter {
 
     public void sendHelp(@Nonnull CommandSender sender) {
         sender.sendMessage("");
-        sender.sendMessage(ChatColors.color("&7----------&b&l " + this.plugin.getName() + " &7----------"));
+        sender.sendMessage(ChatColors.color("&7----------&b&l " + plugin.getName() + " &7----------"));
         sender.sendMessage("");
         
         for (LibCommand cmd : commands) {
-            if (!cmd.isOp() || sender.hasPermission(this.permission)) {
+            if (!cmd.isOp() || sender.hasPermission(permission)) {
                 sender.sendMessage(ChatColors.color("&6/ie " + cmd.getName() + " &e- " + cmd.getDescription()));
             }
         }
         
         sender.sendMessage("");
-        sender.sendMessage(ChatColors.color("&6Aliases: &e" + this.aliases));
+        sender.sendMessage(ChatColors.color("&6Aliases: &e" + aliases));
         sender.sendMessage("");
     }
 
@@ -83,7 +83,7 @@ public class CommandLib implements CommandExecutor, Listener, TabCompleter {
 
     @EventHandler
     public void onCommand(PlayerCommandPreprocessEvent e) {
-        if (e.getMessage().equalsIgnoreCase(this.help)) {
+        if (e.getMessage().equalsIgnoreCase(help)) {
             sendHelp(e.getPlayer());
             e.setCancelled(true);
         }
@@ -95,7 +95,7 @@ public class CommandLib implements CommandExecutor, Listener, TabCompleter {
 
             List<String> subCommands = new ArrayList<>();
             for (LibCommand libCommand : commands) {
-                if (!libCommand.isOp() || sender.hasPermission(this.permission)) {
+                if (!libCommand.isOp() || sender.hasPermission(permission)) {
                     subCommands.add(command.getName());
                 }
             }
