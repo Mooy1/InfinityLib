@@ -11,13 +11,17 @@ public final class RecipeUtils {
     
     public static MultiFilter getRecipeFilter(ShapedRecipe recipe) {
         ItemFilter[] array = new ItemFilter[9];
-        for (int i = 0 ; i < recipe.getShape().length ; i++) {
-            for (int j = 0 ; j < recipe.getShape()[i].length() ; j++) {
-                ItemStack item = recipe.getIngredientMap().get(recipe.getShape()[i].charAt(j));
+        for (int row = 0 ; row < recipe.getShape().length ; row++) {
+            String line = recipe.getShape()[row];
+            
+            for (int column = 0 ; column < line.length() ; column++) {
+                ItemStack item = recipe.getIngredientMap().get(line.charAt(column));
+                
                 if (item != null) {
-                    array[j + i * 3] = new ItemFilter(item);
+                    array[(row * 3) + column] = new ItemFilter(item);
                 }
-                MessageUtils.broadcast("    " + i + "        " + item);
+                
+                MessageUtils.broadcast("");
             }
         }
         return new MultiFilter(array);
