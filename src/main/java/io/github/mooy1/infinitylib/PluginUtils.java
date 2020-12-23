@@ -37,6 +37,15 @@ public final class PluginUtils {
         }
     }
     
+    public static void log(@Nonnull String... logs) {
+        validate();
+
+        for (String log : logs) {
+            plugin.getLogger().log(Level.INFO, log);
+        }
+    }
+    
+    
     public static void runSync(@Nonnull Runnable runnable, long delay) {
         validate();
         Validate.notNull(runnable, "Cannot run null");

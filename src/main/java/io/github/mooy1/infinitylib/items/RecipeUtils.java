@@ -2,7 +2,6 @@ package io.github.mooy1.infinitylib.items;
 
 import io.github.mooy1.infinitylib.filter.ItemFilter;
 import io.github.mooy1.infinitylib.filter.MultiFilter;
-import io.github.mooy1.infinitylib.player.MessageUtils;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
@@ -20,8 +19,6 @@ public final class RecipeUtils {
                 if (item != null) {
                     array[(row * 3) + column] = new ItemFilter(item);
                 }
-                
-                MessageUtils.broadcast("ROW " + row + " COLUMN " + column + " SLOT " + (row * 3) + column + " ITEM " + item);
             }
         }
         return new MultiFilter(array);

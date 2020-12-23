@@ -31,7 +31,7 @@ public class MultiFilter {
             if (filter != null) {
                 amounts[i] = filter.getAmount();
             }
-            hashcode += i + Objects.hashCode(filter);
+            hashcode += i * Objects.hashCode(filter);
         }
         this.hashcode = hashcode;
         this.amounts = amounts;
