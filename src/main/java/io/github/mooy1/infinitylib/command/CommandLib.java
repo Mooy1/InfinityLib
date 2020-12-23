@@ -30,7 +30,7 @@ public final class CommandLib implements CommandExecutor, Listener, TabCompleter
     private static JavaPlugin plugin;
     private static String help;
     
-    public void setup(JavaPlugin plugin, String command, String permission, String aliases) {
+    public CommandLib(JavaPlugin plugin, String command, String permission, String aliases) {
         CommandLib.permission = permission;
         CommandLib.aliases = aliases;
         CommandLib.plugin = plugin;
