@@ -14,8 +14,10 @@ public final class RecipeUtils {
         for (int i = 0 ; i < recipe.getShape().length ; i++) {
             for (int j = 0 ; j < recipe.getShape()[i].length() ; j++) {
                 ItemStack item = recipe.getIngredientMap().get(recipe.getShape()[i].charAt(j));
-                array[(i + 1) * (j + 1) - 1] = item != null ? new ItemFilter(item) : null;
-                MessageUtils.broadcast(" " + item);
+                if (item != null) {
+                    array[j + i * 3] = new ItemFilter(item);
+                }
+                MessageUtils.broadcast("    " + i + "        " + item);
             }
         }
         return new MultiFilter(array);
@@ -25,7 +27,9 @@ public final class RecipeUtils {
         ItemFilter[] array = new ItemFilter[9];
         for (int i = 0 ; i < recipe.getIngredientList().size() ; i++) {
             ItemStack item = recipe.getIngredientList().get(i);
-            array[i] = item != null ? new ItemFilter(item) : null;
+            if (item != null) {
+                array[i] = new ItemFilter(item);
+            }
             MessageUtils.broadcast(" " + item);
         }
         return new MultiFilter(array);
