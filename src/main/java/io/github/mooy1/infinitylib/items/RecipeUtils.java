@@ -21,7 +21,7 @@ public final class RecipeUtils {
                     array[(row * 3) + column] = new ItemFilter(item);
                 }
                 
-                MessageUtils.broadcast("");
+                MessageUtils.broadcast("ROW " + row + " COLUMN " + column + " SLOT " + (row * 3) + column + " ITEM " + item);
             }
         }
         return new MultiFilter(array);
@@ -34,7 +34,6 @@ public final class RecipeUtils {
             if (item != null) {
                 array[i] = new ItemFilter(item);
             }
-            MessageUtils.broadcast(" " + item);
         }
         return new MultiFilter(array);
     }
