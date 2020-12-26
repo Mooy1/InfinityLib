@@ -2,6 +2,7 @@ package io.github.mooy1.infinitylib.filter;
 
 import io.github.mooy1.infinitylib.items.StackUtils;
 import lombok.Getter;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
@@ -23,9 +24,15 @@ public class ItemFilter {
     
     public ItemFilter(@Nonnull ItemStack stack) {
         String id = StackUtils.getItemID(stack, false);
-        this.hashcode = id != null ? id.hashCode() : stack.getType().hashCode(); // TESTING
+        this.hashcode = id != null ? id.hashCode() : stack.getType().ordinal() * 31; // TESTING
         this.amount = stack.getAmount();
         this.item = stack;
+    }
+
+    public ItemFilter(@Nonnull Material material, int amount) {
+        this.hashcode = material.ordinal() * 31; // TESTING
+        this.amount = amount;
+        this.item = new ItemStack(material, amount);
     }
     
     /**

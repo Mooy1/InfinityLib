@@ -23,7 +23,7 @@ public class MultiFilter {
     @Nonnull
     private final ItemFilter[] filters;
     
-    public MultiFilter(@Nonnull ItemFilter... filters) {
+    public MultiFilter(@Nonnull ItemFilter... filters) { 
         int hashcode = filters.length;
         int[] amounts = new int[filters.length];
         for (int i = 0 ; i < filters.length ; i++) {
@@ -31,7 +31,7 @@ public class MultiFilter {
             if (filter != null) {
                 amounts[i] = filter.getAmount();
             }
-            hashcode += (i + 1) * Objects.hashCode(filter);
+            hashcode += filter != null ? filter.hashCode() : i * i; // NEED TO FIX TO CORRECTLY USE ORDER
         }
         this.hashcode = hashcode;
         this.amounts = amounts;
