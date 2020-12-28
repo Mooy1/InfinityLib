@@ -1,28 +1,37 @@
 package io.github.mooy1.infinitylib;
 
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
-import lombok.Setter;
+import me.mrCookieSlime.Slimefun.cscorelib2.updater.GitHubBuildsUpdater;
 import org.apache.commons.lang.Validate;
 import org.bukkit.NamespacedKey;
-import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.annotation.Nonnull;
+import java.io.File;
 import java.util.logging.Level;
 
 public final class PluginUtils {
-
-    @Setter
-    private static Plugin plugin = null;
+    
+    private static JavaPlugin plugin = null;
     
     public static final int TICKER_DELAY = SlimefunPlugin.getCfg().getInt("URID.custom-ticker-delay");
     public static final float TICK_RATIO = 20F / PluginUtils.TICKER_DELAY;
 
-    public static void setupConfig() {
+    /**
+     * sets up config and utility plugin
+     */
+    public static void setup(@Nonnull JavaPlugin javaPlugin, @Nonnull String url, @Nonnull File file) {
         validate();
-        
-        plugin.saveDefaultConfig();
-        plugin.getConfig().options().copyDefaults(true).copyHeader(true);
-        plugin.saveConfig();
+        plugin = javaPlugin;
+        javaPlugin.saveDefaultConfig();
+        javaPlugin.getConfig().options().copyDefaults(true).copyHeader(true);
+        javaPlugin.saveConfig();
+        if (javaPlugin.getDescription().getVersion().startsWith("DEV - ")) {
+            PluginUtils.log(Level.INFO, "Starting auto update");
+            new GitHubBuildsUpdater(plugin, file, url).start();
+        } else {
+            PluginUtils.log(Level.WARNING, "You must be on a DEV build to auto update!");
+        }
     }
     
     public static NamespacedKey getKey(@Nonnull String key) {
@@ -31,7 +40,6 @@ public final class PluginUtils {
 
     public static void log(@Nonnull Level level , @Nonnull String... logs) {
         validate();
-        
         for (String log : logs) {
             plugin.getLogger().log(level, log);
         }
@@ -39,12 +47,10 @@ public final class PluginUtils {
     
     public static void log(@Nonnull String... logs) {
         validate();
-
         for (String log : logs) {
             plugin.getLogger().log(Level.INFO, log);
         }
     }
-    
     
     public static void runSync(@Nonnull Runnable runnable, long delay) {
         validate();

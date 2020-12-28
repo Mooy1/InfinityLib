@@ -7,10 +7,16 @@ import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerKickEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.plugin.Plugin;
 
 import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Collection of utils for sending messages to players and broadcasting
@@ -18,9 +24,23 @@ import java.util.Map;
  * @author Mooy1
  * 
  */
-public final class MessageUtils {
+public final class MessageUtils implements Listener {
     
-    private static final Map<Player, Long> coolDowns = new HashMap<>();
+    public MessageUtils(Plugin plugin) {
+        plugin.getServer().getPluginManager().registerEvents(this, plugin);
+    }
+    
+    @EventHandler
+    public void onQuit(PlayerQuitEvent e) {
+        coolDowns.remove(e.getPlayer().getUniqueId());
+    }
+    
+    @EventHandler
+    public void onKick(PlayerKickEvent e) {
+        coolDowns.remove(e.getPlayer().getUniqueId());
+    }
+    
+    private static final Map<UUID, Long> coolDowns = new HashMap<>();
     @Setter
     public static String prefix = null;
 
@@ -37,10 +57,10 @@ public final class MessageUtils {
     }
 
     public static void messageWithCD(@Nonnull Player p, long coolDown, @Nonnull String... messages) {
-        if (coolDowns.containsKey(p) && System.currentTimeMillis() - coolDowns.get(p) < coolDown) {
+        if (coolDowns.containsKey(p.getUniqueId()) && System.currentTimeMillis() - coolDowns.get(p.getUniqueId()) < coolDown) {
             return;
         }
-        coolDowns.put(p, System.currentTimeMillis());
+        coolDowns.put(p.getUniqueId(), System.currentTimeMillis());
         
         message(p, messages);
     }
