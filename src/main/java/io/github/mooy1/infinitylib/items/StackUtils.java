@@ -96,13 +96,17 @@ public final class StackUtils {
 
     @Nonnull
     public static ItemStack getUnique(@Nonnull ItemStack item) {
+        return makUnique(item.clone());
+    }
+
+    @Nonnull
+    public static ItemStack makUnique(@Nonnull ItemStack item) {
         ItemMeta meta = item.getItemMeta();
         if (meta != null) {
             meta.getPersistentDataContainer().set(key, PersistentDataType.BYTE, (byte) 1);
         }
-        ItemStack unique = item.clone();
-        unique.setItemMeta(meta);
-        return unique;
+        item.setItemMeta(meta);
+        return item;
     }
     
     public static void removeEnchants(@Nonnull ItemStack item) {

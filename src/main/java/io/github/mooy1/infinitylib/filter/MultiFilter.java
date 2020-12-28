@@ -6,7 +6,6 @@ import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Objects;
 
 /**
  * A utility class to be used over ItemFilter arrays
@@ -22,8 +21,9 @@ public class MultiFilter {
     private final int[] amounts;
     @Nonnull
     private final ItemFilter[] filters;
+    private final FilterType equalsType;
     
-    public MultiFilter(@Nonnull ItemFilter... filters) { 
+    public MultiFilter(@Nonnull FilterType equalsType, @Nonnull ItemFilter... filters) { 
         int hashcode = filters.length;
         int[] amounts = new int[filters.length];
         for (int i = 0 ; i < filters.length ; i++) {
@@ -36,6 +36,11 @@ public class MultiFilter {
         this.hashcode = hashcode;
         this.amounts = amounts;
         this.filters = filters;
+        this.equalsType = equalsType;
+    }
+
+    public MultiFilter(@Nonnull ItemFilter... filters) {
+        this(FilterType.EQUAL_AMOUNT, filters);
     }
     
     public int size() {
@@ -94,7 +99,7 @@ public class MultiFilter {
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof MultiFilter)) return false;
-        return matches((MultiFilter) obj, FilterType.EQUAL_AMOUNT);
+        return matches((MultiFilter) obj, this.equalsType);
     }
 
 }

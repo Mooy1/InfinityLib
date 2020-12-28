@@ -1,5 +1,6 @@
 package io.github.mooy1.infinitylib.presets;
 
+import io.github.mooy1.infinitylib.items.StackUtils;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -20,41 +21,57 @@ public final class MenuPreset {
 
     public static final int[] slotChunk3 = {6, 7, 8, 15, 17, 24, 25, 26};
     public static final int slot3 = 16;
-    public static final ItemStack emptyKey = new CustomItem(Material.BARRIER, "&cNo Target", "&7Place a item here to set it as the target");
-    public static final ItemStack loadingItemRed = new CustomItem(
-            Material.RED_STAINED_GLASS_PANE,
-            "&cLoading...");
-    public static final ItemStack invalidInput = new CustomItem(
+    public static final ItemStack emptyKey = StackUtils.makUnique(new CustomItem(
             Material.BARRIER,
-            "&cInvalid Input!");
-    public static final ItemStack invisibleBackground = new CustomItem(
+            "&cNo Target",
+            "&7Place a item here to set it as the target"
+    ));
+    public static final ItemStack loadingItemRed = StackUtils.makUnique(new CustomItem(
+            Material.RED_STAINED_GLASS_PANE,
+            "&cLoading...")
+    );
+    public static final ItemStack invalidInput = StackUtils.makUnique(new CustomItem(
+            Material.BARRIER,
+            "&cInvalid Input!")
+    );
+    public static final ItemStack invisibleBackground = StackUtils.makUnique(new CustomItem(
             Material.LIGHT_GRAY_STAINED_GLASS_PANE,
-            " ");
-    public static final ItemStack loadingItemBarrier = new CustomItem(
+            " ")
+    );
+    public static final ItemStack loadingItemBarrier = StackUtils.makUnique(new CustomItem(
             Material.BARRIER,
-            "&cLoading...");
-    public static final ItemStack inputAnItem = new CustomItem(
+            "&cLoading...")
+    );
+    public static final ItemStack inputAnItem = StackUtils.makUnique(new CustomItem(
             Material.BLUE_STAINED_GLASS_PANE,
-            "&9Input an item");
-    public static final ItemStack invalidRecipe = new CustomItem(
+            "&9Input an item")
+    );
+    public static final ItemStack invalidRecipe = StackUtils.makUnique(new CustomItem(
             Material.BARRIER,
-            "&cInvalid Recipe!");
-    public static final ItemStack notEnoughEnergy = new CustomItem(
+            "&cInvalid Recipe!")
+    );
+    public static final ItemStack notEnoughEnergy = StackUtils.makUnique(new CustomItem(
             Material.RED_STAINED_GLASS_PANE,
-            "&cNot enough energy!");
-    public static final ItemStack notEnoughRoom = new CustomItem(
+            "&cNot enough energy!")
+    );
+    public static final ItemStack notEnoughRoom = StackUtils.makUnique(new CustomItem(
             Material.ORANGE_STAINED_GLASS_PANE,
-            "&6Not enough room!");
-    public static final ItemStack borderItemInput = new CustomItem(
+            "&6Not enough room!")
+    );
+    public static final ItemStack borderItemInput = StackUtils.makUnique(new CustomItem(
             Material.BLUE_STAINED_GLASS_PANE,
-            "&9Input");
-    public static final ItemStack borderItemOutput = new CustomItem(
+            "&9Input")
+    );
+    public static final ItemStack borderItemOutput = StackUtils.makUnique(new CustomItem(
             Material.ORANGE_STAINED_GLASS_PANE,
-            "&6Output");
-    public static final ItemStack borderItemStatus = new CustomItem(
+            "&6Output")
+    );
+    public static final ItemStack borderItemStatus = StackUtils.makUnique(new CustomItem(
             Material.CYAN_STAINED_GLASS_PANE,
-            "&3Status");
-    public static final ItemStack connectToEnergyNet = new CustomItem(
+            "&3Status")
+    );
+    public static final ItemStack connectToEnergyNet = StackUtils.makUnique(new CustomItem(
             Material.RED_STAINED_GLASS_PANE,
-            "&cConnect to an energy network!");
+            "&cConnect to an energy network!")
+    );
 }

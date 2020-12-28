@@ -21,18 +21,26 @@ public class ItemFilter {
     private final int hashcode;
     @Getter
     private final ItemStack item;
+    private final FilterType equalsType;
     
-    public ItemFilter(@Nonnull ItemStack stack) {
+    public ItemFilter(@Nonnull ItemStack stack, @Nonnull FilterType equalsType) {
         String id = StackUtils.getItemID(stack, false);
         this.hashcode = id != null ? id.hashCode() : stack.getType().ordinal() * 31; // TESTING
         this.amount = stack.getAmount();
         this.item = stack;
+        this.equalsType = equalsType;
+    }
+    
+    public ItemFilter(@Nonnull ItemStack stack) {
+        this(stack, FilterType.EQUAL_AMOUNT);
     }
 
     public ItemFilter(@Nonnull Material material, int amount) {
-        this.hashcode = material.ordinal() * 31; // TESTING
-        this.amount = amount;
-        this.item = new ItemStack(material, amount);
+        this(new ItemStack(material, amount));
+    }
+
+    public ItemFilter(@Nonnull Material material) {
+        this(material, 1);
     }
     
     /**
@@ -54,7 +62,7 @@ public class ItemFilter {
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof ItemFilter)) return false;
-        return matches((ItemFilter) obj, FilterType.EQUAL_AMOUNT);
+        return matches((ItemFilter) obj, this.equalsType);
     }
 
     @Override
