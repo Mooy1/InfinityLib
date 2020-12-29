@@ -31,16 +31,12 @@ public class ItemFilter {
         this.equalsType = equalsType;
     }
     
-    public ItemFilter(@Nonnull ItemStack stack) {
-        this(stack, FilterType.EQUAL_AMOUNT);
+    public ItemFilter(@Nonnull Material material, int amount, @Nonnull FilterType equalsType) {
+        this(new ItemStack(material, amount), equalsType);
     }
 
-    public ItemFilter(@Nonnull Material material, int amount) {
-        this(new ItemStack(material, amount));
-    }
-
-    public ItemFilter(@Nonnull Material material) {
-        this(material, 1);
+    public ItemFilter(@Nonnull Material material, @Nonnull FilterType equalsType) {
+        this(material, 1, equalsType);
     }
     
     /**

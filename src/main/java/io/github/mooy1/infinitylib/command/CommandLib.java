@@ -13,6 +13,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -42,8 +43,8 @@ public final class CommandLib implements CommandExecutor, Listener, TabCompleter
         Objects.requireNonNull(plugin.getCommand(command)).setTabCompleter(this);
     }
     
-    public static void addCommand(@Nonnull LibCommand command) {
-        commands.add(command);
+    public static void addCommands(@Nonnull LibCommand... command) {
+        commands.addAll(Arrays.asList(command));
     }
     
     @Override

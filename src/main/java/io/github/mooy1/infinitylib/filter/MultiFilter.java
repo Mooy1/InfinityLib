@@ -38,10 +38,6 @@ public class MultiFilter {
         this.filters = filters;
         this.equalsType = equalsType;
     }
-
-    public MultiFilter(@Nonnull ItemFilter... filters) {
-        this(FilterType.EQUAL_AMOUNT, filters);
-    }
     
     public int size() {
         return this.amounts.length;
@@ -78,7 +74,7 @@ public class MultiFilter {
      * creates a multi filter from a menu using given slots and size
      */
     @Nonnull
-    public static MultiFilter fromMenu(@Nonnull BlockMenu menu, @Nonnull int[] slots) {
+    public static MultiFilter fromMenu(@Nonnull FilterType type, @Nonnull BlockMenu menu, @Nonnull int[] slots) {
         ItemFilter[] array = new ItemFilter[slots.length];
         
         for (int i = 0 ; i < slots.length ; i++) {
@@ -88,7 +84,7 @@ public class MultiFilter {
             }
         }
 
-        return new MultiFilter(array);
+        return new MultiFilter(type, array);
     }
     
     @Override
