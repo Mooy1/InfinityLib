@@ -19,6 +19,7 @@ public class MultiFilter {
     @Getter
     @Nonnull
     private final int[] amounts;
+    @Getter
     @Nonnull
     private final ItemFilter[] filters;
     private final FilterType equalsType;
