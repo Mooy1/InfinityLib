@@ -31,12 +31,23 @@ public class MultiFilter {
             if (filter != null) {
                 amounts[i] = filter.getAmount();
             }
-            hashcode += filter != null ? filter.hashCode() : i * i; // NEED TO FIX TO CORRECTLY USE ORDER
+            hashcode += filter != null ? filter.hashCode() >> i : i * i; // NEED TO FIX TO CORRECTLY USE ORDER
         }
         this.hashcode = hashcode;
         this.amounts = amounts;
         this.filters = filters;
         this.equalsType = equalsType;
+    }
+    
+    public static MultiFilter fromStacks(@Nonnull FilterType type, ItemStack... stacks) {
+        ItemFilter[] filters = new ItemFilter[stacks.length];
+        for (int i = 0 ; i < stacks.length ; i++) {
+            ItemStack stack = stacks[i];
+            if (stack != null) {
+                filters[i] = new ItemFilter(stack, type);
+            }
+        }
+        return new MultiFilter(type, filters);
     }
     
     public int size() {
