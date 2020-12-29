@@ -21,7 +21,6 @@ public final class PluginUtils {
      * sets up config and utility plugin
      */
     public static void setup(@Nonnull JavaPlugin javaPlugin, @Nonnull String url, @Nonnull File file) {
-        validate();
         plugin = javaPlugin;
         javaPlugin.saveDefaultConfig();
         javaPlugin.getConfig().options().copyDefaults(true).copyHeader(true);
