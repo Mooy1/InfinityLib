@@ -80,7 +80,7 @@ public class MultiFilter {
         for (int i = 0 ; i < slots.length ; i++) {
             ItemStack item = menu.getItemInSlot(slots[i]);
             if (item != null) {
-                array[i] = new ItemFilter(item);
+                array[i] = new ItemFilter(item, type);
             }
         }
 
