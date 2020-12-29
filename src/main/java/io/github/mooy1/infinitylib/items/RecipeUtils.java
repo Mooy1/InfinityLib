@@ -1,5 +1,6 @@
 package io.github.mooy1.infinitylib.items;
 
+import io.github.mooy1.infinitylib.filter.FilterType;
 import io.github.mooy1.infinitylib.filter.ItemFilter;
 import io.github.mooy1.infinitylib.filter.MultiFilter;
 import org.bukkit.inventory.ItemStack;
@@ -17,11 +18,11 @@ public final class RecipeUtils {
                 ItemStack item = recipe.getIngredientMap().get(line.charAt(column));
                 
                 if (item != null) {
-                    array[(row * 3) + column] = new ItemFilter(item);
+                    array[(row * 3) + column] = new ItemFilter(item, FilterType.MIN_AMOUNT);
                 }
             }
         }
-        return new MultiFilter(array);
+        return new MultiFilter(FilterType.MIN_AMOUNT, array);
     }
 
     public static MultiFilter getRecipeFilter(ShapelessRecipe recipe) {
@@ -29,10 +30,10 @@ public final class RecipeUtils {
         for (int i = 0 ; i < recipe.getIngredientList().size() ; i++) {
             ItemStack item = recipe.getIngredientList().get(i);
             if (item != null) {
-                array[i] = new ItemFilter(item);
+                array[i] = new ItemFilter(item, FilterType.MIN_AMOUNT);
             }
         }
-        return new MultiFilter(array);
+        return new MultiFilter(FilterType.MIN_AMOUNT, array);
     }
 
 }
