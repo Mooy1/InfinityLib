@@ -42,23 +42,23 @@ public class ItemFilter {
     /**
      * Checks if this filter will fit another filter, returns true if both are null
      */
-    public static boolean matches(@Nullable ItemFilter recipe, @Nullable ItemFilter input, @Nonnull FilterType type) {
+    public static boolean fits(@Nullable ItemFilter recipe, @Nullable ItemFilter input, @Nonnull FilterType type) {
         if ((recipe == null) != (input == null)) return false;
         if (recipe == null) return true;
-        return recipe.matches(input, type);
+        return recipe.fits(input, type);
     }
 
     /**
      * Checks if this filter will fit another filter
      */
-    public boolean matches(@Nonnull ItemFilter input, @Nonnull FilterType type) {
+    public boolean fits(@Nonnull ItemFilter input, @Nonnull FilterType type) {
         return type.filter(this.amount, input.getAmount()) && this.hashcode == input.hashCode();
     }
     
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof ItemFilter)) return false;
-        return matches((ItemFilter) obj, this.equalsType);
+        return fits((ItemFilter) obj, this.equalsType);
     }
 
     @Override

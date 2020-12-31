@@ -51,17 +51,13 @@ public class MultiFilter {
         return new MultiFilter(type, filters);
     }
     
-    public int size() {
-        return this.amounts.length;
-    }
-
     /**
      * gets the index of this array that matches the given filter
      */
     public int indexOf(@Nonnull ItemFilter match, @Nonnull FilterType type) {
-        for (int i = 0 ; i < size() ; i++) {
+        for (int i = 0 ; i < this.filters.length ; i++) {
             ItemFilter filter = this.filters[i];
-            if (filter != null && filter.matches(match, type)) return i;
+            if (filter != null && filter.fits(match, type)) return i;
         }
         return -1;
     }
@@ -69,16 +65,16 @@ public class MultiFilter {
     /**
      * Checks if this filter will fit another filter, returns true if both are null
      */
-    public static boolean matches(@Nullable MultiFilter recipe, @Nullable MultiFilter input, @Nonnull FilterType type) {
+    public static boolean fits(@Nullable MultiFilter recipe, @Nullable MultiFilter input, @Nonnull FilterType type) {
         if ((recipe == null) != (input == null) ) return false;
         if (recipe == null) return true;
-        return recipe.matches(input, type);
+        return recipe.fits(input, type);
     }
 
     /**
      * Checks if this filter will fit another filter
      */
-    public boolean matches(@Nonnull MultiFilter input, @Nonnull FilterType type) {
+    public boolean fits(@Nonnull MultiFilter input, @Nonnull FilterType type) {
         return type.filter(this.amounts, input.getAmounts()) && this.hashcode == input.hashCode();
     }
 
@@ -98,6 +94,17 @@ public class MultiFilter {
 
         return new MultiFilter(type, array);
     }
+
+    @Nonnull
+    private ItemStack[] toStackArray() {
+        ItemStack[] recipe = new ItemStack[this.filters.length];
+        for (int i = 0 ; i < this.filters.length ; i++) {
+            if (this.filters[i] != null) {
+                recipe[i] = this.filters[i].getItem();
+            }
+        }
+        return recipe;
+    }
     
     @Override
     public int hashCode() {
@@ -107,7 +114,7 @@ public class MultiFilter {
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof MultiFilter)) return false;
-        return matches((MultiFilter) obj, this.equalsType);
+        return fits((MultiFilter) obj, this.equalsType);
     }
 
 }
