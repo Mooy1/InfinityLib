@@ -7,11 +7,6 @@ import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerKickEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.plugin.Plugin;
 
 import javax.annotation.Nonnull;
 import java.util.HashMap;
@@ -24,20 +19,10 @@ import java.util.UUID;
  * @author Mooy1
  * 
  */
-public final class MessageUtils implements Listener {
+public final class MessageUtils {
     
-    public MessageUtils(Plugin plugin) {
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
-    }
-    
-    @EventHandler
-    public void onQuit(PlayerQuitEvent e) {
-        coolDowns.remove(e.getPlayer().getUniqueId());
-    }
-    
-    @EventHandler
-    public void onKick(PlayerKickEvent e) {
-        coolDowns.remove(e.getPlayer().getUniqueId());
+    public MessageUtils() {
+        new LeaveListener(coolDowns);
     }
     
     private static final Map<UUID, Long> coolDowns = new HashMap<>();
