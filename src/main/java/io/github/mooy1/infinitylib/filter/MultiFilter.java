@@ -96,7 +96,7 @@ public class MultiFilter {
     }
 
     @Nonnull
-    private ItemStack[] toStackArray() {
+    public ItemStack[] toStackArray() {
         ItemStack[] recipe = new ItemStack[this.filters.length];
         for (int i = 0 ; i < this.filters.length ; i++) {
             if (this.filters[i] != null) {
