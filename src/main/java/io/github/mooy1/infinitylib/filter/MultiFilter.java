@@ -32,7 +32,6 @@ public class MultiFilter {
         StringBuilder builder = new StringBuilder();
         int[] amounts = new int[stacks.length];
         for (int i = 0 ; i < stacks.length ; i++) {
-            builder.append("|");
             ItemStack stack = stacks[i];
             if (stack != null) {
                 String id = StackUtils.getItemID(stack, false);
@@ -43,6 +42,7 @@ public class MultiFilter {
                 }
                 amounts[i] = stack.getAmount();
             }
+            builder.append("|");
         }
         this.string = builder.toString();
         this.amounts = amounts;
@@ -73,7 +73,7 @@ public class MultiFilter {
      * Checks if this filter will fit another filter
      */
     public boolean fits(@Nonnull MultiFilter input, @Nonnull FilterType type) {
-        return type.filter(this.amounts, input.getAmounts()) && this.string.hashCode() == input.string.hashCode();
+        return type.filter(this.amounts, input.getAmounts()) && this.string.equals(input.string);
     }
 
     /**

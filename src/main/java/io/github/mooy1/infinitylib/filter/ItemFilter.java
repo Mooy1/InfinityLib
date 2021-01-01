@@ -52,7 +52,7 @@ public class ItemFilter {
      * Checks if this filter will fit another filter
      */
     public boolean fits(@Nonnull ItemFilter input, @Nonnull FilterType type) {
-        return type.filter(this.amount, input.getAmount()) && this.string.hashCode() == input.string.hashCode();
+        return type.filter(this.amount, input.getAmount()) && this.string.equals(input.string);
     }
 
     /**
