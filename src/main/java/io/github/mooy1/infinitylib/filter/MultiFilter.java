@@ -1,11 +1,15 @@
 package io.github.mooy1.infinitylib.filter;
 
+import io.github.mooy1.infinitylib.items.StackUtils;
 import lombok.Getter;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.ShapelessRecipe;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNullableByDefault;
 
 /**
  * A utility class to be used over ItemFilter arrays
@@ -15,100 +19,98 @@ import javax.annotation.Nullable;
  */
 public class MultiFilter {
     
-    private final int hashcode;
+    private final String string;
     @Getter
     @Nonnull
     private final int[] amounts;
     @Getter
     @Nonnull
-    private final ItemFilter[] filters;
+    private final ItemStack[] stacks;
     private final FilterType equalsType;
-    
-    public MultiFilter(@Nonnull FilterType equalsType, @Nonnull ItemFilter... filters) { 
-        int hashcode = filters.length;
-        int[] amounts = new int[filters.length];
-        for (int i = 0 ; i < filters.length ; i++) {
-            ItemFilter filter = filters[i];
-            if (filter != null) {
-                amounts[i] = filter.getAmount();
-            }
-            hashcode += filter != null ? filter.hashCode() >> i : i * i; // NEED TO FIX TO CORRECTLY USE ORDER
-        }
-        this.hashcode = hashcode;
-        this.amounts = amounts;
-        this.filters = filters;
-        this.equalsType = equalsType;
-    }
-    
-    public static MultiFilter fromStacks(@Nonnull FilterType type, ItemStack... stacks) {
-        ItemFilter[] filters = new ItemFilter[stacks.length];
+
+    public MultiFilter(@Nonnull FilterType equalsType, @Nonnull ItemStack... stacks) { 
+        StringBuilder builder = new StringBuilder();
+        int[] amounts = new int[stacks.length];
         for (int i = 0 ; i < stacks.length ; i++) {
+            builder.append("|");
             ItemStack stack = stacks[i];
             if (stack != null) {
-                filters[i] = new ItemFilter(stack, type);
+                String id = StackUtils.getItemID(stack, false);
+                if (id == null) {
+                    builder.append(stack.getType().ordinal());
+                } else {
+                    builder.append(id);
+                }
+                amounts[i] = stack.getAmount();
             }
         }
-        return new MultiFilter(type, filters);
-    }
-    
-    /**
-     * gets the index of this array that matches the given filter
-     */
-    public int indexOf(@Nonnull ItemFilter match, @Nonnull FilterType type) {
-        for (int i = 0 ; i < this.filters.length ; i++) {
-            ItemFilter filter = this.filters[i];
-            if (filter != null && filter.fits(match, type)) return i;
-        }
-        return -1;
+        this.string = builder.toString();
+        this.amounts = amounts;
+        this.stacks = stacks;
+        this.equalsType = equalsType;
     }
 
-    /**
-     * Checks if this filter will fit another filter, returns true if both are null
-     */
-    public static boolean fits(@Nullable MultiFilter recipe, @Nullable MultiFilter input, @Nonnull FilterType type) {
-        if ((recipe == null) != (input == null) ) return false;
-        if (recipe == null) return true;
-        return recipe.fits(input, type);
+    public static MultiFilter fromRecipe(ShapedRecipe recipe) {
+        ItemStack[] array = new ItemStack[9];
+        for (int row = 0 ; row < recipe.getShape().length ; row++) {
+            String line = recipe.getShape()[row];
+            for (int column = 0 ; column < line.length() ; column++) {
+                array[(row * 3) + column] = recipe.getIngredientMap().get(line.charAt(column));
+            }
+        }
+        return new MultiFilter(FilterType.MIN_AMOUNT, array);
+    }
+
+    public static MultiFilter fromRecipe(ShapelessRecipe recipe) {
+        ItemStack[] array = new ItemStack[9];
+        for (int i = 0 ; i < recipe.getIngredientList().size() ; i++) {
+            array[i] = recipe.getIngredientList().get(i);
+        }
+        return new MultiFilter(FilterType.MIN_AMOUNT, array);
     }
 
     /**
      * Checks if this filter will fit another filter
      */
     public boolean fits(@Nonnull MultiFilter input, @Nonnull FilterType type) {
-        return type.filter(this.amounts, input.getAmounts()) && this.hashcode == input.hashCode();
+        return type.filter(this.amounts, input.getAmounts()) && this.string.hashCode() == input.string.hashCode();
     }
 
+    /**
+     * Checks if this filter will fit another filter using this filters equalsType
+     */
+    public boolean fits(@Nonnull MultiFilter input) {
+        return fits(input, this.equalsType);
+    }
+    
+    /**
+     * gets the index of this array that matches the given filter
+     */
+    public int indexOf(@Nonnull ItemStack match) {
+        for (int i = 0 ; i < this.stacks.length ; i++) {
+            ItemStack stack = this.stacks[i];
+            if (stack != null) {
+                if (new ItemFilter(stack, FilterType.IGNORE_AMOUNT).fits(new ItemFilter(stack, FilterType.IGNORE_AMOUNT))) return i;
+            }
+        }
+        return -1;
+    }
+    
     /**
      * creates a multi filter from a menu using given slots and size
      */
     @Nonnull
     public static MultiFilter fromMenu(@Nonnull FilterType type, @Nonnull BlockMenu menu, @Nonnull int[] slots) {
-        ItemFilter[] array = new ItemFilter[slots.length];
-        
+        ItemStack[] array = new ItemStack[slots.length];
         for (int i = 0 ; i < slots.length ; i++) {
-            ItemStack item = menu.getItemInSlot(slots[i]);
-            if (item != null) {
-                array[i] = new ItemFilter(item, type);
-            }
+            array[i] = menu.getItemInSlot(slots[i]);
         }
-
         return new MultiFilter(type, array);
-    }
-
-    @Nonnull
-    public ItemStack[] toStackArray() {
-        ItemStack[] recipe = new ItemStack[this.filters.length];
-        for (int i = 0 ; i < this.filters.length ; i++) {
-            if (this.filters[i] != null) {
-                recipe[i] = this.filters[i].getItem();
-            }
-        }
-        return recipe;
     }
     
     @Override
     public int hashCode() {
-        return this.hashcode;
+        return this.string.hashCode();
     }
 
     @Override

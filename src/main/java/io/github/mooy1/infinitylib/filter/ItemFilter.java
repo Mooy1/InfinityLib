@@ -18,14 +18,18 @@ public class ItemFilter {
     
     @Getter
     private final int amount;
-    private final int hashcode;
+    private final String string;
     @Getter
     private final ItemStack item;
     private final FilterType equalsType;
     
     public ItemFilter(@Nonnull ItemStack stack, @Nonnull FilterType equalsType) {
         String id = StackUtils.getItemID(stack, false);
-        this.hashcode = id != null ? id.hashCode() : stack.getType().ordinal() * 31; // TESTING
+        if (id == null) {
+            this.string = String.valueOf(stack.getType().ordinal());
+        } else {
+            this.string = id;
+        }
         this.amount = stack.getAmount();
         this.item = stack;
         this.equalsType = equalsType;
@@ -39,20 +43,23 @@ public class ItemFilter {
         this(material, 1, equalsType);
     }
     
-    /**
-     * Checks if this filter will fit another filter, returns true if both are null
-     */
-    public static boolean fits(@Nullable ItemFilter recipe, @Nullable ItemFilter input, @Nonnull FilterType type) {
-        if ((recipe == null) != (input == null)) return false;
-        if (recipe == null) return true;
-        return recipe.fits(input, type);
+    @Nullable
+    public static ItemFilter get(@Nullable ItemStack stack, @Nonnull FilterType equalsType) {
+        return stack != null ? new ItemFilter(stack, equalsType) : null;
     }
 
     /**
      * Checks if this filter will fit another filter
      */
     public boolean fits(@Nonnull ItemFilter input, @Nonnull FilterType type) {
-        return type.filter(this.amount, input.getAmount()) && this.hashcode == input.hashCode();
+        return type.filter(this.amount, input.getAmount()) && this.string.hashCode() == input.string.hashCode();
+    }
+
+    /**
+     * Checks if this filter will fit another filter using this filters equalsType
+     */
+    public boolean fits(@Nonnull ItemFilter input) {
+        return fits(input, this.equalsType);
     }
     
     @Override
@@ -63,7 +70,7 @@ public class ItemFilter {
 
     @Override
     public int hashCode() {
-        return this.hashcode;
+        return this.string.hashCode();
     }
     
 }

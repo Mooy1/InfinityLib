@@ -47,13 +47,9 @@ public final class StackUtils {
         }
 
         if (vanilla) {
-            String id = item.getType().toString();
+
+            return item.getType().toString();
             
-            if (id.equals("COPPER_INGOT")) {
-                return "MC_COPPER_INGOT";
-            }
-            
-            return id;
         }
 
         return null;
@@ -73,10 +69,6 @@ public final class StackUtils {
 
         } else {
             
-            if (id.equals("MC_COPPER_INGOT")) {
-                id = "COPPER_INGOT";
-            }
-
             Material material = Material.getMaterial(id);
 
             if (material != null){
