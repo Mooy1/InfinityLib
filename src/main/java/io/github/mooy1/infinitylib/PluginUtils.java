@@ -1,13 +1,21 @@
 package io.github.mooy1.infinitylib;
 
+import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
+import me.mrCookieSlime.Slimefun.Lists.RecipeType;
+import me.mrCookieSlime.Slimefun.Objects.Category;
+import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
+import me.mrCookieSlime.Slimefun.api.Slimefun;
+import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.cscorelib2.updater.GitHubBuildsUpdater;
 import org.apache.commons.lang.Validate;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.annotation.Nonnull;
 import java.io.File;
+import java.util.Locale;
 import java.util.logging.Level;
 
 public final class PluginUtils {
@@ -84,6 +92,21 @@ public final class PluginUtils {
         }
 
         plugin.getServer().getScheduler().runTask(plugin, runnable);
+    }
+    
+    public static void registerAddonInfoItem(Category category, SlimefunAddon addon) {
+        new SlimefunItem(category, new SlimefunItemStack(
+                addon.getName().toUpperCase(Locale.ROOT) + "_ADDON_INFO",
+                Material.NETHER_STAR,
+                "&bAddon Info",
+                "&fVersion: &7" + addon.getPluginVersion(),
+                "",
+                "&fDiscord: &b@&7Riley&8#5911",
+                "&7discord.gg/slimefun",
+                "",
+                "&fGithub: &b@&8&7Mooy1",
+                "&7" + addon.getBugTrackerURL()
+        ), RecipeType.NULL, null).register(addon);
     }
     
     private static void validate() {
