@@ -96,7 +96,7 @@ public class MultiFilter {
         List<Integer> list = new ArrayList<>(4);
         for (int i = 0 ; i < this.stacks.length ; i++) {
             ItemStack stack = this.stacks[i];
-            if (filter.fits(new ItemFilter(stack, FilterType.IGNORE_AMOUNT))) {
+            if (stack != null && filter.fits(new ItemFilter(stack, FilterType.IGNORE_AMOUNT))) {
                 list.add(i);
             }
         }
