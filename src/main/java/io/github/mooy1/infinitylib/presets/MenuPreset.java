@@ -1,6 +1,8 @@
 package io.github.mooy1.infinitylib.presets;
 
 import io.github.mooy1.infinitylib.items.StackUtils;
+import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
+import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -21,6 +23,19 @@ public final class MenuPreset {
 
     public static final int[] slotChunk3 = {6, 7, 8, 15, 17, 24, 25, 26};
     public static final int slot3 = 16;
+    
+    public static void setupBasicMenu(BlockMenuPreset preset) {
+        for (int i : slotChunk1) {
+            preset.addItem(i, borderItemInput, ChestMenuUtils.getEmptyClickHandler());
+        }
+        for (int i : slotChunk2) {
+            preset.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
+        }
+        for (int i : slotChunk3) {
+            preset.addItem(i, borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
+        }
+    }
+    
     public static final ItemStack emptyKey = StackUtils.makUnique(new CustomItem(
             Material.BARRIER,
             "&cNo Target",
