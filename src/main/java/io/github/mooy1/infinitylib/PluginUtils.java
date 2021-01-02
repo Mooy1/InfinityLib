@@ -1,14 +1,16 @@
 package io.github.mooy1.infinitylib;
 
+import io.github.mooy1.infinitylib.player.LeaveListener;
+import io.github.mooy1.infinitylib.player.MessageUtils;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
-import me.mrCookieSlime.Slimefun.api.Slimefun;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.cscorelib2.updater.GitHubBuildsUpdater;
 import org.apache.commons.lang.Validate;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -28,8 +30,10 @@ public final class PluginUtils {
     /**
      * sets up config and utility plugin
      */
-    public static void setup(@Nonnull JavaPlugin javaPlugin, @Nonnull String url, @Nonnull File file) {
+    public static void setup(@Nonnull String prefix, @Nonnull JavaPlugin javaPlugin, @Nonnull String url, @Nonnull File file) {
         plugin = javaPlugin;
+        MessageUtils.prefix = ChatColor.GRAY + "[" + prefix + ChatColor.GRAY + "] " + ChatColor.WHITE;
+        new LeaveListener(MessageUtils.coolDowns);
         javaPlugin.saveDefaultConfig();
         javaPlugin.getConfig().options().copyDefaults(true).copyHeader(true);
         javaPlugin.saveConfig();

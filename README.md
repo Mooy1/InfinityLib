@@ -1,2 +1,2 @@
 # InfinityLib
-Utilities for my slimefun addons
+Shaded library for my slimefun addons.

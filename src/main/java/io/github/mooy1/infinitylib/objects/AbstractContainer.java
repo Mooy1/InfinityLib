@@ -37,8 +37,8 @@ public abstract class AbstractContainer extends SlimefunItem {
 
             @Override
             public boolean canOpen(@Nonnull Block block, @Nonnull Player player) {
-                return hasPermission(block, player) && (player.hasPermission("slimefun.inventory.bypass")
-                        || SlimefunPlugin.getProtectionManager().hasPermission(player, block.getLocation(), ProtectableAction.INTERACT_BLOCK)
+                return hasPermission(block, player)
+                        && (player.hasPermission("slimefun.inventory.bypass") || SlimefunPlugin.getProtectionManager().hasPermission(player, block.getLocation(), ProtectableAction.INTERACT_BLOCK)
                 );
             }
 
@@ -71,7 +71,8 @@ public abstract class AbstractContainer extends SlimefunItem {
 
     public abstract void tick(@Nonnull Block b, @Nonnull BlockMenu inv);
 
-    public void onNewInstance(@Nonnull BlockMenu menu, @Nonnull  Block b) {}
+    public void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
+    }
 
     public abstract void setupInv(@Nonnull BlockMenuPreset blockMenuPreset);
 

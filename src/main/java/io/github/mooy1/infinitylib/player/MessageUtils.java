@@ -5,6 +5,7 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.cscorelib2.chat.ChatColors;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 
@@ -20,15 +21,10 @@ import java.util.UUID;
  * 
  */
 public final class MessageUtils {
-    
-    public MessageUtils() {
-        new LeaveListener(coolDowns);
-    }
-    
-    private static final Map<UUID, Long> coolDowns = new HashMap<>();
-    @Setter
-    public static String prefix = null;
 
+    public static final Map<UUID, Long> coolDowns = new HashMap<>();
+    public static String prefix = null;
+    
     public static void message(@Nonnull Player p, @Nonnull String... messages) {
         validate();
         for (String m : messages) {
@@ -38,7 +34,7 @@ public final class MessageUtils {
 
     public static void broadcast(@Nonnull String message) {
         validate();
-        Bukkit.broadcastMessage(prefix + message);
+        Bukkit.broadcastMessage(prefix + ChatColors.color(message));
     }
 
     public static void messageWithCD(@Nonnull Player p, long coolDown, @Nonnull String... messages) {
