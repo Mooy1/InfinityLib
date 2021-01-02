@@ -3,6 +3,7 @@ package io.github.mooy1.infinitylib.filter;
 import io.github.mooy1.infinitylib.items.StackUtils;
 import lombok.Getter;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
+import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
@@ -10,6 +11,9 @@ import org.bukkit.inventory.ShapelessRecipe;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNullableByDefault;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.IntFunction;
 
 /**
  * A utility class to be used over ItemFilter arrays
@@ -19,6 +23,7 @@ import javax.annotation.ParametersAreNullableByDefault;
  */
 public class MultiFilter {
     
+    @Getter
     private final String string;
     @Getter
     @Nonnull
@@ -86,14 +91,20 @@ public class MultiFilter {
     /**
      * gets the index of this array that matches the given filter
      */
-    public int indexOf(@Nonnull ItemStack match) {
+    public int[] getTransportSlot(@Nonnull ItemStack input, int[] possible) {
+        ItemFilter filter = new ItemFilter(input, FilterType.IGNORE_AMOUNT);
+        List<Integer> list = new ArrayList<>(4);
         for (int i = 0 ; i < this.stacks.length ; i++) {
             ItemStack stack = this.stacks[i];
-            if (stack != null) {
-                if (new ItemFilter(stack, FilterType.IGNORE_AMOUNT).fits(new ItemFilter(stack, FilterType.IGNORE_AMOUNT))) return i;
+            if (filter.fits(new ItemFilter(stack, FilterType.IGNORE_AMOUNT))) {
+                list.add(i);
             }
         }
-        return -1;
+        int[] slots = new int[list.size()];
+        for (int i = 0 ; i < list.size() ; i++) {
+            slots[i] = possible[list.get(i)];
+        }
+        return slots;
     }
     
     /**

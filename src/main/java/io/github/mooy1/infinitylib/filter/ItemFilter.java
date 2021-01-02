@@ -20,6 +20,7 @@ public class ItemFilter {
     
     @Getter
     private final int amount;
+    @Getter
     private final String string;
     @Getter
     private final ItemStack item;
