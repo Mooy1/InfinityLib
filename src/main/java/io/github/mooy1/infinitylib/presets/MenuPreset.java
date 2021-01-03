@@ -31,19 +31,19 @@ public final class MenuPreset {
             27, 31,
             36, 37, 38, 39, 40
     };
-    
+
     public static final int[] craftingInput = {
             10, 11, 12,
             19, 20, 21,
             28, 29, 30
     };
-    private static final int[] background = {
+    public static final int[] background = {
             5, 6, 7, 14, 8, 23,
             41, 42, 43, 44, 32
     };
 
-    private static final int craftingOutput = 25;
-    private static final int[] craftingOutputBorder = {24, 26, 15, 16, 17, 33, 34, 35};
+    public static final int craftingOutput = 25;
+    public static final int[] craftingOutputBorder = {24, 26, 15, 16, 17, 33, 34, 35};
     
     public static void setupBasicMenu(BlockMenuPreset preset) {
         for (int i : slotChunk1) {

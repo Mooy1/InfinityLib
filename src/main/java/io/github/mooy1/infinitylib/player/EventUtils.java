@@ -9,9 +9,8 @@ import org.bukkit.inventory.EquipmentSlot;
 public final class EventUtils {
 
     public static boolean checkRightClickEvent(PlayerRightClickEvent e) {
-        if (e.getHand() == EquipmentSlot.OFF_HAND
-                || !e.getClickedBlock().isPresent()
-                || !SlimefunPlugin.getProtectionManager().hasPermission(e.getPlayer(), e.getClickedBlock().get(), ProtectableAction.INTERACT_BLOCK)) {
+        if (e.getHand() == EquipmentSlot.OFF_HAND || (e.getClickedBlock().isPresent() &&
+                !SlimefunPlugin.getProtectionManager().hasPermission(e.getPlayer(), e.getClickedBlock().get(), ProtectableAction.INTERACT_BLOCK))) {
             return false;
         }
         e.setUseBlock(Event.Result.DENY);
