@@ -10,7 +10,7 @@ import java.util.concurrent.ThreadLocalRandom;
  *
  * @author Mooy1
  */
-public class RandomUtils {
+public final class RandomUtils {
     
     /**
      * This method returns a random int from the given range, inclusive
