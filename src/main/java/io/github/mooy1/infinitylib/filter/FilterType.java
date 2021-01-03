@@ -53,8 +53,8 @@ public enum FilterType {
         }
     };
     
-    public abstract boolean filter(int recipe, int input);
+    abstract boolean filter(int recipe, int input);
     
-    public abstract boolean filter(int[] recipe, int[] input);
+    abstract boolean filter(int[] recipe, int[] input);
     
 }

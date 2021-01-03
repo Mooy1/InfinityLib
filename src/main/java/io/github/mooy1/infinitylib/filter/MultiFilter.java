@@ -2,6 +2,9 @@ package io.github.mooy1.infinitylib.filter;
 
 import io.github.mooy1.infinitylib.items.StackUtils;
 import lombok.Getter;
+import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
+import me.mrCookieSlime.Slimefun.api.Slimefun;
+import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import org.bukkit.inventory.ItemStack;
