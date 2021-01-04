@@ -28,6 +28,13 @@ public final class MessageUtils {
     public static void message(@Nonnull Player p, @Nonnull String... messages) {
         validate();
         for (String m : messages) {
+            p.sendMessage(ChatColors.color(m));
+        }
+    }
+    
+    public static void messageWithPrefix(@Nonnull Player p, @Nonnull String... messages) {
+        validate();
+        for (String m : messages) {
             p.sendMessage(prefix + ChatColors.color(m));
         }
     }
