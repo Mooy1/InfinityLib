@@ -12,6 +12,7 @@ import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 public abstract class AbstractContainer extends AbstractInventory {
 
@@ -20,8 +21,9 @@ public abstract class AbstractContainer extends AbstractInventory {
     }
 
     @Override
+    @OverridingMethodsMustInvokeSuper
     public void preRegister() {
-        this.addItemHandler(new BlockTicker() {
+        addItemHandler(new BlockTicker() {
             public void tick(Block b, SlimefunItem sf, Config data) {
                 BlockMenu menu = BlockStorage.getInventory(b);
                 if (menu == null) return;

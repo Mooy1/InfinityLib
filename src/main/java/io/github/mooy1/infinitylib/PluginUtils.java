@@ -4,6 +4,7 @@ import io.github.mooy1.infinitylib.player.LeaveListener;
 import io.github.mooy1.infinitylib.player.MessageUtils;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
+import lombok.Getter;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
@@ -13,6 +14,7 @@ import org.apache.commons.lang.Validate;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.annotation.Nonnull;
@@ -22,6 +24,7 @@ import java.util.logging.Level;
 
 public final class PluginUtils {
     
+    @Getter
     private static JavaPlugin plugin = null;
     
     public static final int TICKER_DELAY = SlimefunPlugin.getCfg().getInt("URID.custom-ticker-delay");
@@ -111,6 +114,10 @@ public final class PluginUtils {
                 "&fGithub: &b@&8&7Mooy1",
                 "&7" + addon.getBugTrackerURL()
         ), RecipeType.NULL, null).register(addon);
+    }
+
+    public static void registerEvents(@Nonnull Listener listener) {
+        PluginUtils.getPlugin().getServer().getPluginManager().registerEvents(listener, PluginUtils.getPlugin());
     }
     
     private static void validate() {
