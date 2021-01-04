@@ -2,21 +2,14 @@ package io.github.mooy1.infinitylib.filter;
 
 import io.github.mooy1.infinitylib.items.StackUtils;
 import lombok.Getter;
-import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
-import me.mrCookieSlime.Slimefun.api.Slimefun;
-import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
-import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNullableByDefault;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.IntFunction;
 
 /**
  * A utility class to be used over ItemFilter arrays
@@ -27,6 +20,7 @@ import java.util.function.IntFunction;
 public class MultiFilter {
     
     @Getter
+    @Nonnull
     private final String string;
     @Getter
     @Nonnull
@@ -58,7 +52,7 @@ public class MultiFilter {
         this.equalsType = equalsType;
     }
 
-    public static MultiFilter fromRecipe(ShapedRecipe recipe) {
+    public static MultiFilter fromRecipe(ShapedRecipe recipe, FilterType type) {
         ItemStack[] array = new ItemStack[9];
         for (int row = 0 ; row < recipe.getShape().length ; row++) {
             String line = recipe.getShape()[row];
@@ -66,15 +60,15 @@ public class MultiFilter {
                 array[(row * 3) + column] = recipe.getIngredientMap().get(line.charAt(column));
             }
         }
-        return new MultiFilter(FilterType.MIN_AMOUNT, array);
+        return new MultiFilter(type, array);
     }
 
-    public static MultiFilter fromRecipe(ShapelessRecipe recipe) {
+    public static MultiFilter fromRecipe(ShapelessRecipe recipe, FilterType type) {
         ItemStack[] array = new ItemStack[9];
         for (int i = 0 ; i < recipe.getIngredientList().size() ; i++) {
             array[i] = recipe.getIngredientList().get(i);
         }
-        return new MultiFilter(FilterType.MIN_AMOUNT, array);
+        return new MultiFilter(type, array);
     }
 
     /**
@@ -98,8 +92,7 @@ public class MultiFilter {
         ItemFilter filter = new ItemFilter(input, FilterType.IGNORE_AMOUNT);
         List<Integer> list = new ArrayList<>(4);
         for (int i = 0 ; i < this.stacks.length ; i++) {
-            ItemStack stack = this.stacks[i];
-            if (stack != null && filter.fits(new ItemFilter(stack, FilterType.IGNORE_AMOUNT))) {
+            if (filter.fits(new ItemFilter(this.stacks[i], FilterType.IGNORE_AMOUNT))) {
                 list.add(i);
             }
         }

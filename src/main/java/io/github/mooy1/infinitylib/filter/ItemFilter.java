@@ -26,14 +26,19 @@ public class ItemFilter {
     private final ItemStack item;
     private final FilterType equalsType;
     
-    public ItemFilter(@Nonnull ItemStack stack, @Nonnull FilterType equalsType) {
-        String id = StackUtils.getItemID(stack, false);
-        if (id == null) {
-            this.string = String.valueOf(stack.getType().ordinal());
+    public ItemFilter(@Nullable ItemStack stack, @Nonnull FilterType equalsType) {
+        if (stack == null) {
+            this.string = "";
+            this.amount = 0;
         } else {
-            this.string = id;
+            String id = StackUtils.getItemID(stack, false);
+            if (id == null) {
+                this.string = String.valueOf(stack.getType().ordinal());
+            } else {
+                this.string = id;
+            }
+            this.amount = stack.getAmount();
         }
-        this.amount = stack.getAmount();
         this.item = stack;
         this.equalsType = equalsType;
     }
@@ -44,11 +49,6 @@ public class ItemFilter {
 
     public ItemFilter(@Nonnull Material material, @Nonnull FilterType equalsType) {
         this(material, 1, equalsType);
-    }
-    
-    @Nullable
-    public static ItemFilter get(@Nullable ItemStack stack, @Nonnull FilterType equalsType) {
-        return stack != null ? new ItemFilter(stack, equalsType) : null;
     }
 
     /**
