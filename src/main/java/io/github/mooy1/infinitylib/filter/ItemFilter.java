@@ -68,7 +68,7 @@ public class ItemFilter {
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof ItemFilter)) return false;
-        return fits((ItemFilter) obj, this.equalsType);
+        return ((ItemFilter) obj).fits(this);
     }
 
     @Override

@@ -130,7 +130,7 @@ public class MultiFilter {
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof MultiFilter)) return false;
-        return fits((MultiFilter) obj, this.equalsType);
+        return ((MultiFilter) obj).fits(this);
     }
 
 }
