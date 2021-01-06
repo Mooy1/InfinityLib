@@ -1,4 +1,4 @@
-package io.github.mooy1.infinitylib.general;
+package io.github.mooy1.infinitylib.misc;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
