@@ -1,16 +1,36 @@
 package io.github.mooy1.infinitylib.items;
 
 import lombok.NonNull;
+import me.mrCookieSlime.Slimefun.cscorelib2.chat.ChatColors;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public final class LoreUtils {
+    
+    public static void setLore(@Nonnull ItemStack item, String... lores) {
+        ItemMeta meta = item.getItemMeta();
+
+        if (meta == null) {
+            return;
+        }
+
+        List<String> lore = new ArrayList<>();
+
+        for (String s : lores) {
+            lore.add(ChatColors.color(s));
+        }
+
+        meta.setLore(lore);
+
+        item.setItemMeta(meta);
+    }
     
     public static void addLore(@Nonnull ItemStack item, @Nonnull String... lores) {
         ItemMeta meta = item.getItemMeta();
@@ -19,13 +39,12 @@ public final class LoreUtils {
             return;
         }
 
-        List<String> lore;
+        List<String> lore = meta.getLore();
 
-        if (meta.getLore() != null) {
-            lore = meta.getLore();
-            lore.addAll(Arrays.asList(lores));
-        } else {
-            lore = Arrays.asList(lores);
+        if (lore != null) {
+            for (String s : lores) {
+                lore.add(ChatColors.color(s));
+            }
         }
         
         meta.setLore(lore);
