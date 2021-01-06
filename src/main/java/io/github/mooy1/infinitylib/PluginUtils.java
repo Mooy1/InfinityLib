@@ -36,7 +36,6 @@ public final class PluginUtils {
     public static void setup(@Nonnull String prefix, @Nonnull JavaPlugin javaPlugin, @Nonnull String url, @Nonnull File file) {
         plugin = javaPlugin;
         MessageUtils.prefix = ChatColor.GRAY + "[" + prefix + ChatColor.GRAY + "] " + ChatColor.WHITE;
-        new LeaveListener(MessageUtils.coolDowns);
         javaPlugin.saveDefaultConfig();
         javaPlugin.getConfig().options().copyDefaults(true).copyHeader(true);
         javaPlugin.saveConfig();

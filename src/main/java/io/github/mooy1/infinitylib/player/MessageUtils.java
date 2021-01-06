@@ -1,11 +1,9 @@
 package io.github.mooy1.infinitylib.player;
 
-import lombok.Setter;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.cscorelib2.chat.ChatColors;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 
@@ -24,6 +22,10 @@ public final class MessageUtils {
 
     public static final Map<UUID, Long> coolDowns = new HashMap<>();
     public static String prefix = null;
+    
+    static {
+        LeaveListener.add(coolDowns);
+    }
     
     public static void message(@Nonnull Player p, @Nonnull String... messages) {
         validate();

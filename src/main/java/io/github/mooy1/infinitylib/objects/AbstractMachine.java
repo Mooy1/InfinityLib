@@ -12,12 +12,12 @@ import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
 
-public abstract class AbstractEnergyMachine extends AbstractContainer implements EnergyNetComponent {
+public abstract class AbstractMachine extends AbstractContainer implements EnergyNetComponent {
     
     private final int statusSlot;
     private final int energy;
     
-    public AbstractEnergyMachine(Category category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe, int statusSlot, int energy) {
+    public AbstractMachine(Category category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe, int statusSlot, int energy) {
         super(category, item, recipeType, recipe);
         this.statusSlot = statusSlot;
         this.energy = energy;

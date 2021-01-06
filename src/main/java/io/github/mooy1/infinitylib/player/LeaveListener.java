@@ -7,26 +7,39 @@ import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 public final class LeaveListener implements Listener {
     
-    private final Map<UUID, ?> map;
+    static {
+        new LeaveListener();
+    }
     
-    public LeaveListener(@Nonnull Map<UUID, ?> map) {
-        this.map = map;
+    private static final List<Map<UUID, ?>> maps = new ArrayList<>();
+    
+    private LeaveListener() {
         PluginUtils.registerEvents(this);
+    }
+    
+    public static void add(@Nonnull Map<UUID, ?> map) {
+        maps.add(map);
     }
     
     @EventHandler
     public void onLeave(PlayerQuitEvent e) {
-        this.map.remove(e.getPlayer().getUniqueId());
+        for (Map<UUID, ?> map : maps) {
+            map.remove(e.getPlayer().getUniqueId());
+        }
     }
     
     @EventHandler
     public void onKick(PlayerKickEvent e) {
-        this.map.remove(e.getPlayer().getUniqueId());
+        for (Map<UUID, ?> map : maps) {
+            map.remove(e.getPlayer().getUniqueId());
+        }
     }
     
 }
