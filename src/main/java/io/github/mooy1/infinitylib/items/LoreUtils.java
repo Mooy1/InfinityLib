@@ -41,12 +41,14 @@ public final class LoreUtils {
 
         List<String> lore = meta.getLore();
 
-        if (lore != null) {
-            for (String s : lores) {
-                lore.add(ChatColors.color(s));
-            }
+        if (lore == null) {
+            lore = new ArrayList<>();
         }
-        
+
+        for (String s : lores) {
+            lore.add(ChatColors.color(s));
+        }
+
         meta.setLore(lore);
 
         item.setItemMeta(meta);
