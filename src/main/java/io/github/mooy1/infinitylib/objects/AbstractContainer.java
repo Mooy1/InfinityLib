@@ -23,7 +23,22 @@ public abstract class AbstractContainer extends SlimefunItem {
 
     public AbstractContainer(Category category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
         super(category, item, recipeType, recipe);
+        
+        addItemHandler(new BlockTicker() {
+            public void tick(Block b, SlimefunItem sf, Config data) {
+                BlockMenu menu = BlockStorage.getInventory(b);
+                if (menu == null) return;
+                AbstractContainer.this.tick(b, menu);
+            }
 
+            public boolean isSynchronized() {
+                return true;
+            }
+        });
+    }
+
+    @Override
+    public void preRegister() {
         new BlockMenuPreset(getId(), getItemName()) {
             @Override
             public void init() {
@@ -52,21 +67,8 @@ public abstract class AbstractContainer extends SlimefunItem {
                 return getTransportSlots(menu, flow, item);
             }
         };
-
-        addItemHandler(new BlockTicker() {
-            public void tick(Block b, SlimefunItem sf, Config data) {
-                BlockMenu menu = BlockStorage.getInventory(b);
-                if (menu == null) return;
-                AbstractContainer.this.tick(b, menu);
-            }
-
-            public boolean isSynchronized() {
-                return true;
-            }
-        });
-        
     }
-    
+
     public abstract void tick(@Nonnull Block b, @Nonnull BlockMenu inv);
 
     public abstract void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b);

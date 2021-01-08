@@ -1,5 +1,6 @@
 package io.github.mooy1.infinitylib.player;
 
+import lombok.experimental.UtilityClass;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.cscorelib2.chat.ChatColors;
 import org.apache.commons.lang.Validate;
@@ -18,6 +19,7 @@ import java.util.UUID;
  * @author Mooy1
  * 
  */
+@UtilityClass
 public final class MessageUtils {
 
     public static final Map<UUID, Long> coolDowns = new HashMap<>();

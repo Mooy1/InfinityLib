@@ -3,6 +3,7 @@ package io.github.mooy1.infinitylib.items;
 import io.github.mooy1.infinitylib.PluginUtils;
 import io.github.thebusybiscuit.slimefun4.core.services.CustomItemDataService;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
+import lombok.experimental.UtilityClass;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
@@ -22,6 +23,7 @@ import java.util.Optional;
  *
  * @author Mooy1
  */
+@UtilityClass
 public final class StackUtils {
     
     private static final CustomItemDataService service = SlimefunPlugin.getItemDataService();

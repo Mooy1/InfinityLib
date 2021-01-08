@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
 
-public class DelayedConsumer<A, B> {
+public final class DelayedConsumer<A, B> implements BiConsumer<A, B> {
 
     private List<Pair<A, B>> toBeAccepted = new ArrayList<>();
     private BiConsumer<A, B> consumer = null;

@@ -2,6 +2,7 @@ package io.github.mooy1.infinitylib.presets;
 
 import io.github.mooy1.infinitylib.items.StackUtils;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
+import lombok.experimental.UtilityClass;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import org.bukkit.Material;
@@ -13,6 +14,7 @@ import org.bukkit.inventory.ItemStack;
  * @author Mooy1
  * 
  */
+@UtilityClass
 public final class MenuPreset {
     
     public static final int[] slotChunk1 = {0, 1, 2, 9, 11, 18, 19, 20};

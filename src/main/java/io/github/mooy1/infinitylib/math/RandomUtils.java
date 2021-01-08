@@ -1,5 +1,6 @@
 package io.github.mooy1.infinitylib.math;
 
+import lombok.experimental.UtilityClass;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
@@ -10,6 +11,7 @@ import java.util.concurrent.ThreadLocalRandom;
  *
  * @author Mooy1
  */
+@UtilityClass
 public final class RandomUtils {
     
     /**

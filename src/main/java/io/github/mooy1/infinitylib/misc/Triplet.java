@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class Triplet<A, B, C> {
+public final class Triplet<A, B, C> {
     
     private final A a;
     private final B b;

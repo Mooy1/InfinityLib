@@ -5,6 +5,7 @@ import io.github.mooy1.infinitylib.player.MessageUtils;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import lombok.Getter;
+import lombok.experimental.UtilityClass;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
@@ -22,6 +23,7 @@ import java.io.File;
 import java.util.Locale;
 import java.util.logging.Level;
 
+@UtilityClass
 public final class PluginUtils {
     
     @Getter

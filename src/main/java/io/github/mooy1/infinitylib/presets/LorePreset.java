@@ -1,6 +1,7 @@
 package io.github.mooy1.infinitylib.presets;
 
 import io.github.mooy1.infinitylib.PluginUtils;
+import lombok.experimental.UtilityClass;
 
 import javax.annotation.Nonnull;
 import java.text.DecimalFormat;
@@ -11,6 +12,7 @@ import java.text.DecimalFormat;
  * @author Mooy1
  * 
  */
+@UtilityClass
 public final class LorePreset {
     
     @Nonnull
@@ -52,7 +54,7 @@ public final class LorePreset {
             case 9: return "IX";
             case 10: return "X";
         }
-        return "OUT OF BOUNDS";
+        return String.valueOf(number);
     }
 
     @Nonnull

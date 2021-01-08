@@ -1,6 +1,7 @@
 package io.github.mooy1.infinitylib.items;
 
 import lombok.NonNull;
+import lombok.experimental.UtilityClass;
 import me.mrCookieSlime.Slimefun.cscorelib2.chat.ChatColors;
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+@UtilityClass
 public final class LoreUtils {
     
     public static void setLore(@Nonnull ItemStack item, String... lores) {

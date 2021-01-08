@@ -1,5 +1,6 @@
 package io.github.mooy1.infinitylib.menus;
 
+import lombok.experimental.UtilityClass;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import org.bukkit.Location;
@@ -17,6 +18,7 @@ import java.util.List;
  *
  * @author Mooy1
  */
+@UtilityClass
 public final class LocationUtils {
 
     /**
