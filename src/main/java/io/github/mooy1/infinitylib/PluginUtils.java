@@ -42,10 +42,10 @@ public final class PluginUtils {
         javaPlugin.getConfig().options().copyDefaults(true).copyHeader(true);
         javaPlugin.saveConfig();
         if (javaPlugin.getDescription().getVersion().startsWith("DEV - ")) {
-            PluginUtils.log(Level.INFO, "Starting auto update");
+            log(Level.INFO, "Starting auto update");
             new GitHubBuildsUpdater(plugin, file, url).start();
         } else {
-            PluginUtils.log(Level.WARNING, "You must be on a DEV build to auto update!");
+            log(Level.WARNING, "You must be on a DEV build to auto update!");
         }
     }
     

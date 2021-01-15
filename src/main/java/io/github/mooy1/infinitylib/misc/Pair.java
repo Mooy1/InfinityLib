@@ -8,15 +8,13 @@ import java.util.Objects;
 
 @Getter
 @AllArgsConstructor
-public final class Triplet<A, B, C> {
+public final class Pair<A, B> {
 
     @Nullable
     private final A a;
     @Nullable
     private final B b;
-    @Nullable
-    private final C c;
-    
+
     @Override
     public int hashCode() {
         int hash = 1;
@@ -26,19 +24,16 @@ public final class Triplet<A, B, C> {
         if (this.b != null) {
             hash *= this.b.hashCode();
         }
-        if (this.c != null) {
-            hash *= this.c.hashCode();
-        }
         return hash;
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof Triplet)) {
+        if (!(obj instanceof Pair)) {
             return false;
         }
-        Triplet<?, ?, ?> triplet = (Triplet<?, ?, ?>) obj;
-        return Objects.equals(this.a, triplet.a) && Objects.equals(this.b, triplet.b) && Objects.equals(this.c, triplet.c);
+        Pair<?, ?> pair = (Pair<?, ?>) obj;
+        return Objects.equals(this.a, pair.a) && Objects.equals(this.b, pair.b);
     }
-    
+
 }
