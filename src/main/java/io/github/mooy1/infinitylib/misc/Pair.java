@@ -10,9 +10,7 @@ import java.util.Objects;
 @AllArgsConstructor
 public final class Pair<A, B> {
 
-    @Nullable
     private final A a;
-    @Nullable
     private final B b;
 
     @Override

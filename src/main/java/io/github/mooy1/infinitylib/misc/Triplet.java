@@ -10,11 +10,8 @@ import java.util.Objects;
 @AllArgsConstructor
 public final class Triplet<A, B, C> {
 
-    @Nullable
     private final A a;
-    @Nullable
     private final B b;
-    @Nullable
     private final C c;
     
     @Override

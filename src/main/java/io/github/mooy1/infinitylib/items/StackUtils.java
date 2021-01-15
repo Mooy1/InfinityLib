@@ -46,7 +46,10 @@ public final class StackUtils {
     }
     
     @Nullable
-    public static ItemStack getItemFromID(@Nonnull String id, int amount) {
+    public static ItemStack getItemFromID(@Nullable String id, int amount) {
+        if (id == null) {
+            return null;
+        }
         SlimefunItem sfItem = SlimefunItem.getByID(id);
         if (sfItem != null) {
             return new CustomItem(sfItem.getItem(), amount);
