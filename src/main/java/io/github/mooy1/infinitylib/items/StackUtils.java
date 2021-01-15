@@ -1,7 +1,6 @@
 package io.github.mooy1.infinitylib.items;
 
 import io.github.mooy1.infinitylib.PluginUtils;
-import io.github.thebusybiscuit.slimefun4.core.services.CustomItemDataService;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import lombok.experimental.UtilityClass;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
@@ -16,7 +15,6 @@ import org.bukkit.persistence.PersistentDataType;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Optional;
 
 /**
  * Collection of utils for modifying ItemStacks and getting their ids
@@ -25,61 +23,39 @@ import java.util.Optional;
  */
 @UtilityClass
 public final class StackUtils {
-    
-    private static final CustomItemDataService service = SlimefunPlugin.getItemDataService();
 
-    /**
-     * Gets the slimefun item id of an item, otherwise if vanilla true returns the material id
-     */
     @Nullable
-    public static String getItemID(@Nullable ItemStack item, boolean vanilla) {
-
+    public static String getID(@Nullable ItemStack item) {
         if (item == null) {
             return null;
         }
-        
         if (item instanceof SlimefunItemStack) {
             return ((SlimefunItemStack) item).getItemId();
         }
-
-        Optional<String> itemID = service.getItemData(item);
-
-        if (itemID.isPresent()) {
-            return itemID.get();
-        }
-
-        if (vanilla) {
-
-            return item.getType().toString();
-            
-        }
-
-        return null;
+        return SlimefunPlugin.getItemDataService().getItemData(item).orElse(null);
     }
-
-    /**
-     * Gets the item from an id, calls {@link SlimefunItem}#getByItem
-     */
+    
+    @Nonnull
+    public static String getIDorElse(@Nonnull ItemStack item, @Nonnull String orElse) {
+        String id = getID(item);
+        if (id == null) {
+            return orElse;
+        } else {
+            return id;
+        }
+    }
+    
     @Nullable
     public static ItemStack getItemFromID(@Nonnull String id, int amount) {
-
         SlimefunItem sfItem = SlimefunItem.getByID(id);
-
         if (sfItem != null) {
-
             return new CustomItem(sfItem.getItem(), amount);
-
         } else {
-            
             Material material = Material.getMaterial(id);
-
             if (material != null){
-
                 return new ItemStack(material, amount);
-
             }
         }
-
         return null;
     }
 
