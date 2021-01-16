@@ -2,17 +2,20 @@ package io.github.mooy1.infinitylib.misc;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.annotation.Nullable;
 import java.util.Objects;
 
+@Setter
 @Getter
+@NoArgsConstructor
 @AllArgsConstructor
 public final class Triplet<A, B, C> {
 
-    private final A a;
-    private final B b;
-    private final C c;
+    private A a;
+    private B b;
+    private C c;
     
     @Override
     public int hashCode() {

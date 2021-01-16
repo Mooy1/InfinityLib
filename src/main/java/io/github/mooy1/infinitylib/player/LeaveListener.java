@@ -24,21 +24,29 @@ public final class LeaveListener implements Listener {
         PluginUtils.registerEvents(this);
     }
     
-    public static void add(@Nonnull Map<UUID, ?> map) {
+    public static void add(Map<UUID, ?> map) {
         maps.add(map);
     }
     
     @EventHandler
     public void onLeave(PlayerQuitEvent e) {
         for (Map<UUID, ?> map : maps) {
-            map.remove(e.getPlayer().getUniqueId());
+            if (map != null) {
+                map.remove(e.getPlayer().getUniqueId());
+            } else {
+                PluginUtils.runSync(() -> maps.remove(null));
+            }
         }
     }
     
     @EventHandler
     public void onKick(PlayerKickEvent e) {
         for (Map<UUID, ?> map : maps) {
-            map.remove(e.getPlayer().getUniqueId());
+            if (map != null) {
+                map.remove(e.getPlayer().getUniqueId());
+            } else {
+                PluginUtils.runSync(() -> maps.remove(null));
+            }
         }
     }
     

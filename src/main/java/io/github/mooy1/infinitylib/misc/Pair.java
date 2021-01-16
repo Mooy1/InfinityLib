@@ -2,16 +2,19 @@ package io.github.mooy1.infinitylib.misc;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.annotation.Nullable;
 import java.util.Objects;
 
+@Setter
 @Getter
+@NoArgsConstructor
 @AllArgsConstructor
 public final class Pair<A, B> {
 
-    private final A a;
-    private final B b;
+    private A a;
+    private B b;
 
     @Override
     public int hashCode() {
