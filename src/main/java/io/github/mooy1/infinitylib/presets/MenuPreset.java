@@ -59,56 +59,56 @@ public final class MenuPreset {
         }
     }
     
-    public static final ItemStack emptyKey = StackUtils.makUnique(new CustomItem(
+    public static final ItemStack emptyKey = StackUtils.makeUnique(new CustomItem(
             Material.BARRIER,
             "&cNo Target",
             "&7Place a item here to set it as the target"
     ));
-    public static final ItemStack loadingItemRed = StackUtils.makUnique(new CustomItem(
+    public static final ItemStack loadingItemRed = StackUtils.makeUnique(new CustomItem(
             Material.RED_STAINED_GLASS_PANE,
             "&cLoading...")
     );
-    public static final ItemStack invalidInput = StackUtils.makUnique(new CustomItem(
+    public static final ItemStack invalidInput = StackUtils.makeUnique(new CustomItem(
             Material.BARRIER,
             "&cInvalid Input!")
     );
-    public static final ItemStack invisibleBackground = StackUtils.makUnique(new CustomItem(
+    public static final ItemStack invisibleBackground = StackUtils.makeUnique(new CustomItem(
             Material.LIGHT_GRAY_STAINED_GLASS_PANE,
             " ")
     );
-    public static final ItemStack loadingItemBarrier = StackUtils.makUnique(new CustomItem(
+    public static final ItemStack loadingItemBarrier = StackUtils.makeUnique(new CustomItem(
             Material.BARRIER,
             "&cLoading...")
     );
-    public static final ItemStack inputAnItem = StackUtils.makUnique(new CustomItem(
+    public static final ItemStack inputAnItem = StackUtils.makeUnique(new CustomItem(
             Material.BLUE_STAINED_GLASS_PANE,
             "&9Input an item")
     );
-    public static final ItemStack invalidRecipe = StackUtils.makUnique(new CustomItem(
+    public static final ItemStack invalidRecipe = StackUtils.makeUnique(new CustomItem(
             Material.BARRIER,
             "&cInvalid Recipe!")
     );
-    public static final ItemStack notEnoughEnergy = StackUtils.makUnique(new CustomItem(
+    public static final ItemStack notEnoughEnergy = StackUtils.makeUnique(new CustomItem(
             Material.RED_STAINED_GLASS_PANE,
             "&cNot enough energy!")
     );
-    public static final ItemStack notEnoughRoom = StackUtils.makUnique(new CustomItem(
+    public static final ItemStack notEnoughRoom = StackUtils.makeUnique(new CustomItem(
             Material.ORANGE_STAINED_GLASS_PANE,
             "&6Not enough room!")
     );
-    public static final ItemStack borderItemInput = StackUtils.makUnique(new CustomItem(
+    public static final ItemStack borderItemInput = StackUtils.makeUnique(new CustomItem(
             Material.BLUE_STAINED_GLASS_PANE,
             "&9Input")
     );
-    public static final ItemStack borderItemOutput = StackUtils.makUnique(new CustomItem(
+    public static final ItemStack borderItemOutput = StackUtils.makeUnique(new CustomItem(
             Material.ORANGE_STAINED_GLASS_PANE,
             "&6Output")
     );
-    public static final ItemStack borderItemStatus = StackUtils.makUnique(new CustomItem(
+    public static final ItemStack borderItemStatus = StackUtils.makeUnique(new CustomItem(
             Material.CYAN_STAINED_GLASS_PANE,
             "&3Status")
     );
-    public static final ItemStack connectToEnergyNet = StackUtils.makUnique(new CustomItem(
+    public static final ItemStack connectToEnergyNet = StackUtils.makeUnique(new CustomItem(
             Material.RED_STAINED_GLASS_PANE,
             "&cConnect to an energy network!")
     );

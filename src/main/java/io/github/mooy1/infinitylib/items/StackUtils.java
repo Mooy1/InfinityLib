@@ -12,8 +12,8 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.Contract;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
@@ -25,6 +25,7 @@ import javax.annotation.Nullable;
 public final class StackUtils {
 
     @Nullable
+    @Contract("null -> null")
     public static String getID(@Nullable ItemStack item) {
         if (item == null) {
             return null;
@@ -35,8 +36,11 @@ public final class StackUtils {
         return SlimefunPlugin.getItemDataService().getItemData(item).orElse(null);
     }
     
-    @Nonnull
-    public static String getIDorElse(@Nonnull ItemStack item, @Nonnull String orElse) {
+    @Contract("null, _ -> null ; ")
+    public static String getIDorElse(@Nullable ItemStack item, @Nullable String orElse) {
+        if (item == null) {
+            return null;
+        }
         String id = getID(item);
         if (id == null) {
             return orElse;
@@ -46,6 +50,7 @@ public final class StackUtils {
     }
     
     @Nullable
+    @Contract("null, _ -> null")
     public static ItemStack getItemFromID(@Nullable String id, int amount) {
         if (id == null) {
             return null;
@@ -64,25 +69,35 @@ public final class StackUtils {
 
     private static final NamespacedKey key = PluginUtils.getKey("unique_item");
 
-    @Nonnull
-    public static ItemStack getUnique(@Nonnull ItemStack item) {
-        return makUnique(item.clone());
+    @Contract("null -> null ; !null -> !null")
+    public static ItemStack getUnique(ItemStack item) {
+        if (item == null) {
+            return null;
+        } else {
+            return makeUnique(item.clone());
+        }
     }
 
-    @Nonnull
-    public static ItemStack makUnique(@Nonnull ItemStack item) {
-        ItemMeta meta = item.getItemMeta();
-        if (meta != null) {
-            meta.getPersistentDataContainer().set(key, PersistentDataType.BYTE, (byte) 1);
+    @Contract("_ -> param1")
+    public static ItemStack makeUnique(ItemStack item) {
+        if (item != null) {
+            ItemMeta meta = item.getItemMeta();
+            if (meta != null) {
+                meta.getPersistentDataContainer().set(key, PersistentDataType.BYTE, (byte) 1);
+            }
+            item.setItemMeta(meta);
         }
-        item.setItemMeta(meta);
         return item;
     }
     
-    public static void removeEnchants(@Nonnull ItemStack item) {
-        for (Enchantment e : item.getEnchantments().keySet()) {
-            item.removeEnchantment(e);
+    @Contract("_ -> param1")
+    public static ItemStack removeEnchants(ItemStack item) {
+        if (item != null) {
+            for (Enchantment e : item.getEnchantments().keySet()) {
+                item.removeEnchantment(e);
+            }
         }
+        return item;
     }
     
 }

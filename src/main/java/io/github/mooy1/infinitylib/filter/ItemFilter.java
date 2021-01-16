@@ -74,7 +74,7 @@ public class ItemFilter {
     /**
      * Call to test timings of filter comparisons
      */
-    public void test() {
+    public static void test() {
         for (int j = 0 ; j < 10 ; j++) {
             long t = System.nanoTime();
 

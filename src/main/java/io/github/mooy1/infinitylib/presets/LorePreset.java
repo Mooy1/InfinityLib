@@ -17,7 +17,7 @@ public final class LorePreset {
     
     @Nonnull
     public static String energyPerSecond(int energy) {
-        return "&8\u21E8 &e\u26A1 &7" + format(Math.round(energy * PluginUtils.TICK_RATIO)) + " J/s";
+        return "&8\u21E8 &e\u26A1 &7" + Math.round(energy * PluginUtils.TICK_RATIO) + " J/s";
     }
     
     @Nonnull
