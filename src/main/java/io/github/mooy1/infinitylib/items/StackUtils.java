@@ -15,6 +15,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -42,6 +43,7 @@ public final class StackUtils {
         return getIDorElse(item, orElse);
     }
 
+    @Contract("_, !null -> !null")
     public static String getIDorElse(@Nonnull ItemStack item, String orElse) {
         if (item instanceof SlimefunItemStack) {
             return ((SlimefunItemStack) item).getItemId();
@@ -53,13 +55,14 @@ public final class StackUtils {
     public static String getID(@Nonnull PersistentDataContainer container) {
         return getIDorElse(container, null);
     }
-    
+
+    @Contract("_, !null -> !null")
     public static String getIDorElse(@Nonnull PersistentDataContainer container, String orElse) {
         String id = container.get(dataKey, PersistentDataType.STRING);
-        if (id != null) {
-            return id;
-        } else {
+        if (id == null) {
             return orElse;
+        } else {
+            return id;
         }
     }
     
@@ -106,9 +109,7 @@ public final class StackUtils {
     @Nonnull
     public static ItemStack makeUnique(@Nonnull ItemStack item) {
         ItemMeta meta = item.getItemMeta();
-        if (meta != null) {
-            meta.getPersistentDataContainer().set(key, PersistentDataType.BYTE, (byte) 1);
-        }
+        meta.getPersistentDataContainer().set(key, PersistentDataType.BYTE, (byte) 1);
         item.setItemMeta(meta);
         return item;
     }
