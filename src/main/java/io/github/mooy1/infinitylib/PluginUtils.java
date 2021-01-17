@@ -126,12 +126,14 @@ public final class PluginUtils {
         Validate.notNull(plugin, "Make sure to set the plugin instance");
     }
     
-    public static void testCode(Runnable... runnable) {
+    public static void testCode(int reps, Runnable... runnable) {
         long nanos;
         for (Runnable run : runnable) {
             nanos = System.nanoTime();
-            run.run();
-            log("Time Dif Ms: " + ((System.nanoTime() - nanos) * 1000000));
+            for (int i = 0 ; i < reps ; i++) {
+                run.run();
+            }
+            log("Time Dif Ms: " + ((System.nanoTime() - nanos) / 1000000));
         }
     }
     
