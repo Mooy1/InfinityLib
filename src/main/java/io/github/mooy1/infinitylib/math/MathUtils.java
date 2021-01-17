@@ -16,7 +16,7 @@ public final class MathUtils {
      * Division when b is a power of 2
      */
     public static int divPow2(int a, int b) {
-        return a >> floorLog2(b - 1);
+        return a >> floorLog2(b);
     }
     
     /**
