@@ -70,30 +70,5 @@ public class ItemFilter {
     public int hashCode() {
         return this.string.hashCode();
     }
-
-    /**
-     * Call to test timings of filter comparisons
-     */
-    public static void test() {
-        for (int j = 0 ; j < 10 ; j++) {
-            long t = System.nanoTime();
-
-            ItemFilter vanilla = new ItemFilter(new ItemStack(Material.COBBLESTONE), FilterType.MIN_AMOUNT);
-            ItemFilter sf = new ItemFilter(SlimefunItems.SYNTHETIC_DIAMOND, FilterType.MIN_AMOUNT);
-
-            for (int i = 0 ; i < 1000000 ; i++) {
-                vanilla.fits(sf);
-                sf.fits(vanilla);
-                vanilla.fits(vanilla);
-                sf.fits(sf);
-                vanilla.fits(new ItemFilter(new ItemStack(Material.SAND), FilterType.IGNORE_AMOUNT));
-                sf.fits(new ItemFilter(new ItemStack(Material.SAND), FilterType.IGNORE_AMOUNT));
-                vanilla.fits(new ItemFilter(SlimefunItems.SILVER_INGOT, FilterType.IGNORE_AMOUNT));
-                sf.fits(new ItemFilter(SlimefunItems.SILVER_INGOT, FilterType.IGNORE_AMOUNT));
-            }
-
-            PluginUtils.log("Timings " + ((System.nanoTime() - t) / 1000000) + " ms");
-        }
-    }
     
 }

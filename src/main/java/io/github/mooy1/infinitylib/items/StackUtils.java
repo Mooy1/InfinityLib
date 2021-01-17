@@ -54,12 +54,12 @@ public final class StackUtils {
     }
     
     @Nullable
-    public static ItemStack getItemByNullableID(@Nullable String id) {
+    public static ItemStack getItemByNullableID(@Nullable String id) throws IllegalArgumentException {
         return getItemByNullableID(id, 1);
     }
 
     @Nullable
-    public static ItemStack getItemByNullableID(@Nullable String id, int amount) {
+    public static ItemStack getItemByNullableID(@Nullable String id, int amount) throws IllegalArgumentException {
         if (id == null) {
             return null;
         }
@@ -67,12 +67,12 @@ public final class StackUtils {
     }
     
     @Nonnull
-    public static ItemStack getItemByID(@Nonnull String id) {
+    public static ItemStack getItemByID(@Nonnull String id) throws IllegalArgumentException {
         return getItemByID(id, 1);
     }
 
     @Nonnull
-    public static ItemStack getItemByID(@Nonnull String id, int amount) {
+    public static ItemStack getItemByID(@Nonnull String id, int amount) throws IllegalArgumentException {
         SlimefunItem sfItem = SlimefunItem.getByID(id);
         if (sfItem != null) {
             return new CustomItem(sfItem.getItem(), amount);

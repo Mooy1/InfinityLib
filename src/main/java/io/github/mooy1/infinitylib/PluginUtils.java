@@ -21,6 +21,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import javax.annotation.Nonnull;
 import java.io.File;
 import java.util.Locale;
+import java.util.function.Consumer;
 import java.util.logging.Level;
 
 @UtilityClass
@@ -123,6 +124,15 @@ public final class PluginUtils {
     
     private static void validate() {
         Validate.notNull(plugin, "Make sure to set the plugin instance");
+    }
+    
+    public static void testCode(Runnable... runnable) {
+        long nanos;
+        for (Runnable run : runnable) {
+            nanos = System.nanoTime();
+            run.run();
+            log("Time Dif Ms: " + ((System.nanoTime() - nanos) * 1000000));
+        }
     }
     
 }
