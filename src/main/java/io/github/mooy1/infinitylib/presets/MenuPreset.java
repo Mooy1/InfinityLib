@@ -1,12 +1,18 @@
 package io.github.mooy1.infinitylib.presets;
 
+import io.github.mooy1.infinitylib.PluginUtils;
 import io.github.mooy1.infinitylib.items.StackUtils;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import lombok.experimental.UtilityClass;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
+
+import javax.annotation.Nonnull;
 
 /**
  * Collection of utils for creating BlockMenuPresets
@@ -58,58 +64,75 @@ public final class MenuPreset {
             preset.addItem(i, borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
         }
     }
+
+    private static final NamespacedKey key = PluginUtils.getKey("unique");
+
+
+    @Nonnull
+    public static ItemStack getUnique(@Nonnull ItemStack item) {
+        return makeUnique(item.clone());
+    }
+
+    @Nonnull
+    public static ItemStack makeUnique(@Nonnull ItemStack item) {
+        ItemMeta meta = item.getItemMeta();
+        meta.getPersistentDataContainer().set(key, PersistentDataType.BYTE, (byte) 1);
+        item.setItemMeta(meta);
+        return item;
+    }
     
-    public static final ItemStack emptyKey = StackUtils.makeUnique(new CustomItem(
+    public static final ItemStack emptyKey = makeUnique(new CustomItem(
             Material.BARRIER,
             "&cNo Target",
             "&7Place a item here to set it as the target"
     ));
-    public static final ItemStack loadingItemRed = StackUtils.makeUnique(new CustomItem(
+    public static final ItemStack loadingItemRed = makeUnique(new CustomItem(
             Material.RED_STAINED_GLASS_PANE,
             "&cLoading...")
     );
-    public static final ItemStack invalidInput = StackUtils.makeUnique(new CustomItem(
+    public static final ItemStack invalidInput = makeUnique(new CustomItem(
             Material.BARRIER,
             "&cInvalid Input!")
     );
-    public static final ItemStack invisibleBackground = StackUtils.makeUnique(new CustomItem(
+    public static final ItemStack invisibleBackground = makeUnique(new CustomItem(
             Material.LIGHT_GRAY_STAINED_GLASS_PANE,
             " ")
     );
-    public static final ItemStack loadingItemBarrier = StackUtils.makeUnique(new CustomItem(
+    public static final ItemStack loadingItemBarrier = makeUnique(new CustomItem(
             Material.BARRIER,
             "&cLoading...")
     );
-    public static final ItemStack inputAnItem = StackUtils.makeUnique(new CustomItem(
+    public static final ItemStack inputAnItem = makeUnique(new CustomItem(
             Material.BLUE_STAINED_GLASS_PANE,
             "&9Input an item")
     );
-    public static final ItemStack invalidRecipe = StackUtils.makeUnique(new CustomItem(
+    public static final ItemStack invalidRecipe = makeUnique(new CustomItem(
             Material.BARRIER,
             "&cInvalid Recipe!")
     );
-    public static final ItemStack notEnoughEnergy = StackUtils.makeUnique(new CustomItem(
+    public static final ItemStack notEnoughEnergy = makeUnique(new CustomItem(
             Material.RED_STAINED_GLASS_PANE,
             "&cNot enough energy!")
     );
-    public static final ItemStack notEnoughRoom = StackUtils.makeUnique(new CustomItem(
+    public static final ItemStack notEnoughRoom = makeUnique(new CustomItem(
             Material.ORANGE_STAINED_GLASS_PANE,
             "&6Not enough room!")
     );
-    public static final ItemStack borderItemInput = StackUtils.makeUnique(new CustomItem(
+    public static final ItemStack borderItemInput = makeUnique(new CustomItem(
             Material.BLUE_STAINED_GLASS_PANE,
             "&9Input")
     );
-    public static final ItemStack borderItemOutput = StackUtils.makeUnique(new CustomItem(
+    public static final ItemStack borderItemOutput = makeUnique(new CustomItem(
             Material.ORANGE_STAINED_GLASS_PANE,
             "&6Output")
     );
-    public static final ItemStack borderItemStatus = StackUtils.makeUnique(new CustomItem(
+    public static final ItemStack borderItemStatus = makeUnique(new CustomItem(
             Material.CYAN_STAINED_GLASS_PANE,
             "&3Status")
     );
-    public static final ItemStack connectToEnergyNet = StackUtils.makeUnique(new CustomItem(
+    public static final ItemStack connectToEnergyNet = makeUnique(new CustomItem(
             Material.RED_STAINED_GLASS_PANE,
             "&cConnect to an energy network!")
     );
+    
 }

@@ -36,7 +36,12 @@ public class MultiFilter {
         for (int i = 0 ; i < stacks.length ; i++) {
             ItemStack stack = stacks[i];
             if (stack != null) {
-                builder.append(StackUtils.getIDorElse(stack, String.valueOf(stack.getType().ordinal())));
+                String id = StackUtils.getID(stack);
+                if (id == null) {
+                    builder.append(stack.getType().ordinal());
+                } else {
+                    builder.append(id);
+                }
                 amounts[i] = stack.getAmount();
             }
             builder.append("|");

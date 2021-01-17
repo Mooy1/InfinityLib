@@ -31,7 +31,12 @@ public class ItemFilter {
             this.string = "";
             this.amount = 0;
         } else {
-            this.string = StackUtils.getIDorElse(stack, String.valueOf(stack.getType().ordinal()));
+            String id = StackUtils.getID(stack);
+            if (id == null) {
+                this.string = String.valueOf(stack.getType().ordinal());
+            } else {
+                this.string = id;
+            }
             this.amount = stack.getAmount();
         }
         this.item = stack;
