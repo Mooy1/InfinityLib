@@ -47,6 +47,7 @@ public class MultiFilter {
         this.equalsType = equalsType;
     }
 
+    @Nonnull
     public static MultiFilter fromRecipe(ShapedRecipe recipe, FilterType type) {
         ItemStack[] array = new ItemStack[9];
         for (int row = 0 ; row < recipe.getShape().length ; row++) {
@@ -58,6 +59,7 @@ public class MultiFilter {
         return new MultiFilter(type, array);
     }
 
+    @Nonnull
     public static MultiFilter fromRecipe(ShapelessRecipe recipe, FilterType type) {
         ItemStack[] array = new ItemStack[9];
         for (int i = 0 ; i < recipe.getIngredientList().size() ; i++) {
@@ -83,6 +85,7 @@ public class MultiFilter {
     /**
      * gets the index of this array that matches the given filter
      */
+    @Nonnull
     public int[] getTransportSlot(@Nonnull ItemStack input, int[] possible) {
         ItemFilter filter = new ItemFilter(input, FilterType.IGNORE_AMOUNT);
         List<Integer> list = new ArrayList<>(4);
