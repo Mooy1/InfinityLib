@@ -53,19 +53,19 @@ public class MultiFilter {
     }
 
     @Nonnull
-    public static MultiFilter fromRecipe(ShapedRecipe recipe, FilterType type) {
+    public static MultiFilter fromRecipe(@Nonnull ShapedRecipe recipe, @Nonnull FilterType type) {
         ItemStack[] array = new ItemStack[9];
         for (int row = 0 ; row < recipe.getShape().length ; row++) {
             String line = recipe.getShape()[row];
             for (int column = 0 ; column < line.length() ; column++) {
-                array[(row * 3) + column] = recipe.getIngredientMap().get(line.charAt(column));
+                array[row * 3 + column] = recipe.getIngredientMap().get(line.charAt(column));
             }
         }
         return new MultiFilter(type, array);
     }
 
     @Nonnull
-    public static MultiFilter fromRecipe(ShapelessRecipe recipe, FilterType type) {
+    public static MultiFilter fromRecipe(@Nonnull ShapelessRecipe recipe, @Nonnull FilterType type) {
         ItemStack[] array = new ItemStack[9];
         for (int i = 0 ; i < recipe.getIngredientList().size() ; i++) {
             array[i] = recipe.getIngredientList().get(i);
@@ -91,7 +91,7 @@ public class MultiFilter {
      * gets the index of this array that matches the given filter
      */
     @Nonnull
-    public int[] getTransportSlot(@Nonnull ItemStack input, int[] possible) {
+    public int[] getTransportSlot(@Nonnull ItemStack input, @Nonnull int[] possible) {
         ItemFilter filter = new ItemFilter(input, FilterType.IGNORE_AMOUNT);
         List<Integer> list = new ArrayList<>(4);
         for (int i = 0 ; i < this.stacks.length ; i++) {

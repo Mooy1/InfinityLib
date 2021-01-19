@@ -1,11 +1,10 @@
 package io.github.mooy1.infinitylib.filter;
 
-import io.github.mooy1.infinitylib.PluginUtils;
 import io.github.mooy1.infinitylib.items.StackUtils;
-import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.Range;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -43,7 +42,7 @@ public class ItemFilter {
         this.equalsType = equalsType;
     }
     
-    public ItemFilter(@Nonnull Material material, int amount, @Nonnull FilterType equalsType) {
+    public ItemFilter(@Nonnull Material material, @Range(from = 1, to = 64) int amount, @Nonnull FilterType equalsType) {
         this(new ItemStack(material, amount), equalsType);
     }
 

@@ -11,6 +11,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.Range;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -90,7 +91,7 @@ public final class StackUtils {
     }
 
     @Nullable
-    public static ItemStack getItemByNullableID(@Nullable String id, int amount) {
+    public static ItemStack getItemByNullableID(@Nullable String id, @Range(from = 1, to = 64) int amount) {
         if (id == null) {
             return null;
         }
@@ -98,7 +99,7 @@ public final class StackUtils {
     }
 
     @Nullable
-    public static ItemStack getItemByNullableIDorType(@Nullable String id, int amount) throws IllegalArgumentException {
+    public static ItemStack getItemByNullableIDorType(@Nullable String id, @Range(from = 1, to = 64) int amount) {
         if (id == null) {
             return null;
         }
@@ -110,13 +111,8 @@ public final class StackUtils {
         return getItemByID(id, 1);
     }
 
-    @Nonnull
-    public static ItemStack getItemByIDorType(@Nonnull String id) throws IllegalArgumentException {
-        return getItemByIDorType(id, 1);
-    }
-    
     @Nullable
-    public static ItemStack getItemByID(@Nonnull String id, int amount) {
+    public static ItemStack getItemByID(@Nonnull String id, @Range(from = 1, to = 64) int amount) {
         SlimefunItem sfItem = SlimefunItem.getByID(id);
         if (sfItem != null) {
             return new CustomItem(sfItem.getItem(), amount);
@@ -124,9 +120,14 @@ public final class StackUtils {
             return null;
         }
     }
-    
-    @Nonnull
-    public static ItemStack getItemByIDorType(@Nonnull String id, int amount) throws IllegalArgumentException {
+
+    @Nullable
+    public static ItemStack getItemByIDorType(@Nonnull String id) {
+        return getItemByIDorType(id, 1);
+    }
+
+    @Nullable
+    public static ItemStack getItemByIDorType(@Nonnull String id, @Range(from = 1, to = 64) int amount) {
         SlimefunItem sfItem = SlimefunItem.getByID(id);
         if (sfItem != null) {
             return new CustomItem(sfItem.getItem(), amount);
@@ -135,7 +136,7 @@ public final class StackUtils {
             if (material != null){
                 return new ItemStack(material, amount);
             } else {
-                throw new IllegalArgumentException("Item ID " + id + " does not correspond to any item!");
+                return null;
             }
         }
     }

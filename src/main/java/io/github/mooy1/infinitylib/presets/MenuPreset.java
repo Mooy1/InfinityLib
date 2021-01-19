@@ -1,7 +1,6 @@
 package io.github.mooy1.infinitylib.presets;
 
 import io.github.mooy1.infinitylib.PluginUtils;
-import io.github.mooy1.infinitylib.items.StackUtils;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import lombok.experimental.UtilityClass;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
@@ -81,11 +80,6 @@ public final class MenuPreset {
         return item;
     }
     
-    public static final ItemStack emptyKey = makeUnique(new CustomItem(
-            Material.BARRIER,
-            "&cNo Target",
-            "&7Place a item here to set it as the target"
-    ));
     public static final ItemStack loadingItemRed = makeUnique(new CustomItem(
             Material.RED_STAINED_GLASS_PANE,
             "&cLoading...")

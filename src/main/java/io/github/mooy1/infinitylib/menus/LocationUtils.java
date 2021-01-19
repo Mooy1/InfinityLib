@@ -1,11 +1,7 @@
 package io.github.mooy1.infinitylib.menus;
 
 import lombok.experimental.UtilityClass;
-import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
-import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -104,16 +100,6 @@ public final class LocationUtils {
             return 5;
         } else {
             return -1;
-        }
-    }
-    
-    public static void breakBlock(@Nonnull Location l) {
-        l.getBlock().setType(Material.AIR);
-        SlimefunItem item = BlockStorage.check(l);
-        BlockStorage.clearBlockInfo(l);
-        World w = l.getWorld();
-        if (w != null && item != null) {
-            w.dropItemNaturally(l, item.getItem());
         }
     }
 

@@ -30,21 +30,18 @@ public final class MessageUtils {
     }
     
     public static void message(@Nonnull Player p, @Nonnull String... messages) {
-        validate();
         for (String m : messages) {
             p.sendMessage(ChatColors.color(m));
         }
     }
     
     public static void messageWithPrefix(@Nonnull Player p, @Nonnull String... messages) {
-        validate();
         for (String m : messages) {
             p.sendMessage(prefix + ChatColors.color(m));
         }
     }
 
     public static void broadcast(@Nonnull String message) {
-        validate();
         Bukkit.broadcastMessage(prefix + ChatColors.color(message));
     }
 
@@ -63,10 +60,6 @@ public final class MessageUtils {
                 message((Player) viewer, messages);
             }
         }
-    }
-
-    private static void validate() {
-        Validate.notNull(prefix, "Make sure to set the the prefix");
     }
     
 }

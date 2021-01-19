@@ -33,57 +33,30 @@ import javax.annotation.Nullable;
  */
 @UtilityClass
 public final class TransferUtils {
-
-    /**
-     * This method gets the BlockMenu of a location
-     *
-     * @param location location
-     *
-     * @return the BlockMenu if it exists
-     */
+    
     @Nullable
     public static BlockMenu getMenu(@Nonnull Location location) {
         return BlockStorage.getInventory(location);
     }
-
-    /**
-     * This method gets the vanilla inventory of a block
-     *
-     * @param b block
-     *
-     * @return the inventory if it exists
-     */
+    
     @Nullable
     public static Inventory getInventory(@Nonnull Block b) {
         if (hasInventory(b)) {
-
             BlockState state = PaperLib.getBlockState(b, false).getState();
-
             if (state instanceof InventoryHolder) {
-
                 return ((InventoryHolder) state).getInventory();
             }
         }
         return null;
     }
-
-    /**
-     * This method gets the location of the other chest in a double chest
-     *
-     * @param inventory inventory of chest
-     *
-     * @return both locations
-     */
+    
     @Nullable
     public static Pair<Location, Location> getBothChests(@Nonnull Inventory inventory) {
         InventoryHolder holder = inventory.getHolder();
-
         if (holder instanceof DoubleChest) {
-
             DoubleChest doubleChest = ((DoubleChest) holder);
             Chest leftChest = (Chest) doubleChest.getLeftSide();
             Chest rightChest = (Chest) doubleChest.getRightSide();
-
             if (leftChest != null && rightChest != null) {
                 return new Pair<>(leftChest.getLocation(), rightChest.getLocation());
             }
@@ -100,28 +73,16 @@ public final class TransferUtils {
         }
         return false;
     }
-
-    /**
-     * This methods gets the slots of a BlockMenu for a type of flow
-     *
-     * @param menu              menu to check
-     * @param itemTransportFlow input or output
-     * @param item              item being inputted
-     *
-     * @return slots
-     */
+    
     public static int[] getSlots(@Nonnull BlockMenu menu, @Nonnull ItemTransportFlow itemTransportFlow, @Nullable ItemStack item) {
         return menu.getPreset().getSlotsAccessedByItemTransport(menu, itemTransportFlow, item);
     }
 
     public static boolean hasInventory(@Nonnull Block block) {
-
         Material type = block.getType();
-
         if (SlimefunTag.SHULKER_BOXES.isTagged(type)) {
             return true;
         }
-
         switch (type) {
             case CHEST:
             case TRAPPED_CHEST:
@@ -138,14 +99,7 @@ public final class TransferUtils {
                 return false;
         }
     }
-
-    /**
-     * This method gets the output slots of a vanilla inventory
-     *
-     * @param inv inventory
-     *
-     * @return slot range
-     */
+    
     public static int[] getOutputSlots(Inventory inv) {
         if (inv instanceof FurnaceInventory) {
             return new int[] {2};
@@ -159,15 +113,7 @@ public final class TransferUtils {
             return array;
         }
     }
-
-    /**
-     * This method gets the input slot range of a vanilla inventory
-     *
-     * @param inv  inventory
-     * @param item item being inserted
-     *
-     * @return slot range
-     */
+    
     public static int[] getInputSlots(@Nonnull Inventory inv, @Nullable ItemStack item) {
         if (inv instanceof FurnaceInventory) {
             if (item != null && item.getType().isFuel()) {
