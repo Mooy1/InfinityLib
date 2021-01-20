@@ -5,6 +5,7 @@ import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.Category;
+import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import org.bukkit.block.Block;
@@ -12,7 +13,8 @@ import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
 
-public abstract class AbstractMachine extends AbstractContainer implements EnergyNetComponent {
+//TODO move to infinity ex
+public abstract class AbstractMachine extends SlimefunItem implements EnergyNetComponent, TickingContainer {
 
     protected int statusSlot;
     protected final int energy;
@@ -24,7 +26,7 @@ public abstract class AbstractMachine extends AbstractContainer implements Energ
     }
 
     @Override
-    public final void tick(@Nonnull Block b, @Nonnull BlockMenu inv) {
+    public final void tick(@Nonnull BlockMenu inv, @Nonnull Block b) {
         if (getCharge(b.getLocation()) < this.energy) {
             if (inv.hasViewer()) {
                 inv.replaceExistingItem(this.statusSlot, MenuPreset.notEnoughEnergy);
