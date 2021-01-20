@@ -19,6 +19,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 /**
  * slimefun item implementing must call register on itself
@@ -51,15 +52,13 @@ public interface TickingContainer {
     default void onPlace(@Nonnull BlockPlaceEvent e) {
         
     }
-
-    /**
-     * Only interfaces should override
-     */
+    
     void tick(@Nonnull BlockMenu menu, @Nonnull Block b);
     
     /**
      * Only interfaces should override
      */
+    @OverridingMethodsMustInvokeSuper
     default void beforeBreak(@Nonnull BlockBreakEvent e, BlockMenu menu) {
         onBreak(e, menu);
     }
@@ -67,6 +66,7 @@ public interface TickingContainer {
     /**
      * Only interfaces should override
      */
+    @OverridingMethodsMustInvokeSuper
     default void beforePlace(@Nonnull BlockPlaceEvent e) {
         onPlace(e);
     }
@@ -74,13 +74,15 @@ public interface TickingContainer {
     /**
      * Only interfaces should override
      */
+    @OverridingMethodsMustInvokeSuper
     default void beforeNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
         onNewInstance(menu, b);
     }
     
     /**
-     * Use this to register your UpgradeableBlock SlimefunItem
+     * Use this to register the TickingBlock handlers to its SlimefunItem
      */
+    @OverridingMethodsMustInvokeSuper
     default void register(@Nonnull SlimefunItem item) {
         item.addItemHandler((BlockBreakHandler) (e, item1, fortune, drops) -> {
             BlockMenu menu = BlockStorage.getInventory(e.getBlock());
