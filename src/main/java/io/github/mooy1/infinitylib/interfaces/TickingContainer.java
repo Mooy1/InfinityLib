@@ -1,4 +1,4 @@
-package io.github.mooy1.infinitylib.objects;
+package io.github.mooy1.infinitylib.interfaces;
 
 import io.github.thebusybiscuit.slimefun4.core.handlers.BlockBreakHandler;
 import io.github.thebusybiscuit.slimefun4.core.handlers.BlockPlaceHandler;
@@ -19,7 +19,6 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
-import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 /**
  * slimefun item implementing must call register on itself
@@ -27,8 +26,6 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
  */
 public interface TickingContainer {
     
-    void tick(@Nonnull BlockMenu menu, @Nonnull Block b);
-
     void setupMenu(@Nonnull BlockMenuPreset preset);
 
     @Nonnull
@@ -44,41 +41,63 @@ public interface TickingContainer {
     }
 
     default void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
-
+        
     }
 
-    default void onBreak(@Nonnull BlockMenu menu, @Nonnull BlockBreakEvent e) {
-
+    default void onBreak(@Nonnull BlockBreakEvent e, @Nonnull BlockMenu menu) {
+        
     }
 
     default void onPlace(@Nonnull BlockPlaceEvent e) {
-
+        
     }
 
     /**
-     * Use this to register your UpgradeableBlock
+     * Only interfaces should override
      */
-    @OverridingMethodsMustInvokeSuper
+    void tick(@Nonnull BlockMenu menu, @Nonnull Block b);
+    
+    /**
+     * Only interfaces should override
+     */
+    default void beforeBreak(@Nonnull BlockBreakEvent e, BlockMenu menu) {
+        onBreak(e, menu);
+    }
+
+    /**
+     * Only interfaces should override
+     */
+    default void beforePlace(@Nonnull BlockPlaceEvent e) {
+        onPlace(e);
+    }
+    
+    /**
+     * Only interfaces should override
+     */
+    default void beforeNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
+        onNewInstance(menu, b);
+    }
+    
+    /**
+     * Use this to register your UpgradeableBlock SlimefunItem
+     */
     default void register(@Nonnull SlimefunItem item) {
         item.addItemHandler((BlockBreakHandler) (e, item1, fortune, drops) -> {
             BlockMenu menu = BlockStorage.getInventory(e.getBlock());
             if (menu != null) {
-                onBreak(menu, e);
+                beforeBreak(e, menu);
             }
             return true;
-        });
-        item.addItemHandler(new BlockPlaceHandler(false) {
+        }, new BlockPlaceHandler(false) {
             @Override
             public void onPlayerPlace(BlockPlaceEvent e) {
-                onPlace(e);
+                beforePlace(e);
             }
-        });
-        item.addItemHandler(new BlockTicker() {
+        }, new BlockTicker() {
             @Override
             public boolean isSynchronized() {
                 return true;
             }
-
             @Override
             public void tick(Block b, SlimefunItem item, Config data) {
                 BlockMenu menu = BlockStorage.getInventory(b);
@@ -103,11 +122,11 @@ public interface TickingContainer {
             }
             @Override
             public void newInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
-                TickingContainer.this.onNewInstance(menu, b);
+                beforeNewInstance(menu, b);
             }
             @Override
             public int[] getSlotsAccessedByItemTransport(DirtyChestMenu menu, ItemTransportFlow flow, ItemStack item) {
-                return TickingContainer.this.getTransportSlots(menu, flow, item);
+                return getTransportSlots(menu, flow, item);
             }
         };
     }
