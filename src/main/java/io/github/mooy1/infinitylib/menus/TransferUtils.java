@@ -166,7 +166,6 @@ public final class TransferUtils {
         ItemStackWrapper wrapper = new ItemStackWrapper(stack);
 
         for (int slot : getInputSlots(inv, stack)) {
-            // Changes to this ItemStack are synchronized with the Item in the Inventory
             ItemStack itemInSlot = contents[slot];
 
             if (itemInSlot == null) {
@@ -193,8 +192,35 @@ public final class TransferUtils {
         return stack;
     }
 
+    /**
+     * @return whether successful
+     */
+    public static boolean tryInsertToVanillaInventory(@Nonnull ItemStack stack, @Nonnull Inventory inv) {
+        ItemStack[] contents = inv.getContents();
+        ItemStackWrapper wrapper = new ItemStackWrapper(stack);
+        for (int slot : getInputSlots(inv, stack)) {
+            ItemStack itemInSlot = contents[slot];
+
+            if (itemInSlot == null) {
+                inv.setItem(slot, stack);
+                return true;
+            } else {
+                int maxStackSize = itemInSlot.getType().getMaxStackSize();
+                if (SlimefunUtils.isItemSimilar(itemInSlot, wrapper, true, false) && itemInSlot.getAmount() < maxStackSize) {
+                    int amount = itemInSlot.getAmount() + stack.getAmount();
+                    if (amount <= maxStackSize) {
+                        itemInSlot.setAmount(amount);
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+
     public static ItemStack insertToBlockMenu(@Nonnull BlockMenu menu, @Nonnull ItemStack item) {
         return menu.pushItem(item, TransferUtils.getSlots(menu, ItemTransportFlow.INSERT, item));
     }
-
+    
 }
