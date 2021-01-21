@@ -7,7 +7,6 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Range;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 /**
  * A utility class for testing if items fit a 'filter' for each other
@@ -18,27 +17,13 @@ import javax.annotation.Nullable;
 public class ItemFilter {
     
     @Getter
-    private final int amount;
-    @Getter
-    private final String string;
-    @Getter
-    private final ItemStack item;
-    private final FilterType equalsType;
+    protected final int amount;
+    protected final String string;
+    protected final FilterType equalsType;
     
-    public ItemFilter(@Nullable ItemStack stack, @Nonnull FilterType equalsType) {
-        if (stack == null) {
-            this.string = "";
-            this.amount = 0;
-        } else {
-            String id = StackUtils.getID(stack);
-            if (id == null) {
-                this.string = String.valueOf(stack.getType().ordinal());
-            } else {
-                this.string = id;
-            }
-            this.amount = stack.getAmount();
-        }
-        this.item = stack;
+    public ItemFilter(@Nonnull ItemStack stack, @Nonnull FilterType equalsType) {
+        this.string = StackUtils.getIDorType(stack);
+        this.amount = stack.getAmount();
         this.equalsType = equalsType;
     }
     

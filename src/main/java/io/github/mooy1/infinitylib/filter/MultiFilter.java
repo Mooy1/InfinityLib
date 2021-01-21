@@ -4,12 +4,8 @@ import io.github.mooy1.infinitylib.items.StackUtils;
 import lombok.Getter;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.inventory.ShapelessRecipe;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A utility class to be used over ItemFilter arrays
@@ -20,15 +16,9 @@ import java.util.List;
 public class MultiFilter {
     
     @Getter
-    @Nonnull
-    private final String string;
-    @Getter
-    @Nonnull
-    private final int[] amounts;
-    @Getter
-    @Nonnull
-    private final ItemStack[] stacks;
-    private final FilterType equalsType;
+    protected final int[] amounts;
+    protected final String string;
+    protected final FilterType equalsType;
 
     public MultiFilter(@Nonnull FilterType equalsType, @Nonnull ItemStack... stacks) { 
         StringBuilder builder = new StringBuilder();
@@ -36,41 +26,14 @@ public class MultiFilter {
         for (int i = 0 ; i < stacks.length ; i++) {
             ItemStack stack = stacks[i];
             if (stack != null) {
-                String id = StackUtils.getID(stack);
-                if (id == null) {
-                    builder.append(stack.getType().ordinal());
-                } else {
-                    builder.append(id);
-                }
+                builder.append(StackUtils.getIDorType(stack));
                 amounts[i] = stack.getAmount();
             }
-            builder.append("|");
+            builder.append("-");
         }
         this.string = builder.toString();
         this.amounts = amounts;
-        this.stacks = stacks;
         this.equalsType = equalsType;
-    }
-
-    @Nonnull
-    public static MultiFilter fromRecipe(@Nonnull ShapedRecipe recipe, @Nonnull FilterType type) {
-        ItemStack[] array = new ItemStack[9];
-        for (int row = 0 ; row < recipe.getShape().length ; row++) {
-            String line = recipe.getShape()[row];
-            for (int column = 0 ; column < line.length() ; column++) {
-                array[row * 3 + column] = recipe.getIngredientMap().get(line.charAt(column));
-            }
-        }
-        return new MultiFilter(type, array);
-    }
-
-    @Nonnull
-    public static MultiFilter fromRecipe(@Nonnull ShapelessRecipe recipe, @Nonnull FilterType type) {
-        ItemStack[] array = new ItemStack[9];
-        for (int i = 0 ; i < recipe.getIngredientList().size() ; i++) {
-            array[i] = recipe.getIngredientList().get(i);
-        }
-        return new MultiFilter(type, array);
     }
 
     /**
@@ -85,25 +48,6 @@ public class MultiFilter {
      */
     public boolean fits(@Nonnull MultiFilter input) {
         return fits(input, this.equalsType);
-    }
-    
-    /**
-     * gets the index of this array that matches the given filter
-     */
-    @Nonnull
-    public int[] getTransportSlot(@Nonnull ItemStack input, @Nonnull int[] possible) {
-        ItemFilter filter = new ItemFilter(input, FilterType.IGNORE_AMOUNT);
-        List<Integer> list = new ArrayList<>(4);
-        for (int i = 0 ; i < this.stacks.length ; i++) {
-            if (filter.fits(new ItemFilter(this.stacks[i], FilterType.IGNORE_AMOUNT))) {
-                list.add(i);
-            }
-        }
-        int[] slots = new int[list.size()];
-        for (int i = 0 ; i < list.size() ; i++) {
-            slots[i] = possible[list.get(i)];
-        }
-        return slots;
     }
     
     /**

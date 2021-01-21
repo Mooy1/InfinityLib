@@ -50,6 +50,7 @@ public final class StackUtils {
         return getID(item.getItemMeta().getPersistentDataContainer());
     }
     
+    @Nonnull
     public static String getIDorType(@Nonnull ItemStack item) {
         String id = getID(item);
         if (id == null) {

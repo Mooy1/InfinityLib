@@ -1,6 +1,5 @@
 package io.github.mooy1.infinitylib;
 
-import io.github.mooy1.infinitylib.player.LeaveListener;
 import io.github.mooy1.infinitylib.player.MessageUtils;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
@@ -21,7 +20,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import javax.annotation.Nonnull;
 import java.io.File;
 import java.util.Locale;
-import java.util.function.Consumer;
 import java.util.logging.Level;
 
 @UtilityClass
@@ -133,7 +131,7 @@ public final class PluginUtils {
             for (int i = 0 ; i < reps ; i++) {
                 run.run();
             }
-            log("Time Dif Ms: " + ((System.nanoTime() - nanos) / 1000000));
+            log("Time Dif Ms: " + ((System.nanoTime() - nanos) / 1000000D));
         }
     }
     

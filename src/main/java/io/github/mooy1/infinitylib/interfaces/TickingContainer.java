@@ -27,6 +27,8 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
  */
 public interface TickingContainer {
     
+    void tick(@Nonnull BlockMenu menu, @Nonnull Block b, @Nonnull Config data);
+
     void setupMenu(@Nonnull BlockMenuPreset preset);
 
     @Nonnull
@@ -41,59 +43,36 @@ public interface TickingContainer {
         return true;
     }
 
+    @OverridingMethodsMustInvokeSuper
     default void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
         
     }
 
+    @OverridingMethodsMustInvokeSuper
     default void onBreak(@Nonnull BlockBreakEvent e, @Nonnull BlockMenu menu) {
         
     }
 
+    @OverridingMethodsMustInvokeSuper
     default void onPlace(@Nonnull BlockPlaceEvent e) {
         
     }
     
-    void tick(@Nonnull BlockMenu menu, @Nonnull Block b);
-    
     /**
-     * Only interfaces should override
-     */
-    @OverridingMethodsMustInvokeSuper
-    default void beforeBreak(@Nonnull BlockBreakEvent e, BlockMenu menu) {
-        onBreak(e, menu);
-    }
-
-    /**
-     * Only interfaces should override
-     */
-    @OverridingMethodsMustInvokeSuper
-    default void beforePlace(@Nonnull BlockPlaceEvent e) {
-        onPlace(e);
-    }
-    
-    /**
-     * Only interfaces should override
-     */
-    @OverridingMethodsMustInvokeSuper
-    default void beforeNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
-        onNewInstance(menu, b);
-    }
-    
-    /**
-     * Use this to register the TickingBlock handlers to its SlimefunItem
+     * Use this to register the TickingBlock handlers to this SlimefunItem
      */
     @OverridingMethodsMustInvokeSuper
     default void register(@Nonnull SlimefunItem item) {
         item.addItemHandler((BlockBreakHandler) (e, item1, fortune, drops) -> {
             BlockMenu menu = BlockStorage.getInventory(e.getBlock());
             if (menu != null) {
-                beforeBreak(e, menu);
+                onBreak(e, menu);
             }
             return true;
         }, new BlockPlaceHandler(false) {
             @Override
             public void onPlayerPlace(BlockPlaceEvent e) {
-                beforePlace(e);
+                onPlace(e);
             }
         }, new BlockTicker() {
             @Override
@@ -104,7 +83,7 @@ public interface TickingContainer {
             public void tick(Block b, SlimefunItem item, Config data) {
                 BlockMenu menu = BlockStorage.getInventory(b);
                 if (menu != null) {
-                    TickingContainer.this.tick(menu, b);
+                    TickingContainer.this.tick(menu, b, data);
                 }
             }
         });
@@ -116,7 +95,7 @@ public interface TickingContainer {
             @Override
             public boolean canOpen(@Nonnull Block b, @Nonnull Player p) {
                 return p.hasPermission("slimefun.inventory.bypass")
-                        || (canOpen(b, p) || SlimefunPlugin.getProtectionManager().hasPermission(p, b, ProtectableAction.INTERACT_BLOCK));
+                        || (TickingContainer.this.canOpen(b, p) || SlimefunPlugin.getProtectionManager().hasPermission(p, b, ProtectableAction.INTERACT_BLOCK));
             }
             @Override
             public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
@@ -124,7 +103,7 @@ public interface TickingContainer {
             }
             @Override
             public void newInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
-                beforeNewInstance(menu, b);
+                onNewInstance(menu, b);
             }
             @Override
             public int[] getSlotsAccessedByItemTransport(DirtyChestMenu menu, ItemTransportFlow flow, ItemStack item) {
