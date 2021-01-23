@@ -19,14 +19,9 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
 public interface ContainerBlock {
     
     void setupMenu(@Nonnull BlockMenuPreset preset);
-
+    
     @Nonnull
-    int[] getTransportSlots(@Nonnull ItemTransportFlow flow);
-
-    @Nonnull
-    default int[] getTransportSlots(@Nonnull DirtyChestMenu menu, @Nonnull  ItemTransportFlow flow, ItemStack item) {
-        return getTransportSlots(flow);
-    }
+    int[] getTransportSlots(@Nonnull DirtyChestMenu menu, @Nonnull  ItemTransportFlow flow, ItemStack item);
 
     default boolean canOpen(@Nonnull Block b, @Nonnull Player p) {
         return true;
