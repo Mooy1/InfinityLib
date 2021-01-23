@@ -1,5 +1,6 @@
 package io.github.mooy1.infinitylib.command;
 
+import io.github.mooy1.infinitylib.PluginUtils;
 import me.mrCookieSlime.Slimefun.cscorelib2.chat.ChatColors;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -9,7 +10,6 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -24,27 +24,26 @@ import java.util.Set;
 
 public final class CommandLib implements CommandExecutor, Listener, TabCompleter {
 
-    private static final Set<LibCommand> commands = new HashSet<>();
+    private static final Set<LibCommand> COMMANDS = new HashSet<>();
+
+    public static void setup(String command, String permission, String aliases, LibCommand... commands) {
+        new CommandLib(command, permission, aliases);
+        COMMANDS.addAll(Arrays.asList(commands));
+    }
     
     private final String permission;
     private final String aliases;
-    private final JavaPlugin plugin;
     private final String help;
     private final String command;
     
-    public CommandLib(JavaPlugin plugin, String command, String permission, String aliases) {
+    private CommandLib(String command, String permission, String aliases) {
         this.permission = permission;
         this.aliases = aliases;
-        this.plugin = plugin;
         this.command = command;
-        this.help = "/help " + command; 
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
-        Objects.requireNonNull(plugin.getCommand(command)).setExecutor(this);
-        Objects.requireNonNull(plugin.getCommand(command)).setTabCompleter(this);
-    }
-    
-    public static void addCommands(@Nonnull LibCommand... command) {
-        commands.addAll(Arrays.asList(command));
+        this.help = "/help " + command;
+        PluginUtils.registerEvents(this);
+        Objects.requireNonNull(PluginUtils.getPlugin().getCommand(command)).setExecutor(this);
+        Objects.requireNonNull(PluginUtils.getPlugin().getCommand(command)).setTabCompleter(this);
     }
     
     @Override
@@ -54,7 +53,7 @@ public final class CommandLib implements CommandExecutor, Listener, TabCompleter
                 sendHelp(sender);
                 return true;
             }
-            for (LibCommand libCommand : commands) {
+            for (LibCommand libCommand : COMMANDS) {
                 if (args[0].equalsIgnoreCase(libCommand.getName())) {
                     if (!libCommand.isOp() || sender.hasPermission(this.permission)) {
                         libCommand.onExecute(sender, args);
@@ -70,10 +69,10 @@ public final class CommandLib implements CommandExecutor, Listener, TabCompleter
 
     public void sendHelp(@Nonnull CommandSender sender) {
         sender.sendMessage("");
-        sender.sendMessage(ChatColors.color("&7----------&b&l " + this.plugin.getName() + " &7----------"));
+        sender.sendMessage(ChatColors.color("&7----------&b&l " + PluginUtils.getPlugin().getName() + " &7----------"));
         sender.sendMessage("");
         
-        for (LibCommand cmd : commands) {
+        for (LibCommand cmd : COMMANDS) {
             if (!cmd.isOp() || sender.hasPermission(this.permission)) {
                 sender.sendMessage(ChatColors.color("&6/" + this.command + " " + cmd.getName() + " &e- " + cmd.getDescription()));
             }
@@ -102,7 +101,7 @@ public final class CommandLib implements CommandExecutor, Listener, TabCompleter
 
             List<String> subCommands = new ArrayList<>();
             subCommands.add("help");
-            for (LibCommand libCommand : commands) {
+            for (LibCommand libCommand : COMMANDS) {
                 if (!libCommand.isOp() || sender.hasPermission(this.permission)) {
                     subCommands.add(libCommand.getName());
                 }
@@ -110,7 +109,7 @@ public final class CommandLib implements CommandExecutor, Listener, TabCompleter
             return createReturnList(subCommands, args[0]);
 
         } else if (args.length > 1) {
-            for (LibCommand libCommand : commands) {
+            for (LibCommand libCommand : COMMANDS) {
                 if (args[0].equalsIgnoreCase(libCommand.getName())) {
                     return createReturnList(libCommand.onTab(sender, args), args[args.length - 1]);
                 }
@@ -121,7 +120,7 @@ public final class CommandLib implements CommandExecutor, Listener, TabCompleter
     }
 
     @Nonnull
-    private List<String> createReturnList(@Nonnull List<String> list, @Nonnull String string) {
+    private static List<String> createReturnList(@Nonnull List<String> list, @Nonnull String string) {
         if (string.length() == 0) {
             return list;
         }

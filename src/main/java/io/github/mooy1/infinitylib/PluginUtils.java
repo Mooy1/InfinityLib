@@ -29,6 +29,8 @@ public final class PluginUtils {
     @Getter
     private static JavaPlugin plugin = null;
     @Getter
+    private static SlimefunAddon addon = null;
+    @Getter
     private static int currentTick = 0;
     @Getter
     private static long timings = 0;
@@ -38,13 +40,14 @@ public final class PluginUtils {
     /**
      * sets up plugin config and starts auto updater
      */
-    public static void setup(@Nonnull String prefix, @Nonnull JavaPlugin javaPlugin, @Nonnull String url, @Nonnull File file) {
-        plugin = javaPlugin;
+    public static void setup(@Nonnull String prefix, @Nonnull SlimefunAddon addon, @Nonnull String url, @Nonnull File file) {
+        PluginUtils.addon = addon;
+        plugin = addon.getJavaPlugin();
         MessageUtils.prefix = ChatColor.GRAY + "[" + prefix + ChatColor.GRAY + "] " + ChatColor.WHITE;
-        javaPlugin.saveDefaultConfig();
-        javaPlugin.getConfig().options().copyDefaults(true).copyHeader(true);
-        javaPlugin.saveConfig();
-        if (javaPlugin.getDescription().getVersion().startsWith("DEV - ")) {
+        plugin.saveDefaultConfig();
+        plugin.getConfig().options().copyDefaults(true).copyHeader(true);
+        plugin.saveConfig();
+        if (plugin.getDescription().getVersion().startsWith("DEV - ")) {
             log(Level.INFO, "Starting auto update");
             new GitHubBuildsUpdater(plugin, file, url).start();
         } else {
@@ -105,7 +108,7 @@ public final class PluginUtils {
         plugin.getServer().getScheduler().runTask(plugin, runnable);
     }
     
-    public static void registerAddonInfoItem(Category category, SlimefunAddon addon) {
+    public static void registerAddonInfoItem(Category category) {
         new SlimefunItem(category, new SlimefunItemStack(
                 addon.getName().toUpperCase(Locale.ROOT) + "_ADDON_INFO",
                 Material.NETHER_STAR,

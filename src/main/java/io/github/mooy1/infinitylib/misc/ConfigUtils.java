@@ -1,9 +1,7 @@
 package io.github.mooy1.infinitylib.misc;
 
 import io.github.mooy1.infinitylib.PluginUtils;
-import lombok.Setter;
 import lombok.experimental.UtilityClass;
-import org.apache.commons.lang.Validate;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.Objects;
@@ -12,8 +10,7 @@ import java.util.logging.Level;
 @UtilityClass
 public final class ConfigUtils {
     
-    @Setter
-    private static FileConfiguration config;
+    private static final FileConfiguration config = PluginUtils.getPlugin().getConfig();
     
     public static int getOrDefault(String path, int min, int max, int def) {
         if (hasPath(path)) {
@@ -63,7 +60,6 @@ public final class ConfigUtils {
     }
 
     private static boolean hasPath(String path) {
-        Validate.notNull(config, "You must set the config before using config utils");
         if (config.contains(path)) {
             return true;
         } else {
