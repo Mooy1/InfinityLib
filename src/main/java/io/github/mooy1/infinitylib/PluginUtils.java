@@ -11,6 +11,7 @@ import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.cscorelib2.updater.GitHubBuildsUpdater;
 import org.apache.commons.lang.Validate;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -27,12 +28,15 @@ public final class PluginUtils {
     
     @Getter
     private static JavaPlugin plugin = null;
-    
+    @Getter
+    private static int currentTick = 0;
+    @Getter
+    private static long timings = 0;
     public static final int TICKER_DELAY = SlimefunPlugin.getCfg().getInt("URID.custom-ticker-delay");
     public static final float TICK_RATIO = 20F / PluginUtils.TICKER_DELAY;
 
     /**
-     * sets up config and utility plugin
+     * sets up plugin config and starts auto updater
      */
     public static void setup(@Nonnull String prefix, @Nonnull JavaPlugin javaPlugin, @Nonnull String url, @Nonnull File file) {
         plugin = javaPlugin;
@@ -124,15 +128,32 @@ public final class PluginUtils {
         Validate.notNull(plugin, "Make sure to set the plugin instance");
     }
     
-    public static void testCode(int reps, Runnable... runnable) {
-        long nanos;
-        for (Runnable run : runnable) {
-            nanos = System.nanoTime();
-            for (int i = 0 ; i < reps ; i++) {
-                run.run();
+    public static void startTicker() {
+        Validate.isTrue(currentTick == 0, "Ticker already started!");
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
+            long time = System.currentTimeMillis();
+            if (currentTick < 600) {
+                currentTick++;
+            } else {
+                currentTick = 1;
             }
-            log("Time Dif Ms: " + ((System.nanoTime() - nanos) / 1000000D));
-        }
+            timings = System.currentTimeMillis() - time;
+        }, 10L, PluginUtils.TICKER_DELAY);
+    }
+
+    public static void startTicker(@Nonnull Runnable onTick) {
+        Validate.isTrue(currentTick == 0, "Ticker already started!");
+        Validate.notNull(onTick, "Cannot start a null ticker");
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
+            long time = System.currentTimeMillis();
+            if (currentTick < 600) {
+                currentTick++;
+            } else {
+                currentTick = 1;
+            }
+            onTick.run();
+            timings = System.currentTimeMillis() - time;
+        }, 10L, PluginUtils.TICKER_DELAY);
     }
     
 }
