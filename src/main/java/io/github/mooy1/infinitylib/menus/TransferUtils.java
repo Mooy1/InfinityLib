@@ -6,7 +6,6 @@ import io.github.thebusybiscuit.slimefun4.utils.SlimefunUtils;
 import io.github.thebusybiscuit.slimefun4.utils.itemstack.ItemStackWrapper;
 import io.github.thebusybiscuit.slimefun4.utils.tags.SlimefunTag;
 import lombok.experimental.UtilityClass;
-import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import me.mrCookieSlime.Slimefun.cscorelib2.collections.Pair;
@@ -35,11 +34,6 @@ import javax.annotation.Nullable;
 public final class TransferUtils {
     
     @Nullable
-    public static BlockMenu getMenu(@Nonnull Location location) {
-        return BlockStorage.getInventory(location);
-    }
-    
-    @Nullable
     public static Inventory getInventory(@Nonnull Block b) {
         if (hasInventory(b)) {
             BlockState state = PaperLib.getBlockState(b, false).getState();
@@ -61,7 +55,6 @@ public final class TransferUtils {
                 return new Pair<>(leftChest.getLocation(), rightChest.getLocation());
             }
         }
-
         return null;
     }
 
@@ -69,7 +62,8 @@ public final class TransferUtils {
         if (inv != null) {
             Pair<Location, Location> pair = getBothChests(inv);
             if (pair == null) return false;
-            return pair.getFirstValue().equals(a) && pair.getSecondValue().equals(b) || pair.getSecondValue().equals(a) && pair.getFirstValue().equals(b);
+            return (pair.getFirstValue().equals(a) && pair.getSecondValue().equals(b))
+                    || (pair.getSecondValue().equals(a) && pair.getFirstValue().equals(b));
         }
         return false;
     }
@@ -216,11 +210,6 @@ public final class TransferUtils {
             }
         }
         return false;
-    }
-
-
-    public static ItemStack insertToBlockMenu(@Nonnull BlockMenu menu, @Nonnull ItemStack item) {
-        return menu.pushItem(item, TransferUtils.getSlots(menu, ItemTransportFlow.INSERT, item));
     }
     
 }

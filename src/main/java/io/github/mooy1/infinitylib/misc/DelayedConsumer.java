@@ -11,8 +11,9 @@ public final class DelayedConsumer<A, B> implements BiConsumer<A, B> {
     private List<Pair<A, B>> toBeAccepted = new ArrayList<>();
     private BiConsumer<A, B> consumer = null;
 
-    public DelayedConsumer() { }
+    public DelayedConsumer() {}
 
+    @Override
     public void accept(A a, B b) {
         if (this.consumer == null) {
             this.toBeAccepted.add(new Pair<>(a, b));

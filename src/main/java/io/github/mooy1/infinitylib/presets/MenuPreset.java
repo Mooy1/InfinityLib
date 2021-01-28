@@ -65,8 +65,7 @@ public final class MenuPreset {
     }
 
     private static final NamespacedKey key = PluginUtils.getKey("unique");
-
-
+    
     @Nonnull
     public static ItemStack getUnique(@Nonnull ItemStack item) {
         return makeUnique(item.clone());

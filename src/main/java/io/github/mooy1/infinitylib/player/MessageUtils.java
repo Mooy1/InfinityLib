@@ -1,11 +1,9 @@
 package io.github.mooy1.infinitylib.player;
 
+import io.github.mooy1.infinitylib.PluginUtils;
 import lombok.experimental.UtilityClass;
-import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.cscorelib2.chat.ChatColors;
-import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 
 import javax.annotation.Nonnull;
@@ -22,8 +20,7 @@ import java.util.UUID;
 @UtilityClass
 public final class MessageUtils {
 
-    public static final Map<UUID, Long> coolDowns = new HashMap<>();
-    public static String prefix = null;
+    private static final Map<UUID, Long> coolDowns = new HashMap<>();
     
     static {
         LeaveListener.add(coolDowns);
@@ -37,12 +34,12 @@ public final class MessageUtils {
     
     public static void messageWithPrefix(@Nonnull Player p, @Nonnull String... messages) {
         for (String m : messages) {
-            p.sendMessage(prefix + ChatColors.color(m));
+            p.sendMessage(PluginUtils.getPrefix() + ChatColors.color(m));
         }
     }
 
     public static void broadcast(@Nonnull String message) {
-        Bukkit.broadcastMessage(prefix + ChatColors.color(message));
+        Bukkit.broadcastMessage(PluginUtils.getPrefix() + ChatColors.color(message));
     }
 
     public static void messageWithCD(@Nonnull Player p, long coolDown, @Nonnull String... messages) {
@@ -52,14 +49,6 @@ public final class MessageUtils {
         coolDowns.put(p.getUniqueId(), System.currentTimeMillis());
         
         message(p, messages);
-    }
-
-    public static void messagePlayersInInv(@Nonnull BlockMenu inv, @Nonnull String... messages) {
-        if (inv.hasViewer()) {
-            for (HumanEntity viewer : inv.toInventory().getViewers().toArray(new HumanEntity[1])) {
-                message((Player) viewer, messages);
-            }
-        }
     }
     
 }

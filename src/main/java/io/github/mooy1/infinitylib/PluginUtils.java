@@ -1,6 +1,5 @@
 package io.github.mooy1.infinitylib;
 
-import io.github.mooy1.infinitylib.player.MessageUtils;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import lombok.Getter;
@@ -28,13 +27,21 @@ public final class PluginUtils {
     
     @Getter
     private static JavaPlugin plugin = null;
+    
     @Getter
     private static SlimefunAddon addon = null;
+    
     @Getter
     private static int currentTick = 0;
+    
     @Getter
     private static long timings = 0;
+    
+    @Getter
+    private static String prefix = null;
+    
     public static final int TICKER_DELAY = SlimefunPlugin.getCfg().getInt("URID.custom-ticker-delay");
+    
     public static final float TICK_RATIO = 20F / PluginUtils.TICKER_DELAY;
 
     /**
@@ -42,39 +49,38 @@ public final class PluginUtils {
      */
     public static void setup(@Nonnull String prefix, @Nonnull SlimefunAddon addon, @Nonnull String url, @Nonnull File file) {
         PluginUtils.addon = addon;
+        
         plugin = addon.getJavaPlugin();
-        MessageUtils.prefix = ChatColor.GRAY + "[" + prefix + ChatColor.GRAY + "] " + ChatColor.WHITE;
+        
+        PluginUtils.prefix = ChatColor.GRAY + "[" + prefix + ChatColor.GRAY + "] " + ChatColor.WHITE;
+        
+        // setup config
         plugin.saveDefaultConfig();
         plugin.getConfig().options().copyDefaults(true).copyHeader(true);
         plugin.saveConfig();
+        
+        // auto update
         if (plugin.getDescription().getVersion().startsWith("DEV - ")) {
-            log(Level.INFO, "Starting auto update");
             new GitHubBuildsUpdater(plugin, file, url).start();
-        } else {
-            log(Level.WARNING, "You must be on a DEV build to auto update!");
         }
     }
     
+    @Nonnull
     public static NamespacedKey getKey(@Nonnull String key) {
         return new NamespacedKey(plugin, key);
     }
 
-    public static void log(@Nonnull Level level , @Nonnull String... logs) {
-        validate();
+    public static void log(@Nonnull Level level, @Nonnull String... logs) {
         for (String log : logs) {
             plugin.getLogger().log(level, log);
         }
     }
     
     public static void log(@Nonnull String... logs) {
-        validate();
-        for (String log : logs) {
-            plugin.getLogger().log(Level.INFO, log);
-        }
+        log(Level.INFO, logs);
     }
     
     public static void runSync(@Nonnull Runnable runnable, long delay) {
-        validate();
         Validate.notNull(runnable, "Cannot run null");
         Validate.isTrue(delay >= 0, "The delay cannot be negative");
 
@@ -86,7 +92,6 @@ public final class PluginUtils {
     }
 
     public static void scheduleRepeatingSync(@Nonnull Runnable runnable, long delay, long interval) {
-        validate();
         Validate.notNull(runnable, "Cannot run null");
         Validate.isTrue(delay >= 0, "The delay cannot be negative");
 
@@ -98,7 +103,6 @@ public final class PluginUtils {
     }
 
     public static void runSync(@Nonnull Runnable runnable) {
-        validate();
         Validate.notNull(runnable, "Cannot run null");
 
         if (!plugin.isEnabled()) {
@@ -108,7 +112,7 @@ public final class PluginUtils {
         plugin.getServer().getScheduler().runTask(plugin, runnable);
     }
     
-    public static void registerAddonInfoItem(Category category) {
+    public static void registerAddonInfoItem(@Nonnull Category category) {
         new SlimefunItem(category, new SlimefunItemStack(
                 addon.getName().toUpperCase(Locale.ROOT) + "_ADDON_INFO",
                 Material.NETHER_STAR,
@@ -126,22 +130,12 @@ public final class PluginUtils {
     public static void registerEvents(@Nonnull Listener listener) {
         PluginUtils.getPlugin().getServer().getPluginManager().registerEvents(listener, PluginUtils.getPlugin());
     }
-    
-    private static void validate() {
-        Validate.notNull(plugin, "Make sure to set the plugin instance");
-    }
-    
+
+    /**
+     * ticker that does nothing on tick
+     */
     public static void startTicker() {
-        Validate.isTrue(currentTick == 0, "Ticker already started!");
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
-            long time = System.currentTimeMillis();
-            if (currentTick < 600) {
-                currentTick++;
-            } else {
-                currentTick = 1;
-            }
-            timings = System.currentTimeMillis() - time;
-        }, 10L, PluginUtils.TICKER_DELAY);
+        startTicker(() -> {});
     }
 
     public static void startTicker(@Nonnull Runnable onTick) {
@@ -156,7 +150,7 @@ public final class PluginUtils {
             }
             onTick.run();
             timings = System.currentTimeMillis() - time;
-        }, 10L, PluginUtils.TICKER_DELAY);
+        }, 10L, TICKER_DELAY);
     }
     
 }

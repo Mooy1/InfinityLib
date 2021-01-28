@@ -16,7 +16,7 @@ public final class RecipePreset {
     }
 
     @Nonnull
-    public static ItemStack[] MiddleItem(@Nonnull ItemStack item) {
+    public static ItemStack[] middleItem(@Nonnull ItemStack item) {
         return new ItemStack[] {
                 null, null, null, null , item, null, null, null, null
         };
