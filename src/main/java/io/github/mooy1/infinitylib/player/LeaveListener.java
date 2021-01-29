@@ -6,7 +6,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +20,7 @@ public final class LeaveListener implements Listener {
     private static final List<Map<UUID, ?>> maps = new ArrayList<>();
     
     private LeaveListener() {
-        PluginUtils.registerEvents(this);
+        PluginUtils.registerListener(this);
     }
     
     public static void add(Map<UUID, ?> map) {

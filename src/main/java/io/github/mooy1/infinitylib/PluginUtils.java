@@ -4,22 +4,16 @@ import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import lombok.Getter;
 import lombok.experimental.UtilityClass;
-import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import me.mrCookieSlime.Slimefun.Objects.Category;
-import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
-import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.cscorelib2.updater.GitHubBuildsUpdater;
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.annotation.Nonnull;
 import java.io.File;
-import java.util.Locale;
 import java.util.logging.Level;
 
 @UtilityClass
@@ -112,41 +106,19 @@ public final class PluginUtils {
         plugin.getServer().getScheduler().runTask(plugin, runnable);
     }
     
-    public static void registerAddonInfoItem(@Nonnull Category category) {
-        new SlimefunItem(category, new SlimefunItemStack(
-                addon.getName().toUpperCase(Locale.ROOT) + "_ADDON_INFO",
-                Material.NETHER_STAR,
-                "&bAddon Info",
-                "&fVersion: &7" + addon.getPluginVersion(),
-                "",
-                "&fDiscord: &b@&7Riley&8#5911",
-                "&7discord.gg/slimefun",
-                "",
-                "&fGithub: &b@&8&7Mooy1",
-                "&7" + addon.getBugTrackerURL()
-        ), RecipeType.NULL, null).register(addon);
-    }
-
-    public static void registerEvents(@Nonnull Listener listener) {
+    public static void registerListener(@Nonnull Listener listener) {
         PluginUtils.getPlugin().getServer().getPluginManager().registerEvents(listener, PluginUtils.getPlugin());
     }
-
-    /**
-     * ticker that does nothing on tick
-     */
-    public static void startTicker() {
-        startTicker(() -> {});
-    }
-
+    
     public static void startTicker(@Nonnull Runnable onTick) {
         Validate.isTrue(currentTick == 0, "Ticker already started!");
         Validate.notNull(onTick, "Cannot start a null ticker");
         Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
             long time = System.currentTimeMillis();
-            if (currentTick < 600) {
-                currentTick++;
-            } else {
+            if (currentTick == 6000) {
                 currentTick = 1;
+            } else {
+                currentTick++;
             }
             onTick.run();
             timings = System.currentTimeMillis() - time;

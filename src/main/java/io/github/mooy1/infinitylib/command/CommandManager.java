@@ -6,6 +6,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -22,12 +23,12 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
 
-public final class CommandLib implements CommandExecutor, Listener, TabCompleter {
+public final class CommandManager implements CommandExecutor, Listener, TabCompleter {
 
-    private static final Set<LibCommand> COMMANDS = new HashSet<>();
+    private static final Set<AbstractCommand> COMMANDS = new HashSet<>();
 
-    public static void setup(String command, String permission, String aliases, LibCommand... commands) {
-        new CommandLib(command, permission, aliases);
+    public static void setup(String command, String permission, String aliases, AbstractCommand... commands) {
+        new CommandManager(Objects.requireNonNull(PluginUtils.getPlugin().getCommand(command)), permission, aliases);
         COMMANDS.addAll(Arrays.asList(commands));
     }
     
@@ -36,25 +37,30 @@ public final class CommandLib implements CommandExecutor, Listener, TabCompleter
     private final String help;
     private final String command;
     
-    private CommandLib(String command, String permission, String aliases) {
+    private CommandManager(PluginCommand command, String permission, String aliases) {
         this.permission = permission;
         this.aliases = aliases;
-        this.command = command;
+        this.command = command.getName();
         this.help = "/help " + command;
-        PluginUtils.registerEvents(this);
-        Objects.requireNonNull(PluginUtils.getPlugin().getCommand(command)).setExecutor(this);
-        Objects.requireNonNull(PluginUtils.getPlugin().getCommand(command)).setTabCompleter(this);
+        PluginUtils.registerListener(this);
+        command.setExecutor(this);
+        command.setTabCompleter(this);
     }
     
     @Override
     public boolean onCommand(@Nonnull CommandSender sender, @Nonnull Command command, @Nonnull String label, @Nonnull String[] args) {
         if (args.length > 0) {
-            if (args[0].equalsIgnoreCase("help")) {
+            String arg = args[0];
+            if (arg.equalsIgnoreCase("help")) {
                 sendHelp(sender);
                 return true;
             }
-            for (LibCommand libCommand : COMMANDS) {
-                if (args[0].equalsIgnoreCase(libCommand.getName())) {
+            if (arg.equalsIgnoreCase("info")) {
+                sendInfo(sender);
+                return true;
+            }
+            for (AbstractCommand libCommand : COMMANDS) {
+                if (arg.equalsIgnoreCase(libCommand.getName())) {
                     if (!libCommand.isOp() || sender.hasPermission(this.permission)) {
                         libCommand.onExecute(sender, args);
                     } else {
@@ -71,18 +77,25 @@ public final class CommandLib implements CommandExecutor, Listener, TabCompleter
         sender.sendMessage("");
         sender.sendMessage(ChatColors.color("&7----------&b&l " + PluginUtils.getPlugin().getName() + " &7----------"));
         sender.sendMessage("");
-        
-        for (LibCommand cmd : COMMANDS) {
+        for (AbstractCommand cmd : COMMANDS) {
             if (!cmd.isOp() || sender.hasPermission(this.permission)) {
                 sender.sendMessage(ChatColors.color("&6/" + this.command + " " + cmd.getName() + " &e- " + cmd.getDescription()));
             }
         }
-        
         sender.sendMessage("");
         sender.sendMessage(ChatColors.color("&6Aliases: &e" + this.aliases));
         sender.sendMessage("");
     }
-
+    
+    public void sendInfo(@Nonnull CommandSender sender) {
+        sender.sendMessage("");
+        sender.sendMessage("&bAddon Version: " + PluginUtils.getAddon().getPluginVersion());
+        sender.sendMessage("&aSlimefun Discord: &7Discord.gg/slimefun");
+        sender.sendMessage("&aAddon Community: &7Discord.gg/V2cJR9ADFU");
+        sender.sendMessage("&aGithub: &7" + PluginUtils.getAddon().getBugTrackerURL());
+        sender.sendMessage("");
+    }
+    
     public void sendNoPerm(@Nonnull CommandSender sender) {
         sender.sendMessage(ChatColor.RED + "You do not have permission to run this command!");
     }
@@ -101,7 +114,8 @@ public final class CommandLib implements CommandExecutor, Listener, TabCompleter
 
             List<String> subCommands = new ArrayList<>();
             subCommands.add("help");
-            for (LibCommand libCommand : COMMANDS) {
+            subCommands.add("info");
+            for (AbstractCommand libCommand : COMMANDS) {
                 if (!libCommand.isOp() || sender.hasPermission(this.permission)) {
                     subCommands.add(libCommand.getName());
                 }
@@ -109,7 +123,7 @@ public final class CommandLib implements CommandExecutor, Listener, TabCompleter
             return createReturnList(subCommands, args[0]);
 
         } else if (args.length > 1) {
-            for (LibCommand libCommand : COMMANDS) {
+            for (AbstractCommand libCommand : COMMANDS) {
                 if (args[0].equalsIgnoreCase(libCommand.getName())) {
                     return createReturnList(libCommand.onTab(sender, args), args[args.length - 1]);
                 }

@@ -69,8 +69,7 @@ public class MultiFilter {
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof MultiFilter)) return false;
-        return ((MultiFilter) obj).fits(this);
+        return obj instanceof MultiFilter && ((MultiFilter) obj).fits(this);
     }
 
 }

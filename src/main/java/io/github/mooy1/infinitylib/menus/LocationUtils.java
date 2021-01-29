@@ -66,6 +66,5 @@ public final class LocationUtils {
         String[] split = pattern.split(location);
         return new Location(Bukkit.getServer().getWorld(split[3]), Double.parseDouble(split[0]), Double.parseDouble(split[1]), Double.parseDouble(split[2]));
     }
-
-
+    
 }

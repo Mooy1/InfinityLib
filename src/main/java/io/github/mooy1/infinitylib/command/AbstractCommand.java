@@ -7,13 +7,13 @@ import javax.annotation.Nonnull;
 import java.util.List;
 
 @Getter
-public abstract class LibCommand {
+public abstract class AbstractCommand {
     
     private final boolean op;
     private final String name;
     private final String description;
     
-    public LibCommand(@Nonnull String name, @Nonnull String description, boolean op) {
+    public AbstractCommand(@Nonnull String name, @Nonnull String description, boolean op) {
         this.name = name;
         this.description = description;
         this.op = op;
