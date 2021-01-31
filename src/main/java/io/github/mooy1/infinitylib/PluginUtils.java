@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.experimental.UtilityClass;
 import me.mrCookieSlime.Slimefun.cscorelib2.updater.GitHubBuildsUpdater;
 import org.apache.commons.lang.Validate;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.event.Listener;
@@ -19,23 +18,12 @@ import java.util.logging.Level;
 @UtilityClass
 public final class PluginUtils {
     
-    @Getter
-    private static JavaPlugin plugin = null;
-    
-    @Getter
-    private static SlimefunAddon addon = null;
-    
-    @Getter
-    private static int currentTick = 0;
-    
-    @Getter
-    private static long timings = 0;
-    
-    @Getter
-    private static String prefix = null;
-    
+    @Getter private static JavaPlugin plugin = null;
+    @Getter private static SlimefunAddon addon = null;
+    @Getter private static int currentTick = 0;
+    @Getter private static long timings = 0;
+    @Getter private static String prefix = null;
     public static final int TICKER_DELAY = SlimefunPlugin.getCfg().getInt("URID.custom-ticker-delay");
-    
     public static final float TICK_RATIO = 20F / PluginUtils.TICKER_DELAY;
 
     /**
@@ -113,7 +101,7 @@ public final class PluginUtils {
     public static void startTicker(@Nonnull Runnable onTick) {
         Validate.isTrue(currentTick == 0, "Ticker already started!");
         Validate.notNull(onTick, "Cannot start a null ticker");
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
+        scheduleRepeatingSync(() -> {
             long time = System.currentTimeMillis();
             if (currentTick == 6000) {
                 currentTick = 1;

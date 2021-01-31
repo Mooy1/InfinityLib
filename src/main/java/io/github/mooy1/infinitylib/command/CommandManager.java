@@ -89,10 +89,10 @@ public final class CommandManager implements CommandExecutor, Listener, TabCompl
     
     public void sendInfo(@Nonnull CommandSender sender) {
         sender.sendMessage("");
-        sender.sendMessage("&bAddon Version: " + PluginUtils.getAddon().getPluginVersion());
-        sender.sendMessage("&aSlimefun Discord: &7Discord.gg/slimefun");
-        sender.sendMessage("&aAddon Community: &7Discord.gg/V2cJR9ADFU");
-        sender.sendMessage("&aGithub: &7" + PluginUtils.getAddon().getBugTrackerURL());
+        sender.sendMessage(ChatColors.color("&bAddon Version: " + PluginUtils.getAddon().getPluginVersion()));
+        sender.sendMessage(ChatColors.color("&aSlimefun Discord: &7Discord.gg/slimefun"));
+        sender.sendMessage(ChatColors.color("&aAddon Community: &7Discord.gg/V2cJR9ADFU"));
+        sender.sendMessage(ChatColors.color("&aGithub: &7" + PluginUtils.getAddon().getBugTrackerURL()));
         sender.sendMessage("");
     }
     

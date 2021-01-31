@@ -16,24 +16,24 @@ import javax.annotation.Nonnull;
 public abstract class AbstractMachine extends AbstractTicker implements EnergyNetComponent {
 
     protected final int statusSlot;
-    protected final int energyConsumption;
+    protected final int energy;
     
     public AbstractMachine(Category category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe, int statusSlot, int energyConsumption) {
         super(category, item, recipeType, recipe);
         this.statusSlot = statusSlot;
-        this.energyConsumption = energyConsumption;
+        this.energy = energyConsumption;
     }
     
     protected abstract boolean process(@Nonnull BlockMenu menu, @Nonnull Block b, @Nonnull Config data);
 
     @Override
     protected final void tick(@Nonnull BlockMenu menu, @Nonnull Block b, @Nonnull Config data) {
-        if (getCharge(b.getLocation()) < this.energyConsumption) {
+        if (getCharge(b.getLocation()) < this.energy) {
             if (menu.hasViewer()) {
                 menu.replaceExistingItem(this.statusSlot, MenuPreset.notEnoughEnergy);
             }
         } else if (process(menu, b, data)) {
-            removeCharge(b.getLocation(), this.energyConsumption);
+            removeCharge(b.getLocation(), this.energy);
         }
     }
     
