@@ -1,7 +1,7 @@
 package io.github.mooy1.infinitylib;
 
 import lombok.experimental.UtilityClass;
-import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.Objects;
 import java.util.logging.Level;
@@ -9,53 +9,51 @@ import java.util.logging.Level;
 @UtilityClass
 public final class ConfigUtils {
     
-    private static final FileConfiguration config = PluginUtils.getPlugin().getConfig();
-    
-    public static int getOrDefault(String path, int min, int max, int def) {
-        int value = config.getInt(path);
+    public static int getOrDefault(ConfigurationSection section, String path, int min, int max, int def) {
+        int value = section.getInt(path);
         if (value >= min && value <= max) {
             return value;
         } else {
             configWarnValue(path);
-            config.set(path, def);
+            section.set(path, def);
             PluginUtils.getPlugin().saveConfig();
             return def;
         }
     }
 
-    public static boolean getOrDefault(String path, boolean def) {
-        String value = config.getString(path);
+    public static boolean getOrDefault(ConfigurationSection section, String path, boolean def) {
+        String value = section.getString(path);
         if (Objects.equals(value, "true")) {
             return true;
         } else if (Objects.equals(value, "false")) {
             return false;
         } else {
             configWarnValue(path);
-            config.set(path, def);
+            section.set(path, def);
             PluginUtils.getPlugin().saveConfig();
             return def;
         }
     }
 
-    public static double getOrDefault(String path, double min, double max, double def) {
-        double value = config.getDouble(path);
+    public static double getOrDefault(ConfigurationSection section, String path, double min, double max, double def) {
+        double value = section.getDouble(path);
         if (value >= min && value <= max) {
             return value;
         } else {
             configWarnValue(path);
-            config.set(path, def);
+            section.set(path, def);
             PluginUtils.getPlugin().saveConfig();
             return def;
         }
     }
 
-    public static String getOrDefault(String path, String def) {
-        String value = config.getString(path);
+    public static String getOrDefault(ConfigurationSection section, String path, String def) {
+        String value = section.getString(path);
         if (value != null) {
             return value;
         } else {
             configWarnValue(path);
-            config.set(path, def);
+            section.set(path, def);
             PluginUtils.getPlugin().saveConfig();
             return def;
         }
