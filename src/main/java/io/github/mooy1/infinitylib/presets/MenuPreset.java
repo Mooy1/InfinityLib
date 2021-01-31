@@ -87,10 +87,6 @@ public final class MenuPreset {
             Material.BARRIER,
             "&cInvalid Input!")
     );
-    public static final ItemStack invisibleBackground = makeUnique(new CustomItem(
-            Material.LIGHT_GRAY_STAINED_GLASS_PANE,
-            " ")
-    );
     public static final ItemStack loadingItemBarrier = makeUnique(new CustomItem(
             Material.BARRIER,
             "&cLoading...")
