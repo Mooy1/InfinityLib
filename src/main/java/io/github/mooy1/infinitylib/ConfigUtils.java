@@ -62,7 +62,7 @@ public final class ConfigUtils {
     }
     
     public static void configWarnValue(String path) {
-        PluginUtils.log(Level.WARNING, "Config value at " + path + " was out of bounds, resetting it to default");
+        PluginUtils.log(Level.WARNING, "Config value of " + path + " was out of bounds, resetting it to default");
     }
     
 }
