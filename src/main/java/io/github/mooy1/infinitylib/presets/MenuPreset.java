@@ -79,17 +79,9 @@ public final class MenuPreset {
         return item;
     }
     
-    public static final ItemStack loadingItemRed = makeUnique(new CustomItem(
-            Material.RED_STAINED_GLASS_PANE,
-            "&cLoading...")
-    );
     public static final ItemStack invalidInput = makeUnique(new CustomItem(
             Material.BARRIER,
             "&cInvalid Input!")
-    );
-    public static final ItemStack loadingItemBarrier = makeUnique(new CustomItem(
-            Material.BARRIER,
-            "&cLoading...")
     );
     public static final ItemStack inputAnItem = makeUnique(new CustomItem(
             Material.BLUE_STAINED_GLASS_PANE,
