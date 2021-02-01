@@ -7,6 +7,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Range;
 
 import javax.annotation.Nonnull;
+import java.util.Objects;
 
 /**
  * A utility class for testing if items fit a 'filter' for each other
@@ -47,6 +48,11 @@ public class ItemFilter {
      */
     public boolean fits(@Nonnull ItemFilter input) {
         return fits(input, this.equalsType);
+    }
+    
+    @Nonnull
+    public ItemStack toItem() {
+        return Objects.requireNonNull(StackUtils.getItemByIDorType(this.string, this.amount));
     }
     
     @Override

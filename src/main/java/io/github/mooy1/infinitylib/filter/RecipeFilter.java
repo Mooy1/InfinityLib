@@ -18,8 +18,7 @@ public class RecipeFilter extends MultiFilter {
         super(equalsType, stacks);
         this.strings = super.string.split("-");
     }
-
-
+    
     /**
      * gets the index of this array that matches the given filter
      */
