@@ -1,6 +1,7 @@
 package io.github.mooy1.infinitylib.command;
 
 import io.github.mooy1.infinitylib.PluginUtils;
+import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import me.mrCookieSlime.Slimefun.cscorelib2.chat.ChatColors;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -89,9 +90,10 @@ public final class CommandManager implements CommandExecutor, Listener, TabCompl
     
     public void sendInfo(@Nonnull CommandSender sender) {
         sender.sendMessage("");
-        sender.sendMessage(ChatColors.color("&bAddon Version: " + PluginUtils.getAddon().getPluginVersion()));
-        sender.sendMessage(ChatColors.color("&aSlimefun Discord: &7Discord.gg/slimefun"));
-        sender.sendMessage(ChatColors.color("&aAddon Community: &7Discord.gg/V2cJR9ADFU"));
+        sender.sendMessage(ChatColors.color("&aSlimefun Version: " + Objects.requireNonNull(SlimefunPlugin.instance()).getPluginVersion()));
+        sender.sendMessage(ChatColors.color("&bSlimefun Discord: &7Discord.gg/slimefun"));
+        sender.sendMessage(ChatColors.color("&aAddon Version: " + PluginUtils.getAddon().getPluginVersion()));
+        sender.sendMessage(ChatColors.color("&bAddon Community: &7Discord.gg/V2cJR9ADFU"));
         sender.sendMessage(ChatColors.color("&aGithub: &7" + PluginUtils.getAddon().getBugTrackerURL()));
         sender.sendMessage("");
     }

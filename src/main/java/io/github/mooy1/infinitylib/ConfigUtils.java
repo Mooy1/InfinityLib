@@ -9,7 +9,7 @@ import java.util.logging.Level;
 @UtilityClass
 public final class ConfigUtils {
     
-    public static int getOrDefault(ConfigurationSection section, String path, int min, int max, int def) {
+    public static int getInt(ConfigurationSection section, String path, int min, int max, int def) {
         int value = section.getInt(path);
         if (value >= min && value <= max) {
             return value;
@@ -21,7 +21,7 @@ public final class ConfigUtils {
         }
     }
 
-    public static boolean getOrDefault(ConfigurationSection section, String path, boolean def) {
+    public static boolean getBoolean(ConfigurationSection section, String path, boolean def) {
         String value = section.getString(path);
         if (Objects.equals(value, "true")) {
             return true;
@@ -35,7 +35,7 @@ public final class ConfigUtils {
         }
     }
 
-    public static double getOrDefault(ConfigurationSection section, String path, double min, double max, double def) {
+    public static double getDouble(ConfigurationSection section, String path, double min, double max, double def) {
         double value = section.getDouble(path);
         if (value >= min && value <= max) {
             return value;
@@ -47,7 +47,7 @@ public final class ConfigUtils {
         }
     }
 
-    public static String getOrDefault(ConfigurationSection section, String path, String def) {
+    public static String getString(ConfigurationSection section, String path, String def) {
         String value = section.getString(path);
         if (value != null) {
             return value;
