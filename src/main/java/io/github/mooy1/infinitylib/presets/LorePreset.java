@@ -41,15 +41,15 @@ public final class LorePreset {
     }
     
     @Nonnull
-    public static String roundHundreds(float number) {
-        return format(Math.round(number * 100) / 100);
+    public static String roundHundreds(double number) {
+        return format(Math.round(number * 100D) / 100D);
     }
 
-    private static final DecimalFormat decimalFormat = new DecimalFormat("###,###,###,###");
+    private static final DecimalFormat FORMAT = new DecimalFormat("###,###,###,###,###,###.#");
 
     @Nonnull
-    public static String format(int number) {
-        return decimalFormat.format(number);
+    public static String format(double number) {
+        return FORMAT.format(number);
     }
     
 }
