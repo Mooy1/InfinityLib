@@ -8,6 +8,24 @@ import java.util.logging.Level;
 
 @UtilityClass
 public final class ConfigUtils {
+
+    private static final ConfigurationSection CONFIG = PluginUtils.getPlugin().getConfig();
+    
+    public static int getInt(String path, int min, int max, int def) {
+        return getInt(CONFIG, path, min, max, def);
+    }
+
+    public static boolean getBoolean(String path, boolean def) {
+        return getBoolean(CONFIG, path, def);
+    }
+
+    public static double getDouble(String path, double min, double max, double def) {
+        return getDouble(CONFIG, path, min, max, def);
+    }
+
+    public static String getString(String path, String def) {
+        return getString(CONFIG, path, def);
+    }
     
     public static int getInt(ConfigurationSection section, String path, int min, int max, int def) {
         int value = section.getInt(path);
