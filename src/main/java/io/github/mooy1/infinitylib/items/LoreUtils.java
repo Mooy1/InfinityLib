@@ -34,5 +34,28 @@ public final class LoreUtils {
         meta.setLore(lore);
         item.setItemMeta(meta);
     }
+
+    public static void setLore(@Nonnull ItemStack item, @Nonnull List<String> list) {
+        ItemMeta meta = item.getItemMeta();
+        List<String> lore = new ArrayList<>();
+        for (String s : list) {
+            lore.add(ChatColors.color(s));
+        }
+        meta.setLore(lore);
+        item.setItemMeta(meta);
+    }
+
+    public static void addLore(@Nonnull ItemStack item, @Nonnull List<String> list) {
+        ItemMeta meta = item.getItemMeta();
+        List<String> lore = meta.getLore();
+        if (lore == null) {
+            lore = new ArrayList<>();
+        }
+        for (String s : list) {
+            lore.add(ChatColors.color(s));
+        }
+        meta.setLore(lore);
+        item.setItemMeta(meta);
+    }
     
 }
