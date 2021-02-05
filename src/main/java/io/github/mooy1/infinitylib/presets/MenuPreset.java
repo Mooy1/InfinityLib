@@ -80,40 +80,34 @@ public final class MenuPreset {
     }
     
     public static final ItemStack invalidInput = makeUnique(new CustomItem(
-            Material.BARRIER,
-            "&cInvalid Input!")
+            Material.BARRIER, "&cInvalid Input!")
     );
     public static final ItemStack inputAnItem = makeUnique(new CustomItem(
-            Material.BLUE_STAINED_GLASS_PANE,
-            "&9Input an item")
+            Material.BLUE_STAINED_GLASS_PANE, "&9Input an item")
     );
     public static final ItemStack invalidRecipe = makeUnique(new CustomItem(
-            Material.BARRIER,
-            "&cInvalid Recipe!")
+            Material.BARRIER, "&cInvalid Recipe!")
     );
     public static final ItemStack notEnoughEnergy = makeUnique(new CustomItem(
-            Material.RED_STAINED_GLASS_PANE,
-            "&cNot enough energy!")
+            Material.RED_STAINED_GLASS_PANE, "&cNot enough energy!")
     );
     public static final ItemStack notEnoughRoom = makeUnique(new CustomItem(
-            Material.ORANGE_STAINED_GLASS_PANE,
-            "&6Not enough room!")
+            Material.ORANGE_STAINED_GLASS_PANE, "&6Not enough room!")
     );
     public static final ItemStack borderItemInput = makeUnique(new CustomItem(
-            Material.BLUE_STAINED_GLASS_PANE,
-            "&9Input")
+            Material.BLUE_STAINED_GLASS_PANE, "&9Input")
     );
     public static final ItemStack borderItemOutput = makeUnique(new CustomItem(
-            Material.ORANGE_STAINED_GLASS_PANE,
-            "&6Output")
+            Material.ORANGE_STAINED_GLASS_PANE, "&6Output")
     );
     public static final ItemStack borderItemStatus = makeUnique(new CustomItem(
-            Material.CYAN_STAINED_GLASS_PANE,
-            "&3Status")
+            Material.CYAN_STAINED_GLASS_PANE, "&3Status")
     );
     public static final ItemStack connectToEnergyNet = makeUnique(new CustomItem(
-            Material.RED_STAINED_GLASS_PANE,
-            "&cConnect to an energy network!")
+            Material.RED_STAINED_GLASS_PANE, "&cConnect to an energy network!")
+    );
+    public static final ItemStack loadingItemRed = makeUnique(new CustomItem(
+            Material.RED_STAINED_GLASS_PANE, "&cLoading...")
     );
     
 }
