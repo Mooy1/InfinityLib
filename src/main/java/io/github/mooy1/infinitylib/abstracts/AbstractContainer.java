@@ -34,7 +34,7 @@ public abstract class AbstractContainer extends SlimefunItem {
             @Override
             public boolean canOpen(@Nonnull Block b, @Nonnull Player p) {
                 return p.hasPermission("slimefun.inventory.bypass")
-                        || (AbstractContainer.this.canOpen(b, p) || SlimefunPlugin.getProtectionManager().hasPermission(p, b, ProtectableAction.INTERACT_BLOCK));
+                        || (AbstractContainer.this.canOpen(b, p) && SlimefunPlugin.getProtectionManager().hasPermission(p, b, ProtectableAction.INTERACT_BLOCK));
             }
             @Override
             public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
