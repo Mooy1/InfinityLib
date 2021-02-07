@@ -13,6 +13,7 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import me.mrCookieSlime.Slimefun.cscorelib2.protection.ProtectableAction;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -53,7 +54,7 @@ public abstract class AbstractContainer extends SlimefunItem {
         addItemHandler((BlockBreakHandler) (e, item1, fortune, drops) -> {
             BlockMenu menu = BlockStorage.getInventory(e.getBlock());
             if (menu != null) {
-                onBreak(e, menu);
+                onBreak(e, menu, e.getBlock().getLocation());
             }
             return true;
         });
@@ -61,7 +62,7 @@ public abstract class AbstractContainer extends SlimefunItem {
         addItemHandler(new BlockPlaceHandler(false) {
             @Override
             public void onPlayerPlace(BlockPlaceEvent e) {
-                onPlace(e);
+                onPlace(e, e.getBlockPlaced());
             }
         });
     }
@@ -75,11 +76,11 @@ public abstract class AbstractContainer extends SlimefunItem {
 
     }
 
-    protected void onBreak(@Nonnull BlockBreakEvent e, @Nonnull BlockMenu menu) {
+    protected void onBreak(@Nonnull BlockBreakEvent e, @Nonnull BlockMenu menu, @Nonnull Location l) {
 
     }
 
-    protected void onPlace(@Nonnull BlockPlaceEvent e) {
+    protected void onPlace(@Nonnull BlockPlaceEvent e, @Nonnull Block b) {
 
     }
     
