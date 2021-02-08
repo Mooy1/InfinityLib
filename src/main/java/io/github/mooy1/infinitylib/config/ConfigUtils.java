@@ -1,5 +1,6 @@
-package io.github.mooy1.infinitylib;
+package io.github.mooy1.infinitylib.config;
 
+import io.github.mooy1.infinitylib.PluginUtils;
 import lombok.experimental.UtilityClass;
 import org.bukkit.configuration.ConfigurationSection;
 

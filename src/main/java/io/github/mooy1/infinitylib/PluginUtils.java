@@ -43,6 +43,11 @@ public final class PluginUtils {
      * sets up plugin config and starts auto updater
      */
     public static void setup(@Nonnull String messagePrefix, @Nonnull SlimefunAddon slimefunAddon, @Nonnull String url, @Nonnull File file) {
+        Validate.notNull(messagePrefix);
+        Validate.notNull(slimefunAddon);
+        Validate.notNull(url);
+        Validate.notNull(file);
+
         addon = slimefunAddon;
         plugin = addon.getJavaPlugin();
         prefix = ChatColor.GRAY + "[" + prefix + ChatColor.GRAY + "] " + ChatColor.WHITE;
