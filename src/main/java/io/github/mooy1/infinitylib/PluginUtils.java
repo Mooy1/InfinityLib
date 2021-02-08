@@ -58,7 +58,7 @@ public final class PluginUtils {
         Configuration defaultConfig = Objects.requireNonNull(plugin.getConfig().getDefaults());
         
         // remove unused fields in config
-        for (String key : config.getKeys(true)) {
+        for (String key : config.getKeys(false)) {
             if (!defaultConfig.contains(key)) {
                 config.set(key, null);
             }
