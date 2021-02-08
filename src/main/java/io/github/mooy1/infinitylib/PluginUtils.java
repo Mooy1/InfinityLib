@@ -8,8 +8,7 @@ import me.mrCookieSlime.Slimefun.cscorelib2.updater.GitHubBuildsUpdater;
 import org.apache.commons.lang.Validate;
 import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
-import org.bukkit.configuration.Configuration;
-import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -45,27 +44,17 @@ public final class PluginUtils {
      */
     public static void setup(@Nonnull String messagePrefix, @Nonnull SlimefunAddon slimefunAddon, @Nonnull String url, @Nonnull File file) {
         addon = slimefunAddon;
-        
         plugin = addon.getJavaPlugin();
-        
         prefix = ChatColor.GRAY + "[" + prefix + ChatColor.GRAY + "] " + ChatColor.WHITE;
         
         // copy config if not present
         plugin.saveDefaultConfig();
         
-        // config and default config
-        FileConfiguration config = plugin.getConfig();
-        Configuration defaultConfig = Objects.requireNonNull(plugin.getConfig().getDefaults());
-        
         // remove unused fields in config
-        for (String key : config.getKeys(false)) {
-            if (!defaultConfig.contains(key)) {
-                config.set(key, null);
-            }
-        }
+        clearUnused(plugin.getConfig(), plugin.getConfig().getDefaults());
         
         // copy defaults and header to update stuff
-        config.options().copyDefaults(true).copyHeader(true);
+        plugin.getConfig().options().copyDefaults(true).copyHeader(true);
         
         // save
         plugin.saveConfig();
@@ -73,6 +62,21 @@ public final class PluginUtils {
         // auto update
         if (plugin.getDescription().getVersion().startsWith("DEV - ")) {
             new GitHubBuildsUpdater(plugin, file, url).start();
+        }
+    }
+
+    /**
+     * Recursively clears unused fields in a config
+     */
+    private static void clearUnused(ConfigurationSection config, ConfigurationSection defaultConfig) {
+        Objects.requireNonNull(config);
+        Objects.requireNonNull(defaultConfig);
+        for (String key : config.getKeys(false)) {
+            if (!defaultConfig.contains(key)) {
+                config.set(key, null);
+            } else if (config.isConfigurationSection(key)) {
+                clearUnused(config.getConfigurationSection(key), defaultConfig.getConfigurationSection(key));
+            }
         }
     }
     
