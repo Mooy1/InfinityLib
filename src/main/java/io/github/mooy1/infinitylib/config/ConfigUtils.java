@@ -37,8 +37,8 @@ public final class ConfigUtils {
     
     @Nonnull
     @Contract("_, _ -> new")
-    public static Config loadConfig(@Nonnull String folder, @Nonnull String name) {
-        return new Config(new File(PluginUtils.getPlugin().getDataFolder().getPath() + "/" + folder, name));
+    public static Config loadConfig(@Nonnull File folder, @Nonnull String name) {
+        return new Config(new File(folder, name));
     }
     
     private static final ConfigurationSection CONFIG = PluginUtils.getPlugin().getConfig();
