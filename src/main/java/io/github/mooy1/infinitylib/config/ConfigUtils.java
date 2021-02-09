@@ -2,14 +2,45 @@ package io.github.mooy1.infinitylib.config;
 
 import io.github.mooy1.infinitylib.PluginUtils;
 import lombok.experimental.UtilityClass;
+import me.mrCookieSlime.Slimefun.cscorelib2.config.Config;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.jetbrains.annotations.Contract;
 
+import javax.annotation.Nonnull;
+import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Objects;
 import java.util.logging.Level;
 
 @UtilityClass
 public final class ConfigUtils {
 
+    @Nonnull
+    @Contract("_-> new")
+    public static Config loadConfig(@Nonnull String resource) {
+        Config config = new Config(PluginUtils.getPlugin(), resource);
+
+        InputStream defaultResource = PluginUtils.getPlugin().getResource(resource);
+
+        Objects.requireNonNull(defaultResource, () -> "Failed to get default resource " + resource + "!");
+
+        config.getConfiguration().setDefaults(YamlConfiguration.loadConfiguration(new InputStreamReader(defaultResource)));
+
+        config.getConfiguration().options().copyDefaults(true).copyHeader(true);
+
+        config.save();
+        
+        return config;
+    }
+    
+    @Nonnull
+    @Contract("_, _ -> new")
+    public static Config loadConfig(@Nonnull String folder, @Nonnull String name) {
+        return new Config(new File(PluginUtils.getPlugin().getDataFolder().getPath() + "/" + folder, name));
+    }
+    
     private static final ConfigurationSection CONFIG = PluginUtils.getPlugin().getConfig();
     
     public static int getInt(String path, int min, int max, int def) {
