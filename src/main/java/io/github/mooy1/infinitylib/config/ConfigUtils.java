@@ -5,7 +5,6 @@ import lombok.experimental.UtilityClass;
 import me.mrCookieSlime.Slimefun.cscorelib2.config.Config;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.jetbrains.annotations.Contract;
 
 import javax.annotation.Nonnull;
 import java.io.File;
@@ -18,10 +17,25 @@ import java.util.logging.Level;
 public final class ConfigUtils {
 
     @Nonnull
-    @Contract("_-> new")
     public static Config loadConfig(@Nonnull String resource) {
         Config config = new Config(PluginUtils.getPlugin(), resource);
+        attachDefaults(config, resource);
+        return config;
+    }
+    
+    @Nonnull
+    public static Config loadConfig(@Nonnull File folder, @Nonnull String name) {
+        return new Config(new File(folder, name));
+    }
 
+    @Nonnull
+    public static Config loadConfig(@Nonnull File folder, @Nonnull String name, @Nonnull String resource) {
+        Config config = new Config(new File(folder, name));
+        attachDefaults(config, resource);
+        return config;
+    }
+    
+    public static void attachDefaults(@Nonnull Config config, @Nonnull String resource) {
         InputStream defaultResource = PluginUtils.getPlugin().getResource(resource);
 
         Objects.requireNonNull(defaultResource, () -> "Failed to get default resource " + resource + "!");
@@ -31,14 +45,6 @@ public final class ConfigUtils {
         config.getConfiguration().options().copyDefaults(true).copyHeader(true);
 
         config.save();
-        
-        return config;
-    }
-    
-    @Nonnull
-    @Contract("_, _ -> new")
-    public static Config loadConfig(@Nonnull File folder, @Nonnull String name) {
-        return new Config(new File(folder, name));
     }
     
     private static final ConfigurationSection CONFIG = PluginUtils.getPlugin().getConfig();
