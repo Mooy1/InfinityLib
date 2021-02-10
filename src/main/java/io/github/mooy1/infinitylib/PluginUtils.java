@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.experimental.UtilityClass;
 import me.mrCookieSlime.Slimefun.cscorelib2.updater.GitHubBuildsUpdater;
 import org.apache.commons.lang.Validate;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
@@ -99,39 +100,12 @@ public final class PluginUtils {
     public static void log(@Nonnull String... logs) {
         log(Level.INFO, logs);
     }
-    
-    public static void runSync(@Nonnull Runnable runnable, long delay) {
-        Validate.notNull(runnable, "Cannot run null");
-        Validate.isTrue(delay >= 0, "The delay cannot be negative");
 
-        plugin.getServer().getScheduler().runTaskLater(plugin, runnable, delay);
-    }
-    
-    public static void scheduleRepeatingSync(@Nonnull Runnable runnable, long interval) {
-        scheduleRepeatingSync(runnable, 0, interval);
-    }
-
-    public static void scheduleRepeatingSync(@Nonnull Runnable runnable, long delay, long interval) {
-        Validate.notNull(runnable, "Cannot run null");
-        Validate.isTrue(delay >= 0, "The delay cannot be negative");
-
-        plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, runnable, delay, interval);
-    }
-
-    public static void runSync(@Nonnull Runnable runnable) {
-        Validate.notNull(runnable, "Cannot run null");
-
-        plugin.getServer().getScheduler().runTask(plugin, runnable);
-    }
-    
     public static void registerListener(@Nonnull Listener listener) {
-        plugin.getServer().getPluginManager().registerEvents(listener, plugin);
+        Bukkit.getPluginManager().registerEvents(listener, plugin);
     }
-    
+
     public static void startTicker(@Nonnull Runnable onTick) {
-        Validate.isTrue(currentTick == 0, "Ticker already started!");
-        Validate.notNull(onTick, "Cannot start a null ticker");
-        
         scheduleRepeatingSync(() -> {
             long time = System.currentTimeMillis();
             if (currentTick == 6000) {
@@ -142,6 +116,38 @@ public final class PluginUtils {
             onTick.run();
             timings = System.currentTimeMillis() - time;
         }, TICKER_DELAY);
+    }
+
+    public static void runSync(@Nonnull Runnable runnable) {
+        Bukkit.getScheduler().runTask(plugin, runnable);
+    }
+    
+    public static void runSync(@Nonnull Runnable runnable, long delay) {
+        Bukkit.getScheduler().runTaskLater(plugin, runnable, delay);
+    }
+    
+    public static void scheduleRepeatingSync(@Nonnull Runnable runnable, long interval) {
+        Bukkit.getScheduler().runTaskTimer(plugin, runnable, 0, interval);
+    }
+
+    public static void scheduleRepeatingSync(@Nonnull Runnable runnable, long delay, long interval) {
+        Bukkit.getScheduler().runTaskTimer(plugin, runnable, delay, interval);
+    }
+
+    public static void runAsync(@Nonnull Runnable runnable) {
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, runnable);
+    }
+
+    public static void runAsync(@Nonnull Runnable runnable, long delay) {
+        Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, runnable, delay);
+    }
+
+    public static void scheduleRepeatingAsync(@Nonnull Runnable runnable, long interval) {
+        Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, runnable, 0, interval);
+    }
+
+    public static void scheduleRepeatingAsync(@Nonnull Runnable runnable, long delay, long interval) {
+        Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, runnable, delay, interval);
     }
     
 }
