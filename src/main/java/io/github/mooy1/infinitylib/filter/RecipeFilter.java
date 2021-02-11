@@ -1,6 +1,7 @@
 package io.github.mooy1.infinitylib.filter;
 
 import io.github.mooy1.infinitylib.items.StackUtils;
+import io.github.mooy1.infinitylib.math.MathUtils;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
@@ -37,26 +38,40 @@ public class RecipeFilter extends MultiFilter {
         }
         return slots;
     }
-
+    
     @Nonnull
-    public static RecipeFilter fromRecipe(@Nonnull ShapedRecipe recipe, @Nonnull FilterType type) {
-        ItemStack[] array = new ItemStack[9];
-        for (int row = 0 ; row < recipe.getShape().length ; row++) {
-            String line = recipe.getShape()[row];
-            for (int column = 0 ; column < line.length() ; column++) {
-                array[row * 3 + column] = recipe.getIngredientMap().get(line.charAt(column));
+    public static RecipeFilter[] fromRecipe(@Nonnull ShapedRecipe recipe, @Nonnull FilterType type) {
+        
+        int width = recipe.getShape().length;
+        int height = recipe.getShape()[0].length();
+        int x = 4 - width;
+        int y = 4 - height;
+        
+        RecipeFilter[] filters = new RecipeFilter[x * y];
+
+        while (x-- > 0) {
+            while (y-- > 0) {
+                ItemStack[] arr = new ItemStack[9];
+                for (int a = 0 ; a < width ; a++) {
+                    for (int b = 0 ; b < height ; b++) {
+                        arr[(a + x) * 3 + b + y] = recipe.getIngredientMap().get(recipe.getShape()[a].charAt(b));
+                    }
+                }
+                filters[x * 3 + y] = new RecipeFilter(FilterType.IGNORE_AMOUNT, arr);
             }
         }
-        return new RecipeFilter(type, array);
+
+        return filters;
     }
 
     @Nonnull
-    public static RecipeFilter fromRecipe(@Nonnull ShapelessRecipe recipe, @Nonnull FilterType type) {
-        ItemStack[] array = new ItemStack[9];
-        for (int i = 0 ; i < recipe.getIngredientList().size() ; i++) {
-            array[i] = recipe.getIngredientList().get(i);
+    public static RecipeFilter[] fromRecipe(@Nonnull ShapelessRecipe recipe, @Nonnull FilterType type) {
+        ItemStack[][] combos = MathUtils.combinations(recipe.getIngredientList().toArray(new ItemStack[0]));
+        RecipeFilter[] filters = new RecipeFilter[combos.length];
+        for (int i = 0 ; i < combos.length ; i++) {
+            filters[i] = new RecipeFilter(FilterType.IGNORE_AMOUNT, combos[i]);
         }
-        return new RecipeFilter(type, array);
+        return filters;
     }
     
 }
