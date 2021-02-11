@@ -41,26 +41,23 @@ public class RecipeFilter extends MultiFilter {
     
     @Nonnull
     public static RecipeFilter[] fromRecipe(@Nonnull ShapedRecipe recipe) {
-        
         int width = recipe.getShape().length;
         int height = recipe.getShape()[0].length();
         int x = 4 - width;
         int y = 4 - height;
-        
         RecipeFilter[] filters = new RecipeFilter[x * y];
-
         while (x-- > 0) {
             while (y-- > 0) {
                 ItemStack[] arr = new ItemStack[9];
                 for (int a = 0 ; a < width ; a++) {
                     for (int b = 0 ; b < height ; b++) {
-                        arr[(a + x) * 3 + b + y] = recipe.getIngredientMap().get(recipe.getShape()[a].charAt(b));
+                        arr[3 * (a + x) + b + y] = recipe.getIngredientMap().get(recipe.getShape()[a].charAt(b));
                     }
                 }
                 filters[x * 3 + y] = new RecipeFilter(FilterType.IGNORE_AMOUNT, arr);
             }
+            y = 4 - height;
         }
-
         return filters;
     }
 
