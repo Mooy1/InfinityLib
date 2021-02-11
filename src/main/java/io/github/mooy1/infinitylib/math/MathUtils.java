@@ -3,6 +3,7 @@ package io.github.mooy1.infinitylib.math;
 import lombok.experimental.UtilityClass;
 
 import javax.annotation.Nonnull;
+import java.lang.reflect.Array;
 
 @UtilityClass
 public final class MathUtils {
@@ -52,16 +53,20 @@ public final class MathUtils {
      * Done by repeatedly swapping certain indexes until all combinations have been reached
      */
     public static <T> T[][] combinations(@Nonnull T[] array) {
+        Class<?> arrayClass = array.getClass();
+        Class<?> componentClass = arrayClass.getComponentType();
         int length = array.length;
-        Object[][] combos = new Object[fact(length)][];
+        @SuppressWarnings("unchecked")
+        T[][] combos = (T[][]) Array.newInstance(arrayClass, fact(length));
         if (length == 1) {
             combos[0] = array;
         } else if (length != 0) {
-            Object[] old = array;
+            T[] old = array;
             int index = 0;
             while (index < combos.length) {
                 for (int swap = 0 ; swap < length - 1 ; swap++) {
-                    Object[] current = new Object[length];
+                    @SuppressWarnings("unchecked")
+                    T[] current = (T[]) Array.newInstance(componentClass, length);
                     for (int fill = 0 ; fill < length ; fill++) {
                         if (fill == swap) {
                             current[fill] = old[fill + 1];
@@ -75,9 +80,7 @@ public final class MathUtils {
                 }
             }
         }
-        @SuppressWarnings("unchecked")
-        T[][] casted = (T[][]) combos;
-        return casted;
+        return combos;
     }
 
 }
