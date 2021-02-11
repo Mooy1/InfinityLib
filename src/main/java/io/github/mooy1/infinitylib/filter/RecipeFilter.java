@@ -40,7 +40,7 @@ public class RecipeFilter extends MultiFilter {
     }
     
     @Nonnull
-    public static RecipeFilter[] fromRecipe(@Nonnull ShapedRecipe recipe, @Nonnull FilterType type) {
+    public static RecipeFilter[] fromRecipe(@Nonnull ShapedRecipe recipe) {
         
         int width = recipe.getShape().length;
         int height = recipe.getShape()[0].length();
@@ -65,7 +65,7 @@ public class RecipeFilter extends MultiFilter {
     }
 
     @Nonnull
-    public static RecipeFilter[] fromRecipe(@Nonnull ShapelessRecipe recipe, @Nonnull FilterType type) {
+    public static RecipeFilter[] fromRecipe(@Nonnull ShapelessRecipe recipe) {
         ItemStack[][] combos = MathUtils.combinations(recipe.getIngredientList().toArray(new ItemStack[0]));
         RecipeFilter[] filters = new RecipeFilter[combos.length];
         for (int i = 0 ; i < combos.length ; i++) {
