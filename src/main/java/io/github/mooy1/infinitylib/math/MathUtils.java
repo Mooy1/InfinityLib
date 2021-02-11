@@ -54,11 +54,13 @@ public final class MathUtils {
     public static <T> T[][] combinations(@Nonnull T[] array) {
         int length = array.length;
         Object[][] combos = new Object[fact(length)][length];
-        if (length != 0) {
-            Object[] old = combos[0] = array;
-            int index = 1;
-            while (index < length) {
-                for (int swap = 0 ; swap < length - 1 ; swap++, index++) {
+        if (length == 1) {
+            combos[0] = array;
+        } else if (length != 0) {
+            Object[] old = array;
+            int index = 0;
+            while (index < combos.length) {
+                for (int swap = 0 ; swap < length - 1 ; swap++) {
                     Object[] current = new Object[length];
                     for (int fill = 0 ; fill < length ; fill++) {
                         if (fill == swap) {
@@ -69,7 +71,7 @@ public final class MathUtils {
                             current[fill] = old[fill];
                         }
                     }
-                    combos[index] = old = current;
+                    combos[index++] = old = current;
                 }
             }
         }
