@@ -53,7 +53,7 @@ public final class MathUtils {
      */
     public static <T> T[][] combinations(@Nonnull T[] array) {
         int length = array.length;
-        Object[][] combos = new Object[fact(length)][length];
+        Object[][] combos = new Object[fact(length)][];
         if (length == 1) {
             combos[0] = array;
         } else if (length != 0) {
