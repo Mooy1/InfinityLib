@@ -68,9 +68,17 @@ class BigRecipe {
             }
         } else {
             ids = new String[map.size()];
-            for (Map.Entry<String, Integer> entry : map.entrySet()) {
-                ids[entry.getValue() - 1] = entry.getKey();
-                hashCode += entry.getValue().hashCode();
+            if (shape == Shape.SHAPELESS) {
+                int i = 0;
+                for (Map.Entry<String, Integer> entry : map.entrySet()) {
+                    ids[i++] = entry.getKey();
+                    hashCode += entry.getValue().hashCode();
+                }
+            } else {
+                for (Map.Entry<String, Integer> entry : map.entrySet()) {
+                    ids[entry.getValue() - 1] = entry.getKey();
+                    hashCode += entry.getValue().hashCode();
+                }
             }
         }
         
@@ -134,7 +142,7 @@ class BigRecipe {
         Shape(int... shapes) {
             this.shapes = shapes;
         }
-        
+
         private static final Map<Integer, Shape> MAP = new HashMap<>();
 
         static {
