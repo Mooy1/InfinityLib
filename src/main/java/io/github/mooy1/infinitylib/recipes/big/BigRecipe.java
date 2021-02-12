@@ -65,7 +65,7 @@ class BigRecipe {
         } else {
             ids = new String[map.size()];
             for (Map.Entry<String, Integer> entry : map.entrySet()) {
-                ids[entry.getValue()] = entry.getKey();
+                ids[entry.getValue() - 1] = entry.getKey();
                 hashCode += entry.getValue().hashCode();
             }
         }
@@ -99,7 +99,7 @@ class BigRecipe {
     
     private enum Shape {
         
-        SHAPELESS(120000000, 12000000, 123000000),
+        SHAPELESS(120000000, 123000000),
         
         SINGLE(100000000, 10000000, 1000000, 100000, 10000, 1000, 100, 10, 1), 
         
