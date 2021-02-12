@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -89,7 +90,7 @@ class BigRecipe {
             return false;
         }
         for (int i = 0 ; i < this.ids.length ; i++) {
-            if (!recipe.ids[i].equals(this.ids[i])) {
+            if (!Objects.equals(recipe.ids[i], this.ids[i])) {
                 return false;
             }
         }
