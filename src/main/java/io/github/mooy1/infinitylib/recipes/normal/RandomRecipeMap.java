@@ -20,6 +20,10 @@ public final class RandomRecipeMap {
         this.map.put(new Recipe(item), set);
     }
 
+    public void put(@Nonnull ItemStack item, @Nonnull RandomizedSet<ItemStack> set) {
+        this.map.put(new Recipe(item), set);
+    }
+
     @Nullable
     public ItemStack get(@Nonnull ItemStack item) {
         RandomizedSet<ItemStack> set = this.map.get(new Recipe(item));
