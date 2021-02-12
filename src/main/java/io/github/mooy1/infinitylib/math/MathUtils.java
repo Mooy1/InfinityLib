@@ -49,9 +49,23 @@ public final class MathUtils {
     }
 
     /**
+     * Integer to array of all its digits
+     */
+    @Nonnull
+    public static int[] toArray(int i) {
+        String string = String.valueOf(i);
+        int[] arr = new int[string.length()];
+        for (int j = 0 ; j < string.length() ; j++) {
+            arr[j] = string.charAt(j) - '0';
+        }
+        return arr;
+    }
+
+    /**
      * All combinations of an array, returned array has a size of the input array factorial
      * Done by repeatedly swapping certain indexes until all combinations have been reached
      */
+    @Nonnull
     public static <T> T[][] combinations(@Nonnull T[] array) {
         Class<?> arrayClass = array.getClass();
         Class<?> componentClass = arrayClass.getComponentType();

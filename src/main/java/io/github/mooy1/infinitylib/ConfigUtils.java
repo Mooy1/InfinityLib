@@ -1,6 +1,5 @@
-package io.github.mooy1.infinitylib.config;
+package io.github.mooy1.infinitylib;
 
-import io.github.mooy1.infinitylib.PluginUtils;
 import lombok.experimental.UtilityClass;
 import me.mrCookieSlime.Slimefun.cscorelib2.config.Config;
 import org.bukkit.configuration.ConfigurationSection;

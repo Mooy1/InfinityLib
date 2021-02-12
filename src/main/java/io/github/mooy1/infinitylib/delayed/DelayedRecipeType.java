@@ -1,4 +1,4 @@
-package io.github.mooy1.infinitylib.misc;
+package io.github.mooy1.infinitylib.delayed;
 
 import io.github.mooy1.infinitylib.PluginUtils;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
