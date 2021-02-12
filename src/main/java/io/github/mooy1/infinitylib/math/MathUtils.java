@@ -5,6 +5,11 @@ import lombok.experimental.UtilityClass;
 import javax.annotation.Nonnull;
 import java.lang.reflect.Array;
 
+/**
+ * Collections of math utils, mostly for working with integers slightly faster
+ * 
+ * @author Mooy1
+ */
 @UtilityClass
 public final class MathUtils {
     

@@ -24,6 +24,11 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
 
+/**
+ * Manages command stuff for your addon, register {@link AbstractCommand}s to this
+ * 
+ * @author Mooy1
+ */
 public final class CommandManager implements CommandExecutor, Listener, TabCompleter {
 
     private static final Set<AbstractCommand> COMMANDS = new HashSet<>();
@@ -93,7 +98,7 @@ public final class CommandManager implements CommandExecutor, Listener, TabCompl
         sender.sendMessage(ChatColors.color("&aSlimefun Version: " + Objects.requireNonNull(SlimefunPlugin.instance()).getPluginVersion()));
         sender.sendMessage(ChatColors.color("&bSlimefun Discord: &7Discord.gg/slimefun"));
         sender.sendMessage(ChatColors.color("&aAddon Version: " + PluginUtils.getAddon().getPluginVersion()));
-        sender.sendMessage(ChatColors.color("&bAddon Community: &7Discord.gg/V2cJR9ADFU"));
+        sender.sendMessage(ChatColors.color("&bAddon Community: &7Discord.gg/Will be added later"));
         sender.sendMessage(ChatColors.color("&aGithub: &7" + PluginUtils.getAddon().getBugTrackerURL()));
         sender.sendMessage("");
     }

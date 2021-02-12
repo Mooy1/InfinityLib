@@ -7,6 +7,11 @@ import org.bukkit.inventory.ShapelessRecipe;
 
 import javax.annotation.Nonnull;
 
+/**
+ * Utility class to convert vanilla recipes into item stack arrays of size 9
+ * 
+ * @author Mooy1
+ */
 @UtilityClass
 public final class RecipeUtils {
 

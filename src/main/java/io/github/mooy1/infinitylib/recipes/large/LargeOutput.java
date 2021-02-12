@@ -1,4 +1,4 @@
-package io.github.mooy1.infinitylib.recipes.big;
+package io.github.mooy1.infinitylib.recipes.large;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -7,9 +7,9 @@ import org.bukkit.inventory.ItemStack;
 
 @Getter
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
-public final class OutputAndAmounts {
+public final class LargeOutput {
 
     private final ItemStack output;
-    private final int[] amounts;
+    private final int[] inputConsumption;
     
 }

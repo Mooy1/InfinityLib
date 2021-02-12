@@ -22,6 +22,11 @@ import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
 
+/**
+ * A slimefun item with a menu
+ *
+ * @author Mooy1
+ */
 public abstract class AbstractContainer extends SlimefunItem {
 
     public AbstractContainer(Category category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {

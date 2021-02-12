@@ -13,6 +13,11 @@ import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
 
+/**
+ * A slimefun item with a menu and ticker, which will process if it has enough energy
+ * 
+ * @author Mooy1
+ */
 public abstract class AbstractMachine extends AbstractTicker implements EnergyNetComponent {
 
     protected final int statusSlot;
@@ -29,7 +34,7 @@ public abstract class AbstractMachine extends AbstractTicker implements EnergyNe
     @Override
     protected final void tick(@Nonnull BlockMenu menu, @Nonnull Block b, @Nonnull Config data) {
         if (getCharge(b.getLocation()) < this.energy) {
-            if (menu.hasViewer()) {
+            if (this.statusSlot != -1 && menu.hasViewer()) {
                 menu.replaceExistingItem(this.statusSlot, MenuPreset.notEnoughEnergy);
             }
         } else if (process(menu, b, data)) {

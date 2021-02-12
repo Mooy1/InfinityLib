@@ -11,6 +11,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * A class which listens to players leaving and removes their uuid from maps.
+ * 
+ * @author Mooy1
+ */
 public final class LeaveListener implements Listener {
     
     static {

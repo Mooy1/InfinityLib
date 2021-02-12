@@ -6,6 +6,11 @@ import org.bukkit.command.CommandSender;
 import javax.annotation.Nonnull;
 import java.util.List;
 
+/**
+ * A command for use in the {@link CommandManager}
+ * 
+ * @author Mooy1
+ */
 @Getter
 public abstract class AbstractCommand {
     

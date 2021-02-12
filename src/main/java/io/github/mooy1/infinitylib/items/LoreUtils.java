@@ -9,6 +9,11 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Collection of utils for modifying item lore
+ * 
+ * @author Mooy1
+ */
 @UtilityClass
 public final class LoreUtils {
     

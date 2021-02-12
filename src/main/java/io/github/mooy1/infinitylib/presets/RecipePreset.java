@@ -5,6 +5,11 @@ import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
 
+/**
+ * Presets for making recipes
+ * 
+ * @author Mooy1
+ */
 @UtilityClass
 public final class RecipePreset {
 

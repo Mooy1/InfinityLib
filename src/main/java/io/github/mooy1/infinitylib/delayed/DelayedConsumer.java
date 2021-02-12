@@ -3,9 +3,17 @@ package io.github.mooy1.infinitylib.delayed;
 import me.mrCookieSlime.Slimefun.cscorelib2.collections.Pair;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.function.BiConsumer;
 
+/**
+ * A consumer which stores elements which have been accepted for acceptance at a later time
+ * 
+ * @see DelayedRecipeType
+ * 
+ * @author Mooy1
+ */
 public final class DelayedConsumer<A, B> implements BiConsumer<A, B> {
 
     private List<Pair<A, B>> toBeAccepted = new ArrayList<>();
@@ -24,8 +32,11 @@ public final class DelayedConsumer<A, B> implements BiConsumer<A, B> {
 
     public void acceptEach(BiConsumer<A, B> consumer) {
         this.consumer = consumer;
-        for (Pair<A, B> pair : this.toBeAccepted) {
-            consumer.accept(pair.getFirstValue(), pair.getSecondValue());
+        Iterator<Pair<A, B>> iterator = this.toBeAccepted.listIterator();
+        while (iterator.hasNext()) {
+            Pair<A, B> next = iterator.next();
+            consumer.accept(next.getFirstValue(), next.getSecondValue());
+            iterator.remove();
         }
         this.toBeAccepted = null;
     }

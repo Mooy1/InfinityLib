@@ -18,6 +18,11 @@ import java.io.File;
 import java.util.Objects;
 import java.util.logging.Level;
 
+/**
+ * Main utility class for your addon, register it here
+ * 
+ * @author Mooy1
+ */
 @UtilityClass
 public final class PluginUtils {
     

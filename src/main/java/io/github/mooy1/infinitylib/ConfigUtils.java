@@ -12,6 +12,11 @@ import java.io.InputStreamReader;
 import java.util.Objects;
 import java.util.logging.Level;
 
+/**
+ * Utility class for reading from config
+ * 
+ * @author Mooy1
+ */
 @UtilityClass
 public final class ConfigUtils {
 

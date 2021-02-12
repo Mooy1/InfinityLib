@@ -5,11 +5,14 @@ import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
 
-final class Recipe {
+/**
+ * A simple recipe which only checks id/material
+ */
+final class NormalRecipe {
 
     private final String id;
 
-    Recipe(@Nonnull ItemStack item) {
+    NormalRecipe(@Nonnull ItemStack item) {
         this.id = StackUtils.getIDorType(item);
     }
 
@@ -20,7 +23,7 @@ final class Recipe {
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof Recipe && ((Recipe) obj).id.equals(this.id);
+        return obj instanceof NormalRecipe && ((NormalRecipe) obj).id.equals(this.id);
     }
 
 }

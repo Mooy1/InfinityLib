@@ -14,8 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import javax.annotation.Nonnull;
 
 /**
- * slimefun item implementing must call register on itself
- * adds a ticker, menu, place handler, and break handler
+ * A slimefun item with a menu and ticker
  */
 public abstract class AbstractTicker extends AbstractContainer {
 

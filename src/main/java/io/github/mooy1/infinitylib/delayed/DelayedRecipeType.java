@@ -8,6 +8,11 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Locale;
 import java.util.function.BiConsumer;
 
+/**
+ * A recipe type which stores all recipes registered to it for use at a later date.
+ * 
+ * @author Mooy1
+ */
 public final class DelayedRecipeType extends RecipeType {
 
     private final DelayedConsumer<ItemStack[], ItemStack> delayed;
