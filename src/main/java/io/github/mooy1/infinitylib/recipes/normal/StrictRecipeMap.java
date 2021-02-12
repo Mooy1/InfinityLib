@@ -1,7 +1,6 @@
-package io.github.mooy1.infinitylib.recipes;
+package io.github.mooy1.infinitylib.recipes.normal;
 
 import io.github.mooy1.infinitylib.items.StackUtils;
-import me.mrCookieSlime.Slimefun.cscorelib2.collections.Pair;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
@@ -10,15 +9,19 @@ import java.util.Map;
 
 public final class StrictRecipeMap {
     
-    private final Map<Recipe, Pair<ItemStack, Integer>> map = new HashMap<>();
+    private final Map<Recipe, OutputAndAmount> map = new HashMap<>();
     
     public void put(@Nonnull ItemStack item, @Nonnull ItemStack output) {
-        this.map.put(new Recipe(item), new Pair<>(output, item.getAmount()));
+        this.map.put(new Recipe(item), new OutputAndAmount(output, item.getAmount()));
     }
 
     @Nonnull
-    public Pair<ItemStack, Integer> get(@Nonnull ItemStack item) {
+    public OutputAndAmount get(@Nonnull ItemStack item) {
         return this.map.get(new Recipe(item));
+    }
+
+    public int size() {
+        return this.map.size();
     }
 
     private static final class Recipe {

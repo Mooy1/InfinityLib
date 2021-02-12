@@ -1,4 +1,4 @@
-package io.github.mooy1.infinitylib.recipes;
+package io.github.mooy1.infinitylib.recipes.big;
 
 import io.github.mooy1.infinitylib.items.StackUtils;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;

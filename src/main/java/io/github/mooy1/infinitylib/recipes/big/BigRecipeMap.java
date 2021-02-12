@@ -1,4 +1,4 @@
-package io.github.mooy1.infinitylib.recipes;
+package io.github.mooy1.infinitylib.recipes.big;
 
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.cscorelib2.collections.Pair;
@@ -23,10 +23,14 @@ public final class BigRecipeMap {
     }
     
     @Nullable
-    public Pair<ItemStack, int[]> get(@Nonnull BlockMenu menu, @Nonnull int[] slots) {
+    public OutputAndAmounts get(@Nonnull BlockMenu menu, @Nonnull int[] slots) {
         Pair<BigRecipe, int[]> pair = BigRecipe.fromMenu(menu, slots);
         ItemStack output = this.map.get(pair.getFirstValue());
-        return output == null ? null : new Pair<>(output, pair.getSecondValue());
+        return output == null ? null : new OutputAndAmounts(output, pair.getSecondValue());
+    }
+    
+    public int size() {
+        return this.map.size();
     }
 
 }

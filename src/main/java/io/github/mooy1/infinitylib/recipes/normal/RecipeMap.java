@@ -1,4 +1,4 @@
-package io.github.mooy1.infinitylib.recipes;
+package io.github.mooy1.infinitylib.recipes.normal;
 
 import io.github.mooy1.infinitylib.items.StackUtils;
 import org.bukkit.inventory.ItemStack;
@@ -18,6 +18,10 @@ public final class RecipeMap {
     @Nonnull
     public ItemStack get(@Nonnull ItemStack item) {
         return this.map.get(new Recipe(item));
+    }
+
+    public int size() {
+        return this.map.size();
     }
     
     private static final class Recipe {

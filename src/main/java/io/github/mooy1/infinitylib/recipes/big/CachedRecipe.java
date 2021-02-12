@@ -1,4 +1,4 @@
-package io.github.mooy1.infinitylib.recipes;
+package io.github.mooy1.infinitylib.recipes.big;
 
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.cscorelib2.collections.Pair;
@@ -22,9 +22,9 @@ public final class CachedRecipe extends BigRecipe {
     }
     
     @Nullable
-    public Pair<ItemStack, int[]> get(@Nonnull BlockMenu menu, @Nonnull int[] slots) {
+    public OutputAndAmounts get(@Nonnull BlockMenu menu, @Nonnull int[] slots) {
         Pair<BigRecipe, int[]> pair = fromMenu(menu, slots);
-        return equals(pair.getFirstValue()) ? new Pair<>(this.output, pair.getSecondValue()) : null;
+        return equals(pair.getFirstValue()) ? new OutputAndAmounts(this.output, pair.getSecondValue()) : null;
     }
     
 }
