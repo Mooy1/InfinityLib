@@ -1,5 +1,6 @@
 package io.github.mooy1.infinitylib.recipes;
 
+import io.github.mooy1.infinitylib.PluginUtils;
 import lombok.experimental.UtilityClass;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
@@ -16,6 +17,8 @@ public final class RecipeUtils {
         for (int i = 0 ; i < Math.min(9, recipe.getIngredientList().size()) ; i++) {
             arr[i] = recipe.getIngredientList().get(i);
         }
+
+        PluginUtils.log("Recipe " + recipe.getResult().getType());
         return arr;
     }
     
@@ -27,6 +30,8 @@ public final class RecipeUtils {
                 arr[i * 3 + j] = recipe.getIngredientMap().get(recipe.getShape()[i].charAt(j));
             }
         }
+
+        PluginUtils.log("Recipe " + recipe.getResult().getType());
         return arr;
     }
     

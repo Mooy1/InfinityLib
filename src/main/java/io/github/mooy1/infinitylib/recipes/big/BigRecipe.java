@@ -1,5 +1,6 @@
 package io.github.mooy1.infinitylib.recipes.big;
 
+import io.github.mooy1.infinitylib.PluginUtils;
 import io.github.mooy1.infinitylib.items.StackUtils;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.cscorelib2.collections.Pair;
@@ -41,7 +42,8 @@ class BigRecipe {
         
         AtomicInteger next = new AtomicInteger(1);
         
-        for (int i = 0; i < 9 ; i++, shapeInt*=10) {
+        for (int i = 0; i < 9 ; i++) {
+            shapeInt*=10;
             if (items[i] != null) {
                 shapeInt += map.computeIfAbsent(ids[i] = StackUtils.getIDorType(items[i]), k -> next.getAndIncrement());
                 if (next.intValue() == 4) {
@@ -50,6 +52,8 @@ class BigRecipe {
                 }
             }
         }
+
+        PluginUtils.log("Int " + shapeInt);
 
         if (shape == null) {
             shape = Shape.MAP.getOrDefault(shapeInt, Shape.FULL);
