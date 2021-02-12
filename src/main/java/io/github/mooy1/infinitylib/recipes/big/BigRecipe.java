@@ -42,9 +42,9 @@ class BigRecipe {
         
         MutableInt next = new MutableInt(0);
         
-        for (int i = 0, m = 1 ; i < 9 ; i++, m*=10) {
+        for (int i = 0; i < 9 ; i++, shapeInt*=10) {
             if (items[i] != null) {
-                shapeInt += m * map.computeIfAbsent(ids[i] = StackUtils.getIDorType(items[i]), k -> {
+                shapeInt += map.computeIfAbsent(ids[i] = StackUtils.getIDorType(items[i]), k -> {
                     next.increment();
                     return next.intValue();
                 });
