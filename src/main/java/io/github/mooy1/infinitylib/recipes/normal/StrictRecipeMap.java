@@ -9,43 +9,43 @@ import java.util.Map;
 
 public final class StrictRecipeMap {
     
-    private final Map<Recipe, OutputAndAmount> map = new HashMap<>();
+    private final Map<StrictRecipe, OutputAndAmount> map = new HashMap<>();
     
     public void put(@Nonnull ItemStack item, @Nonnull ItemStack output) {
-        this.map.put(new Recipe(item), new OutputAndAmount(output, item.getAmount()));
+        this.map.put(new StrictRecipe(item), new OutputAndAmount(output, item.getAmount()));
     }
 
     @Nonnull
     public OutputAndAmount get(@Nonnull ItemStack item) {
-        return this.map.get(new Recipe(item));
+        return this.map.get(new StrictRecipe(item));
     }
 
     public int size() {
         return this.map.size();
     }
 
-    private static final class Recipe {
-
+    private static final class StrictRecipe {
+    
         private final String id;
         private final int amount;
 
-        private Recipe(@Nonnull ItemStack item) {
+        private StrictRecipe(@Nonnull ItemStack item) {
             this.id = StackUtils.getIDorType(item);
             this.amount = hashCode();
         }
-
+    
         @Override
         public int hashCode() {
             return this.id.hashCode();
         }
-
+    
         @Override
         public boolean equals(Object obj) {
-            if (!(obj instanceof Recipe)) return false;
-            Recipe recipe = (Recipe) obj;
+            if (!(obj instanceof StrictRecipe)) return false;
+            StrictRecipe recipe = (StrictRecipe) obj;
             return recipe.amount >= this.amount && recipe.id.equals(this.id);
         }
-
+    
     }
 
 }
