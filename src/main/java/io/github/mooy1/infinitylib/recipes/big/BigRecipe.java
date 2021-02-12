@@ -1,11 +1,9 @@
 package io.github.mooy1.infinitylib.recipes.big;
 
-import io.github.mooy1.infinitylib.PluginUtils;
 import io.github.mooy1.infinitylib.items.StackUtils;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.cscorelib2.collections.Pair;
 import org.apache.commons.lang.Validate;
-import org.apache.commons.lang.mutable.MutableInt;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
@@ -13,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.TreeMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 class BigRecipe {
     
@@ -40,22 +39,17 @@ class BigRecipe {
         int shapeInt = 0;
         Shape shape = null;
         
-        MutableInt next = new MutableInt(0);
+        AtomicInteger next = new AtomicInteger(1);
         
         for (int i = 0; i < 9 ; i++, shapeInt*=10) {
             if (items[i] != null) {
-                shapeInt += map.computeIfAbsent(ids[i] = StackUtils.getIDorType(items[i]), k -> {
-                    next.increment();
-                    return next.intValue();
-                });
+                shapeInt += map.computeIfAbsent(ids[i] = StackUtils.getIDorType(items[i]), k -> next.getAndIncrement());
                 if (next.intValue() == 4) {
                     shape = Shape.FULL;
                     break;
                 }
             }
         }
-
-        PluginUtils.log(" " + shapeInt);
 
         if (shape == null) {
             shape = Shape.MAP.getOrDefault(shapeInt, Shape.FULL);
@@ -78,7 +72,7 @@ class BigRecipe {
         
         this.shape = shape;
         this.ids = ids;
-        this.hashCode = hashCode;
+        this.hashCode = hashCode + shape.hashCode();
     }
 
     @Override
