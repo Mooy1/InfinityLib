@@ -1,6 +1,5 @@
 package io.github.mooy1.infinitylib.recipes.big;
 
-import io.github.mooy1.infinitylib.PluginUtils;
 import io.github.mooy1.infinitylib.items.StackUtils;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.cscorelib2.collections.Pair;
@@ -35,25 +34,33 @@ class BigRecipe {
     BigRecipe(@Nonnull ItemStack[] items) {
         Validate.isTrue(items.length == 9);
         
+        // map of ids to digit for shape
         Map<String, Integer> map = new TreeMap<>();
+        
+        // array of ids for 3x3 shaped recipes
         String[] ids = new String[9];
+        
+        // the shape int
         int shapeInt = 0;
+        
+        // the shape
         Shape shape = null;
         
-        AtomicInteger next = new AtomicInteger(1);
+        // the current digit
+        AtomicInteger digit = new AtomicInteger(1);
         
+        // find all ids and the shape int
         for (int i = 0; i < 9 ; i++) {
             shapeInt*=10;
             if (items[i] != null) {
-                shapeInt += map.computeIfAbsent(ids[i] = StackUtils.getIDorType(items[i]), k -> next.getAndIncrement());
-                if (next.intValue() == 4) {
+                shapeInt += map.computeIfAbsent(ids[i] = StackUtils.getIDorType(items[i]), k -> digit.getAndIncrement());
+                if (digit.intValue() == 4) {
+                    // no shape has 4 different types rn
                     shape = Shape.FULL;
                     break;
                 }
             }
         }
-
-        PluginUtils.log("Int " + shapeInt);
 
         if (shape == null) {
             shape = Shape.MAP.getOrDefault(shapeInt, Shape.FULL);
@@ -61,6 +68,7 @@ class BigRecipe {
 
         int hashCode = 0;
         if (shape == Shape.FULL) {
+            // use the array already made
             for (String id : ids) {
                 if (id != null) {
                     hashCode += id.hashCode();
@@ -69,12 +77,14 @@ class BigRecipe {
         } else {
             ids = new String[map.size()];
             if (shape == Shape.SHAPELESS) {
+                // sort tree map entries into array
                 int i = 0;
                 for (Map.Entry<String, Integer> entry : map.entrySet()) {
                     ids[i++] = entry.getKey();
                     hashCode += entry.getValue().hashCode();
                 }
             } else {
+                // just use the tree map entries
                 for (Map.Entry<String, Integer> entry : map.entrySet()) {
                     ids[entry.getValue() - 1] = entry.getKey();
                     hashCode += entry.getValue().hashCode();
@@ -108,7 +118,15 @@ class BigRecipe {
         }
         return true;
     }
-    
+
+    /**
+     * Utility enum of 'shapes', for example a helmet could be:
+     * 
+     * 111    000
+     * 101 or 111
+     * 000    101
+     *
+     */
     private enum Shape {
         
         SHAPELESS(120000000, 123000000),
@@ -126,14 +144,15 @@ class BigRecipe {
         
         FOUR_SQUARE(110110000, 11011000, 110110, 11011),
         FOUR_HOE(110200200, 110020020, 11020020, 11002002),
+        FOUR_BOOTS(101101000, 101101),
         
         FIVE_AXE(110120020, 11012002, 110210200, 11021020),
+        FIVE_HELMET(111101000, 111101),
         
         SIX_TABLE(111111000, 111111),
         SIX_DOOR(110110110, 11011011),
         SIX_STAIRS(1011111, 100110111),
         SIX_BOW(120102120, 12102012),
-        
         
         FULL();
         
