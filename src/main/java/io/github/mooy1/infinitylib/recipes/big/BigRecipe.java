@@ -22,7 +22,10 @@ class BigRecipe {
         ItemStack[] stacks = new ItemStack[slots.length];
         int[] amounts = new int[slots.length];
         for (int i = 0 ; i < slots.length ; i++) {
-            amounts[i] = (stacks[i] = menu.getItemInSlot(slots[i])).getAmount();
+            ItemStack item = menu.getItemInSlot(slots[i]);
+            if (item != null) {
+                amounts[i] = (stacks[i] = item).getAmount();
+            }
         }
         return new Pair<>(new BigRecipe(stacks), amounts);
     }
@@ -54,7 +57,9 @@ class BigRecipe {
         int hashCode = 0;
         if (shape == Shape.FULL) {
             for (String id : ids) {
-                hashCode += id.hashCode();
+                if (id != null) {
+                    hashCode += id.hashCode();
+                }
             }
         } else {
             ids = new String[map.size()];
