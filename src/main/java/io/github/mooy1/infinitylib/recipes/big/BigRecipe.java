@@ -4,6 +4,7 @@ import io.github.mooy1.infinitylib.items.StackUtils;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.cscorelib2.collections.Pair;
 import org.apache.commons.lang.Validate;
+import org.apache.commons.lang.mutable.MutableInt;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
@@ -11,7 +12,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.TreeMap;
-import java.util.concurrent.atomic.AtomicInteger;
 
 class BigRecipe {
     
@@ -39,12 +39,15 @@ class BigRecipe {
         int shapeInt = 0;
         Shape shape = null;
         
-        AtomicInteger next = new AtomicInteger(1);
+        MutableInt next = new MutableInt(0);
         
         for (int i = 0, m = 1 ; i < 9 ; i++, m*=10) {
             if (items[i] != null) {
-                shapeInt += m * map.computeIfAbsent(ids[i] = StackUtils.getIDorType(items[i]), k -> next.getAndIncrement());
-                if (next.get() == 4) {
+                shapeInt += m * map.computeIfAbsent(ids[i] = StackUtils.getIDorType(items[i]), k -> {
+                    next.increment();
+                    return next.intValue();
+                });
+                if (next.intValue() == 4) {
                     shape = Shape.FULL;
                     break;
                 }
@@ -110,9 +113,10 @@ class BigRecipe {
         THREE_SIDE(111000000, 111000, 111),
         THREE_SWORD(100100200, 10010020, 1001002),
         THREE_ARROW(100200300, 10020030, 1002003),
+        THREE_SHOVEL(100200200, 10020020, 1002002),
         
         FOUR_SQUARE(110110000, 11011000, 110110, 11011),
-        FOUR_HOE(110200200, 11020020, 110020020, 11002002),
+        FOUR_HOE(110200200, 110020020, 11020020, 11002002),
         
         FIVE_AXE(110120020, 11012002, 110210200, 11021020),
         
