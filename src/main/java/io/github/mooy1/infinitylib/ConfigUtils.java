@@ -53,6 +53,14 @@ public final class ConfigUtils {
     
     private static final ConfigurationSection CONFIG = PluginUtils.getPlugin().getConfig();
     
+    public static String getString(String path) {
+        return CONFIG.getString(path);
+    }
+
+    public static boolean getBoolean(String path) {
+        return CONFIG.getBoolean(path);
+    }
+    
     public static int getInt(String path, int min, int max, int def) {
         return getInt(CONFIG, path, min, max, def);
     }

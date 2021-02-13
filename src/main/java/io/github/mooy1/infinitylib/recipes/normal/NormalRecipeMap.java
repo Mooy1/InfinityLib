@@ -1,19 +1,16 @@
 package io.github.mooy1.infinitylib.recipes.normal;
 
+import io.github.mooy1.infinitylib.misc.MapHolder;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * A simple input-output recipe map
  * 
  * @author Mooy1
  */
-public final class NormalRecipeMap {
-
-    private final Map<NormalRecipe, ItemStack> map = new HashMap<>();
+public final class NormalRecipeMap extends MapHolder<NormalRecipe, ItemStack> {
     
     public void put(@Nonnull ItemStack item, @Nonnull ItemStack output) {
         this.map.put(new NormalRecipe(item), output);
@@ -22,10 +19,6 @@ public final class NormalRecipeMap {
     @Nonnull
     public ItemStack get(@Nonnull ItemStack item) {
         return this.map.get(new NormalRecipe(item));
-    }
-
-    public int size() {
-        return this.map.size();
     }
 
 }
