@@ -23,34 +23,38 @@ import javax.annotation.OverridingMethodsMustInvokeSuper;
  */
 public abstract class AbstractMachine extends AbstractTicker implements EnergyNetComponent {
 
-    protected final int statusSlot;
-    protected final int energy;
-    
-    public AbstractMachine(Category category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe, int statusSlot, int energyConsumption) {
+    public AbstractMachine(Category category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
         super(category, item, recipeType, recipe);
-        this.statusSlot = statusSlot;
-        this.energy = energyConsumption;
     }
     
     protected abstract boolean process(@Nonnull BlockMenu menu, @Nonnull Block b, @Nonnull Config data);
 
     @Override
     protected final void tick(@Nonnull BlockMenu menu, @Nonnull Block b, @Nonnull Config data) {
-        if (getCharge(b.getLocation()) < this.energy) {
-            if (this.statusSlot != -1 && menu.hasViewer()) {
-                menu.replaceExistingItem(this.statusSlot, MenuPreset.notEnoughEnergy);
+        if (getCharge(b.getLocation()) < getEnergyConsumption()) {
+            if (getStatusSlot() != -1 && menu.hasViewer()) {
+                menu.replaceExistingItem(getStatusSlot(), MenuPreset.notEnoughEnergy);
             }
         } else if (process(menu, b, data)) {
-            removeCharge(b.getLocation(), this.energy);
+            removeCharge(b.getLocation(), getEnergyConsumption());
         }
     }
 
     @Override
     @OverridingMethodsMustInvokeSuper
     protected void setupMenu(@Nonnull BlockMenuPreset preset) {
-        if (this.statusSlot != -1) {
-            preset.addItem(this.statusSlot, MenuPreset.loadingItemRed, ChestMenuUtils.getEmptyClickHandler());
+        if (getStatusSlot() != -1) {
+            preset.addItem(getStatusSlot(), MenuPreset.loadingItemRed, ChestMenuUtils.getEmptyClickHandler());
         }
+    }
+    
+    protected abstract int getStatusSlot();
+    
+    protected abstract int getEnergyConsumption();
+    
+    @Override
+    public int getCapacity() {
+        return getEnergyConsumption() * 2;
     }
 
     @Nonnull

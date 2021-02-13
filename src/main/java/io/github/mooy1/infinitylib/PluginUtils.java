@@ -20,29 +20,29 @@ import java.util.logging.Level;
 
 /**
  * Main utility class for your addon, register it here
- * 
+ *
  * @author Mooy1
  */
 @UtilityClass
 public final class PluginUtils {
-    
+
     @Getter
     private static JavaPlugin plugin = null;
-    
+
     @Getter
     private static SlimefunAddon addon = null;
-    
+
     @Getter
     private static int currentTick = 0;
-    
+
     @Getter
     private static long timings = 0;
-    
+
     @Getter
     private static String prefix = null;
-    
+
     public static final int TICKER_DELAY = SlimefunPlugin.getCfg().getInt("URID.custom-ticker-delay");
-    
+
     public static final float TICK_RATIO = 20F / PluginUtils.TICKER_DELAY;
 
     /**
@@ -57,22 +57,35 @@ public final class PluginUtils {
         addon = slimefunAddon;
         plugin = addon.getJavaPlugin();
         prefix = ChatColor.GRAY + "[" + prefix + ChatColor.GRAY + "] " + ChatColor.WHITE;
-        
+
         // copy config if not present
         plugin.saveDefaultConfig();
-        
+
+        // add auto update
+        Objects.requireNonNull(plugin.getConfig().getDefaults()).set("auto-update", true);
+
         // remove unused fields in config
         clearUnused(plugin.getConfig(), plugin.getConfig().getDefaults());
-        
+
         // copy defaults and header to update stuff
         plugin.getConfig().options().copyDefaults(true).copyHeader(true);
-        
+
         // save
         plugin.saveConfig();
 
         // auto update
-        if (plugin.getDescription().getVersion().startsWith("DEV - ")) {
-            new GitHubBuildsUpdater(plugin, file, url).start();
+        if (plugin.getConfig().getBoolean("auto-update")) {
+            if (plugin.getDescription().getVersion().startsWith("DEV - ")) {
+                new GitHubBuildsUpdater(plugin, file, url).start();
+            }
+        } else {
+            runSync(() -> PluginUtils.log(
+                    "#######################################",
+                    "Auto Updates have been disabled for " + plugin.getName(),
+                    "You will receive no support for bugs",
+                    "Until you update to the latest version!",
+                    "#######################################"
+            ));
         }
     }
 
@@ -90,7 +103,7 @@ public final class PluginUtils {
             }
         }
     }
-    
+
     @Nonnull
     public static NamespacedKey getKey(@Nonnull String key) {
         return new NamespacedKey(plugin, key);
@@ -101,7 +114,7 @@ public final class PluginUtils {
             plugin.getLogger().log(level, log);
         }
     }
-    
+
     public static void log(@Nonnull String... logs) {
         log(Level.INFO, logs);
     }
@@ -126,11 +139,11 @@ public final class PluginUtils {
     public static void runSync(@Nonnull Runnable runnable) {
         Bukkit.getScheduler().runTask(plugin, runnable);
     }
-    
+
     public static void runSync(@Nonnull Runnable runnable, long delay) {
         Bukkit.getScheduler().runTaskLater(plugin, runnable, delay);
     }
-    
+
     public static void scheduleRepeatingSync(@Nonnull Runnable runnable, long interval) {
         Bukkit.getScheduler().runTaskTimer(plugin, runnable, 0, interval);
     }
@@ -154,5 +167,5 @@ public final class PluginUtils {
     public static void scheduleRepeatingAsync(@Nonnull Runnable runnable, long delay, long interval) {
         Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, runnable, delay, interval);
     }
-    
+
 }
