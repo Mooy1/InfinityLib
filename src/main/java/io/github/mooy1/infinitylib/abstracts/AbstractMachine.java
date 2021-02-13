@@ -3,15 +3,18 @@ package io.github.mooy1.infinitylib.abstracts;
 import io.github.mooy1.infinitylib.presets.MenuPreset;
 import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
+import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
+import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
+import javax.annotation.OverridingMethodsMustInvokeSuper;
 
 /**
  * A slimefun item with a menu and ticker, which will process if it has enough energy
@@ -41,7 +44,15 @@ public abstract class AbstractMachine extends AbstractTicker implements EnergyNe
             removeCharge(b.getLocation(), this.energy);
         }
     }
-    
+
+    @Override
+    @OverridingMethodsMustInvokeSuper
+    protected void setupMenu(@Nonnull BlockMenuPreset preset) {
+        if (this.statusSlot != -1) {
+            preset.addItem(this.statusSlot, MenuPreset.loadingItemRed, ChestMenuUtils.getEmptyClickHandler());
+        }
+    }
+
     @Nonnull
     @Override
     public final EnergyNetComponentType getEnergyComponentType() {
