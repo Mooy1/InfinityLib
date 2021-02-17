@@ -14,6 +14,8 @@ import java.util.concurrent.ThreadLocalRandom;
 @UtilityClass
 public final class RandomUtils {
     
+    private static final ThreadLocalRandom random = ThreadLocalRandom.current();
+    
     /**
      * This method returns a random int from the given range, inclusive
      *
@@ -22,28 +24,22 @@ public final class RandomUtils {
      * @return random int in range
      */
     public static int randomFromRange(int min, int max) {
-        return ThreadLocalRandom.current().nextInt(min, max + 1);
+        return random.nextInt(min, max + 1);
     }
 
     /**
      * This method gets a random ItemStack from the array
-     *
-     * @param array array of outputs
-     * @return random output
      */
     @Nonnull
     public static ItemStack randomOutput(@Nonnull ItemStack[] array) {
-        return array[randomFromRange(0, array.length - 1)].clone();
+        return array[random.nextInt(array.length)].clone();
     }
 
     /**
      * This method will return true 1 / chance times.
-     *
-     * @param chance average tries to return true
-     * @return true if chance
      */
     public static boolean chanceIn(int chance) {
-        return randomFromRange(1, chance) == chance;
+        return random.nextInt(chance) == 0;
     }
     
 }
