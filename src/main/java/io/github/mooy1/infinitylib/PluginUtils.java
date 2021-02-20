@@ -117,11 +117,6 @@ public final class PluginUtils {
     }
     
     @Nonnull
-    public static File getFile(@Nonnull String name) {
-        return new File(plugin.getDataFolder(), name);
-    }
-
-    @Nonnull
     public static NamespacedKey getKey(@Nonnull String key) {
         return new NamespacedKey(plugin, key);
     }

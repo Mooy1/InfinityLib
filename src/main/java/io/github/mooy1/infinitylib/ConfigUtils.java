@@ -55,12 +55,12 @@ public final class ConfigUtils {
     
     private static final ConfigurationSection CONFIG = PluginUtils.getPlugin().getConfig();
     
-    public static String getString(String path) {
-        return CONFIG.getString(path);
+    public static String getString(String path, String def) {
+        return CONFIG.getString(path, def);
     }
 
-    public static boolean getBoolean(String path) {
-        return CONFIG.getBoolean(path);
+    public static boolean getBoolean(String path, boolean def) {
+        return CONFIG.getBoolean(path, def);
     }
     
     public static int getInt(String path, int min, int max, int def) {
