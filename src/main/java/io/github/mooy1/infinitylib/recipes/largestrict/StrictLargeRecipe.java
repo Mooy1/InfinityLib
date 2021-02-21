@@ -16,8 +16,9 @@ final class StrictLargeRecipe {
         StringBuilder builder = new StringBuilder();
         for (ItemStack item : recipe) {
             if (item != null) {
-                builder.append(StackUtils.getIDorType(item)).append(';');
+                builder.append(StackUtils.getIDorType(item));
             }
+            builder.append(';');
         }
         this.string = builder.toString();
         this.amounts = amounts;
@@ -29,9 +30,10 @@ final class StrictLargeRecipe {
         for (int i = 0 ; i < recipe.length ; i++) {
             ItemStack item = recipe[i];
             if (item != null) {
-                builder.append(StackUtils.getIDorType(item)).append(';');
+                builder.append(StackUtils.getIDorType(item));
                 amounts[i] = item.getAmount();
             }
+            builder.append(';');
         }
         this.string = builder.toString();
         this.amounts = amounts;
@@ -43,9 +45,10 @@ final class StrictLargeRecipe {
         for (int i = 0 ; i < slots.length ; i++) {
             ItemStack item = menu.getItemInSlot(slots[i]);
             if (item != null) {
-                builder.append(StackUtils.getIDorType(item)).append(';');
+                builder.append(StackUtils.getIDorType(item));
                 amounts[i] = item.getAmount();
             }
+            builder.append(';');
         }
         this.string = builder.toString();
         this.amounts = amounts;
@@ -59,13 +62,13 @@ final class StrictLargeRecipe {
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof StrictLargeRecipe)) return false;
-        StrictLargeRecipe input = (StrictLargeRecipe) obj;
+        StrictLargeRecipe recipe = (StrictLargeRecipe) obj;
         for (int i = 0 ; i < this.amounts.length ; i++) {
-            if (input.amounts[i] < this.amounts[i]) {
+            if (recipe.amounts[i] > this.amounts[i]) {
                 return false;
             }
         }
-        return input.string.equals(this.string);
+        return recipe.string.equals(this.string);
     }
 
 }

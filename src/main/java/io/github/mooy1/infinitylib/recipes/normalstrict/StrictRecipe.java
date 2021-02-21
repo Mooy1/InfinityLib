@@ -26,8 +26,8 @@ final class StrictRecipe {
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof StrictRecipe)) return false;
-        StrictRecipe input = (StrictRecipe) obj;
-        return input.amount >= this.amount && input.id.equals(this.id);
+        StrictRecipe recipe = (StrictRecipe) obj;
+        return recipe.amount <= this.amount && recipe.id.equals(this.id);
     }
 
 }
