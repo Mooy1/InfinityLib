@@ -1,4 +1,4 @@
-package io.github.mooy1.infinitylib.recipes.strict;
+package io.github.mooy1.infinitylib.recipes.normalstrict;
 
 import io.github.mooy1.infinitylib.misc.MapHolder;
 import me.mrCookieSlime.Slimefun.cscorelib2.collections.RandomizedSet;
@@ -15,16 +15,16 @@ import java.util.Map;
  */
 public final class StrictRandomRecipeMap extends MapHolder<StrictRecipe, RandomizedSet<StrictOutput>> {
     
-    public void put(@Nonnull ItemStack item, @Nonnull RandomizedSet<ItemStack> set) {
+    public void put(@Nonnull ItemStack recipe, @Nonnull RandomizedSet<ItemStack> set) {
         RandomizedSet<StrictOutput> recipes = new RandomizedSet<>();
         for (Map.Entry<ItemStack, Float> entry : set.toMap().entrySet()) {
-            recipes.add(new StrictOutput(entry.getKey(), item.getAmount()), entry.getValue());
+            recipes.add(new StrictOutput(entry.getKey(), recipe.getAmount()), entry.getValue());
         }
-        this.map.put(new StrictRecipe(item), recipes);
+        this.map.put(new StrictRecipe(recipe), recipes);
     }
 
-    public void put(@Nonnull ItemStack item, @Nonnull ItemStack output, float weight) {
-        this.map.computeIfAbsent(new StrictRecipe(item), k -> new RandomizedSet<>()).add(new StrictOutput(output, item.getAmount()), weight);
+    public void put(@Nonnull ItemStack recipe, @Nonnull ItemStack output, float weight) {
+        this.map.computeIfAbsent(new StrictRecipe(recipe), k -> new RandomizedSet<>()).add(new StrictOutput(output, recipe.getAmount()), weight);
     }
     
     @Nullable

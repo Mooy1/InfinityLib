@@ -1,31 +1,38 @@
 package io.github.mooy1.infinitylib.recipes.large;
 
 import io.github.mooy1.infinitylib.items.StackUtils;
+import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
 
-/**
- * A large recipe which stores a string of all ids/materials and amounts
- */
-final class LargeRecipe {
-
+public final class LargeRecipe {
+    
     private final String string;
-    private final int[] amounts;
 
     LargeRecipe(@Nonnull ItemStack[] recipe) {
         StringBuilder builder = new StringBuilder();
-        int[] amounts = new int[recipe.length];
 
-        for (int i = 0 ; i < recipe.length ; i++) {
-            if (recipe[i] != null) {
-                builder.append(StackUtils.getIDorType(recipe[i])).append(';');
-                amounts[i] = recipe[i].getAmount();
+        for (ItemStack itemStack : recipe) {
+            if (itemStack != null) {
+                builder.append(StackUtils.getIDorType(itemStack)).append(';');
             }
         }
 
         this.string = builder.toString();
-        this.amounts = amounts;
+    }
+
+    LargeRecipe(BlockMenu menu, int[] slots) {
+        StringBuilder builder = new StringBuilder();
+
+        for (int slot : slots) {
+            ItemStack item = menu.getItemInSlot(slot);
+            if (item != null) {
+                builder.append(StackUtils.getIDorType(item)).append(';');
+            }
+        }
+
+        this.string = builder.toString();
     }
 
     @Override
@@ -35,14 +42,7 @@ final class LargeRecipe {
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof LargeRecipe)) return false;
-        LargeRecipe input = (LargeRecipe) obj;
-        for (int i = 0 ; i < this.amounts.length ; i++) {
-            if (input.amounts[i] < this.amounts[i]) {
-                return false;
-            }
-        }
-        return input.string.equals(this.string);
+        return obj instanceof LargeRecipe && ((LargeRecipe) obj).string.equals(this.string);
     }
-
+    
 }
