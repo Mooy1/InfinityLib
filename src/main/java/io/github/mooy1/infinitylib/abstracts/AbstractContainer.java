@@ -57,20 +57,19 @@ public abstract class AbstractContainer extends SlimefunItem {
             }
         };
         
-        addItemHandler(new BlockBreakHandler() {
+        addItemHandler(new BlockBreakHandler(false, false) {
             @Override
-            public boolean onBlockBreak(BlockBreakEvent e, ItemStack item, int fortune, List<ItemStack> drops) {
+            public void onPlayerBreak(@Nonnull BlockBreakEvent e, @Nonnull ItemStack itemStack, @Nonnull List<ItemStack> list) {
                 BlockMenu menu = BlockStorage.getInventory(e.getBlock());
                 if (menu != null) {
                     onBreak(e, menu, e.getBlock().getLocation());
                 }
-                return true;
             }
         });
         
         addItemHandler(new BlockPlaceHandler(false) {
             @Override
-            public void onPlayerPlace(BlockPlaceEvent e) {
+            public void onPlayerPlace(@Nonnull BlockPlaceEvent e) {
                 onPlace(e, e.getBlockPlaced());
             }
         });
