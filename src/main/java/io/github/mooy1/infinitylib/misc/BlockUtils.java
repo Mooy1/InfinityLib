@@ -59,7 +59,7 @@ public final class BlockUtils {
      *
      * @return a set of blocks
      */
-    private static Set<Block> getNearbyBlocks(Block start, Set<Material> allowedMaterials) {
+    public static Set<Block> getNearbyBlocks(Block start, Set<Material> allowedMaterials) {
         Set<Block> blocks = new HashSet<>();
         for (int x = -1; x < 2; x++) {
             for (int y = -1; y < 2; y++) {
