@@ -46,8 +46,8 @@ public final class BlockUtils {
 
         treeMats.put(TreeType.CHORUS_PLANT, EnumSet.of(Material.CHORUS_PLANT, Material.CHORUS_FLOWER));
 
-        treeMats.put(TreeType.WARPED_FUNGUS, EnumSet.of(Material.WARPED_STEM, Material.WARPED_WART_BLOCK));
-        treeMats.put(TreeType.CRIMSON_FUNGUS, EnumSet.of(Material.CRIMSON_STEM, Material.NETHER_WART_BLOCK));
+        treeMats.put(TreeType.WARPED_FUNGUS, EnumSet.of(Material.WARPED_STEM, Material.WARPED_WART_BLOCK, Material.TWISTING_VINES_PLANT, Material.SHROOMLIGHT));
+        treeMats.put(TreeType.CRIMSON_FUNGUS, EnumSet.of(Material.CRIMSON_STEM, Material.NETHER_WART_BLOCK, Material.WEEPING_VINES_PLANT, Material.SHROOMLIGHT));
     }
 
     /**
