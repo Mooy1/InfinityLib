@@ -1,10 +1,13 @@
 package io.github.mooy1.infinitylib.misc;
 
 import lombok.experimental.UtilityClass;
+import org.apache.commons.lang.Validate;
 import org.bukkit.Material;
 import org.bukkit.TreeType;
 import org.bukkit.block.Block;
 
+import javax.annotation.Nonnull;
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.HashSet;
@@ -56,15 +59,19 @@ public final class BlockUtils {
      *
      * @param start the block  to start from
      * @param allowedMaterials all the allowed materials that can connect to the block
-     *
      * @return a set of blocks
      */
-    public static Set<Block> getNearbyBlocks(Block start, Set<Material> allowedMaterials) {
+    @Nonnull
+    public static Set<Block> getNearbyBlocks(@Nonnull Block start, @Nonnull Set<Material> allowedMaterials) {
+        if (allowedMaterials.isEmpty()) {
+            allowedMaterials = EnumSet.allOf(Material.class);
+        }
+
         Set<Block> blocks = new HashSet<>();
         for (int x = -1; x < 2; x++) {
             for (int y = -1; y < 2; y++) {
                 for (int z = -1; z < 2; z++) {
-                    Block block = start.getLocation().clone().add(x, y, z).getBlock();
+                    Block block = start.getLocation().add(x, y, z).getBlock();
                     if (!blocks.contains(block) && allowedMaterials.contains(block.getType())) {
                         blocks.add(block);
                         blocks.addAll(getNearbyBlocks(block, allowedMaterials, blocks));
@@ -75,11 +82,12 @@ public final class BlockUtils {
         return blocks;
     }
 
-    private static Set<Block> getNearbyBlocks(Block start, Set<Material> allowedMaterials, Set<Block> blocks) {
+    @Nonnull
+    private static Set<Block> getNearbyBlocks(@Nonnull Block start, @Nonnull Set<Material> allowedMaterials, @Nonnull Set<Block> blocks) {
         for (int x = -1; x < 2; x++) {
             for (int y = -1; y < 2; y++) {
                 for (int z = -1; z < 2; z++) {
-                    Block block = start.getLocation().clone().add(x, y, z).getBlock();
+                    Block block = start.getLocation().add(x, y, z).getBlock();
                     if (!blocks.contains(block) && allowedMaterials.contains(block.getType())) {
                         blocks.add(block);
                         blocks.addAll(getNearbyBlocks(block, allowedMaterials, blocks));
@@ -95,10 +103,10 @@ public final class BlockUtils {
      *
      * @param start the block to start
      * @param treeType the type of the tree to get
-     *
      * @return a set of the blocks contained in the tree
      */
-    public static Set<Block> getTree(Block start, TreeType treeType) {
+    @Nonnull
+    public static Set<Block> getTree(@Nonnull Block start, @Nonnull TreeType treeType) {
         return getNearbyBlocks(start, treeMats.getOrDefault(treeType, new HashSet<>()));
     }
 }
