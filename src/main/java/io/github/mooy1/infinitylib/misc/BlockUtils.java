@@ -7,6 +7,7 @@ import org.bukkit.TreeType;
 import org.bukkit.block.Block;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.EnumSet;
@@ -58,13 +59,13 @@ public final class BlockUtils {
      * is in {@code allowedMaterials}
      *
      * @param start the block  to start from
-     * @param allowedMaterials all the allowed materials that can connect to the block
+     * @param allowedMaterials all the allowed materials that can connect to the block. if null or empty function returns null
      * @return a set of blocks
      */
     @Nonnull
-    public static Set<Block> getNearbyBlocks(@Nonnull Block start, @Nonnull Set<Material> allowedMaterials) {
-        if (allowedMaterials.isEmpty()) {
-            allowedMaterials = EnumSet.allOf(Material.class);
+    public static Set<Block> getNearbyBlocks(@Nonnull Block start, @Nullable Set<Material> allowedMaterials) {
+        if (allowedMaterials == null || allowedMaterials.isEmpty()) {
+            return new HashSet<>();
         }
 
         Set<Block> blocks = new HashSet<>();
@@ -107,6 +108,6 @@ public final class BlockUtils {
      */
     @Nonnull
     public static Set<Block> getTree(@Nonnull Block start, @Nonnull TreeType treeType) {
-        return getNearbyBlocks(start, treeMats.getOrDefault(treeType, new HashSet<>()));
+        return getNearbyBlocks(start, treeMats.get(treeType));
     }
 }
