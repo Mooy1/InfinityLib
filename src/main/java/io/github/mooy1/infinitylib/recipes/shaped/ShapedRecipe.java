@@ -1,7 +1,6 @@
 package io.github.mooy1.infinitylib.recipes.shaped;
 
 import io.github.mooy1.infinitylib.items.StackUtils;
-import org.apache.commons.lang.Validate;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
@@ -27,11 +26,14 @@ final class ShapedRecipe {
         // array of ids for 3x3 shaped recipes
         String[] ids = new String[9];
 
+        // hash
+        int hashCode = 0;
+        
         // the shape int
         int shapeInt = 0;
 
         // the shape
-        Shape shape = null;
+        Shape shape;
 
         // the current digit
         AtomicInteger digit = new AtomicInteger(1);
@@ -40,29 +42,19 @@ final class ShapedRecipe {
         for (int i = 0 ; i < 9 ; i++) {
             shapeInt *= 10;
             if (items[i] != null) {
-                shapeInt += map.computeIfAbsent(ids[i] = StackUtils.getIDorType(items[i]), k -> digit.getAndIncrement());
-                if (digit.intValue() == 4) {
-                    // no shape has 4 different types rn
-                    shape = Shape.FULL;
-                    break;
-                }
+                String id = ids[i] = StackUtils.getIDorType(items[i]);
+                shapeInt += map.computeIfAbsent(id, k -> digit.getAndIncrement());
+                hashCode += id.hashCode();
             }
         }
 
-        if (shape == null) {
-            shape = Shape.get(shapeInt);
-        }
-
-        int hashCode = 0;
-        if (shape == Shape.FULL) {
-            // use the array already made
-            for (String id : ids) {
-                if (id != null) {
-                    hashCode += id.hashCode();
-                }
-            }
-        } else {
+        // find shape
+        shape = Shape.get(shapeInt);
+        
+        if (shape != Shape.FULL) {
+            // full should keep the current ids & hash
             ids = new String[map.size()];
+            hashCode = 0;
             if (shape == Shape.SHAPELESS) {
                 // sort tree map entries into array
                 int i = 0;
