@@ -1,6 +1,6 @@
 package io.github.mooy1.infinitylib.recipes.large;
 
-import io.github.mooy1.infinitylib.misc.MapHolder;
+import io.github.mooy1.infinitylib.recipes.AbstractRecipeMap;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import org.apache.commons.lang.Validate;
 import org.bukkit.inventory.ItemStack;
@@ -13,7 +13,7 @@ import javax.annotation.Nullable;
  * 
  * @author Mooy1
  */
-public final class LargeRecipeMap extends MapHolder<LargeRecipe, ItemStack> {
+public final class LargeRecipeMap extends AbstractRecipeMap<LargeRecipe, ItemStack> {
 
     private final int size;
     
@@ -24,19 +24,19 @@ public final class LargeRecipeMap extends MapHolder<LargeRecipe, ItemStack> {
     
     public void put(@Nonnull ItemStack[] input, @Nonnull ItemStack output) {
         Validate.isTrue(input.length == this.size);
-        this.map.put(new LargeRecipe(input), output);
+        this.recipes.put(new LargeRecipe(input), output);
     }
 
     @Nullable
     public ItemStack get(@Nonnull ItemStack[] input) {
         Validate.isTrue(input.length == this.size);
-        return this.map.get(new LargeRecipe(input));
+        return this.recipes.get(new LargeRecipe(input));
     }
 
     @Nullable
     public ItemStack get(@Nonnull BlockMenu menu, @Nonnull int[] slots) {
         Validate.isTrue(slots.length == this.size);
-        return this.map.get(new LargeRecipe(menu, slots));
+        return this.recipes.get(new LargeRecipe(menu, slots));
     }
     
 }

@@ -1,6 +1,6 @@
 package io.github.mooy1.infinitylib.recipes.normalstrict;
 
-import io.github.mooy1.infinitylib.misc.MapHolder;
+import io.github.mooy1.infinitylib.recipes.AbstractRecipeMap;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
@@ -10,15 +10,15 @@ import javax.annotation.Nonnull;
  * 
  * @author Mooy1
  */
-public final class StrictRecipeMap extends MapHolder<StrictRecipe, StrictOutput> {
+public final class StrictRecipeMap extends AbstractRecipeMap<StrictRecipe, StrictOutput> {
     
     protected void add(@Nonnull ItemStack recipe, @Nonnull ItemStack output) {
-        this.map.put(new StrictRecipe(recipe), new StrictOutput(output, recipe.getAmount()));
+        this.recipes.put(new StrictRecipe(recipe), new StrictOutput(output, recipe.getAmount()));
     }
     
     @Nonnull
     public StrictOutput get(@Nonnull ItemStack item) {
-        return this.map.get(new StrictRecipe(item));
+        return this.recipes.get(new StrictRecipe(item));
     }
     
 }

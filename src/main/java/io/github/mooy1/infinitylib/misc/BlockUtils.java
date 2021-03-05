@@ -1,14 +1,12 @@
 package io.github.mooy1.infinitylib.misc;
 
 import lombok.experimental.UtilityClass;
-import org.apache.commons.lang.Validate;
 import org.bukkit.Material;
 import org.bukkit.TreeType;
 import org.bukkit.block.Block;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.HashSet;
@@ -88,8 +86,8 @@ public final class BlockUtils {
         for (int x = -1; x < 2; x++) {
             for (int y = -1; y < 2; y++) {
                 for (int z = -1; z < 2; z++) {
-                    Block block = start.getLocation().add(x, y, z).getBlock();
-                    if (!blocks.contains(block) && allowedMaterials.contains(block.getType())) {
+                    Block block = start.getRelative(x, y, z);
+                    if (allowedMaterials.contains(block.getType()) && !blocks.contains(block)) {
                         blocks.add(block);
                         blocks.addAll(getNearbyBlocks(block, allowedMaterials, blocks));
                     }
