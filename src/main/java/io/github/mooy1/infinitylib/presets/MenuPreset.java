@@ -1,17 +1,13 @@
 package io.github.mooy1.infinitylib.presets;
 
-import io.github.mooy1.infinitylib.PluginUtils;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import lombok.experimental.UtilityClass;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataType;
 
-import javax.annotation.Nonnull;
+import static io.github.mooy1.infinitylib.items.StackUtils.makeUnique;
 
 /**
  * Collection of utils for creating BlockMenuPresets
@@ -62,28 +58,6 @@ public final class MenuPreset {
         for (int i : slotChunk3) {
             preset.addItem(i, borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
         }
-    }
-
-    private static final NamespacedKey UNIQUE_KEY = PluginUtils.getKey("unique");
-    
-    @Nonnull
-    public static ItemStack getUnique(@Nonnull ItemStack item) {
-        return makeUnique(item.clone());
-    }
-
-    @Nonnull
-    public static ItemStack makeUnique(@Nonnull ItemStack item) {
-        ItemMeta meta = item.getItemMeta();
-        meta.getPersistentDataContainer().set(UNIQUE_KEY, PersistentDataType.BYTE, (byte) 1);
-        item.setItemMeta(meta);
-        return item;
-    }
-    
-    @Nonnull
-    public static ItemStack removeUnique(@Nonnull ItemStack item, int newAmount) {
-        ItemStack newItem = new CustomItem(item, meta -> meta.getPersistentDataContainer().remove(UNIQUE_KEY));
-        item.setAmount(newAmount);
-        return newItem;
     }
     
     public static final ItemStack invalidInput = makeUnique(new CustomItem(

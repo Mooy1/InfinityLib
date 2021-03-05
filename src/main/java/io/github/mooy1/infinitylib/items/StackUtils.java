@@ -1,5 +1,6 @@
 package io.github.mooy1.infinitylib.items;
 
+import io.github.mooy1.infinitylib.PluginUtils;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import lombok.experimental.UtilityClass;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
@@ -9,7 +10,6 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.Range;
 
@@ -24,30 +24,14 @@ import javax.annotation.Nullable;
 @UtilityClass
 public final class StackUtils {
 
-    private static final NamespacedKey dataKey = SlimefunPlugin.getItemDataService().getKey();
-    
-    @Nullable
-    public static String getIDofNullable(@Nullable ItemStack item) {
-        if (item == null) {
-            return null;
-        }
-        return getID(item);
-    }
-
-    @Nullable
-    public static String getIDorTypeOfNullable(@Nullable ItemStack item) {
-        if (item == null) {
-            return null;
-        }
-        return getIDorType(item);
-    }
+    private static final NamespacedKey ID = SlimefunPlugin.getItemDataService().getKey();
 
     @Nullable
     public static String getID(@Nonnull ItemStack item) {
         if (item instanceof SlimefunItemStack) {
             return ((SlimefunItemStack) item).getItemId();
         }
-        return getID(item.getItemMeta().getPersistentDataContainer());
+        return item.getItemMeta().getPersistentDataContainer().get(ID, PersistentDataType.STRING);
     }
     
     @Nonnull
@@ -58,53 +42,6 @@ public final class StackUtils {
         } else {
             return id;
         }
-    }
-    
-    @Nullable
-    public static String getID(@Nonnull PersistentDataContainer container) {
-        return container.get(dataKey, PersistentDataType.STRING);
-    }
-
-    @Nonnull
-    public static String getIDorType(@Nonnull PersistentDataContainer container, @Nonnull ItemStack item) {
-        String id = getID(container);
-        if (id == null) {
-            return item.getType().toString();
-        } else {
-            return id;
-        }
-    }
-
-    @Nullable
-    public static ItemStack getItemByNullableID(@Nullable String id) {
-        if (id == null) {
-            return null;
-        }
-        return getItemByID(id, 1);
-    }
-
-    @Nullable
-    public static ItemStack getItemByNullableIDorType(@Nullable String id) throws IllegalArgumentException {
-        if (id == null) {
-            return null;
-        }
-        return getItemByIDorType(id, 1);
-    }
-
-    @Nullable
-    public static ItemStack getItemByNullableID(@Nullable String id, @Range(from = 1, to = 64) int amount) {
-        if (id == null) {
-            return null;
-        }
-        return getItemByID(id, amount);
-    }
-
-    @Nullable
-    public static ItemStack getItemByNullableIDorType(@Nullable String id, @Range(from = 1, to = 64) int amount) {
-        if (id == null) {
-            return null;
-        }
-        return getItemByIDorType(id, amount);
     }
 
     @Nullable
@@ -148,6 +85,32 @@ public final class StackUtils {
             item.removeEnchantment(e);
         }
         return item;
+    }
+
+    private static final NamespacedKey UNIQUE_KEY = PluginUtils.getKey("unique");
+    
+    @Nonnull
+    public static ItemStack makeUnique(@Nonnull ItemStack item) {
+        return new CustomItem(item, meta -> meta.getPersistentDataContainer().set(UNIQUE_KEY, PersistentDataType.BYTE, (byte) 1));
+    }
+
+    @Nonnull
+    public static ItemStack removeUnique(@Nonnull ItemStack item) {
+        return new CustomItem(item, meta -> meta.getPersistentDataContainer().remove(UNIQUE_KEY));
+    }
+    
+    @Nonnull
+    public static ItemStack makeUnique(@Nonnull ItemStack item, int newAmount) {
+        ItemStack newItem = new CustomItem(item, meta -> meta.getPersistentDataContainer().set(UNIQUE_KEY, PersistentDataType.BYTE, (byte) 1));
+        newItem.setAmount(newAmount);
+        return newItem;
+    }
+
+    @Nonnull
+    public static ItemStack removeUnique(@Nonnull ItemStack item, int newAmount) {
+        ItemStack newItem = new CustomItem(item, meta -> meta.getPersistentDataContainer().remove(UNIQUE_KEY));
+        newItem.setAmount(newAmount);
+        return newItem;
     }
     
 }
