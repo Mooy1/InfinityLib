@@ -64,7 +64,7 @@ public final class MenuPreset {
         }
     }
 
-    private static final NamespacedKey key = PluginUtils.getKey("unique");
+    private static final NamespacedKey UNIQUE_KEY = PluginUtils.getKey("unique");
     
     @Nonnull
     public static ItemStack getUnique(@Nonnull ItemStack item) {
@@ -74,9 +74,16 @@ public final class MenuPreset {
     @Nonnull
     public static ItemStack makeUnique(@Nonnull ItemStack item) {
         ItemMeta meta = item.getItemMeta();
-        meta.getPersistentDataContainer().set(key, PersistentDataType.BYTE, (byte) 1);
+        meta.getPersistentDataContainer().set(UNIQUE_KEY, PersistentDataType.BYTE, (byte) 1);
         item.setItemMeta(meta);
         return item;
+    }
+    
+    @Nonnull
+    public static ItemStack removeUnique(@Nonnull ItemStack item, int newAmount) {
+        ItemStack newItem = new CustomItem(item, meta -> meta.getPersistentDataContainer().remove(UNIQUE_KEY));
+        item.setAmount(newAmount);
+        return newItem;
     }
     
     public static final ItemStack invalidInput = makeUnique(new CustomItem(
