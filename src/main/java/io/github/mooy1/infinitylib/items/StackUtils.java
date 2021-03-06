@@ -1,19 +1,25 @@
 package io.github.mooy1.infinitylib.items;
 
+import io.github.mooy1.infinitylib.PluginUtils;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import lombok.experimental.UtilityClass;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
+import me.mrCookieSlime.Slimefun.cscorelib2.inventory.ItemUtils;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.Range;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.lang.reflect.Method;
+import java.util.logging.Level;
 
 /**
  * Collection of utils for modifying ItemStacks and getting their ids
@@ -84,6 +90,34 @@ public final class StackUtils {
             item.removeEnchantment(e);
         }
         return item;
+    }
+    
+    private static Method copyCBItemStackToNMS;
+    private static Method itemStackNameComponent;
+    private static Method componentToString;
+
+    static {
+        try {
+            copyCBItemStackToNMS = (Method) ItemUtils.class.getDeclaredField("copy").get(null);
+            itemStackNameComponent = (Method) ItemUtils.class.getDeclaredField("getName").get(null);
+            componentToString = (Method) ItemUtils.class.getDeclaredField("toString").get(null);
+        } catch (Exception e) {
+            PluginUtils.log(Level.SEVERE, "Failed to load ItemStack name methods!");
+            e.printStackTrace();
+        }
+    }
+    
+    public static String getName(@Nonnull ItemStack item, @Nonnull ItemMeta meta) {
+        if (meta.hasDisplayName()) {
+            return meta.getDisplayName();
+        }
+        try {
+            return (String) componentToString.invoke(itemStackNameComponent.invoke(copyCBItemStackToNMS.invoke(null, item)));
+        } catch (Exception e) {
+            PluginUtils.log(Level.SEVERE, "Failed to load ItemStack name for " + item.toString());
+            e.printStackTrace();
+            return ChatColor.RED + "ERROR";
+        }
     }
     
 }
