@@ -9,7 +9,6 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.Range;
 
@@ -85,26 +84,6 @@ public final class StackUtils {
             item.removeEnchantment(e);
         }
         return item;
-    }
-    
-    @Nonnull
-    public static ItemStack addKey(@Nonnull ItemStack item, NamespacedKey key) {
-        ItemMeta meta = item.getItemMeta();
-        meta.getPersistentDataContainer().set(key, PersistentDataType.BYTE, (byte) 1);
-        item.setItemMeta(meta);
-        return item;
-    }
-
-    @Nonnull
-    public static ItemStack removeKey(@Nonnull ItemStack item, NamespacedKey key) {
-        ItemMeta meta = item.getItemMeta();
-        meta.getPersistentDataContainer().remove(key);
-        item.setItemMeta(meta);
-        return item;
-    }
-    
-    public static boolean containsKey(@Nonnull ItemStack item, NamespacedKey key) {
-        return item.getItemMeta().getPersistentDataContainer().has(key, PersistentDataType.BYTE);
     }
     
 }
