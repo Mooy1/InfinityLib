@@ -1,6 +1,5 @@
 package io.github.mooy1.infinitylib.items;
 
-import io.github.mooy1.infinitylib.PluginUtils;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import lombok.experimental.UtilityClass;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
@@ -87,14 +86,25 @@ public final class StackUtils {
         }
         return item;
     }
-
-    private static final NamespacedKey UNIQUE_KEY = PluginUtils.getKey("unique");
     
     @Nonnull
-    public static ItemStack makeUnique(@Nonnull ItemStack item) {
+    public static ItemStack addKey(@Nonnull ItemStack item, NamespacedKey key) {
         ItemMeta meta = item.getItemMeta();
-        meta.getPersistentDataContainer().set(UNIQUE_KEY, PersistentDataType.BYTE, (byte) 1);
+        meta.getPersistentDataContainer().set(key, PersistentDataType.BYTE, (byte) 1);
+        item.setItemMeta(meta);
         return item;
+    }
+
+    @Nonnull
+    public static ItemStack removeKey(@Nonnull ItemStack item, NamespacedKey key) {
+        ItemMeta meta = item.getItemMeta();
+        meta.getPersistentDataContainer().remove(key);
+        item.setItemMeta(meta);
+        return item;
+    }
+    
+    public static boolean containsKey(@Nonnull ItemStack item, NamespacedKey key) {
+        return item.getItemMeta().getPersistentDataContainer().has(key, PersistentDataType.BYTE);
     }
     
 }

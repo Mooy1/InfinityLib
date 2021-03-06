@@ -1,13 +1,15 @@
 package io.github.mooy1.infinitylib.presets;
 
+import io.github.mooy1.infinitylib.PluginUtils;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import lombok.experimental.UtilityClass;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 
-import static io.github.mooy1.infinitylib.items.StackUtils.makeUnique;
+import static io.github.mooy1.infinitylib.items.StackUtils.addKey;
 
 /**
  * Collection of utils for creating BlockMenuPresets
@@ -59,36 +61,38 @@ public final class MenuPreset {
             preset.addItem(i, borderItemOutput, ChestMenuUtils.getEmptyClickHandler());
         }
     }
+
+    private static final NamespacedKey UNIQUE_KEY = PluginUtils.getKey("unique");
     
-    public static final ItemStack invalidInput = makeUnique(new CustomItem(
-            Material.BARRIER, "&cInvalid Input!")
+    public static final ItemStack invalidInput = addKey(new CustomItem(
+            Material.BARRIER, "&cInvalid Input!"), UNIQUE_KEY
     );
-    public static final ItemStack inputAnItem = makeUnique(new CustomItem(
-            Material.BLUE_STAINED_GLASS_PANE, "&9Input an item")
+    public static final ItemStack inputAnItem = addKey(new CustomItem(
+            Material.BLUE_STAINED_GLASS_PANE, "&9Input an item"), UNIQUE_KEY
     );
-    public static final ItemStack invalidRecipe = makeUnique(new CustomItem(
-            Material.BARRIER, "&cInvalid Recipe!")
+    public static final ItemStack invalidRecipe = addKey(new CustomItem(
+            Material.BARRIER, "&cInvalid Recipe!"), UNIQUE_KEY
     );
-    public static final ItemStack notEnoughEnergy = makeUnique(new CustomItem(
-            Material.RED_STAINED_GLASS_PANE, "&cNot enough energy!")
+    public static final ItemStack notEnoughEnergy = addKey(new CustomItem(
+            Material.RED_STAINED_GLASS_PANE, "&cNot enough energy!"), UNIQUE_KEY
     );
-    public static final ItemStack notEnoughRoom = makeUnique(new CustomItem(
-            Material.ORANGE_STAINED_GLASS_PANE, "&6Not enough room!")
+    public static final ItemStack notEnoughRoom = addKey(new CustomItem(
+            Material.ORANGE_STAINED_GLASS_PANE, "&6Not enough room!"), UNIQUE_KEY
     );
-    public static final ItemStack borderItemInput = makeUnique(new CustomItem(
-            Material.BLUE_STAINED_GLASS_PANE, "&9Input")
+    public static final ItemStack borderItemInput = addKey(new CustomItem(
+            Material.BLUE_STAINED_GLASS_PANE, "&9Input"), UNIQUE_KEY
     );
-    public static final ItemStack borderItemOutput = makeUnique(new CustomItem(
-            Material.ORANGE_STAINED_GLASS_PANE, "&6Output")
+    public static final ItemStack borderItemOutput = addKey(new CustomItem(
+            Material.ORANGE_STAINED_GLASS_PANE, "&6Output"), UNIQUE_KEY
     );
-    public static final ItemStack borderItemStatus = makeUnique(new CustomItem(
-            Material.CYAN_STAINED_GLASS_PANE, "&3Status")
+    public static final ItemStack borderItemStatus = addKey(new CustomItem(
+            Material.CYAN_STAINED_GLASS_PANE, "&3Status"), UNIQUE_KEY
     );
-    public static final ItemStack connectToEnergyNet = makeUnique(new CustomItem(
-            Material.RED_STAINED_GLASS_PANE, "&cConnect to an energy network!")
+    public static final ItemStack connectToEnergyNet = addKey(new CustomItem(
+            Material.RED_STAINED_GLASS_PANE, "&cConnect to an energy network!"), UNIQUE_KEY
     );
-    public static final ItemStack loadingItemRed = makeUnique(new CustomItem(
-            Material.RED_STAINED_GLASS_PANE, "&cLoading...")
+    public static final ItemStack loadingItemRed = addKey(new CustomItem(
+            Material.RED_STAINED_GLASS_PANE, "&cLoading..."), UNIQUE_KEY
     );
     
 }
