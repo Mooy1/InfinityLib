@@ -1,5 +1,6 @@
 package io.github.mooy1.infinitylib.items;
 
+import io.github.mooy1.infinitylib.PluginUtils;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import lombok.experimental.UtilityClass;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
@@ -9,6 +10,7 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.Range;
 
@@ -83,6 +85,15 @@ public final class StackUtils {
         for (Enchantment e : item.getEnchantments().keySet()) {
             item.removeEnchantment(e);
         }
+        return item;
+    }
+
+    private static final NamespacedKey UNIQUE_KEY = PluginUtils.getKey("unique");
+    
+    @Nonnull
+    public static ItemStack makeUnique(@Nonnull ItemStack item) {
+        ItemMeta meta = item.getItemMeta();
+        meta.getPersistentDataContainer().set(UNIQUE_KEY, PersistentDataType.BYTE, (byte) 1);
         return item;
     }
     
