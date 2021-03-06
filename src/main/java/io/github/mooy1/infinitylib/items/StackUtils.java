@@ -18,6 +18,7 @@ import org.jetbrains.annotations.Range;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.logging.Level;
 
@@ -98,9 +99,15 @@ public final class StackUtils {
 
     static {
         try {
-            copyCBItemStackToNMS = (Method) ItemUtils.class.getDeclaredField("copy").get(null);
-            itemStackNameComponent = (Method) ItemUtils.class.getDeclaredField("getName").get(null);
-            componentToString = (Method) ItemUtils.class.getDeclaredField("toString").get(null);
+            Field field = ItemUtils.class.getDeclaredField("copy");
+            field.setAccessible(true);
+            copyCBItemStackToNMS = (Method) field.get(null);
+            field = ItemUtils.class.getDeclaredField("getName");
+            field.setAccessible(true);
+            itemStackNameComponent = (Method) field.get(null);
+            field = ItemUtils.class.getDeclaredField("toString");
+            field.setAccessible(true);
+            componentToString = (Method) field.get(null);
         } catch (Exception e) {
             PluginUtils.log(Level.SEVERE, "Failed to load ItemStack name methods!");
             e.printStackTrace();
