@@ -113,13 +113,17 @@ public final class StackUtils {
             e.printStackTrace();
         }
     }
+
+    public static String getName(@Nonnull ItemStack item) {
+        return getName(item, item.getItemMeta());
+    }
     
     public static String getName(@Nonnull ItemStack item, @Nonnull ItemMeta meta) {
         if (meta.hasDisplayName()) {
             return meta.getDisplayName();
         }
         try {
-            return (String) componentToString.invoke(itemStackNameComponent.invoke(copyCBItemStackToNMS.invoke(null, item)));
+            return ChatColor.WHITE + (String) componentToString.invoke(itemStackNameComponent.invoke(copyCBItemStackToNMS.invoke(null, item)));
         } catch (Exception e) {
             PluginUtils.log(Level.SEVERE, "Failed to load ItemStack name for " + item.toString());
             e.printStackTrace();
