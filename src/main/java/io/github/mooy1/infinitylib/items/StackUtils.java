@@ -37,6 +37,9 @@ public final class StackUtils {
         if (item instanceof SlimefunItemStack) {
             return ((SlimefunItemStack) item).getItemId();
         }
+        if (!item.hasItemMeta()) {
+            return null;
+        }
         return item.getItemMeta().getPersistentDataContainer().get(ID, PersistentDataType.STRING);
     }
     
@@ -121,7 +124,7 @@ public final class StackUtils {
         try {
             return ChatColor.WHITE + (String) componentToString.invoke(itemStackNameComponent.invoke(copyCBItemStackToNMS.invoke(null, item)));
         } catch (Exception e) {
-            PluginUtils.log(Level.SEVERE, "Failed to load ItemStack name for " + item.toString());
+            PluginUtils.log(Level.SEVERE, "Failed to get ItemStack name for " + item.toString());
             e.printStackTrace();
             return ChatColor.RED + "ERROR";
         }
