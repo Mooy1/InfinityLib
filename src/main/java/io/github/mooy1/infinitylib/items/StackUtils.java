@@ -102,19 +102,22 @@ public final class StackUtils {
             Field field = ItemUtils.class.getDeclaredField("copy");
             field.setAccessible(true);
             copyCBItemStackToNMS = (Method) field.get(null);
+            copyCBItemStackToNMS.setAccessible(true);
             field = ItemUtils.class.getDeclaredField("getName");
             field.setAccessible(true);
             itemStackNameComponent = (Method) field.get(null);
+            itemStackNameComponent.setAccessible(true);
             field = ItemUtils.class.getDeclaredField("toString");
             field.setAccessible(true);
             componentToString = (Method) field.get(null);
+            componentToString.setAccessible(true);
         } catch (Exception e) {
             PluginUtils.log(Level.SEVERE, "Failed to load ItemStack name methods!");
             e.printStackTrace();
         }
     }
     
-    private static String getInternalName(@Nonnull ItemStack item) {
+    public static String getInternalName(@Nonnull ItemStack item) {
         try {
             return ChatColor.WHITE + (String) componentToString.invoke(itemStackNameComponent.invoke(copyCBItemStackToNMS.invoke(null, item)));
         } catch (Exception e) {
@@ -124,17 +127,7 @@ public final class StackUtils {
         }
     }
     
-    public static String getName(@Nonnull ItemStack item) {
-        if (item.hasItemMeta()) {
-            ItemMeta meta = item.getItemMeta();
-            if (meta.hasDisplayName()) {
-                return meta.getDisplayName();
-            }
-        }
-        return getInternalName(item);
-    }
-
-    public static String getName(@Nonnull ItemStack item, @Nonnull ItemMeta meta) {
+    public static String getDisplayName(@Nonnull ItemStack item, @Nonnull ItemMeta meta) {
         if (meta.hasDisplayName()) {
             return meta.getDisplayName();
         }
