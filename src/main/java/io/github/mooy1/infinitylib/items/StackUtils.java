@@ -136,5 +136,15 @@ public final class StackUtils {
         }
         return getInternalName(item);
     }
+
+    public static String getDisplayName(@Nonnull ItemStack item) {
+        if (item.hasItemMeta()) {
+            ItemMeta meta = item.getItemMeta();
+            if (meta.hasDisplayName()) {
+                return meta.getDisplayName();
+            }
+        }
+        return getInternalName(item);
+    }
     
 }
