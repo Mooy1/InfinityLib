@@ -17,7 +17,7 @@ import javax.annotation.Nonnull;
  */
 public final class PersistentItemStack implements PersistentDataType<String, ItemStack> {
 
-    public static final PersistentDataType<String, ItemStack> ITEM_STACK = new PersistentItemStack();
+    public static final PersistentDataType<String, ItemStack> TYPE = new PersistentItemStack();
     
     private PersistentItemStack() {}
     

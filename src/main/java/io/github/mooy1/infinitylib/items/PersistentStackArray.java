@@ -9,15 +9,15 @@ import org.bukkit.persistence.PersistentDataType;
 import javax.annotation.Nonnull;
 
 /**
- * Persistent data type for ItemStacks
+ * Persistent data type for ItemStack arrays
  * 
  * @author Mooy1
  */
-public final class PersistentItemStackArray implements PersistentDataType<String, ItemStack[]> {
+public final class PersistentStackArray implements PersistentDataType<String, ItemStack[]> {
 
-    public static final PersistentDataType<String, ItemStack[]> ITEM_STACK_ARRAY = new PersistentItemStackArray();
+    public static final PersistentDataType<String, ItemStack[]> TYPE = new PersistentStackArray();
     
-    private PersistentItemStackArray() {}
+    private PersistentStackArray() {}
     
     @Nonnull
     @Override

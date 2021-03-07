@@ -113,15 +113,8 @@ public final class StackUtils {
             e.printStackTrace();
         }
     }
-
-    public static String getName(@Nonnull ItemStack item) {
-        return getName(item, item.getItemMeta());
-    }
     
-    public static String getName(@Nonnull ItemStack item, @Nonnull ItemMeta meta) {
-        if (meta.hasDisplayName()) {
-            return meta.getDisplayName();
-        }
+    private static String getInternalName(@Nonnull ItemStack item) {
         try {
             return ChatColor.WHITE + (String) componentToString.invoke(itemStackNameComponent.invoke(copyCBItemStackToNMS.invoke(null, item)));
         } catch (Exception e) {
@@ -129,6 +122,23 @@ public final class StackUtils {
             e.printStackTrace();
             return ChatColor.RED + "ERROR";
         }
+    }
+    
+    public static String getName(@Nonnull ItemStack item) {
+        if (item.hasItemMeta()) {
+            ItemMeta meta = item.getItemMeta();
+            if (meta.hasDisplayName()) {
+                return meta.getDisplayName();
+            }
+        }
+        return getInternalName(item);
+    }
+
+    public static String getName(@Nonnull ItemStack item, @Nonnull ItemMeta meta) {
+        if (meta.hasDisplayName()) {
+            return meta.getDisplayName();
+        }
+        return getInternalName(item);
     }
     
 }
