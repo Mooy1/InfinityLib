@@ -10,8 +10,11 @@ import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Sound;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.Range;
@@ -20,6 +23,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 
 /**
@@ -92,6 +96,41 @@ public final class StackUtils {
     public static ItemStack removeEnchants(@Nonnull ItemStack item) {
         for (Enchantment e : item.getEnchantments().keySet()) {
             item.removeEnchantment(e);
+        }
+        return item;
+    }
+    
+    @Nonnull
+    public static ItemStack damageItem(@Nonnull Player p, @Nonnull ItemStack item, int tries) {
+        ItemMeta meta = item.getItemMeta();
+        if (meta instanceof Damageable) {
+            
+            int damage;
+
+            int unbreakingLevel = item.getEnchantmentLevel(Enchantment.DURABILITY);
+            if (unbreakingLevel > 0) {
+                damage = 0;
+                double threshold = 60 + Math.floorDiv(40, (unbreakingLevel + 1));
+                while (tries --> 0) {
+                    if (ThreadLocalRandom.current().nextDouble(100) <= threshold) {
+                        damage++;
+                    }
+                }
+            } else {
+                damage = tries;
+            }
+            
+            if (damage != 0) {
+                Damageable damageable = (Damageable) meta;
+
+                if (damageable.getDamage() + damage >= item.getType().getMaxDurability()) {
+                    p.playSound(p.getEyeLocation(), Sound.ENTITY_ITEM_BREAK, 1, 1);
+                    item.setAmount(0);
+                } else {
+                    damageable.setDamage(damageable.getDamage() + damage);
+                    item.setItemMeta(meta);
+                }
+            }
         }
         return item;
     }
