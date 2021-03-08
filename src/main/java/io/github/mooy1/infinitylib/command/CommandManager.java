@@ -37,6 +37,8 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
         return manager;
     }
     
+    public static final int MAX_TAB_COMPLETE = 64;
+    
     private static final Info INFO_COMMAND_INSTANCE = new Info();
     private static final String PLUGIN_HELP_HEADER = ChatColors.color("&7----------&b&l " + PluginUtils.getPlugin().getName() + " &7----------");
     
@@ -126,7 +128,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
         for (String item : list) {
             if (item.toLowerCase(Locale.ROOT).contains(input)) {
                 returnList.add(item);
-                if (returnList.size() >= 64) {
+                if (returnList.size() >= MAX_TAB_COMPLETE) {
                     break;
                 }
             } else if (item.equalsIgnoreCase(input)) {
