@@ -15,7 +15,11 @@ import javax.annotation.Nonnull;
  */
 public final class PersistentStackArray implements PersistentDataType<String, ItemStack[]> {
 
-    public static final PersistentDataType<String, ItemStack[]> TYPE = new PersistentStackArray();
+    private static final PersistentDataType<String, ItemStack[]> INSTANCE = new PersistentStackArray();
+    
+    public static PersistentDataType<String, ItemStack[]> instance() {
+        return INSTANCE;
+    }
     
     private PersistentStackArray() {}
     

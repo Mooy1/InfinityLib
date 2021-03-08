@@ -5,6 +5,7 @@ import org.bukkit.command.CommandSender;
 
 import javax.annotation.Nonnull;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * A command for use in the {@link CommandManager}
@@ -19,7 +20,7 @@ public abstract class AbstractCommand {
     private final String description;
     
     public AbstractCommand(@Nonnull String name, @Nonnull String description, boolean op) {
-        this.name = name;
+        this.name = name.toLowerCase(Locale.ROOT);
         this.description = description;
         this.op = op;
     }
