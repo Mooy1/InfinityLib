@@ -1,4 +1,4 @@
-package io.github.mooy1.infinitylib.delayed;
+package io.github.mooy1.infinitylib.slimefun.utils;
 
 import me.mrCookieSlime.Slimefun.cscorelib2.collections.Pair;
 

@@ -1,4 +1,4 @@
-package io.github.mooy1.infinitylib.abstracts;
+package io.github.mooy1.infinitylib.slimefun.abstracts;
 
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;

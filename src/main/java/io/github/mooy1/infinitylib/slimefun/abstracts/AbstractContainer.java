@@ -1,4 +1,4 @@
-package io.github.mooy1.infinitylib.abstracts;
+package io.github.mooy1.infinitylib.slimefun.abstracts;
 
 import io.github.thebusybiscuit.slimefun4.core.handlers.BlockBreakHandler;
 import io.github.thebusybiscuit.slimefun4.core.handlers.BlockPlaceHandler;

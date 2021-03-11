@@ -1,4 +1,4 @@
-package io.github.mooy1.infinitylib;
+package io.github.mooy1.infinitylib.core;
 
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;

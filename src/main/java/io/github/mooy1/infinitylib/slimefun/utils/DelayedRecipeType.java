@@ -1,6 +1,6 @@
-package io.github.mooy1.infinitylib.delayed;
+package io.github.mooy1.infinitylib.slimefun.utils;
 
-import io.github.mooy1.infinitylib.PluginUtils;
+import io.github.mooy1.infinitylib.core.PluginUtils;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import org.bukkit.inventory.ItemStack;

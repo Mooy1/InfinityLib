@@ -1,4 +1,4 @@
-package io.github.mooy1.infinitylib;
+package io.github.mooy1.infinitylib.core;
 
 import lombok.experimental.UtilityClass;
 import me.mrCookieSlime.Slimefun.cscorelib2.config.Config;

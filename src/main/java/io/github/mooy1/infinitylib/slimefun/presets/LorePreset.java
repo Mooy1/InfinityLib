@@ -1,6 +1,6 @@
-package io.github.mooy1.infinitylib.presets;
+package io.github.mooy1.infinitylib.slimefun.presets;
 
-import io.github.mooy1.infinitylib.PluginUtils;
+import io.github.mooy1.infinitylib.core.PluginUtils;
 import lombok.experimental.UtilityClass;
 
 import javax.annotation.Nonnull;

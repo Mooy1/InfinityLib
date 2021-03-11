@@ -1,4 +1,4 @@
-package io.github.mooy1.infinitylib.presets;
+package io.github.mooy1.infinitylib.slimefun.presets;
 
 import lombok.experimental.UtilityClass;
 import org.bukkit.inventory.ItemStack;
