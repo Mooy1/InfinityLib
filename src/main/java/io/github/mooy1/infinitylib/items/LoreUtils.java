@@ -75,7 +75,9 @@ public final class LoreUtils {
                 for (int i = 0 ; i < lore.size() ; i++) {
                     if (lore.get(i).equals(target)) {
                         lore.set(i, replace);
-                        break;
+                        meta.setLore(lore);
+                        item.setItemMeta(meta);
+                        return;
                     }
                 }
             }
