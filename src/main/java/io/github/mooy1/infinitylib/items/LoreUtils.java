@@ -29,8 +29,10 @@ public final class LoreUtils {
     
     public static void addLore(@Nonnull ItemStack item, @Nonnull String... lores) {
         ItemMeta meta = item.getItemMeta();
-        List<String> lore = meta.getLore();
-        if (lore == null) {
+        List<String> lore;
+        if (meta.hasLore()) {
+            lore = meta.getLore();
+        } else {
             lore = new ArrayList<>();
         }
         for (String s : lores) {
@@ -52,8 +54,10 @@ public final class LoreUtils {
 
     public static void addLore(@Nonnull ItemStack item, @Nonnull List<String> list) {
         ItemMeta meta = item.getItemMeta();
-        List<String> lore = meta.getLore();
-        if (lore == null) {
+        List<String> lore;
+        if (meta.hasLore()) {
+            lore = meta.getLore();
+        } else {
             lore = new ArrayList<>();
         }
         for (String s : list) {
@@ -61,6 +65,21 @@ public final class LoreUtils {
         }
         meta.setLore(lore);
         item.setItemMeta(meta);
+    }
+    
+    public static void replaceLine(@Nonnull ItemStack item, String target, String replace) {
+        if (item.hasItemMeta()) {
+            ItemMeta meta = item.getItemMeta();
+            if (meta.hasLore()) {
+                List<String> lore = meta.getLore();
+                for (int i = 0 ; i < lore.size() ; i++) {
+                    if (lore.get(i).equals(target)) {
+                        lore.set(i, replace);
+                        break;
+                    }
+                }
+            }
+        }
     }
     
 }
