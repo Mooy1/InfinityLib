@@ -37,9 +37,6 @@ public final class PluginUtils {
     private static int currentTick = 0;
 
     @Getter
-    private static long timings = 0;
-
-    @Getter
     private static String prefix = null;
 
     public static final int TICKER_DELAY = SlimefunPlugin.getCfg().getInt("URID.custom-ticker-delay");
@@ -135,16 +132,13 @@ public final class PluginUtils {
         Bukkit.getPluginManager().registerEvents(listener, plugin);
     }
 
-    public static void startTicker(@Nonnull Runnable onTick) {
+    public static void startTicker() {
         scheduleRepeatingSync(() -> {
-            long time = System.currentTimeMillis();
-            if (currentTick == 6000) {
+            if (currentTick == 24000) {
                 currentTick = 1;
             } else {
                 currentTick++;
             }
-            onTick.run();
-            timings = System.currentTimeMillis() - time;
         }, TICKER_DELAY);
     }
 
