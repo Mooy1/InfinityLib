@@ -14,7 +14,7 @@ public final class CoolDownMap {
     }
     
     public boolean check(@Nonnull UUID uuid, long cd) {
-        return System.currentTimeMillis() - this.map.getOrDefault(uuid, 0L) < cd;
+        return System.currentTimeMillis() - this.map.getOrDefault(uuid, 0L) >= cd;
     }
 
     public void put(@Nonnull UUID uuid) {
