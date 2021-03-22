@@ -1,6 +1,6 @@
 package io.github.mooy1.infinitylib.slimefun.presets;
 
-import io.github.mooy1.infinitylib.core.PluginUtils;
+import io.github.mooy1.infinitylib.InfinityAddon;
 import lombok.experimental.UtilityClass;
 
 import javax.annotation.Nonnull;
@@ -17,7 +17,7 @@ public final class LorePreset {
     
     @Nonnull
     public static String energyPerSecond(int energy) {
-        return "&8\u21E8 &e\u26A1 &7" + roundHundreds(energy * PluginUtils.TICK_RATIO) + " J/s";
+        return "&8\u21E8 &e\u26A1 &7" + roundHundreds(energy * InfinityAddon.TICK_RATIO) + " J/s";
     }
     
     @Nonnull

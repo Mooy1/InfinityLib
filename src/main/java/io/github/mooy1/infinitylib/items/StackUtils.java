@@ -1,12 +1,12 @@
 package io.github.mooy1.infinitylib.items;
 
-import io.github.mooy1.infinitylib.core.PluginUtils;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import lombok.experimental.UtilityClass;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.cscorelib2.inventory.ItemUtils;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -115,7 +115,7 @@ public final class StackUtils {
             componentToString = (Method) field.get(null);
             componentToString.setAccessible(true);
         } catch (Exception e) {
-            PluginUtils.log(Level.SEVERE, "Failed to load ItemStack name methods!");
+            Bukkit.getLogger().log(Level.SEVERE, "Failed to load ItemStack name methods!");
             e.printStackTrace();
         }
     }
@@ -124,7 +124,7 @@ public final class StackUtils {
         try {
             return ChatColor.WHITE + (String) componentToString.invoke(itemStackNameComponent.invoke(copyCBItemStackToNMS.invoke(null, item)));
         } catch (Exception e) {
-            PluginUtils.log(Level.SEVERE, "Failed to get ItemStack name for " + item.toString());
+            Bukkit.getLogger().log(Level.SEVERE, "Failed to get ItemStack name for " + item.toString());
             e.printStackTrace();
             return ChatColor.RED + "ERROR";
         }

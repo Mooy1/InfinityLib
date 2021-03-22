@@ -1,5 +1,7 @@
 package io.github.mooy1.infinitylib.players;
 
+import io.github.mooy1.infinitylib.InfinityAddon;
+
 import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,8 +11,8 @@ public final class CoolDownMap {
     
     private final Map<UUID, Long> map = new HashMap<>();
     
-    public CoolDownMap() {
-        LeaveListener.add(this.map);
+    public CoolDownMap(InfinityAddon addon) {
+        LeaveListener.create(addon, this.map);
     }
     
     public boolean check(@Nonnull UUID uuid, long cd) {

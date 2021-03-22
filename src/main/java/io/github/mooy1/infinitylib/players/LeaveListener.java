@@ -1,48 +1,33 @@
 package io.github.mooy1.infinitylib.players;
 
-import io.github.mooy1.infinitylib.core.PluginUtils;
+import io.github.mooy1.infinitylib.InfinityAddon;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-/**
- * A class which listens to players leaving and removes their uuid from maps.
- * 
- * @author Mooy1
- */
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public final class LeaveListener implements Listener {
-    
-    private static final LeaveListener instance = new LeaveListener();
-    
-    private final List<Map<UUID, ?>> maps = new ArrayList<>();
-    
-    private LeaveListener() {
-        PluginUtils.registerListener(this);
+
+    public static void create(InfinityAddon addon, Map<UUID, ?> map) {
+        addon.registerListener(new LeaveListener(map));
     }
     
-    public static void add(@Nonnull Map<UUID, ?> map) {
-        instance.maps.add(map);
-    }
+    private final Map<UUID, ?> map;
     
     @EventHandler
-    public void onLeave(PlayerQuitEvent e) {
-        for (Map<UUID, ?> map : this.maps) {
-            map.remove(e.getPlayer().getUniqueId());
-        }
+    private void onLeave(PlayerQuitEvent e) {
+        this.map.remove(e.getPlayer().getUniqueId());
     }
-    
+
     @EventHandler
-    public void onKick(PlayerKickEvent e) {
-        for (Map<UUID, ?> map : this.maps) {
-            map.remove(e.getPlayer().getUniqueId());
-        }
+    private void onKick(PlayerKickEvent e) {
+        this.map.remove(e.getPlayer().getUniqueId());
     }
     
 }
