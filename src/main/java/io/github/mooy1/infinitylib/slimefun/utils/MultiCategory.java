@@ -1,5 +1,6 @@
 package io.github.mooy1.infinitylib.slimefun.utils;
 
+import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
 import io.github.thebusybiscuit.slimefun4.core.categories.FlexCategory;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuide;
@@ -98,6 +99,15 @@ public final class MultiCategory extends FlexCategory {
         });
 
         menu.open(p);
+    }
+
+    @Override
+    public void register(@Nonnull SlimefunAddon addon) {
+        super.register(addon);
+        
+        for (Category category : this.subCategories) {
+            category.register(addon);
+        }
     }
 
 }
