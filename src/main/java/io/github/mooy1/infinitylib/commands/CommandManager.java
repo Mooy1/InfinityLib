@@ -92,9 +92,6 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 
     @Nonnull
     private static List<String> createReturnList(@Nonnull List<String> strings, @Nonnull String string) {
-        if (string.length() == 0) {
-            return Collections.emptyList();
-        }
         String input = string.toLowerCase(Locale.ROOT);
         List<String> returnList = new LinkedList<>();
         for (String item : strings) {
