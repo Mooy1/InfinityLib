@@ -14,11 +14,11 @@ import org.bukkit.inventory.ItemStack;
 import javax.annotation.Nonnull;
 
 /**
- * A slimefun item with a ticker
+ * A slimefun item with a menu and ticker
  */
-public abstract class AbstractTicker extends SlimefunItem {
+public abstract class TickingContainer extends AbstractContainer {
 
-    public AbstractTicker(Category category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
+    public TickingContainer(Category category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
         super(category, item, recipeType, recipe);
 
         addItemHandler(new BlockTicker() {
@@ -30,7 +30,7 @@ public abstract class AbstractTicker extends SlimefunItem {
             public void tick(Block b, SlimefunItem item, Config data) {
                 BlockMenu menu = BlockStorage.getInventory(b);
                 if (menu != null) {
-                    AbstractTicker.this.tick(menu, b, data);
+                    TickingContainer.this.tick(menu, b, data);
                 }
             }
         });
@@ -38,9 +38,9 @@ public abstract class AbstractTicker extends SlimefunItem {
     }
 
     protected abstract void tick(@Nonnull BlockMenu menu, @Nonnull Block b, @Nonnull Config data);
-    
+
     protected boolean synchronised() {
         return false;
     }
-    
+
 }

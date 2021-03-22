@@ -28,7 +28,6 @@ import java.util.Objects;
 public abstract class AbstractMob {
     
     private static final NamespacedKey KEY = PluginUtils.getKey("mob");
-    
     private static final Map<String, AbstractMob> MOBS = new HashMap<>();
     
     private final String id;
@@ -40,7 +39,7 @@ public abstract class AbstractMob {
         Validate.notNull(this.id = id);
         Validate.notNull(this.name = ChatColors.color(name));
         Validate.notNull(this.type = type);
-        this.health = health;
+        Validate.isTrue((this.health = health) > 0);
 
         MOBS.put(id, this);
     }
@@ -82,12 +81,12 @@ public abstract class AbstractMob {
 
     protected void onAttack(EntityDamageByEntityEvent e) { }
     
-    private static AbstractMob get(Entity entity) {
-        return MOBS.get(entity.getPersistentDataContainer().get(KEY, PersistentDataType.STRING));
-    }
-    
     static {
         PluginUtils.registerListener(new Listener() {
+
+            private AbstractMob get(Entity entity) {
+                return MOBS.get(entity.getPersistentDataContainer().get(KEY, PersistentDataType.STRING));
+            }
 
             @EventHandler
             public void onTarget(@Nonnull EntityTargetEvent e) {

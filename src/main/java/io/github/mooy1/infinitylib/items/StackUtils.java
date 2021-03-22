@@ -30,22 +30,22 @@ import java.util.logging.Level;
 @UtilityClass
 public final class StackUtils {
 
-    private static final NamespacedKey ID = SlimefunPlugin.getItemDataService().getKey();
+    private static final NamespacedKey KEY = SlimefunPlugin.getItemDataService().getKey();
 
     @Nullable
-    public static String getID(@Nonnull ItemStack item) {
+    public static String getKEY(@Nonnull ItemStack item) {
         if (item instanceof SlimefunItemStack) {
             return ((SlimefunItemStack) item).getItemId();
         }
         if (!item.hasItemMeta()) {
             return null;
         }
-        return item.getItemMeta().getPersistentDataContainer().get(ID, PersistentDataType.STRING);
+        return item.getItemMeta().getPersistentDataContainer().get(KEY, PersistentDataType.STRING);
     }
     
     @Nonnull
     public static String getIDorType(@Nonnull ItemStack item) {
-        String id = getID(item);
+        String id = getKEY(item);
         if (id == null) {
             return item.getType().toString();
         } else {

@@ -1,4 +1,4 @@
-package io.github.mooy1.infinitylib.command;
+package io.github.mooy1.infinitylib.commands;
 
 import io.github.mooy1.infinitylib.core.PluginUtils;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
@@ -29,71 +29,39 @@ import java.util.Objects;
  */
 public final class CommandManager implements CommandExecutor, TabCompleter {
 
-    public static CommandManager setup(String command, String permission, String aliases, AbstractCommand... commands) {
-        CommandManager manager = new CommandManager(Objects.requireNonNull(PluginUtils.getPlugin().getCommand(command)), permission, aliases);
+    public static CommandManager setup(String command, String aliases, AbstractCommand... commands) {
+        CommandManager manager = new CommandManager(Objects.requireNonNull(PluginUtils.getPlugin().getCommand(command)), aliases);
         for (AbstractCommand command1 : commands) {
             manager.addCommand(command1);
         }
         return manager;
     }
     
-    public static final int MAX_TAB_COMPLETE = 64;
-    
-    private static final Info INFO_COMMAND_INSTANCE = new Info();
-    private static final String PLUGIN_HELP_HEADER = ChatColors.color("&7----------&b&l " + PluginUtils.getPlugin().getName() + " &7----------");
-    
     private final Map<String, AbstractCommand> commands = new HashMap<>();
     
-    private final List<String> commandNames = new ArrayList<>();
-    private final List<String> defaultCommandNames = new ArrayList<>();
-
-    private final List<String> commandDescriptions = new ArrayList<>();
-    private final List<String> defaultCommandDescriptions = new ArrayList<>();
-    
-    private final String permission;
     private final String aliases;
     private final String command;
     
-    private CommandManager(PluginCommand command, String permission, String aliases) {
-        this.permission = permission;
+    private CommandManager(PluginCommand command, String aliases) {
         this.aliases = ChatColors.color("&6Aliases: &e" + aliases);
         this.command = command.getName();
         
         command.setExecutor(this);
         command.setTabCompleter(this);
         
-        addCommand(INFO_COMMAND_INSTANCE);
+        addCommand(new Info());
         addCommand(new Help());
     }
     
-    public void addCommand(AbstractCommand command) {
-        this.commands.put(command.getName(), command);
-        this.commandNames.add(command.getName());
-        String desc = toDescription(command);
-        this.commandDescriptions.add(desc);
-        if (!command.isOp()) {
-            this.defaultCommandNames.add(command.getName());
-            this.defaultCommandDescriptions.add(desc);
-        }
-    }
-    
-    private boolean hasPerm(AbstractCommand command, CommandSender sender) {
-        return command != null && (!command.isOp() || hasPerm(sender));
-    }
-    
-    private boolean hasPerm(CommandSender sender) {
-        return sender.isOp() || sender.hasPermission(this.permission);
-    }
-    
-    private String toDescription(AbstractCommand command) {
-        return ChatColors.color("&6/" + CommandManager.this.command + " " + command.getName() + " &e- " + command.getDescription());
+    private void addCommand(AbstractCommand command) {
+        this.commands.put(command.name, command);
     }
     
     @Override
     public boolean onCommand(@Nonnull CommandSender sender, @Nonnull Command command, @Nonnull String label, @Nonnull String[] args) {
         if (args.length > 0) {
             AbstractCommand command1 = this.commands.get(args[0]);
-            if (hasPerm(command1, sender)) {
+            if (command1 != null && command1.hasPerm(sender)) {
                 command1.onExecute(sender, args);
                 return true;
             }
@@ -104,31 +72,35 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
     @Override
     public List<String> onTabComplete(@Nonnull CommandSender sender, @Nonnull Command command, @Nonnull String alias, String[] args) {
         if (args.length == 1) {
-            if (hasPerm(sender)) {
-                return createReturnList(this.commandNames, args[0]);
-            } else {
-                return createReturnList(this.defaultCommandNames, args[0]);
+            List<String> strings = new ArrayList<>();
+            for (AbstractCommand command1 : this.commands.values()) {
+                if (command1.hasPerm(sender)) {
+                    strings.add(command1.name);
+                }
             }
+            return createReturnList(strings, args[0]);
         } else if (args.length > 1) {
             AbstractCommand command1 = this.commands.get(args[0]);
-            if (hasPerm(command1, sender)) {
-                return createReturnList(command1.onTab(sender, args), args[args.length - 1]);
+            if (command1 != null && command1.hasPerm(sender)) {
+                List<String> strings = new ArrayList<>();
+                command1.onTab(sender, args, strings);
+                return createReturnList(strings, args[args.length - 1]);
             }
         }
-        return new ArrayList<>();
+        return Collections.emptyList();
     }
 
     @Nonnull
-    private static List<String> createReturnList(@Nonnull List<String> list, @Nonnull String string) {
+    private static List<String> createReturnList(@Nonnull List<String> strings, @Nonnull String string) {
         if (string.length() == 0) {
-            return list;
+            return Collections.emptyList();
         }
         String input = string.toLowerCase(Locale.ROOT);
         List<String> returnList = new LinkedList<>();
-        for (String item : list) {
+        for (String item : strings) {
             if (item.toLowerCase(Locale.ROOT).contains(input)) {
                 returnList.add(item);
-                if (returnList.size() >= MAX_TAB_COMPLETE) {
+                if (returnList.size() >= 64) {
                     break;
                 }
             } else if (item.equalsIgnoreCase(input)) {
@@ -139,42 +111,35 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
     }
 
     private final class Help extends AbstractCommand implements Listener {
-        private final String help;
         
         private Help() {
             super("help", "Displays this", false);
-            this.help = "/help " + CommandManager.this.command;
             PluginUtils.registerListener(this);
         }
     
         @Override
         public void onExecute(@Nonnull CommandSender sender, @Nonnull String[] args) {
             sender.sendMessage("");
-            sender.sendMessage(PLUGIN_HELP_HEADER);
+            sender.sendMessage(ChatColors.color("&7----------&b&l " + PluginUtils.getPlugin().getName() + " &7----------"));
             sender.sendMessage("");
-            if (hasPerm(sender)) {
-                for (String s : CommandManager.this.commandDescriptions) {
-                    sender.sendMessage(s);
-                }
-            } else {
-                for (String s : CommandManager.this.defaultCommandDescriptions) {
-                    sender.sendMessage(s);
+            for (AbstractCommand command : CommandManager.this.commands.values()) {
+                if (command.hasPerm(sender)) {
+                    sender.sendMessage(ChatColors.color("&6/" + CommandManager.this.command + " " + command.name + " &e- " + command.description));
                 }
             }
             sender.sendMessage("");
             sender.sendMessage(CommandManager.this.aliases);
             sender.sendMessage("");
         }
-    
-        @Nonnull
+
         @Override
-        public List<String> onTab(@Nonnull CommandSender sender, @Nonnull String[] args) {
-            return Collections.emptyList();
+        protected void onTab(@Nonnull CommandSender sender, @Nonnull String[] args, @Nonnull List<String> tabs) {
+            
         }
 
         @EventHandler
         public void onCommand(PlayerCommandPreprocessEvent e) {
-            if (e.getMessage().equalsIgnoreCase(this.help)) {
+            if (e.getMessage().equalsIgnoreCase("/help " + CommandManager.this.command)) {
                 onExecute(e.getPlayer(), new String[0]);
                 e.setCancelled(true);
             }
@@ -203,10 +168,9 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
             sender.sendMessage(INFO);
         }
 
-        @Nonnull
         @Override
-        public List<String> onTab(@Nonnull CommandSender sender, @Nonnull String[] args) {
-            return Collections.emptyList();
+        protected void onTab(@Nonnull CommandSender sender, @Nonnull String[] args, @Nonnull List<String> tabs) {
+            
         }
 
     }
