@@ -23,6 +23,9 @@ import javax.annotation.Nonnull;
  */
 public final class MultiCategory extends FlexCategory {
     
+    public static final SurvivalSlimefunGuide SURVIVAL_GUIDE = (SurvivalSlimefunGuide)
+            SlimefunPlugin.getRegistry().getSlimefunGuide(SlimefunGuideMode.SURVIVAL_MODE);
+    
     private final Category[] subCategories;
     
     public MultiCategory(NamespacedKey key, ItemStack item, Category... subCategories) {
@@ -48,15 +51,14 @@ public final class MultiCategory extends FlexCategory {
         profile.getGuideHistory().add(this, page);
 
         ChestMenu menu = new ChestMenu(SlimefunPlugin.getLocalization().getMessage(p, "guide.title.main"));
-        SurvivalSlimefunGuide guide = (SurvivalSlimefunGuide) SlimefunPlugin.getRegistry().getSlimefunGuide(mode);
 
         menu.setEmptySlotsClickable(false);
-        menu.addMenuOpeningHandler(pl -> pl.playSound(pl.getLocation(), guide.getSound(), 1, 1));
-        guide.createHeader(p, profile, menu);
+        menu.addMenuOpeningHandler(pl -> pl.playSound(pl.getLocation(), SURVIVAL_GUIDE.getSound(), 1, 1));
+        SURVIVAL_GUIDE.createHeader(p, profile, menu);
 
         menu.addItem(1, new CustomItem(ChestMenuUtils.getBackButton(p, "", ChatColor.GRAY + SlimefunPlugin.getLocalization().getMessage(p, "guide.back.guide"))));
         menu.addMenuClickHandler(1, (pl, s, is, action) -> {
-            profile.getGuideHistory().goBack(guide);
+            profile.getGuideHistory().goBack(SURVIVAL_GUIDE);
             return false;
         });
 
