@@ -25,7 +25,7 @@ import java.util.logging.Level;
 /**
  * Extend this in your main plugin class and add static instance getter
  */
-public abstract class InfinityAddon extends JavaPlugin implements SlimefunAddon, Listener {
+public abstract class InfinityAddon extends JavaPlugin implements SlimefunAddon {
 
     public static final int TICKER_DELAY = SlimefunPlugin.getCfg().getInt("URID.custom-ticker-delay");
     public static final float TICK_RATIO = 20F / TICKER_DELAY;
@@ -129,8 +129,10 @@ public abstract class InfinityAddon extends JavaPlugin implements SlimefunAddon,
         Bukkit.broadcastMessage(ChatColors.color("&7[&b" + getName() + "&7] &f" + message));
     }
 
-    public final void registerListener(Listener listener) {
-        Bukkit.getPluginManager().registerEvents(listener, this);
+    public final void registerListener(Listener... listeners) {
+        for (Listener listener : listeners) {
+            Bukkit.getPluginManager().registerEvents(listener, this);
+        }
     }
 
     public final void runSync(Runnable runnable) {
