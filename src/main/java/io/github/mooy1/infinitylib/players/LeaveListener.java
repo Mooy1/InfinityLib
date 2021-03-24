@@ -1,6 +1,6 @@
 package io.github.mooy1.infinitylib.players;
 
-import io.github.mooy1.infinitylib.InfinityAddon;
+import io.github.mooy1.infinitylib.AbstractAddon;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import org.bukkit.event.EventHandler;
@@ -14,7 +14,7 @@ import java.util.UUID;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public final class LeaveListener implements Listener {
 
-    public static void create(InfinityAddon addon, Map<UUID, ?> map) {
+    public static void create(AbstractAddon addon, Map<UUID, ?> map) {
         addon.registerListener(new LeaveListener(map));
     }
     

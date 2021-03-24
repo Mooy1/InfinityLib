@@ -1,4 +1,4 @@
-package io.github.mooy1.infinitylib.command;
+package io.github.mooy1.infinitylib.commands;
 
 import org.bukkit.command.CommandSender;
 

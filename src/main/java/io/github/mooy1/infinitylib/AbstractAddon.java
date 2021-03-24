@@ -1,6 +1,7 @@
 package io.github.mooy1.infinitylib;
 
-import io.github.mooy1.infinitylib.command.AbstractCommand;
+import io.github.mooy1.infinitylib.commands.AbstractCommand;
+import io.github.mooy1.infinitylib.slimefun.utils.SlimefunConstants;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import lombok.AccessLevel;
@@ -39,10 +40,7 @@ import java.util.logging.Level;
 /**
  * Extend this in your main plugin class and add static instance getter
  */
-public abstract class InfinityAddon extends JavaPlugin implements SlimefunAddon {
-
-    public static final int TICKER_DELAY = SlimefunPlugin.getCfg().getInt("URID.custom-ticker-delay");
-    public static final float TICK_RATIO = 20F / TICKER_DELAY;
+public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon {
     
     @Getter
     private int globalTick = 0;
@@ -53,7 +51,7 @@ public abstract class InfinityAddon extends JavaPlugin implements SlimefunAddon 
     @Override
     @OverridingMethodsMustInvokeSuper
     public void onEnable() {
-
+        
         // copy config if not present
         saveDefaultConfig();
 
@@ -89,7 +87,7 @@ public abstract class InfinityAddon extends JavaPlugin implements SlimefunAddon 
         }
 
         // global ticker
-        scheduleRepeatingSync(() -> this.globalTick++, TICKER_DELAY);
+        scheduleRepeatingSync(() -> this.globalTick++, SlimefunConstants.TICKER_TICKS);
 
         // metrics
         if (getMetricsID() != -1) {
@@ -100,8 +98,7 @@ public abstract class InfinityAddon extends JavaPlugin implements SlimefunAddon 
         // commands
         PluginCommand command = getCommand(getName().toLowerCase(Locale.ROOT));
         if (command != null) {
-            List<AbstractCommand> commands = new ArrayList<>();
-            getCommands(commands);
+            List<AbstractCommand> commands = new ArrayList<>(getSubCommands());
             commands.add(new AddonInfoCommand(this));
             new CommandHelper(command, commands);
         }
@@ -118,9 +115,9 @@ public abstract class InfinityAddon extends JavaPlugin implements SlimefunAddon 
     protected abstract String getGithubPath();
 
     /**
-     * return your sub commands, you should have a command with the same name as plugin in your plugin.yml
+     * return your sub commands, use Arrays.asList(Commands...)
      */
-    protected abstract void getCommands(List<AbstractCommand> commands);
+    protected abstract List<AbstractCommand> getSubCommands();
     
     @Nonnull
     @Override
@@ -320,7 +317,7 @@ public abstract class InfinityAddon extends JavaPlugin implements SlimefunAddon 
 
         private final String[] message;
         
-        private AddonInfoCommand(InfinityAddon addon) {
+        private AddonInfoCommand(AbstractAddon addon) {
             super("info", "Gives addon version information", false);
             this.message = new String[] {
                     "",
