@@ -278,7 +278,7 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
                 this.help = "/help " + command.getName();
                 this.command = ChatColor.GOLD + "/" + command.getName() + " ";
                 this.aliases = ChatColors.color("&6Aliases: &e" + command.getAliases());
-                this.header = ChatColors.color("&7----------&b " + command.getName() + " Help &7----------");
+                this.header = ChatColors.color("&7----------&b " + command.getPlugin().getName() + " Help &7----------");
             }
 
             @Override
@@ -322,9 +322,9 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
             this.message = new String[] {
                     "",
                     ChatColors.color("&b" + addon.getName() + " Info"),
-                    ChatColors.color("&bSlimefun Version: " + Objects.requireNonNull(SlimefunPlugin.instance()).getPluginVersion()),
+                    ChatColors.color("&bSlimefun Version: &7" + Objects.requireNonNull(SlimefunPlugin.instance()).getPluginVersion()),
                     ChatColors.color("&bSlimefun Discord: &7Discord.gg/slimefun"),
-                    ChatColors.color("&bAddon Version: " + addon.getPluginVersion()),
+                    ChatColors.color("&bAddon Version: &7" + addon.getPluginVersion()),
                     ChatColors.color("&bAddon Community: &7Discord.gg/SqD3gg5SAU"),
                     ChatColors.color("&bGithub: &7" + addon.getBugTrackerURL()),
                     ""
