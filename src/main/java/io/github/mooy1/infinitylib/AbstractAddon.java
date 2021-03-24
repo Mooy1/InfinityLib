@@ -190,6 +190,10 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
     public final NamespacedKey getKey(String s) {
         return new NamespacedKey(this, s);
     }
+    
+    public final Config loadConfig(String name) {
+        return attachDefaults(new Config(this, name), name);
+    }
 
     public final Config attachDefaults(Config config, String resource) {
         config.getConfiguration().setDefaults(YamlConfiguration.loadConfiguration(
