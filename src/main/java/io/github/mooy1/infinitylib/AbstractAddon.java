@@ -184,10 +184,10 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
     }
     
     public final void addSubCommands(String command, AbstractCommand... commands) {
-        new CommandHelper(Objects.requireNonNull(getCommand(command), () -> "No such command '" + command + "'"), new ArrayList<>(Arrays.asList(commands)));
+        new CommandHelper(Objects.requireNonNull(getCommand(command), () -> "No such command '" + command + "'!"), new ArrayList<>(Arrays.asList(commands)));
     }
 
-    public final NamespacedKey createKey(String s) {
+    public final NamespacedKey getKey(String s) {
         return new NamespacedKey(this, s);
     }
 

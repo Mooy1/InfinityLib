@@ -1,5 +1,6 @@
 package io.github.mooy1.infinitylib.slimefun.utils;
 
+import io.github.mooy1.infinitylib.AbstractAddon;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.cscorelib2.collections.Pair;
@@ -8,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.function.BiConsumer;
 
 /**
@@ -19,8 +21,8 @@ public final class DelayedRecipeType extends RecipeType {
 
     private final DelayedConsumer consumer;
     
-    public DelayedRecipeType(NamespacedKey key, SlimefunItemStack item) {
-        this(key, item, new DelayedConsumer());
+    public DelayedRecipeType(AbstractAddon addon, SlimefunItemStack item) {
+        this(addon.getKey(item.getItemId().toLowerCase(Locale.ROOT)), item, new DelayedConsumer());
     }
     
     private DelayedRecipeType(NamespacedKey key, SlimefunItemStack item, DelayedConsumer consumer) {
