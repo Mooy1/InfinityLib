@@ -199,7 +199,25 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
         config.save();
         return config;
     }
+    
+    public final int getConfigInt(String path, int min, int max) {
+        int val = getConfig().getInt(path);
+        if (val < min || val > max) {
+            getConfig().set(path, val = Objects.requireNonNull(getConfig().getDefaults()).getInt(path));
+            log(Level.WARNING, "Config value at " + path + " was out of bounds, resetting to default!");
+        }
+        return val;
+    }
 
+    public final double getConfigDouble(String path, double min, double max) {
+        double val = getConfig().getDouble(path);
+        if (val < min || val > max) {
+            getConfig().set(path, val = Objects.requireNonNull(getConfig().getDefaults()).getDouble(path));
+            log(Level.WARNING, "Config value at " + path + " was out of bounds, resetting to default!");
+        }
+        return val;
+    }
+    
     private static final class CommandHelper implements TabExecutor {
         
         private final Map<String, AbstractCommand> commands = new HashMap<>();
