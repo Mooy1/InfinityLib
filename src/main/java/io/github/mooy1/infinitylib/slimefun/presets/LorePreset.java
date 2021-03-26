@@ -1,6 +1,6 @@
 package io.github.mooy1.infinitylib.slimefun.presets;
 
-import io.github.mooy1.infinitylib.slimefun.utils.SlimefunConstants;
+import io.github.mooy1.infinitylib.slimefun.utils.TickerUtils;
 import lombok.experimental.UtilityClass;
 
 import javax.annotation.Nonnull;
@@ -17,7 +17,7 @@ public final class LorePreset {
     
     @Nonnull
     public static String energyPerSecond(int energy) {
-        return "&8\u21E8 &e\u26A1 &7" + roundHundreds(energy * SlimefunConstants.TICKER_TPS) + " J/s";
+        return "&8\u21E8 &e\u26A1 &7" + roundHundreds(energy * TickerUtils.TPS) + " J/s";
     }
     
     @Nonnull

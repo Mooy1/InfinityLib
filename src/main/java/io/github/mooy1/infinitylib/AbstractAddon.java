@@ -1,7 +1,7 @@
 package io.github.mooy1.infinitylib;
 
 import io.github.mooy1.infinitylib.commands.AbstractCommand;
-import io.github.mooy1.infinitylib.slimefun.utils.SlimefunConstants;
+import io.github.mooy1.infinitylib.slimefun.utils.TickerUtils;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import lombok.AccessLevel;
@@ -44,9 +44,9 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
     
     @Getter
     private int globalTick = 0;
-    
     @Getter(AccessLevel.PROTECTED)
     private Metrics metrics;
+    private String bugTrackerUrl;
     
     @Override
     @OverridingMethodsMustInvokeSuper
@@ -87,7 +87,7 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
         }
 
         // global ticker
-        scheduleRepeatingSync(() -> this.globalTick++, SlimefunConstants.TICKER_TICKS);
+        scheduleRepeatingSync(() -> this.globalTick++, TickerUtils.TICKS);
 
         // metrics
         if (getMetricsID() != -1) {
@@ -102,6 +102,10 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
             commands.add(new AddonInfoCommand(this));
             new CommandHelper(command, commands);
         }
+        
+        // bug tracker url
+        String[] split = getGithubPath().split("/");
+        this.bugTrackerUrl = "https://github.com/" + split[0] + "/" + split[1];
     }
 
     /**
@@ -128,7 +132,7 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
     @Nonnull
     @Override
     public final String getBugTrackerURL() {
-        return "https://github.com/" + getGithubPath() + "/issues";
+        return this.bugTrackerUrl;
     }
 
     public final void log(String... messages) {
@@ -192,10 +196,14 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
     }
     
     public final Config loadConfig(String name) {
-        return attachDefaults(new Config(this, name), name);
+        return new Config(this, name);
+    }
+    
+    public final Config loadConfigWithDefaults(String name) {
+        return attachConfigDefaults(loadConfig(name), name);
     }
 
-    public final Config attachDefaults(Config config, String resource) {
+    public final Config attachConfigDefaults(Config config, String resource) {
         config.getConfiguration().setDefaults(YamlConfiguration.loadConfiguration(
                 new InputStreamReader(Objects.requireNonNull(getResource(resource),
                         () -> "Failed to get default resource " + resource + "!"))));

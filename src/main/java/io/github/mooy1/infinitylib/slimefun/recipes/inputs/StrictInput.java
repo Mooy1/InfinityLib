@@ -1,6 +1,8 @@
-package io.github.mooy1.infinitylib.recipes.normalstrict;
+package io.github.mooy1.infinitylib.slimefun.recipes.inputs;
 
 import io.github.mooy1.infinitylib.items.StackUtils;
+import io.github.mooy1.infinitylib.slimefun.recipes.RecipeInput;
+import io.github.mooy1.infinitylib.slimefun.recipes.outputs.StrictOutput;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
@@ -8,12 +10,12 @@ import javax.annotation.Nonnull;
 /**
  * A strict recipe which checks id/material and amount
  */
-final class StrictRecipe {
+public class StrictInput extends RecipeInput<StrictOutput> {
 
     private final String id;
     private final int amount;
 
-    StrictRecipe(@Nonnull ItemStack item) {
+    public StrictInput(@Nonnull ItemStack item) {
         this.id = StackUtils.getIDorType(item);
         this.amount = item.getAmount();
     }
@@ -25,9 +27,14 @@ final class StrictRecipe {
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof StrictRecipe)) return false;
-        StrictRecipe recipe = (StrictRecipe) obj;
+        if (!(obj instanceof StrictInput)) return false;
+        StrictInput recipe = (StrictInput) obj;
         return recipe.amount <= this.amount && recipe.id.equals(this.id);
+    }
+
+    @Override
+    protected void affectOutput(StrictOutput output) {
+        output.setInputConsumption(this.amount);
     }
 
 }
