@@ -4,32 +4,33 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public final class RecipeMap<I extends RecipeInput<O>, O> {
+public abstract class RecipeMap<I extends RecipeInput, O> {
     
-    private final Map<I, O> recipes = new HashMap<>();
+    final Map<I, O> recipes = new HashMap<>();
     
-    public void add(I input, O output) {
-        input.affectOutput(output);
-        this.recipes.put(input, output);
+    RecipeMap() {
+        
     }
     
-    public O get(I input) {
+    public abstract void put(I input, O output);
+    
+    public final O get(I input) {
         return this.recipes.get(input);
     }
     
-    public Collection<Map.Entry<I, O>> entries() {
+    public final Collection<Map.Entry<I, O>> entries() {
         return this.recipes.entrySet();
     }
     
-    public Collection<I> inputs() {
+    public final Collection<I> inputs() {
         return this.recipes.keySet();
     }
 
-    public Collection<O> outputs() {
+    public final Collection<O> outputs() {
         return this.recipes.values();
     }
     
-    public int size() {
+    public final int size() {
         return this.recipes.size();
     }
     

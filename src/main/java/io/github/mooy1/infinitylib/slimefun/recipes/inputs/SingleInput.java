@@ -9,7 +9,7 @@ import javax.annotation.Nonnull;
 /**
  * A simple recipe which only checks id/material
  */
-public class SingleInput extends RecipeInput<ItemStack> {
+public class SingleInput extends RecipeInput {
 
     private final String id;
 

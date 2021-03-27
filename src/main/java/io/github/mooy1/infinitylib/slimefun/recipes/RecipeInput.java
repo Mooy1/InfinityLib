@@ -1,9 +1,5 @@
 package io.github.mooy1.infinitylib.slimefun.recipes;
 
-public abstract class RecipeInput<O> {
+public abstract class RecipeInput {
 
-    protected void affectOutput(O output) {
-        
-    }
-    
 }

@@ -2,16 +2,17 @@ package io.github.mooy1.infinitylib.slimefun.recipes.inputs;
 
 import io.github.mooy1.infinitylib.items.StackUtils;
 import io.github.mooy1.infinitylib.slimefun.recipes.RecipeInput;
-import io.github.mooy1.infinitylib.slimefun.recipes.outputs.StrictMultiOutput;
+import lombok.Getter;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import org.bukkit.inventory.ItemStack;
 
 /**
  * A large recipe which stores a string of all ids/materials and amounts
  */
-public class StrictMultiInput extends RecipeInput<StrictMultiOutput> {
+public class StrictMultiInput extends RecipeInput {
 
     private final String string;
+    @Getter
     private final int[] amounts;
 
     public StrictMultiInput(ItemStack[] recipe, int[] amounts) {
@@ -71,11 +72,6 @@ public class StrictMultiInput extends RecipeInput<StrictMultiOutput> {
             }
         }
         return recipe.string.equals(this.string);
-    }
-
-    @Override
-    protected void affectOutput(StrictMultiOutput output) {
-        output.setInputConsumption(this.amounts);
     }
 
 }
