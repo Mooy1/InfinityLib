@@ -64,8 +64,13 @@ public class StrictMultiInput extends RecipeInput {
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof StrictMultiInput)) return false;
+        if (!(obj instanceof StrictMultiInput)) {
+            return false;
+        }
         StrictMultiInput recipe = (StrictMultiInput) obj;
+        if (recipe.amounts.length != this.amounts.length) {
+            return false;
+        }
         for (int i = 0 ; i < this.amounts.length ; i++) {
             if (recipe.amounts[i] > this.amounts[i]) {
                 return false;
