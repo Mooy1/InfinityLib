@@ -46,7 +46,6 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
     private int globalTick = 0;
     @Getter(AccessLevel.PROTECTED)
     private Metrics metrics;
-    private String bugTrackerUrl;
     
     @Override
     @OverridingMethodsMustInvokeSuper
@@ -102,10 +101,6 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
             commands.add(new AddonInfoCommand(this));
             new CommandHelper(command, commands);
         }
-        
-        // bug tracker url
-        String[] split = getGithubPath().split("/");
-        this.bugTrackerUrl = "https://github.com/" + split[0] + "/" + split[1];
     }
 
     /**
@@ -132,7 +127,7 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
     @Nonnull
     @Override
     public final String getBugTrackerURL() {
-        return this.bugTrackerUrl;
+        return "https://github.com/" + getGithubPath().substring(0, getGithubPath().lastIndexOf('/')) + "issues";
     }
 
     public final void log(String... messages) {
@@ -143,10 +138,6 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
         for (String msg : messages) {
             getLogger().log(level, msg);
         }
-    }
-
-    public final void broadcast(String message) {
-        Bukkit.broadcastMessage(ChatColors.color("&7[&b" + getName() + "&7] &f" + message));
     }
 
     public final void registerListener(Listener... listeners) {
