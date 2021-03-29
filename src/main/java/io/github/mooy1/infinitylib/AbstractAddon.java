@@ -127,7 +127,7 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
     @Nonnull
     @Override
     public final String getBugTrackerURL() {
-        return "https://github.com/" + getGithubPath().substring(0, getGithubPath().lastIndexOf('/')) + "issues";
+        return "https://github.com/" + getGithubPath().substring(0, getGithubPath().lastIndexOf('/')) + "/issues";
     }
 
     public final void log(String... messages) {
