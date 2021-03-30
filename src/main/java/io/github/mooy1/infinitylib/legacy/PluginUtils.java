@@ -132,6 +132,12 @@ public final class PluginUtils {
         Bukkit.getPluginManager().registerEvents(listener, plugin);
     }
 
+    public static void registerListeners(@Nonnull Listener... listeners) {
+        for (Listener listener : listeners) {
+            registerListener(listener);
+        }
+    }
+
     public static void startTicker() {
         scheduleRepeatingSync(() -> {
             if (currentTick == 24000) {
