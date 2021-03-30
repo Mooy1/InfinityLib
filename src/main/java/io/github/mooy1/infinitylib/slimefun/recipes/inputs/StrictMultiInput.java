@@ -1,18 +1,21 @@
-package io.github.mooy1.infinitylib.recipes.largestrict;
+package io.github.mooy1.infinitylib.slimefun.recipes.inputs;
 
 import io.github.mooy1.infinitylib.items.StackUtils;
+import io.github.mooy1.infinitylib.slimefun.recipes.RecipeInput;
+import lombok.Getter;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import org.bukkit.inventory.ItemStack;
 
 /**
  * A large recipe which stores a string of all ids/materials and amounts
  */
-final class StrictLargeRecipe {
+public class StrictMultiInput extends RecipeInput {
 
     private final String string;
-    final int[] amounts;
+    @Getter
+    private final int[] amounts;
 
-    StrictLargeRecipe(ItemStack[] recipe, int[] amounts) {
+    public StrictMultiInput(ItemStack[] recipe, int[] amounts) {
         StringBuilder builder = new StringBuilder();
         for (ItemStack item : recipe) {
             if (item != null) {
@@ -24,7 +27,7 @@ final class StrictLargeRecipe {
         this.amounts = amounts;
     }
 
-    StrictLargeRecipe(ItemStack[] recipe) {
+    public StrictMultiInput(ItemStack[] recipe) {
         StringBuilder builder = new StringBuilder();
         int[] amounts = new int[recipe.length];
         for (int i = 0 ; i < recipe.length ; i++) {
@@ -39,7 +42,7 @@ final class StrictLargeRecipe {
         this.amounts = amounts;
     }
 
-    StrictLargeRecipe(BlockMenu menu, int[] slots) {
+    public StrictMultiInput(BlockMenu menu, int[] slots) {
         StringBuilder builder = new StringBuilder();
         int[] amounts = new int[slots.length];
         for (int i = 0 ; i < slots.length ; i++) {
@@ -61,8 +64,13 @@ final class StrictLargeRecipe {
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof StrictLargeRecipe)) return false;
-        StrictLargeRecipe recipe = (StrictLargeRecipe) obj;
+        if (!(obj instanceof StrictMultiInput)) {
+            return false;
+        }
+        StrictMultiInput recipe = (StrictMultiInput) obj;
+        if (recipe.amounts.length != this.amounts.length) {
+            return false;
+        }
         for (int i = 0 ; i < this.amounts.length ; i++) {
             if (recipe.amounts[i] > this.amounts[i]) {
                 return false;

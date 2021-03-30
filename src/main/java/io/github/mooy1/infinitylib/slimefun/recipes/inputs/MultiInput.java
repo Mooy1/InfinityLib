@@ -1,18 +1,17 @@
-package io.github.mooy1.infinitylib.recipes.large;
+package io.github.mooy1.infinitylib.slimefun.recipes.inputs;
 
 import io.github.mooy1.infinitylib.items.StackUtils;
+import io.github.mooy1.infinitylib.slimefun.recipes.RecipeInput;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import org.bukkit.inventory.ItemStack;
 
-import javax.annotation.Nonnull;
-
-public final class LargeRecipe {
+public class MultiInput extends RecipeInput {
     
     private final String string;
 
-    LargeRecipe(@Nonnull ItemStack[] recipe) {
+    public MultiInput(ItemStack[] recipe) {
         StringBuilder builder = new StringBuilder();
-
+        
         for (ItemStack itemStack : recipe) {
             if (itemStack != null) {
                 builder.append(StackUtils.getIDorType(itemStack)).append(';');
@@ -22,7 +21,7 @@ public final class LargeRecipe {
         this.string = builder.toString();
     }
 
-    LargeRecipe(BlockMenu menu, int[] slots) {
+    public MultiInput(BlockMenu menu, int[] slots) {
         StringBuilder builder = new StringBuilder();
 
         for (int slot : slots) {
@@ -42,7 +41,7 @@ public final class LargeRecipe {
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof LargeRecipe && ((LargeRecipe) obj).string.equals(this.string);
+        return obj instanceof MultiInput && ((MultiInput) obj).string.equals(this.string);
     }
     
 }
