@@ -2,9 +2,9 @@ package io.github.mooy1.infinitylib;
 
 import io.github.mooy1.infinitylib.commands.AbstractCommand;
 import io.github.mooy1.infinitylib.slimefun.utils.TickerUtils;
+import io.github.thebusybiscuit.slimefun4.api.MinecraftVersion;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
-import lombok.AccessLevel;
 import lombok.Getter;
 import me.mrCookieSlime.Slimefun.cscorelib2.chat.ChatColors;
 import me.mrCookieSlime.Slimefun.cscorelib2.config.Config;
@@ -44,7 +44,7 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
     
     @Getter
     private int globalTick = 0;
-    @Getter(AccessLevel.PROTECTED)
+    @Getter
     private Metrics metrics;
     
     @Override
@@ -71,18 +71,20 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
         saveConfig();
 
         // auto update
-        if (getConfig().getBoolean("auto-update")) {
-            if (getDescription().getVersion().startsWith("DEV - ")) {
-                new GitHubBuildsUpdater(this, getFile(), getGithubPath()).start();
+        if (SlimefunPlugin.getMinecraftVersion() != MinecraftVersion.UNIT_TEST) {
+            if (getConfig().getBoolean("auto-update")) {
+                if (getDescription().getVersion().startsWith("DEV - ")) {
+                    new GitHubBuildsUpdater(this, getFile(), getGithubPath()).start();
+                }
+            } else {
+                runSync(() -> log(
+                        "#######################################",
+                        "Auto Updates have been disabled for " + getName(),
+                        "You will receive no support for bugs",
+                        "Until you update to the latest version!",
+                        "#######################################"
+                ));
             }
-        } else {
-            runSync(() -> log(
-                    "#######################################",
-                    "Auto Updates have been disabled for " + getName(),
-                    "You will receive no support for bugs",
-                    "Until you update to the latest version!",
-                    "#######################################"
-            ));
         }
 
         // global ticker
@@ -95,12 +97,10 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
         }
         
         // commands
-        PluginCommand command = getCommand(getName().toLowerCase(Locale.ROOT));
-        if (command != null) {
-            List<AbstractCommand> commands = new ArrayList<>(getSubCommands());
-            commands.add(new AddonInfoCommand(this));
-            new CommandHelper(command, commands);
-        }
+        PluginCommand command = Objects.requireNonNull(getCommand(getName().toLowerCase(Locale.ROOT)), "Make sure to set a command with the plugin's name in your plugin.yml");
+        List<AbstractCommand> commands = new ArrayList<>(getSubCommands());
+        commands.add(new AddonInfoCommand(this));
+        new CommandHelper(command, commands);
     }
 
     /**
