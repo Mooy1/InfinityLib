@@ -51,27 +51,38 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
     @OverridingMethodsMustInvokeSuper
     public void onEnable() {
         
-        // copy config if not present
-        saveDefaultConfig();
+        // global ticker
+        scheduleRepeatingSync(() -> this.globalTick++, TickerUtils.TICKS);
+        
+        // commands
+        PluginCommand command = Objects.requireNonNull(getCommand(getName().toLowerCase(Locale.ROOT)), "Make sure to set a command with the plugin's name in your plugin.yml");
+        List<AbstractCommand> commands = new ArrayList<>(getSubCommands());
+        commands.add(new AddonInfoCommand(this));
+        new CommandHelper(command, commands);
 
-        // add auto update
-        Objects.requireNonNull(getConfig().getDefaults()).set("auto-update", true);
-
-        // remove unused fields in config
-        for (String key : getConfig().getKeys(true)) {
-            if (!getConfig().getDefaults().contains(key)) {
-                getConfig().set(key, null);
-            }
-        }
-
-        // copy defaults and header to update stuff
-        getConfig().options().copyDefaults(true).copyHeader(true);
-
-        // save
-        saveConfig();
-
-        // auto update
+        // stuff that cant be done in unit test
         if (SlimefunPlugin.getMinecraftVersion() != MinecraftVersion.UNIT_TEST) {
+
+            // copy config if not present
+            saveDefaultConfig();
+
+            // add auto update
+            Objects.requireNonNull(getConfig().getDefaults()).set("auto-update", true);
+
+            // remove unused fields in config
+            for (String key : getConfig().getKeys(true)) {
+                if (!getConfig().getDefaults().contains(key)) {
+                    getConfig().set(key, null);
+                }
+            }
+
+            // copy defaults and header to update stuff
+            getConfig().options().copyDefaults(true).copyHeader(true);
+
+            // save
+            saveConfig();
+
+            // auto update
             if (getConfig().getBoolean("auto-update")) {
                 if (getDescription().getVersion().startsWith("DEV - ")) {
                     new GitHubBuildsUpdater(this, getFile(), getGithubPath()).start();
@@ -85,22 +96,13 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
                         "#######################################"
                 ));
             }
-        }
 
-        // global ticker
-        scheduleRepeatingSync(() -> this.globalTick++, TickerUtils.TICKS);
-
-        // metrics
-        if (getMetricsID() != -1) {
-            this.metrics = new Metrics(this, getMetricsID());
-            this.metrics.addCustomChart(new Metrics.SimplePie("auto_updates", () -> String.valueOf(getConfig().getBoolean("auto-update"))));
+            // metrics
+            if (getMetricsID() != -1) {
+                this.metrics = new Metrics(this, getMetricsID());
+                this.metrics.addCustomChart(new Metrics.SimplePie("auto_updates", () -> String.valueOf(getConfig().getBoolean("auto-update"))));
+            }
         }
-        
-        // commands
-        PluginCommand command = Objects.requireNonNull(getCommand(getName().toLowerCase(Locale.ROOT)), "Make sure to set a command with the plugin's name in your plugin.yml");
-        List<AbstractCommand> commands = new ArrayList<>(getSubCommands());
-        commands.add(new AddonInfoCommand(this));
-        new CommandHelper(command, commands);
     }
 
     /**
