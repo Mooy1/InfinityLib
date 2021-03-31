@@ -36,7 +36,7 @@ public final class PluginUtils {
 
     public static void log(Level level, String... messages) {
         validate();
-        plugin.log(messages);
+        plugin.log(level, messages);
     }
 
     public static void registerListener(Listener... listeners) {
