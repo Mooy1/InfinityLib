@@ -1,127 +1,111 @@
 package io.github.mooy1.infinitylib;
 
 import io.github.mooy1.infinitylib.commands.AbstractCommand;
-import lombok.Getter;
+import lombok.experimental.UtilityClass;
 import me.mrCookieSlime.Slimefun.cscorelib2.config.Config;
-import org.apache.commons.lang.Validate;
 import org.bukkit.NamespacedKey;
 import org.bukkit.event.Listener;
 
 import java.util.logging.Level;
 
 /**
- * A static interface to an {@link AbstractAddon}'s methods
+ * A static interface to an {@link AbstractAddon}
  */
+@UtilityClass
 public final class PluginUtils {
     
-    @Getter
-    private static AbstractAddon plugin;
+    private static AbstractAddon PLUGIN;
     
-    public static void setAddon(AbstractAddon addon) {
-        if (plugin != null) {
+    public static void setPlugin(AbstractAddon addon) {
+        if (PLUGIN != null) {
             throw new IllegalStateException("Plugin is already set!");
         } else {
-            plugin = addon;
+            PLUGIN = addon;
         }
     }
-    
-    private static void validate() {
-        Validate.notNull(plugin, "Plugin was not set!");
+
+    public static AbstractAddon getPlugin() {
+        if (PLUGIN == null) {
+            throw new IllegalStateException("Plugin was not set!");
+        } else {
+            return PLUGIN;
+        }
     }
 
     public static void log(String... messages) {
-        validate();
-        plugin.log(messages);
+        getPlugin().log(messages);
     }
 
     public static void log(Level level, String... messages) {
-        validate();
-        plugin.log(level, messages);
+        getPlugin().log(level, messages);
     }
 
     public static void registerListener(Listener... listeners) {
-        validate();
-        plugin.registerListener(listeners);
+        getPlugin().registerListener(listeners);
     }
 
     public static void runSync(Runnable runnable) {
-        validate();
-        plugin.runSync(runnable);
+        getPlugin().runSync(runnable);
     }
 
     public static void runSync(Runnable runnable, long delay) {
-        validate();
-        plugin.runSync(runnable, delay);
+        getPlugin().runSync(runnable, delay);
     }
 
     public static void scheduleRepeatingSync(Runnable runnable, long interval) {
-        validate();
-        plugin.scheduleRepeatingSync(runnable, interval);
+        getPlugin().scheduleRepeatingSync(runnable, interval);
     }
 
     public static void scheduleRepeatingSync(Runnable runnable, long delay, long interval) {
-        validate();
-        plugin.scheduleRepeatingSync(runnable, delay, interval);
+        getPlugin().scheduleRepeatingSync(runnable, delay, interval);
     }
 
     public static void runAsync(Runnable runnable) {
-        validate();
-        plugin.runAsync(runnable);
+        getPlugin().runAsync(runnable);
     }
 
     public static void runAsync(Runnable runnable, long delay) {
-        validate();
-        plugin.runAsync(runnable, delay);
+        getPlugin().runAsync(runnable, delay);
     }
 
     public static void scheduleRepeatingAsync(Runnable runnable, long interval) {
-        validate();
-        plugin.scheduleRepeatingAsync(runnable, interval);
+        getPlugin().scheduleRepeatingAsync(runnable, interval);
     }
 
     public static void scheduleRepeatingAsync(Runnable runnable, long delay, long interval) {
-        validate();
-        plugin.scheduleRepeatingAsync(runnable, delay, interval);
+        getPlugin().scheduleRepeatingAsync(runnable, delay, interval);
     }
 
     public static void addSubCommands(String command, AbstractCommand... commands) {
-        validate();
-        plugin.addSubCommands(command, commands);
+        getPlugin().addSubCommands(command, commands);
     }
 
     public static NamespacedKey getKey(String s) {
-        validate();
-        return plugin.getKey(s);
+        return getPlugin().getKey(s);
     }
 
     public static Config loadConfig(String name) {
-        validate();
-        return plugin.loadConfig(name);
+        return getPlugin().loadConfig(name);
     }
 
     public static Config loadConfigWithDefaults(String name) {
-        validate();
-        return plugin.loadConfigWithDefaults(name);
+        return getPlugin().loadConfigWithDefaults(name);
     }
 
     public static Config attachConfigDefaults(Config config, String resource) {
-        validate();
-        return plugin.attachConfigDefaults(config, resource);
+        return getPlugin().attachConfigDefaults(config, resource);
     }
 
     public static int getConfigInt(String path, int min, int max) {
-        validate();
-        return plugin.getConfigInt(path, min, max);
+        return getPlugin().getConfigInt(path, min, max);
     }
 
     public static double getConfigDouble(String path, double min, double max) {
-        validate();
-        return plugin.getConfigDouble(path, min, max);
+        return getPlugin().getConfigDouble(path, min, max);
     }
     
     public static int getGlobalTick() {
-        validate();
-        return plugin.getGlobalTick();
+        return getPlugin().getGlobalTick();
     }
 
 }

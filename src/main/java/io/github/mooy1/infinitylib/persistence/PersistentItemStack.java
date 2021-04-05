@@ -1,4 +1,4 @@
-package io.github.mooy1.infinitylib.items;
+package io.github.mooy1.infinitylib.persistence;
 
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 import org.bukkit.Material;
@@ -15,15 +15,7 @@ import javax.annotation.Nonnull;
  * 
  * @author Mooy1
  */
-public final class PersistentItemStack implements PersistentDataType<String, ItemStack> {
-
-    private static final PersistentDataType<String, ItemStack> INSTANCE = new PersistentItemStack();
-
-    public static PersistentDataType<String, ItemStack> instance() {
-        return INSTANCE;
-    }
-    
-    private PersistentItemStack() {}
+final class PersistentItemStack implements PersistentDataType<String, ItemStack> {
     
     @Nonnull
     @Override

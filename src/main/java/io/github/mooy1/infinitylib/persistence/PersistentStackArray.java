@@ -1,4 +1,4 @@
-package io.github.mooy1.infinitylib.items;
+package io.github.mooy1.infinitylib.persistence;
 
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -13,15 +13,7 @@ import javax.annotation.Nonnull;
  * 
  * @author Mooy1
  */
-public final class PersistentStackArray implements PersistentDataType<String, ItemStack[]> {
-
-    private static final PersistentDataType<String, ItemStack[]> INSTANCE = new PersistentStackArray();
-    
-    public static PersistentDataType<String, ItemStack[]> instance() {
-        return INSTANCE;
-    }
-    
-    private PersistentStackArray() {}
+final class PersistentStackArray implements PersistentDataType<String, ItemStack[]> {
     
     @Nonnull
     @Override

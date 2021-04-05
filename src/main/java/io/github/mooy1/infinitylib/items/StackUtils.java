@@ -6,7 +6,6 @@ import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.cscorelib2.inventory.ItemUtils;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -20,7 +19,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.logging.Level;
 
 /**
  * Collection of utils for modifying ItemStacks and getting their ids
@@ -115,7 +113,6 @@ public final class StackUtils {
             componentToString = (Method) field.get(null);
             componentToString.setAccessible(true);
         } catch (Exception e) {
-            Bukkit.getLogger().log(Level.SEVERE, "Failed to load ItemStack name methods!");
             e.printStackTrace();
         }
     }
@@ -124,7 +121,6 @@ public final class StackUtils {
         try {
             return ChatColor.WHITE + (String) componentToString.invoke(itemStackNameComponent.invoke(copyCBItemStackToNMS.invoke(null, item)));
         } catch (Exception e) {
-            Bukkit.getLogger().log(Level.SEVERE, "Failed to get ItemStack name for " + item.toString());
             e.printStackTrace();
             return ChatColor.RED + "ERROR";
         }
