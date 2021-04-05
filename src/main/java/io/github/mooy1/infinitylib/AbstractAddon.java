@@ -44,8 +44,6 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
     
     @Getter
     private int globalTick = 0;
-    @Getter
-    private Metrics metrics;
     
     @Override
     @OverridingMethodsMustInvokeSuper
@@ -98,17 +96,17 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
             }
 
             // metrics
-            if (getMetricsID() != -1) {
-                this.metrics = new Metrics(this, getMetricsID());
-                this.metrics.addCustomChart(new Metrics.SimplePie("auto_updates", () -> String.valueOf(getConfig().getBoolean("auto-update"))));
+            Metrics metrics = setupMetrics();
+            if (metrics != null) {
+                metrics.addCustomChart(new Metrics.SimplePie("auto_updates", () -> String.valueOf(getConfig().getBoolean("auto-update"))));
             }
         }
     }
 
     /**
-     * return your metrics id or -1 for none
+     * return your metrics or null
      */
-    protected abstract int getMetricsID();
+    protected abstract Metrics setupMetrics();
 
     /**
      * return the github path in the format user/repo/branch, for example Mooy1/InfinityExpansion/master
