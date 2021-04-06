@@ -26,7 +26,7 @@ final class PersistentBlock implements PersistentDataType<String, Block> {
     @Nonnull
     @Override
     public String toPrimitive(@Nonnull Block complex, @Nonnull PersistentDataAdapterContext context) {
-        return complex.getWorld().getName() + ';' + complex.getX() + ';' + complex.getY() + ';' + complex.getZ();
+        return complex.getWorld().getName() + ";" + complex.getX() + ";" + complex.getY() + ";" + complex.getZ();
     }
 
     @Nonnull
