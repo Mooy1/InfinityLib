@@ -1,0 +1,14 @@
+name: TestAddon
+author: Mooy1
+description: test
+main: io.github.mooy1.infinitylib.TestAddon
+website: https://github.com/Mooy1/InfinityLib
+depend: [Slimefun]
+version: ${project.version}
+api-version: 1.16
+
+commands:
+  testaddon:
+    description: Do /testaddon help for a list of commands
+    usage: /testaddon <subcommand>
+    aliases: [te]

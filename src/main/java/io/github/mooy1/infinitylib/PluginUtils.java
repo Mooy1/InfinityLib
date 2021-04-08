@@ -2,7 +2,6 @@ package io.github.mooy1.infinitylib;
 
 import io.github.mooy1.infinitylib.commands.AbstractCommand;
 import lombok.experimental.UtilityClass;
-import me.mrCookieSlime.Slimefun.cscorelib2.config.Config;
 import org.bukkit.NamespacedKey;
 import org.bukkit.event.Listener;
 
@@ -84,24 +83,8 @@ public final class PluginUtils {
         return getPlugin().getKey(s);
     }
 
-    public static Config loadConfig(String name) {
+    public static AddonConfig loadConfig(String name) {
         return getPlugin().loadConfig(name);
-    }
-
-    public static Config loadConfigWithDefaults(String name) {
-        return getPlugin().loadConfigWithDefaults(name);
-    }
-
-    public static Config attachConfigDefaults(Config config, String resource) {
-        return getPlugin().attachConfigDefaults(config, resource);
-    }
-
-    public static int getConfigInt(String path, int min, int max) {
-        return getPlugin().getConfigInt(path, min, max);
-    }
-
-    public static double getConfigDouble(String path, double min, double max) {
-        return getPlugin().getConfigDouble(path, min, max);
     }
     
     public static int getGlobalTick() {

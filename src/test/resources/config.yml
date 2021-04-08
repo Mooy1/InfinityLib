@@ -1,0 +1,11 @@
+# test comment
+key: value
+# test spaces
+section:
+  one: 1
+  # test single line
+  two: 2
+  # test multi line
+  # test multi line
+  # test multi line
+  three: 3

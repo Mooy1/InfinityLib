@@ -2,12 +2,10 @@ package io.github.mooy1.infinitylib;
 
 import io.github.mooy1.infinitylib.commands.AbstractCommand;
 import io.github.mooy1.infinitylib.slimefun.utils.TickerUtils;
-import io.github.thebusybiscuit.slimefun4.api.MinecraftVersion;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import lombok.Getter;
 import me.mrCookieSlime.Slimefun.cscorelib2.chat.ChatColors;
-import me.mrCookieSlime.Slimefun.cscorelib2.config.Config;
 import me.mrCookieSlime.Slimefun.cscorelib2.updater.GitHubBuildsUpdater;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
@@ -17,15 +15,18 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabExecutor;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.java.JavaPluginLoader;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
-import java.io.InputStreamReader;
+import javax.annotation.ParametersAreNonnullByDefault;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -38,86 +39,79 @@ import java.util.Objects;
 import java.util.logging.Level;
 
 /**
- * Extend this in your main plugin class and add static instance getter
+ * Extend this in your main plugin class
  */
 public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon {
     
     @Getter
     private int globalTick = 0;
+    @Getter
+    private AddonConfig config;
+
+    /**
+     * For testing
+     */
+    @ParametersAreNonnullByDefault
+    public AbstractAddon(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file) {
+        super(loader, description, dataFolder, file);
+    }
     
     @Override
     @OverridingMethodsMustInvokeSuper
     public void onEnable() {
         
+        // config
+        this.config = loadConfig("config.yml");
+
+        // auto update
+        if (this.config.autoUpdatesEnabled()) {
+            if (getDescription().getVersion().startsWith("DEV - ")) {
+                new GitHubBuildsUpdater(this, getFile(), getGithubPath()).start();
+            }
+        } else {
+            runSync(() -> log(
+                    "#######################################",
+                    "Auto Updates have been disabled for " + getName(),
+                    "You will receive no support for bugs",
+                    "Until you update to the latest version!",
+                    "#######################################"
+            ));
+        }
+
+        // metrics
+        Metrics metrics = setupMetrics();
+        if (metrics != null) {
+            metrics.addCustomChart(new Metrics.SimplePie("auto_updates", () -> String.valueOf(this.config.autoUpdatesEnabled())));
+        }
+
         // global ticker
         scheduleRepeatingSync(() -> this.globalTick++, TickerUtils.TICKS);
-        
+
         // commands
         PluginCommand command = Objects.requireNonNull(getCommand(getName().toLowerCase(Locale.ROOT)), "Make sure to set a command with the plugin's name in your plugin.yml");
         List<AbstractCommand> commands = new ArrayList<>(getSubCommands());
         commands.add(new AddonInfoCommand(this));
         new CommandHelper(command, commands);
-
-        // stuff that cant be done in unit test
-        if (SlimefunPlugin.getMinecraftVersion() != MinecraftVersion.UNIT_TEST) {
-
-            // copy config if not present
-            saveDefaultConfig();
-
-            // add auto update
-            Objects.requireNonNull(getConfig().getDefaults()).set("auto-update", true);
-
-            // remove unused fields in config
-            for (String key : getConfig().getKeys(true)) {
-                if (!getConfig().getDefaults().contains(key)) {
-                    getConfig().set(key, null);
-                }
-            }
-
-            // copy defaults and header to update stuff
-            getConfig().options().copyDefaults(true).copyHeader(true);
-
-            // save
-            saveConfig();
-
-            // auto update
-            if (getConfig().getBoolean("auto-update")) {
-                if (getDescription().getVersion().startsWith("DEV - ")) {
-                    new GitHubBuildsUpdater(this, getFile(), getGithubPath()).start();
-                }
-            } else {
-                runSync(() -> log(
-                        "#######################################",
-                        "Auto Updates have been disabled for " + getName(),
-                        "You will receive no support for bugs",
-                        "Until you update to the latest version!",
-                        "#######################################"
-                ));
-            }
-
-            // metrics
-            Metrics metrics = setupMetrics();
-            if (metrics != null) {
-                metrics.addCustomChart(new Metrics.SimplePie("auto_updates", () -> String.valueOf(getConfig().getBoolean("auto-update"))));
-            }
-        }
     }
 
     /**
      * return your metrics or null
      */
+    @Nullable
     protected abstract Metrics setupMetrics();
 
     /**
      * return the github path in the format user/repo/branch, for example Mooy1/InfinityExpansion/master
      */
+    @Nonnull
     protected abstract String getGithubPath();
 
     /**
      * return your sub commands, use Arrays.asList(Commands...)
      */
+    @Nonnull
     protected abstract List<AbstractCommand> getSubCommands();
-    
+
     @Nonnull
     @Override
     public final JavaPlugin getJavaPlugin() {
@@ -186,39 +180,8 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
         return new NamespacedKey(this, s);
     }
     
-    public final Config loadConfig(String name) {
-        return new Config(this, name);
-    }
-    
-    public final Config loadConfigWithDefaults(String name) {
-        return attachConfigDefaults(loadConfig(name), name);
-    }
-
-    public final Config attachConfigDefaults(Config config, String resource) {
-        config.getConfiguration().setDefaults(YamlConfiguration.loadConfiguration(
-                new InputStreamReader(Objects.requireNonNull(getResource(resource),
-                        () -> "Failed to get default resource " + resource + "!"))));
-        config.getConfiguration().options().copyDefaults(true).copyHeader(true);
-        config.save();
-        return config;
-    }
-    
-    public final int getConfigInt(String path, int min, int max) {
-        int val = getConfig().getInt(path);
-        if (val < min || val > max) {
-            getConfig().set(path, val = Objects.requireNonNull(getConfig().getDefaults()).getInt(path));
-            log(Level.WARNING, "Config value at " + path + " was out of bounds, resetting to default!");
-        }
-        return val;
-    }
-
-    public final double getConfigDouble(String path, double min, double max) {
-        double val = getConfig().getDouble(path);
-        if (val < min || val > max) {
-            getConfig().set(path, val = Objects.requireNonNull(getConfig().getDefaults()).getDouble(path));
-            log(Level.WARNING, "Config value at " + path + " was out of bounds, resetting to default!");
-        }
-        return val;
+    public final AddonConfig loadConfig(String name) {
+        return new AddonConfig(this, name);
     }
     
     private static final class CommandHelper implements TabExecutor {
@@ -363,5 +326,5 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
         }
 
     }
-    
+
 }

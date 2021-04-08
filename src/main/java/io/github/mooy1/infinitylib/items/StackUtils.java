@@ -13,7 +13,6 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
-import org.jetbrains.annotations.Range;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -57,7 +56,7 @@ public final class StackUtils {
     }
 
     @Nullable
-    public static ItemStack getItemByID(@Nonnull String id, @Range(from = 1, to = 64) int amount) {
+    public static ItemStack getItemByID(@Nonnull String id, int amount) {
         SlimefunItem sfItem = SlimefunItem.getByID(id);
         if (sfItem != null) {
             return new CustomItem(sfItem.getItem(), amount);
@@ -72,7 +71,7 @@ public final class StackUtils {
     }
 
     @Nullable
-    public static ItemStack getItemByIDorType(@Nonnull String id, @Range(from = 1, to = 64) int amount) {
+    public static ItemStack getItemByIDorType(@Nonnull String id, int amount) {
         SlimefunItem sfItem = SlimefunItem.getByID(id);
         if (sfItem != null) {
             return new CustomItem(sfItem.getItem(), amount);
