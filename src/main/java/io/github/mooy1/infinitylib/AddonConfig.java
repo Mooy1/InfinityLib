@@ -130,11 +130,11 @@ public final class AddonConfig extends YamlConfiguration {
                     commentBuilder.append(line).append('\n');
                 } else if (line.contains("#")) {
                     // add new line if none before first comment
-                    if (commentBuilder.isEmpty()) {
+                    if (commentBuilder.length() == 0) {
                         commentBuilder.append('\n');
                     }
                     commentBuilder.append(line).append('\n');
-                } else if (commentBuilder.isEmpty()) {
+                } else if (commentBuilder.length() == 0) {
                     // add new line
                     this.comments.put(pathBuilder.append(line), "\n");
                 } else {

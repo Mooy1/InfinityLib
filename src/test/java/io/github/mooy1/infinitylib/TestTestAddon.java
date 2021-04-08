@@ -7,9 +7,6 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
-import java.io.IOException;
-
 public final class TestTestAddon {
 
     private static ServerMock server;
@@ -24,12 +21,8 @@ public final class TestTestAddon {
     }
     
     @Test
-    public void testSaveConfig() {
-        try {
-            addon.getConfig().save(new File("src/test/resources/config-save-test.yml"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void test() {
+        
     }
 
     @AfterAll
