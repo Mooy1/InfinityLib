@@ -49,7 +49,14 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
     private AddonConfig config;
 
     /**
-     * For testing
+     * For Sub Classes
+     */
+    public AbstractAddon() {
+        
+    }
+
+    /**
+     * For Unit Tests
      */
     @ParametersAreNonnullByDefault
     public AbstractAddon(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file) {
