@@ -1,13 +1,16 @@
 package io.github.mooy1.infinitylib.items;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
 import lombok.experimental.UtilityClass;
-import me.mrCookieSlime.Slimefun.cscorelib2.chat.ChatColors;
+
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.List;
+import me.mrCookieSlime.Slimefun.cscorelib2.chat.ChatColors;
 
 /**
  * Collection of utils for modifying item lore

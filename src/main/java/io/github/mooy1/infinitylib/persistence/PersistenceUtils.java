@@ -1,6 +1,7 @@
 package io.github.mooy1.infinitylib.persistence;
 
 import lombok.experimental.UtilityClass;
+
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;

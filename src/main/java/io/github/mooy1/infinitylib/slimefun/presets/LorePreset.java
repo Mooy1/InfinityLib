@@ -1,10 +1,12 @@
 package io.github.mooy1.infinitylib.slimefun.presets;
 
-import io.github.mooy1.infinitylib.slimefun.utils.TickerUtils;
-import lombok.experimental.UtilityClass;
+import java.text.DecimalFormat;
 
 import javax.annotation.Nonnull;
-import java.text.DecimalFormat;
+
+import lombok.experimental.UtilityClass;
+
+import io.github.mooy1.infinitylib.slimefun.utils.TickerUtils;
 
 /**
  * Collection of utils for building item lore

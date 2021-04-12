@@ -1,10 +1,12 @@
 package io.github.mooy1.infinitylib.slimefun.recipes.inputs;
 
+import lombok.Getter;
+
+import org.bukkit.inventory.ItemStack;
+
 import io.github.mooy1.infinitylib.items.StackUtils;
 import io.github.mooy1.infinitylib.slimefun.recipes.RecipeInput;
-import lombok.Getter;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
-import org.bukkit.inventory.ItemStack;
 
 /**
  * A large recipe which stores a string of all ids/materials and amounts

@@ -1,12 +1,5 @@
 package io.github.mooy1.infinitylib;
 
-import org.apache.commons.codec.Charsets;
-import org.apache.commons.lang.StringUtils;
-import org.bukkit.configuration.Configuration;
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.YamlConfiguration;
-
-import javax.annotation.Nonnull;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -17,6 +10,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Level;
+
+import javax.annotation.Nonnull;
+
+import org.apache.commons.codec.Charsets;
+import org.apache.commons.lang.StringUtils;
+import org.bukkit.configuration.Configuration;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 /**
  * A config which is able to save all of it's comments and has some additional utility methods
@@ -49,9 +50,10 @@ public final class AddonConfig extends YamlConfiguration {
 
             if (this.file.exists()) {
                 load(this.file);
-            } else {
-                save(this.file);
             }
+            
+            save(this.file);
+            
         } catch (InvalidConfigurationException | IOException e) {
             e.printStackTrace();
         }
@@ -106,10 +108,11 @@ public final class AddonConfig extends YamlConfiguration {
         String string = super.saveToString();
         StringBuilder save = new StringBuilder();
         String[] lines = string.split("\n");
-        PathBuilder pathBuilder = new PathBuilder();
+        StringBuilder pathBuilder = new StringBuilder();
+        List<Integer> dotIndexes = new ArrayList<>(2);
         for (String line : lines) {
             // append the comment and line
-            save.append(this.comments.get(pathBuilder.append(line))).append(line).append('\n');
+            save.append(this.comments.get(appendPath(pathBuilder, dotIndexes, line))).append(line).append('\n');
         }
         return save.toString();
     }
@@ -118,8 +121,9 @@ public final class AddonConfig extends YamlConfiguration {
         BufferedReader input = new BufferedReader(new InputStreamReader(Objects.requireNonNull(
                 this.addon.getResource(filePath), () -> "No default config for " + filePath + "!"), Charsets.UTF_8));
         StringBuilder yamlBuilder = new StringBuilder();
-        PathBuilder pathBuilder = new PathBuilder();
         StringBuilder commentBuilder = new StringBuilder();
+        StringBuilder pathBuilder = new StringBuilder();
+        List<Integer> dotIndexes = new ArrayList<>(2);
         try {
             String line;
             while ((line = input.readLine()) != null) {
@@ -136,10 +140,10 @@ public final class AddonConfig extends YamlConfiguration {
                     commentBuilder.append(line).append('\n');
                 } else if (commentBuilder.length() == 0) {
                     // add new line
-                    this.comments.put(pathBuilder.append(line), "\n");
+                    this.comments.put(appendPath(pathBuilder, dotIndexes, line), "\n");
                 } else {
                     // add comment and reset
-                    this.comments.put(pathBuilder.append(line), commentBuilder.toString());
+                    this.comments.put(appendPath(pathBuilder, dotIndexes, line), commentBuilder.toString());
                     commentBuilder = new StringBuilder();
                 }
             }
@@ -148,40 +152,33 @@ public final class AddonConfig extends YamlConfiguration {
         }
         return yamlBuilder.toString();
     }
-    
-    private static final class PathBuilder {
 
-        private final List<Integer> dotIndexes = new ArrayList<>(2);
-        private StringBuilder path;
-        
-        private String append(String line) {
-            // count indent
-            int indent = 0;
-            for (int i = 0 ; i < line.length() ; i++) {
-                if (line.charAt(i) == ' ') {
-                    indent++;
-                } else {
-                    break;
-                }
-            }
-            String key = line.substring(indent, line.lastIndexOf(':'));
-            indent >>= 2;
-            // change path
-            if (indent == 0) {
-                this.path = new StringBuilder(key);
-                if (this.dotIndexes.size() != 0) {
-                    this.dotIndexes.clear();
-                }
-            } else if (indent <= this.dotIndexes.size()) {
-                this.path.replace(this.dotIndexes.get(indent - 1), this.path.length(), key);
+    private static String appendPath(StringBuilder path, List<Integer> dotIndexes, String line) {
+        // count indent
+        int indent = 0;
+        for (int i = 0 ; i < line.length() ; i++) {
+            if (line.charAt(i) == ' ') {
+                indent++;
             } else {
-                this.path.append('.');
-                this.dotIndexes.add(this.path.length());
-                this.path.append(key);
+                break;
             }
-            return this.path.toString();
         }
-        
+        String key = line.substring(indent, line.lastIndexOf(':'));
+        indent >>= 2;
+        // change path
+        if (indent == 0) {
+            path = new StringBuilder(key);
+            if (dotIndexes.size() != 0) {
+                dotIndexes.clear();
+            }
+        } else if (indent <= dotIndexes.size()) {
+            path.replace(dotIndexes.get(indent - 1), path.length(), key);
+        } else {
+            path.append('.');
+            dotIndexes.add(path.length());
+            path.append(key);
+        }
+        return path.toString();
     }
 
 }

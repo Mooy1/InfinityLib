@@ -1,6 +1,7 @@
 package io.github.mooy1.infinitylib.persistence;
 
-import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
+import javax.annotation.Nonnull;
+
 import org.bukkit.Material;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -8,7 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataAdapterContext;
 import org.bukkit.persistence.PersistentDataType;
 
-import javax.annotation.Nonnull;
+import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 
 /**
  * Persistent data type for ItemStacks

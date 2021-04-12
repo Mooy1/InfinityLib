@@ -1,11 +1,12 @@
 package io.github.mooy1.infinitylib.slimefun.utils;
 
-import me.mrCookieSlime.Slimefun.Objects.Category;
+import javax.annotation.Nonnull;
+
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import javax.annotation.Nonnull;
+import me.mrCookieSlime.Slimefun.Objects.Category;
 
 /**
  * A category that is hidden from the main guide page

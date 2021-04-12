@@ -1,15 +1,17 @@
 package io.github.mooy1.infinitylib.players;
 
-import io.github.mooy1.infinitylib.AbstractAddon;
+import java.util.Map;
+import java.util.UUID;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import java.util.Map;
-import java.util.UUID;
+import io.github.mooy1.infinitylib.AbstractAddon;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public final class LeaveListener implements Listener {

@@ -1,10 +1,11 @@
 package io.github.mooy1.infinitylib.commands;
 
-import org.bukkit.command.CommandSender;
-
-import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Locale;
+
+import javax.annotation.Nonnull;
+
+import org.bukkit.command.CommandSender;
 
 /**
  * A command 

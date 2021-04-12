@@ -1,11 +1,12 @@
 package io.github.mooy1.infinitylib.players;
 
-import io.github.mooy1.infinitylib.AbstractAddon;
-
-import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+
+import javax.annotation.Nonnull;
+
+import io.github.mooy1.infinitylib.AbstractAddon;
 
 public final class CoolDownMap {
     

@@ -1,12 +1,12 @@
 package io.github.mooy1.infinitylib.persistence;
 
+import javax.annotation.Nonnull;
+
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataAdapterContext;
 import org.bukkit.persistence.PersistentDataType;
-
-import javax.annotation.Nonnull;
 
 /**
  * Persistent data type for ItemStack arrays

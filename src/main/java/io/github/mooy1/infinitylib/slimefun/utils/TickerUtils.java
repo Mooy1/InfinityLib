@@ -1,7 +1,8 @@
 package io.github.mooy1.infinitylib.slimefun.utils;
 
-import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import lombok.experimental.UtilityClass;
+
+import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 
 @UtilityClass
 public final class TickerUtils {

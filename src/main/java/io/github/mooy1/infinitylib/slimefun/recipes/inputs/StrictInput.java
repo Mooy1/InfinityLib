@@ -1,11 +1,13 @@
 package io.github.mooy1.infinitylib.slimefun.recipes.inputs;
 
-import io.github.mooy1.infinitylib.items.StackUtils;
-import io.github.mooy1.infinitylib.slimefun.recipes.RecipeInput;
+import javax.annotation.Nonnull;
+
 import lombok.Getter;
+
 import org.bukkit.inventory.ItemStack;
 
-import javax.annotation.Nonnull;
+import io.github.mooy1.infinitylib.items.StackUtils;
+import io.github.mooy1.infinitylib.slimefun.recipes.RecipeInput;
 
 /**
  * A strict recipe which checks id/material and amount

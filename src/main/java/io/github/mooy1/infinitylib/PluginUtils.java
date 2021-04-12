@@ -1,11 +1,13 @@
 package io.github.mooy1.infinitylib;
 
-import io.github.mooy1.infinitylib.commands.AbstractCommand;
+import java.util.logging.Level;
+
 import lombok.experimental.UtilityClass;
+
 import org.bukkit.NamespacedKey;
 import org.bukkit.event.Listener;
 
-import java.util.logging.Level;
+import io.github.mooy1.infinitylib.commands.AbstractCommand;
 
 /**
  * A static interface to an {@link AbstractAddon}

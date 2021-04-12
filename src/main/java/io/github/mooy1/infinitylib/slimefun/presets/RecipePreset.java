@@ -1,9 +1,10 @@
 package io.github.mooy1.infinitylib.slimefun.presets;
 
-import lombok.experimental.UtilityClass;
-import org.bukkit.inventory.ItemStack;
-
 import javax.annotation.Nonnull;
+
+import lombok.experimental.UtilityClass;
+
+import org.bukkit.inventory.ItemStack;
 
 /**
  * Presets for making recipes

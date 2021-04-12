@@ -1,13 +1,14 @@
 package io.github.mooy1.infinitylib.persistence;
 
-import io.github.thebusybiscuit.slimefun4.utils.PatternUtils;
+import javax.annotation.Nonnull;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.persistence.PersistentDataAdapterContext;
 import org.bukkit.persistence.PersistentDataType;
 
-import javax.annotation.Nonnull;
+import io.github.thebusybiscuit.slimefun4.utils.PatternUtils;
 
 final class PersistentBlock implements PersistentDataType<String, Block> {
 
