@@ -39,17 +39,16 @@ public final class AddonConfig extends YamlConfiguration {
             defaults.loadFromString(loadDefaults(path));
             defaults.set("auto-update", true);
             this.comments.put("auto-update", "\n# This must be enabled to receive support!\n");
-
-            for (String key : getKeys(true)) {
-                if (!defaults.contains(key)) {
-                    set(key, null);
-                }
-            }
-
             setDefaults(defaults);
 
             if (this.file.exists()) {
                 load(this.file);
+            }
+            
+            for (String key : getKeys(true)) {
+                if (!defaults.contains(key)) {
+                    set(key, null);
+                }
             }
             
             save(this.file);
