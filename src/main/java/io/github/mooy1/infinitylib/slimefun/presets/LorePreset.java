@@ -16,10 +16,12 @@ import io.github.mooy1.infinitylib.slimefun.utils.TickerUtils;
  */
 @UtilityClass
 public final class LorePreset {
+
+    private static final DecimalFormat FORMAT = new DecimalFormat("###,###,###,###,###,###.#");
     
     @Nonnull
     public static String energyPerSecond(int energy) {
-        return "&8\u21E8 &e\u26A1 &7" + roundHundreds(energy * TickerUtils.TPS) + " J/s";
+        return "&8\u21E8 &e\u26A1 &7" + format(energy * TickerUtils.TPS) + " J/s";
     }
     
     @Nonnull
@@ -36,18 +38,6 @@ public final class LorePreset {
     public static String speed(int speed) {
         return "&8\u21E8 &b\u26A1 &7Speed: &b" + speed + 'x';
     }
-
-    @Nonnull
-    public static String storesItem(int amount) {
-        return "&6Capacity: &e" + format(amount) + " &eitems";
-    }
-    
-    @Nonnull
-    public static String roundHundreds(double number) {
-        return format(Math.round(number * 100D) / 100D);
-    }
-
-    private static final DecimalFormat FORMAT = new DecimalFormat("###,###,###,###,###,###.#");
 
     @Nonnull
     public static String format(double number) {

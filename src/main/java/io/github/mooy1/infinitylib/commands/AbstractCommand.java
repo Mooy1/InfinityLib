@@ -37,7 +37,7 @@ public abstract class AbstractCommand {
 
     public abstract void onTab(@Nonnull CommandSender sender, @Nonnull String[] args, @Nonnull List<String> tabs);
 
-    public boolean hasPerm(CommandSender sender) {
+    public final boolean hasPerm(CommandSender sender) {
         return this.op ? sender.isOp() : this.perm == null || sender.hasPermission(this.perm);
     }
     

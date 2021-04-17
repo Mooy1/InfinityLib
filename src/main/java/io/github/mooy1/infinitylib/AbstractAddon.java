@@ -20,6 +20,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import lombok.Getter;
 
 import org.bstats.bukkit.Metrics;
+import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
@@ -74,7 +75,7 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
         this.config = loadConfig("config.yml");
 
         // auto update
-        if (this.config.autoUpdatesEnabled()) {
+        if (this.config.getBoolean("auto-update")) {
             if (getDescription().getVersion().startsWith("DEV - ")) {
                 new GitHubBuildsUpdater(this, getFile(), getGithubPath()).start();
             }
@@ -91,7 +92,7 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
         // metrics
         Metrics metrics = setupMetrics();
         if (metrics != null) {
-            metrics.addCustomChart(new Metrics.SimplePie("auto_updates", () -> String.valueOf(this.config.autoUpdatesEnabled())));
+            metrics.addCustomChart(new SimplePie("auto_updates", () -> String.valueOf(this.config.getBoolean("auto-update"))));
         }
 
         // global ticker
@@ -102,6 +103,13 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
         List<AbstractCommand> commands = new ArrayList<>(getSubCommands());
         commands.add(new AddonInfoCommand(this));
         new CommandHelper(command, commands);
+    }
+
+    @Override
+    @OverridingMethodsMustInvokeSuper
+    public void onLoad() {
+        // default to not logging world settings
+        Bukkit.spigot().getConfig().set("world-settings.default.verbose", false);
     }
 
     /**
