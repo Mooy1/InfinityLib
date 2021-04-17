@@ -2,6 +2,7 @@ package io.github.mooy1.infinitylib;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -29,30 +30,25 @@ public final class AddonConfig extends YamlConfiguration {
     private final Map<String, String> comments = new HashMap<>();
     private final AbstractAddon addon;
     private final File file;
-    
+
     AddonConfig(AbstractAddon addon, String path) {
         this.addon = addon;
         this.file = new File(addon.getDataFolder(), path);
-        
         try {
             YamlConfiguration defaults = new YamlConfiguration();
             defaults.loadFromString(loadDefaults(path));
             defaults.set("auto-update", true);
             this.comments.put("auto-update", "\n# This must be enabled to receive support!\n");
             setDefaults(defaults);
-
             if (this.file.exists()) {
                 load(this.file);
             }
-            
             for (String key : getKeys(true)) {
                 if (!defaults.contains(key)) {
                     set(key, null);
                 }
             }
-            
             save(this.file);
-            
         } catch (InvalidConfigurationException | IOException e) {
             e.printStackTrace();
         }
@@ -116,6 +112,21 @@ public final class AddonConfig extends YamlConfiguration {
         }
         return save.toString();
     }
+    
+    @Override
+    public void load(@Nonnull File file) throws InvalidConfigurationException, IOException {
+        BufferedReader input = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+        StringBuilder load = new StringBuilder();
+        String line;
+        while ((line = input.readLine()) != null) {
+            if (line.startsWith("null")) {
+                line = line.substring(4);
+            }
+            load.append(line).append('\n');
+        }
+        input.close();
+        loadFromString(load.toString());
+    }
 
     private String loadDefaults(String filePath) throws IOException {
         BufferedReader input = new BufferedReader(new InputStreamReader(Objects.requireNonNull(
@@ -127,9 +138,6 @@ public final class AddonConfig extends YamlConfiguration {
         String line;
         while ((line = input.readLine()) != null) {
             // fix messed up lines
-            if (line.startsWith("null")) {
-                line = line.substring(4);
-            }
             yamlBuilder.append(line).append('\n');
             // load comment
             if (StringUtils.isBlank(line)) {
