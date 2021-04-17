@@ -37,7 +37,9 @@ public final class AddonConfig extends YamlConfiguration {
         YamlConfiguration defaults = new YamlConfiguration();
         try {
             defaults.loadFromString(loadDefaults(path));
-        } catch (Exception e) {
+        } catch (InvalidConfigurationException e) {
+            addon.log(Level.SEVERE, "There was an error loading the defaults of '" + path + "'!");
+        } catch (IOException e) {
             e.printStackTrace();
         }
         defaults.set("auto-update", true);
@@ -46,7 +48,9 @@ public final class AddonConfig extends YamlConfiguration {
         if (this.file.exists()) {
             try {
                 load(this.file);
-            } catch (Exception e) {
+            } catch (InvalidConfigurationException e) {
+                addon.log(Level.WARNING, "There was an error loading the config '" + path + "'!");
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
@@ -55,11 +59,7 @@ public final class AddonConfig extends YamlConfiguration {
                 set(key, null);
             }
         }
-        try {
-            save(this.file);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        save();
     }
     
     public int getInt(String path, int min, int max) {
