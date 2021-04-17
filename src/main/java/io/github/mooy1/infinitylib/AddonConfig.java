@@ -34,22 +34,30 @@ public final class AddonConfig extends YamlConfiguration {
     AddonConfig(AbstractAddon addon, String path) {
         this.addon = addon;
         this.file = new File(addon.getDataFolder(), path);
+        YamlConfiguration defaults = new YamlConfiguration();
         try {
-            YamlConfiguration defaults = new YamlConfiguration();
             defaults.loadFromString(loadDefaults(path));
-            defaults.set("auto-update", true);
-            this.comments.put("auto-update", "\n# This must be enabled to receive support!\n");
-            setDefaults(defaults);
-            if (this.file.exists()) {
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        defaults.set("auto-update", true);
+        this.comments.put("auto-update", "\n# This must be enabled to receive support!\n");
+        setDefaults(defaults);
+        if (this.file.exists()) {
+            try {
                 load(this.file);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            for (String key : getKeys(true)) {
-                if (!defaults.contains(key)) {
-                    set(key, null);
-                }
+        }
+        for (String key : getKeys(true)) {
+            if (!defaults.contains(key)) {
+                set(key, null);
             }
+        }
+        try {
             save(this.file);
-        } catch (InvalidConfigurationException | IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
