@@ -49,7 +49,7 @@ public final class AddonConfig extends YamlConfiguration {
             try {
                 load(this.file);
             } catch (InvalidConfigurationException e) {
-                addon.log(Level.WARNING, "There was an error loading the config '" + path + "'!");
+                addon.log(Level.SEVERE, "There was an error loading the config '" + path + "', resetting to default!");
             } catch (IOException e) {
                 e.printStackTrace();
             }
