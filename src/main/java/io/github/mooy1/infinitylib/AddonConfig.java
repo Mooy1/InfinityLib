@@ -133,6 +133,7 @@ public final class AddonConfig extends YamlConfiguration {
             load.append(line).append('\n');
         }
         input.close();
+        System.out.println(load.toString());
         loadFromString(load.toString());
     }
 
