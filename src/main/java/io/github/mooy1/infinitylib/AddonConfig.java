@@ -59,7 +59,7 @@ public final class AddonConfig extends YamlConfiguration {
                 set(key, null);
             }
         }
-        save();
+        // save();
     }
     
     public int getInt(String path, int min, int max) {
