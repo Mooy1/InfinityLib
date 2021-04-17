@@ -2,6 +2,8 @@ package io.github.mooy1.infinitylib.items;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -19,6 +21,7 @@ import org.bukkit.persistence.PersistentDataType;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
+import me.mrCookieSlime.Slimefun.cscorelib2.chat.ChatColors;
 import me.mrCookieSlime.Slimefun.cscorelib2.inventory.ItemUtils;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 
@@ -86,6 +89,21 @@ public final class StackUtils {
                 return null;
             }
         }
+    }
+    
+    @Nonnull
+    public static ItemStack addLore(@Nonnull ItemStack item, @Nonnull String... lines) {
+        ItemMeta meta = item.getItemMeta();
+        List<String> lore = meta.getLore();
+        if (lore == null) {
+            lore = new ArrayList<>();
+        }
+        for (String line : lines) {
+            lore.add(ChatColors.color(line));
+        }
+        meta.setLore(lore);
+        item.setItemMeta(meta);
+        return item;
     }
     
     @Nonnull
