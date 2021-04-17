@@ -2,7 +2,6 @@ package io.github.mooy1.infinitylib;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -59,7 +58,7 @@ public final class AddonConfig extends YamlConfiguration {
                 set(key, null);
             }
         }
-        // save();
+        save();
     }
     
     public int getInt(String path, int min, int max) {
@@ -119,22 +118,6 @@ public final class AddonConfig extends YamlConfiguration {
             }
         }
         return save.toString();
-    }
-    
-    @Override
-    public void load(@Nonnull File file) throws InvalidConfigurationException, IOException {
-        BufferedReader input = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
-        StringBuilder load = new StringBuilder();
-        String line;
-        while ((line = input.readLine()) != null) {
-            if (line.startsWith("null")) {
-                line = line.substring(4);
-            }
-            load.append(line).append('\n');
-        }
-        input.close();
-        System.out.println(load.toString());
-        loadFromString(load.toString());
     }
 
     private String loadDefaults(String filePath) throws IOException {
