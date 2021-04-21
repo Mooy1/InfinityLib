@@ -3,10 +3,9 @@ package io.github.mooy1.infinitylib.slimefun.recipes.inputs;
 import org.bukkit.inventory.ItemStack;
 
 import io.github.mooy1.infinitylib.items.StackUtils;
-import io.github.mooy1.infinitylib.slimefun.recipes.RecipeInput;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 
-public class MultiInput extends RecipeInput {
+public final class MultiInput {
     
     private final String string;
 

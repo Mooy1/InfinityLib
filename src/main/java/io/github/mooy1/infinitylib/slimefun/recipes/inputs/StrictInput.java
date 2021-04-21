@@ -7,12 +7,11 @@ import lombok.Getter;
 import org.bukkit.inventory.ItemStack;
 
 import io.github.mooy1.infinitylib.items.StackUtils;
-import io.github.mooy1.infinitylib.slimefun.recipes.RecipeInput;
 
 /**
  * A strict recipe which checks id/material and amount
  */
-public class StrictInput extends RecipeInput {
+public final class StrictInput {
 
     private final String id;
     @Getter
