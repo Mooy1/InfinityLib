@@ -16,18 +16,6 @@ public final class StrictMultiInput {
     @Getter
     private final int[] amounts;
 
-    public StrictMultiInput(ItemStack[] recipe, int[] amounts) {
-        StringBuilder builder = new StringBuilder();
-        for (ItemStack item : recipe) {
-            if (item != null) {
-                builder.append(StackUtils.getIDorType(item));
-            }
-            builder.append(';');
-        }
-        this.string = builder.toString();
-        this.amounts = amounts;
-    }
-
     public StrictMultiInput(ItemStack[] recipe) {
         StringBuilder builder = new StringBuilder();
         int[] amounts = new int[recipe.length];
