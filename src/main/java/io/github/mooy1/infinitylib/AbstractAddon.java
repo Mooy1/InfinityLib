@@ -92,7 +92,8 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
         // metrics
         Metrics metrics = setupMetrics();
         if (metrics != null) {
-            metrics.addCustomChart(new SimplePie("auto_updates", () -> String.valueOf(this.config.getBoolean("auto-update"))));
+            String autoUpdates = String.valueOf(this.config.getBoolean("auto-update"));
+            metrics.addCustomChart(new SimplePie("auto_updates", () -> autoUpdates));
         }
 
         // global ticker
