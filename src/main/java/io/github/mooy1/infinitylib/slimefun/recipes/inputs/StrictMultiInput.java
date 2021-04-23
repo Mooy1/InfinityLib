@@ -10,7 +10,7 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 /**
  * A large recipe which stores a string of all ids/materials and amounts
  */
-public final class StrictMultiInput {
+public class StrictMultiInput {
 
     private final String string;
     @Getter

@@ -7,7 +7,7 @@ import org.bukkit.inventory.ItemStack;
 
 @Getter
 @AllArgsConstructor
-public final class StrictMultiOutput {
+public class StrictMultiOutput {
 
     private final ItemStack output;
     private final int[] inputConsumption;

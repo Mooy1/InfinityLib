@@ -9,7 +9,7 @@ import io.github.mooy1.infinitylib.items.StackUtils;
 /**
  * A simple recipe which only checks id/material
  */
-public final class SingleInput {
+public class SingleInput {
 
     private final String id;
 

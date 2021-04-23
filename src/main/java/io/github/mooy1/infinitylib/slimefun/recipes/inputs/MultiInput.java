@@ -5,7 +5,7 @@ import org.bukkit.inventory.ItemStack;
 import io.github.mooy1.infinitylib.items.StackUtils;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 
-public final class MultiInput {
+public class MultiInput {
     
     private final String string;
 

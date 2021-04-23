@@ -11,7 +11,7 @@ import io.github.mooy1.infinitylib.items.StackUtils;
 /**
  * A strict recipe which checks id/material and amount
  */
-public final class StrictInput {
+public class StrictInput {
 
     private final String id;
     @Getter
