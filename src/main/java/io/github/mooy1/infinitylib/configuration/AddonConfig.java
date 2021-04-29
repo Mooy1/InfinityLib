@@ -1,4 +1,4 @@
-package io.github.mooy1.infinitylib;
+package io.github.mooy1.infinitylib.configuration;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -19,6 +19,8 @@ import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import io.github.mooy1.infinitylib.AbstractAddon;
+
 /**
  * A config which is able to save all of it's comments and has some additional utility methods
  * 
@@ -29,7 +31,7 @@ public final class AddonConfig extends YamlConfiguration {
     private final Map<String, String> comments = new HashMap<>();
     private final File file;
 
-    AddonConfig(AbstractAddon addon, String path) {
+    public AddonConfig(AbstractAddon addon, String path) {
         this.file = new File(addon.getDataFolder(), path);
         YamlConfiguration defaults = new YamlConfiguration();
         try {

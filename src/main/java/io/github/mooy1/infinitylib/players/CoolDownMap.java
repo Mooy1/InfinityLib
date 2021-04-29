@@ -3,18 +3,11 @@ package io.github.mooy1.infinitylib.players;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-
 import javax.annotation.Nonnull;
-
-import io.github.mooy1.infinitylib.AbstractAddon;
 
 public final class CoolDownMap {
     
     private final Map<UUID, Long> map = new HashMap<>();
-    
-    public CoolDownMap(AbstractAddon addon) {
-        LeaveListener.create(addon, this.map);
-    }
     
     public boolean check(@Nonnull UUID uuid, long cd) {
         return System.currentTimeMillis() - this.map.getOrDefault(uuid, 0L) >= cd;
