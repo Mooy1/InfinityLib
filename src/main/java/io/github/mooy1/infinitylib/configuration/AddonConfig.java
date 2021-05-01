@@ -64,7 +64,7 @@ public final class AddonConfig extends YamlConfiguration {
     }
     
     public void addComment(String path, String comment) {
-        this.comments.put(path, comment);
+        this.comments.putIfAbsent(path, comment);
     }
     
     public int getInt(String path, int min, int max) {
