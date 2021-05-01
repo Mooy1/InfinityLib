@@ -43,8 +43,6 @@ public final class AddonConfig extends YamlConfiguration {
             e.printStackTrace();
             return;
         }
-        defaults.set("auto-update", true);
-        this.comments.put("auto-update", "\n# This must be enabled to receive support!\n");
         setDefaults(defaults);
         if (this.file.exists()) {
             try {
@@ -63,6 +61,10 @@ public final class AddonConfig extends YamlConfiguration {
             }
         }
         save();
+    }
+    
+    public void addComment(String path, String comment) {
+        this.comments.put(path, comment);
     }
     
     public int getInt(String path, int min, int max) {
