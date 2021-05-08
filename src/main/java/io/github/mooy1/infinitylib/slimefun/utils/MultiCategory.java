@@ -110,9 +110,10 @@ public final class MultiCategory extends FlexCategory {
     @Override
     public void register(@Nonnull SlimefunAddon addon) {
         super.register(addon);
-        
         for (Category category : this.subCategories) {
-            category.register(addon);
+            if (!category.isRegistered()) {
+                category.register(addon);
+            }
         }
     }
 
