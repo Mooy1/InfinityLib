@@ -61,11 +61,10 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
         
         // config
         this.config = new AddonConfig(this, "config.yml");
-        this.config.getDefaults().set(getAutoUpdatePath(), true);
-        this.config.addComment(getAutoUpdatePath(), "\n# This must be enabled to receive support!\n");
 
         // auto update
-        if (this.config.getBoolean(getAutoUpdatePath())) {
+        boolean autoUpdate = this.config.getBoolean(getAutoUpdatePath());
+        if (autoUpdate) {
             if (getDescription().getVersion().startsWith("DEV - ")) {
                 new GitHubBuildsUpdater(this, getFile(), getGithubPath()).start();
             }
@@ -82,7 +81,7 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
         // metrics
         Metrics metrics = setupMetrics();
         if (metrics != null) {
-            String autoUpdates = String.valueOf(this.config.getBoolean("auto-update"));
+            String autoUpdates = String.valueOf(autoUpdate);
             metrics.addCustomChart(new SimplePie("auto_updates", () -> autoUpdates));
         }
 
@@ -122,7 +121,7 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
      * Override this if you have a different path
      */
     @Nonnull
-    protected String getAutoUpdatePath() {
+    public String getAutoUpdatePath() {
         return "auto-update";
     }
 

@@ -30,7 +30,7 @@ public final class AddonConfig extends YamlConfiguration {
 
     private final Map<String, String> comments = new HashMap<>();
     private final File file;
-
+    
     public AddonConfig(AbstractAddon addon, String path) {
         this.file = new File(addon.getDataFolder(), path);
         YamlConfiguration defaults = new YamlConfiguration();
@@ -42,6 +42,10 @@ public final class AddonConfig extends YamlConfiguration {
         } catch (IOException e) {
             e.printStackTrace();
             return;
+        }
+        if (path.equals("config.yml")) {
+            defaults.set(addon.getAutoUpdatePath(), true);
+            addComment(addon.getAutoUpdatePath(), "\n# This must be enabled to receive support!\n");
         }
         setDefaults(defaults);
         if (this.file.exists()) {
