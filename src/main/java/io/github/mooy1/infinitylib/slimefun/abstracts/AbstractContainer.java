@@ -56,6 +56,8 @@ public abstract class AbstractContainer extends SlimefunItem {
 
             @Override
             public void newInstance(@Nonnull BlockMenu menu, @Nonnull Location l) {
+                System.out.println(menu);
+                System.out.println(l);
                 new Exception().printStackTrace();
                 super.newInstance(menu, l);
             }
