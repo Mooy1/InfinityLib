@@ -53,15 +53,6 @@ public abstract class AbstractContainer extends SlimefunItem {
             public void newInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
                 onNewInstance(menu, b);
             }
-
-            @Override
-            public void newInstance(@Nonnull BlockMenu menu, @Nonnull Location l) {
-                System.out.println(menu);
-                System.out.println(l);
-                new Exception().printStackTrace();
-                super.newInstance(menu, l);
-            }
-
             @Override
             public int[] getSlotsAccessedByItemTransport(DirtyChestMenu menu, ItemTransportFlow flow, ItemStack item) {
                 return getTransportSlots(menu, flow, item);
