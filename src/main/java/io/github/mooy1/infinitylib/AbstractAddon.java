@@ -89,13 +89,16 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
         scheduleRepeatingSync(() -> this.globalTick++, TickerUtils.TICKS);
 
         // commands
-        CommandManager.register(this, getName(), getSubCommands());
+        List<AbstractCommand> subCommands = setupSubCommands();
+        if (subCommands != null) {
+            CommandManager.createSubCommands(this, getName(), setupSubCommands());
+        }
     }
 
     @Override
     @OverridingMethodsMustInvokeSuper
     public void onLoad() {
-        // default to not logging world settings
+        // default to not logging world settings because its annoying
         Bukkit.spigot().getConfig().set("world-settings.default.verbose", false);
     }
 
@@ -112,10 +115,20 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
     protected abstract String getGithubPath();
 
     /**
-     * return your sub commands, use Arrays.asList(Commands...)
+     * return your sub commands, use Arrays.asList(Commands...) or null for none.
+     */
+    @Nullable
+    protected List<AbstractCommand> setupSubCommands() {
+        return null;
+    }
+
+    /**
+     * return your main command name, defaults to the name of the plugin
      */
     @Nonnull
-    protected abstract List<AbstractCommand> getSubCommands();
+    protected String getCommandName() {
+        return getName();
+    }
 
     /**
      * Override this if you have a different path
