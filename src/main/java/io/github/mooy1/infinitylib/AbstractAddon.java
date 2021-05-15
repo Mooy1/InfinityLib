@@ -95,13 +95,6 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
         }
     }
 
-    @Override
-    @OverridingMethodsMustInvokeSuper
-    public void onLoad() {
-        // default to not logging world settings because its annoying
-        Bukkit.spigot().getConfig().set("world-settings.default.verbose", false);
-    }
-
     /**
      * return your metrics or null
      */
