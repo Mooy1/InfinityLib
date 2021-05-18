@@ -34,10 +34,8 @@ import me.mrCookieSlime.Slimefun.cscorelib2.updater.GitHubBuildsUpdater;
 public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon {
     
     private final String bugTrackerURL = "https://github.com/" + getGithubPath().substring(0, getGithubPath().lastIndexOf('/')) + "/issues";
-    
     @Getter
     private int globalTick;
-    
     private AddonConfig config;
 
     /**
@@ -48,7 +46,7 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
     }
 
     /**
-     * Mock Bukkit Constructor
+     * MockBukkit Constructor
      */
     @ParametersAreNonnullByDefault
     public AbstractAddon(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file) {
