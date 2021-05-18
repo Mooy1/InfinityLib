@@ -20,7 +20,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.JavaPluginLoader;
 
 import io.github.mooy1.infinitylib.commands.AbstractCommand;
-import io.github.mooy1.infinitylib.commands.CommandManager;
+import io.github.mooy1.infinitylib.commands.CommandUtils;
 import io.github.mooy1.infinitylib.configuration.AddonConfig;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
@@ -91,7 +91,7 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
         // commands
         List<AbstractCommand> subCommands = setupSubCommands();
         if (subCommands != null) {
-            CommandManager.createSubCommands(this, getCommandName(), setupSubCommands());
+            CommandUtils.createSubCommands(this, getCommandName(), setupSubCommands());
         }
     }
 

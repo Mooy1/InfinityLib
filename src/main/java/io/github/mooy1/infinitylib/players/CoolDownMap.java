@@ -13,14 +13,14 @@ public final class CoolDownMap {
         return System.currentTimeMillis() - this.map.getOrDefault(uuid, 0L) >= cd;
     }
 
-    public void put(@Nonnull UUID uuid) {
+    public void reset(@Nonnull UUID uuid) {
         this.map.put(uuid, System.currentTimeMillis());
     }
 
-    public boolean checkAndPut(@Nonnull UUID uuid, long cd) {
+    public boolean checkAndReset(@Nonnull UUID uuid, long cd) {
         boolean check = check(uuid, cd);
         if (check) {
-            put(uuid);
+            reset(uuid);
         }
         return check;
     }

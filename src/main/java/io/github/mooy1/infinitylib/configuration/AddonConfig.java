@@ -37,17 +37,6 @@ public final class AddonConfig extends YamlConfiguration {
         loadDefaults();
         reload();
     }
-    
-    @Override
-    public void loadFromString(@Nonnull String contents) throws InvalidConfigurationException {
-        super.loadFromString(contents);
-        for (String key : getKeys(true)) {
-            if (!this.defaults.contains(key)) {
-                set(key, null);
-            }
-        }
-        save();
-    }
 
     public void addComment(String path, String comment) {
         this.comments.putIfAbsent(path, comment);
@@ -99,6 +88,17 @@ public final class AddonConfig extends YamlConfiguration {
     @Override
     protected String buildHeader() {
         return "";
+    }
+
+    @Override
+    public void loadFromString(@Nonnull String contents) throws InvalidConfigurationException {
+        super.loadFromString(contents);
+        for (String key : getKeys(true)) {
+            if (!this.defaults.contains(key)) {
+                set(key, null);
+            }
+        }
+        save();
     }
     
     @Nonnull

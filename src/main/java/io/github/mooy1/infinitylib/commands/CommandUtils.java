@@ -17,19 +17,20 @@ import org.bukkit.command.TabExecutor;
 
 import io.github.mooy1.infinitylib.AbstractAddon;
 
-public final class CommandManager implements TabExecutor {
+public final class CommandUtils implements TabExecutor {
     
     public static void createSubCommands(AbstractAddon addon, String commandName, List<AbstractCommand> subCommands) {
-        PluginCommand command = Objects.requireNonNull(addon.getCommand(commandName), () -> "No such command '" + commandName + "'!");
+        PluginCommand command = Objects.requireNonNull(addon.getCommand(commandName),
+                () -> "No such command '" + commandName + "'!");
         subCommands = new ArrayList<>(subCommands);
         subCommands.add(new HelpCommand(subCommands, command));
         subCommands.add(new InfoCommand(addon));
-        new CommandManager(command, subCommands);
+        new CommandUtils(command, subCommands);
     }
 
     private final Map<String, AbstractCommand> commands = new HashMap<>();
 
-    private CommandManager(PluginCommand command, List<AbstractCommand> subCommands) {
+    private CommandUtils(PluginCommand command, List<AbstractCommand> subCommands) {
         command.setExecutor(this);
         command.setTabCompleter(this);
         for (AbstractCommand abstractCommand : subCommands) {
