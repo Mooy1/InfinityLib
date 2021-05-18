@@ -150,6 +150,7 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
     left non-final in case addons want to add their own functionality, i.e. apply some
     settings from the new config
      */
+    @OverridingMethodsMustInvokeSuper
     public void reloadAddonConfig() {
         this.config = new AddonConfig(this, "config.yml");
     }
