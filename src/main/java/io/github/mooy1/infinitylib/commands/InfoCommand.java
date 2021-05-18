@@ -22,7 +22,7 @@ final class InfoCommand extends AbstractCommand {
                 ChatColors.color("&bSlimefun Version: &7" + Objects.requireNonNull(SlimefunPlugin.instance()).getPluginVersion()),
                 ChatColors.color("&bSlimefun Discord: &7Discord.gg/slimefun"),
                 ChatColors.color("&bAddon Version: &7" + addon.getPluginVersion()),
-                ChatColors.color("&bAddon Community: &7Discord.gg/SqD3gg5SAU"),
+                ChatColors.color("&bAddon Community Discord: &7Discord.gg/SqD3gg5SAU"),
                 ChatColors.color("&bGithub: &7" + addon.getBugTrackerURL()),
                 ""
         };

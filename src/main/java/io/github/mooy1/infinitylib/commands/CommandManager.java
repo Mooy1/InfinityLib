@@ -24,6 +24,7 @@ public final class CommandManager implements TabExecutor {
         subCommands = new ArrayList<>(subCommands);
         subCommands.add(new HelpCommand(subCommands, command));
         subCommands.add(new InfoCommand(addon));
+        subCommands.add(new ReloadCommand(addon));
         new CommandManager(command, subCommands);
     }
 

@@ -48,7 +48,7 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
     }
 
     /**
-     * Mock Bukkit Constructor
+     * MockBukkit Constructor
      */
     @ParametersAreNonnullByDefault
     public AbstractAddon(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file) {
@@ -141,6 +141,17 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
     @Override
     public final String getBugTrackerURL() {
         return this.bugTrackerURL;
+    }
+
+    /**
+     * Reloads the config.yml file into the addon
+     */
+    /*
+    left non-final in case addons want to add their own functionality, i.e. apply some
+    settings from the new config
+     */
+    public void reloadConfig() {
+        this.config = new AddonConfig(this, "config.yml");
     }
 
     public final NamespacedKey getKey(String s) {
