@@ -13,6 +13,7 @@ import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -21,8 +22,8 @@ import org.bukkit.plugin.java.JavaPluginLoader;
 import io.github.mooy1.infinitylib.commands.AbstractCommand;
 import io.github.mooy1.infinitylib.commands.CommandManager;
 import io.github.mooy1.infinitylib.configuration.AddonConfig;
-import io.github.mooy1.infinitylib.slimefun.utils.TickerUtils;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
+import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import me.mrCookieSlime.Slimefun.cscorelib2.updater.GitHubBuildsUpdater;
 
 /**
@@ -37,7 +38,6 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
     @Getter
     private int globalTick;
     
-    @Getter
     private AddonConfig config;
 
     /**
@@ -86,12 +86,12 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
         }
 
         // global ticker
-        scheduleRepeatingSync(() -> this.globalTick++, TickerUtils.TICKS);
+        scheduleRepeatingSync(() -> this.globalTick++, SlimefunPlugin.getTickerTask().getTickRate());
 
         // commands
         List<AbstractCommand> subCommands = setupSubCommands();
         if (subCommands != null) {
-            CommandManager.createSubCommands(this, getName(), setupSubCommands());
+            CommandManager.createSubCommands(this, getCommandName(), setupSubCommands());
         }
     }
 
@@ -141,6 +141,22 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
     @Override
     public final String getBugTrackerURL() {
         return this.bugTrackerURL;
+    }
+
+    @Nonnull
+    @Override
+    public final FileConfiguration getConfig() {
+        return this.config;
+    }
+
+    @Override
+    public final void reloadConfig() {
+        this.config.reload();
+    }
+
+    @Override
+    public final void saveConfig() {
+        this.config.save();
     }
 
     public final NamespacedKey getKey(String s) {

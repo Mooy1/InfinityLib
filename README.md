@@ -97,26 +97,23 @@ Utility classes relating to players.
 `CoolDownMap` is an implementation of a `HashMap<UUID, Long>` which makes it easier to have cooldowns on items.
 
 ## Slimefun
-Package for utilities that are specifically slimefun related.
-
-### Abstracts
 Contains a few SlimefunItem implementations to make it easier to create blocks with inventories and tickers.
 
-### Presets
-Utility classes, field, and methods for making lore and menus.
+## Presets
+Utility methods for making lore and menus.
 
-### Utils
-Utility classes related to slimefun like a better `MultiCategory` implementation.
+## Categories
+Slimefun Category classes like a better `MultiCategory` implementation.
 
-### Recipes
+## Recipes
 Classes that should server as keys and values in `HashMap`s which allows for fast recipe lookup in machines.
 
-#### Inputs
+### Inputs
 The keys of a recipe `HashMap`.
 
 These implement `equals()` and `hashCode()`.
 
-#### Outputs
+### Outputs
 The values of a recipe `HashMap`.
 
 These are just holders for an output `ItemStack` and some form of input amount to be used for item consumption.

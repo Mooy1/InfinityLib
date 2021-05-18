@@ -1,4 +1,4 @@
-package io.github.mooy1.infinitylib.slimefun.utils;
+package io.github.mooy1.infinitylib.categories;
 
 import javax.annotation.Nonnull;
 

@@ -1,4 +1,4 @@
-package io.github.mooy1.infinitylib.slimefun.utils;
+package io.github.mooy1.infinitylib.categories;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -23,6 +23,8 @@ import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 
 /**
  * A better multi category
+ * 
+ * @author Mooy1
  */
 public final class MultiCategory extends FlexCategory {
     

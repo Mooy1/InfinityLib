@@ -1,4 +1,4 @@
-package io.github.mooy1.infinitylib.slimefun.recipes.inputs;
+package io.github.mooy1.infinitylib.recipes.inputs;
 
 import org.bukkit.inventory.ItemStack;
 
