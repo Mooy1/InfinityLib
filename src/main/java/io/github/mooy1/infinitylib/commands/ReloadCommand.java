@@ -17,7 +17,7 @@ final class ReloadCommand extends AbstractCommand {
 
     @Override
     public void onExecute(@Nonnull CommandSender sender, @Nonnull String[] args) {
-        addon.reloadConfig();
+        addon.reloadAddonConfig();
         sender.sendMessage("Reloaded config");
     }
 
