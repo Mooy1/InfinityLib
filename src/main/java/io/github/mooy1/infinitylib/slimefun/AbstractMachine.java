@@ -19,6 +19,7 @@ public abstract class AbstractMachine extends AbstractContainer {
 
     public AbstractMachine(Category category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
         super(category, item, recipeType, recipe);
+        
     }
 
     @Nonnull
