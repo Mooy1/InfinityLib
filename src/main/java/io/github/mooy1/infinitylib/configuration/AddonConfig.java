@@ -34,7 +34,7 @@ public final class AddonConfig extends YamlConfiguration {
     public AddonConfig(AbstractAddon addon, String name) {
         this.file = new File(addon.getDataFolder(), name);
         this.addon = addon;
-        loadDefaults();
+        loadDefaults(name);
         reload();
     }
 
@@ -122,10 +122,10 @@ public final class AddonConfig extends YamlConfiguration {
         return save.toString();
     }
 
-    private void loadDefaults() {
+    private void loadDefaults(String name) {
         BufferedReader input = new BufferedReader(new InputStreamReader(
-                Objects.requireNonNull(this.addon.getResource(this.file.getPath()),
-                () -> "No default config for " + this.file.getPath() + "!"), Charsets.UTF_8));
+                Objects.requireNonNull(this.addon.getResource(name),
+                () -> "No default config for " + name + "!"), Charsets.UTF_8));
         
         StringBuilder yamlBuilder = new StringBuilder();
         StringBuilder commentBuilder = new StringBuilder();
