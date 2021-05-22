@@ -3,6 +3,7 @@ package io.github.mooy1.infinitylib;
 import java.io.File;
 import java.util.List;
 import java.util.logging.Level;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
@@ -56,31 +57,36 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
     @Override
     @OverridingMethodsMustInvokeSuper
     public void onEnable() {
-        
+
         // config
         this.config = new AddonConfig(this, "config.yml");
 
-        // auto update
-        boolean autoUpdate = this.config.getBoolean(getAutoUpdatePath());
-        if (autoUpdate) {
-            if (getDescription().getVersion().startsWith("DEV - ")) {
-                new GitHubBuildsUpdater(this, getFile(), getGithubPath()).start();
-            }
-        } else {
-            runSync(() -> log(
-                    "#######################################",
-                    "Auto Updates have been disabled for " + getName(),
-                    "You will receive no support for bugs",
-                    "Until you update to the latest version!",
-                    "#######################################"
-            ));
-        }
-
         // metrics
         Metrics metrics = setupMetrics();
-        if (metrics != null) {
-            String autoUpdates = String.valueOf(autoUpdate);
-            metrics.addCustomChart(new SimplePie("auto_updates", () -> autoUpdates));
+
+        // check auto update
+        if (getAutoUpdatePath() != null && getDescription().getVersion().startsWith("DEV - ")) {
+
+            boolean autoUpdate = this.config.getBoolean(getAutoUpdatePath());
+
+            // update
+            if (autoUpdate) {
+                new GitHubBuildsUpdater(this, getFile(), getGithubPath()).start();
+            } else {
+                runSync(() -> log(
+                        "#######################################",
+                        "Auto Updates have been disabled for " + getName(),
+                        "You will receive no support for bugs",
+                        "Until you update to the latest version!",
+                        "#######################################"
+                ));
+            }
+
+            // add to metrics
+            if (metrics != null) {
+                String autoUpdates = String.valueOf(autoUpdate);
+                metrics.addCustomChart(new SimplePie("auto_updates", () -> autoUpdates));
+            }
         }
 
         // global ticker
@@ -94,13 +100,13 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
     }
 
     /**
-     * return your metrics or null
+     * Return your metrics or null
      */
     @Nullable
     protected abstract Metrics setupMetrics();
 
     /**
-     * return the github path in the format user/repo/branch, for example Mooy1/InfinityExpansion/master
+     * return the auto update path in the format user/repo/branch, for example Mooy1/InfinityExpansion/master
      */
     @Nonnull
     protected abstract String getGithubPath();
@@ -122,9 +128,9 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
     }
 
     /**
-     * Override this if you have a different path
+     * Override this if you have a different path, or null for no auto updates
      */
-    @Nonnull
+    @Nullable
     public String getAutoUpdatePath() {
         return "auto-update";
     }

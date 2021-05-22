@@ -175,8 +175,11 @@ public final class AddonConfig extends YamlConfiguration {
         
         // Auto Update
         if (this.file.getPath().equals("config.yml")) {
-            defaults.set(this.addon.getAutoUpdatePath(), true);
-            addComment(this.addon.getAutoUpdatePath(), "\n# This must be enabled to receive support!\n");
+            String path = this.addon.getAutoUpdatePath();
+            if (path != null) {
+                defaults.set(path, true);
+                addComment(path, "\n# This must be enabled to receive support!\n");
+            }
         }
         
         setDefaults(defaults);
