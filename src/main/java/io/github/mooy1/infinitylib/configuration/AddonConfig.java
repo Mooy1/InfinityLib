@@ -106,11 +106,13 @@ public final class AddonConfig extends YamlConfiguration {
     public String saveToString() {
         options().copyDefaults(true).copyHeader(false);
         String string = super.saveToString();
+        System.out.println(string);
         StringBuilder save = new StringBuilder();
         String[] lines = string.split("\n");
         StringBuilder pathBuilder = new StringBuilder();
         List<Integer> dotIndexes = new ArrayList<>(2);
         for (String line : lines) {
+            System.out.println("LINE: " + line);
             // append the comment and line
             String comment = this.comments.get(appendPath(pathBuilder, dotIndexes, line));
             if (comment == null) {
