@@ -37,10 +37,6 @@ public final class AddonConfig extends YamlConfiguration {
         loadDefaults(name);
         reload();
     }
-
-    public void addComment(String path, String comment) {
-        this.comments.putIfAbsent(path, comment);
-    }
     
     public int getInt(String path, int min, int max) {
         int val = getInt(path);
@@ -106,13 +102,14 @@ public final class AddonConfig extends YamlConfiguration {
     public String saveToString() {
         options().copyDefaults(true).copyHeader(false);
         String string = super.saveToString();
-        System.out.println(string);
         StringBuilder save = new StringBuilder();
         String[] lines = string.split("\n");
         StringBuilder pathBuilder = new StringBuilder();
         List<Integer> dotIndexes = new ArrayList<>(2);
         for (String line : lines) {
-            System.out.println("LINE: " + line);
+            if (line.isEmpty()) {
+                continue;
+            }
             // append the comment and line
             String comment = this.comments.get(appendPath(pathBuilder, dotIndexes, line));
             if (comment == null) {
@@ -176,11 +173,11 @@ public final class AddonConfig extends YamlConfiguration {
         }
         
         // Auto Update
-        if (this.file.getPath().equals("config.yml")) {
+        if (name.equals("config.yml")) {
             String path = this.addon.getAutoUpdatePath();
             if (path != null) {
                 defaults.set(path, true);
-                addComment(path, "\n# This must be enabled to receive support!\n");
+                this.comments.put(path, "\n# This must be enabled to receive support!\n");
             }
         }
         
