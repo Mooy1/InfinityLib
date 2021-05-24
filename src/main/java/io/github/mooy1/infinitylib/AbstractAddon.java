@@ -14,7 +14,6 @@ import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -149,7 +148,7 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
 
     @Nonnull
     @Override
-    public final FileConfiguration getConfig() {
+    public final AddonConfig getConfig() {
         return this.config;
     }
 

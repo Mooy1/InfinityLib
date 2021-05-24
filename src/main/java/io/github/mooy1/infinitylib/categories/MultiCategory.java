@@ -2,6 +2,7 @@ package io.github.mooy1.infinitylib.categories;
 
 import java.util.Arrays;
 import java.util.Comparator;
+
 import javax.annotation.Nonnull;
 
 import org.bukkit.ChatColor;
