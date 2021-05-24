@@ -1,5 +1,15 @@
 package io.github.mooy1.infinitylib.slimefun;
 
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
+import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.inventory.ItemStack;
+
 import io.github.thebusybiscuit.slimefun4.core.handlers.BlockBreakHandler;
 import io.github.thebusybiscuit.slimefun4.core.handlers.BlockPlaceHandler;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
@@ -14,14 +24,6 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import me.mrCookieSlime.Slimefun.cscorelib2.protection.ProtectableAction;
-import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.inventory.ItemStack;
-
-import javax.annotation.Nonnull;
-import java.util.List;
 
 /**
  * A slimefun item with a menu
@@ -39,11 +41,10 @@ public abstract class AbstractContainer extends SlimefunItem {
             public void init() {
                 setupMenu(this);
             }
-            
+
             @Override
             public boolean canOpen(@Nonnull Block b, @Nonnull Player p) {
-                return p.hasPermission("slimefun.inventory.bypass") || SlimefunPlugin.getProtectionManager()
-                        .hasPermission(p, b.getLocation(), ProtectableAction.INTERACT_BLOCK);
+                return AbstractContainer.canOpen(b, p);
             }
             
             @Override
@@ -118,6 +119,11 @@ public abstract class AbstractContainer extends SlimefunItem {
 
     protected boolean isSynchronized() {
         return false;
+    }
+
+    public static boolean canOpen(@Nonnull Block b, @Nonnull Player p) {
+        return p.hasPermission("slimefun.inventory.bypass") || SlimefunPlugin.getProtectionManager()
+                .hasPermission(p, b.getLocation(), ProtectableAction.INTERACT_BLOCK);
     }
     
 }
