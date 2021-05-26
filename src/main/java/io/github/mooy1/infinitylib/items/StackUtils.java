@@ -58,6 +58,9 @@ public final class StackUtils {
         if (item instanceof SlimefunItemStack) {
             return ((SlimefunItemStack) item).getItemId();
         }
+        if (item instanceof CachedItemStack) {
+            return ((CachedItemStack) item).getID();
+        }
         if (!item.hasItemMeta()) {
             return null;
         }
