@@ -43,6 +43,16 @@ public final class StackUtils {
         }
     }
 
+    @Nonnull
+    public static String getIDorType(@Nonnull ItemStack item, @Nonnull ItemMeta meta) {
+        String id = getID(meta);
+        if (id == null) {
+            return item.getType().toString();
+        } else {
+            return id;
+        }
+    }
+
     @Nullable
     public static String getID(@Nonnull ItemStack item) {
         if (item instanceof SlimefunItemStack) {
