@@ -62,8 +62,4 @@ public final class CachedItemStack {
         return this.meta.isPresent();
     }
 
-    public int getAmount() {
-        return this.item.getAmount();
-    }
-
 }
