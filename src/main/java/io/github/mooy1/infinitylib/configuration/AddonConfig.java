@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Level;
+
 import javax.annotation.Nonnull;
 
 import org.apache.commons.codec.Charsets;
@@ -22,7 +23,7 @@ import io.github.mooy1.infinitylib.AbstractAddon;
 
 /**
  * A config which is able to save all of it's comments and has some additional utility methods
- * 
+ *
  * @author Mooy1
  */
 public final class AddonConfig extends YamlConfiguration {
@@ -30,14 +31,14 @@ public final class AddonConfig extends YamlConfiguration {
     private final Map<String, String> comments = new HashMap<>();
     private final AbstractAddon addon;
     private final File file;
-    
+
     public AddonConfig(AbstractAddon addon, String name) {
         this.file = new File(addon.getDataFolder(), name);
         this.addon = addon;
         loadDefaults(name);
         reload();
     }
-    
+
     public int getInt(String path, int min, int max) {
         int val = getInt(path);
         if (val < min || val > max) {
@@ -73,7 +74,7 @@ public final class AddonConfig extends YamlConfiguration {
             }
         }
     }
-    
+
     @Nonnull
     @Override
     public Configuration getDefaults() {
@@ -96,7 +97,7 @@ public final class AddonConfig extends YamlConfiguration {
         }
         save();
     }
-    
+
     @Nonnull
     @Override
     public String saveToString() {
@@ -124,13 +125,13 @@ public final class AddonConfig extends YamlConfiguration {
     private void loadDefaults(String name) {
         BufferedReader input = new BufferedReader(new InputStreamReader(
                 Objects.requireNonNull(this.addon.getResource(name),
-                () -> "No default config for " + name + "!"), Charsets.UTF_8));
-        
+                        () -> "No default config for " + name + "!"), Charsets.UTF_8));
+
         StringBuilder yamlBuilder = new StringBuilder();
         StringBuilder commentBuilder = new StringBuilder();
         StringBuilder pathBuilder = new StringBuilder();
         List<Integer> dotIndexes = new ArrayList<>(2);
-        
+
         // Load comments
         try {
             String line;
@@ -163,7 +164,7 @@ public final class AddonConfig extends YamlConfiguration {
         }
 
         YamlConfiguration defaults = new YamlConfiguration();
-        
+
         // load values
         try {
             defaults.loadFromString(yamlBuilder.toString());
@@ -171,7 +172,7 @@ public final class AddonConfig extends YamlConfiguration {
             this.addon.log(Level.SEVERE, "There was an error loading the default config of '" + this.file.getPath() + "', report this to the developers!");
             return;
         }
-        
+
         // Auto Update
         if (name.equals("config.yml")) {
             String path = this.addon.getAutoUpdatePath();
@@ -180,7 +181,7 @@ public final class AddonConfig extends YamlConfiguration {
                 this.comments.put(path, "\n# This must be enabled to receive support!\n");
             }
         }
-        
+
         setDefaults(defaults);
     }
 

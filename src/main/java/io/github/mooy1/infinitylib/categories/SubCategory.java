@@ -10,7 +10,7 @@ import me.mrCookieSlime.Slimefun.Objects.Category;
 
 /**
  * A category that is hidden from the main guide page
- * 
+ *
  * @author Mooy1
  */
 public final class SubCategory extends Category {

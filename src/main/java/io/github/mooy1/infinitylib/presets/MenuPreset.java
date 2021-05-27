@@ -10,7 +10,7 @@ import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 
 @UtilityClass
 public final class MenuPreset {
-    
+
     public static final ItemStack BACKGROUND = ChestMenuUtils.getBackground();
     public static final ItemStack INVALID_INPUT = new CustomItem(
             Material.BARRIER, "&cInvalid Input!"

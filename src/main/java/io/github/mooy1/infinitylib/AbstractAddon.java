@@ -8,6 +8,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import javax.annotation.ParametersAreNonnullByDefault;
+
 import lombok.Getter;
 
 import org.bstats.bukkit.Metrics;
@@ -28,11 +29,11 @@ import me.mrCookieSlime.Slimefun.cscorelib2.updater.GitHubBuildsUpdater;
 
 /**
  * Extend this in your main plugin class
- * 
+ *
  * @author Mooy1
  */
 public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon {
-    
+
     private final String bugTrackerURL = "https://github.com/" + getGithubPath().substring(0, getGithubPath().lastIndexOf('/')) + "/issues";
     @Getter
     private int globalTick;
@@ -42,7 +43,7 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
      * Main Constructor
      */
     public AbstractAddon() {
-        
+
     }
 
     /**
@@ -52,7 +53,7 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
     public AbstractAddon(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file) {
         super(loader, description, dataFolder, file);
     }
-    
+
     @Override
     @OverridingMethodsMustInvokeSuper
     public void onEnable() {
@@ -139,7 +140,7 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
     public final JavaPlugin getJavaPlugin() {
         return this;
     }
-    
+
     @Nonnull
     @Override
     public final String getBugTrackerURL() {

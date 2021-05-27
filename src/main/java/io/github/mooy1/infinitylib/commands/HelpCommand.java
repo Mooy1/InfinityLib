@@ -1,6 +1,7 @@
 package io.github.mooy1.infinitylib.commands;
 
 import java.util.List;
+
 import javax.annotation.Nonnull;
 
 import org.bukkit.Bukkit;
@@ -28,7 +29,7 @@ final class HelpCommand extends AbstractCommand implements Listener {
         this.command = ChatColor.GOLD + "/" + command.getName() + " ";
         this.aliases = ChatColors.color("&6Aliases: &e" + command.getAliases());
         this.header = ChatColors.color("&7----------&b " + command.getPlugin().getName() + " Help &7----------");
-        
+
         Bukkit.getPluginManager().registerEvents(this, command.getPlugin());
     }
 

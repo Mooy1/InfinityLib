@@ -2,6 +2,7 @@ package io.github.mooy1.infinitylib.commands;
 
 import java.util.List;
 import java.util.Objects;
+
 import javax.annotation.Nonnull;
 
 import org.bukkit.command.CommandSender;

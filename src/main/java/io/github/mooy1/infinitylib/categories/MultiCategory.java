@@ -24,20 +24,20 @@ import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 
 /**
  * A better multi category
- * 
+ *
  * @author Mooy1
  */
 public final class MultiCategory extends FlexCategory {
-    
+
     public static final SurvivalSlimefunGuide SURVIVAL_GUIDE = (SurvivalSlimefunGuide)
             SlimefunPlugin.getRegistry().getSlimefunGuide(SlimefunGuideMode.SURVIVAL_MODE);
-    
+
     private final Category[] subCategories;
-    
+
     public MultiCategory(NamespacedKey key, ItemStack item, Category... subCategories) {
         this(key, item, 3, subCategories);
     }
-    
+
     public MultiCategory(NamespacedKey key, ItemStack item, int tier, Category... subCategories) {
         super(key, item, tier);
         Arrays.sort(subCategories, Comparator.comparingInt(Category::getTier));
@@ -53,7 +53,7 @@ public final class MultiCategory extends FlexCategory {
     public void open(Player p, PlayerProfile profile, SlimefunGuideMode mode) {
         openGuide(p, profile, mode, 1);
     }
-    
+
     private void openGuide(Player p, PlayerProfile profile, SlimefunGuideMode mode, int page) {
         profile.getGuideHistory().add(this, page);
 

@@ -3,12 +3,13 @@ package io.github.mooy1.infinitylib.players;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+
 import javax.annotation.Nonnull;
 
 public final class CoolDownMap {
-    
+
     private final Map<UUID, Long> map = new HashMap<>();
-    
+
     public boolean check(@Nonnull UUID uuid, long cd) {
         return System.currentTimeMillis() - this.map.getOrDefault(uuid, 0L) >= cd;
     }
@@ -24,5 +25,5 @@ public final class CoolDownMap {
         }
         return check;
     }
-    
+
 }
