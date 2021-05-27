@@ -1,7 +1,7 @@
 package io.github.mooy1.infinitylib.recipes;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Function;
 
 import javax.annotation.Nonnull;
@@ -11,36 +11,35 @@ import lombok.RequiredArgsConstructor;
 
 import org.bukkit.inventory.ItemStack;
 
-import io.github.mooy1.infinitylib.items.CachedItemStack;
+import io.github.mooy1.infinitylib.items.FastItemStack;
 
 @RequiredArgsConstructor
-public final class RecipeMap {
+public final class RecipeMap<T extends AbstractRecipe> {
 
-    private final Function<CachedItemStack[], AbstractRecipe> recipeConstructor;
+    private final Function<FastItemStack[], T> recipeConstructor;
 
-    private final Map<AbstractRecipe, ItemStack> map = new HashMap<>();
+    private final Set<T> recipes = new HashSet<>();
 
-    public void put(@Nonnull ItemStack[] recipe, @Nonnull ItemStack output) {
-        this.map.put(this.recipeConstructor.apply(CachedItemStack.ofArray(recipe)), output);
+    public void add(@Nonnull ItemStack[] input, @Nonnull ItemStack output) {
+        T recipe = this.recipeConstructor.apply(FastItemStack.ofArray(input));
+        recipe.setOutput(output);
+        this.recipes.add(recipe);
     }
 
     @Nullable
-    public final RecipeOutput get(@Nonnull ItemStack[] input) {
-        AbstractRecipe recipe = this.recipeConstructor.apply(CachedItemStack.ofArray(input));
-        ItemStack output = this.map.get(recipe);
-        if (output != null) {
-            return new RecipeOutput(output, recipe);
+    public final T get(@Nonnull ItemStack input) {
+        T recipe = this.recipeConstructor.apply(new FastItemStack[] { FastItemStack.of(input) });
+        if (this.recipes.contains(recipe)) {
+            return recipe;
         }
         return null;
     }
 
     @Nullable
-    public final ItemStack getAndConsume(@Nonnull ItemStack[] input) {
-        AbstractRecipe recipe = this.recipeConstructor.apply(CachedItemStack.ofArray(input));
-        ItemStack output = this.map.get(recipe);
-        if (output != null) {
-            recipe.consumeRecipe();
-            return output;
+    public final T get(@Nonnull ItemStack[] input) {
+        T recipe = this.recipeConstructor.apply(FastItemStack.ofArray(input));
+        if (this.recipes.contains(recipe)) {
+            return recipe;
         }
         return null;
     }

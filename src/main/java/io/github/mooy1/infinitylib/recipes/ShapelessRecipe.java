@@ -5,15 +5,15 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 
-import io.github.mooy1.infinitylib.items.CachedItemStack;
+import io.github.mooy1.infinitylib.items.FastItemStack;
 
 public final class ShapelessRecipe extends AbstractRecipe {
 
     private final Map<String, Integer> map = new HashMap<>(8);
 
-    public ShapelessRecipe(CachedItemStack[] input) {
+    public ShapelessRecipe(FastItemStack[] input) {
         super(input);
-        for (CachedItemStack item : input) {
+        for (FastItemStack item : input) {
             if (item != null) {
                 this.map.compute(item.getIDorType(),
                         (k, v) -> v == null ? item.getAmount() : v + item.getAmount());
@@ -41,11 +41,11 @@ public final class ShapelessRecipe extends AbstractRecipe {
     }
 
     @Override
-    protected void consume(AbstractRecipe recipe) {
+    protected void consume(@Nonnull AbstractRecipe recipe) {
         for (Map.Entry<String, Integer> entry : ((ShapelessRecipe) recipe).map.entrySet()) {
             int rem = entry.getValue();
 
-            for (CachedItemStack item : getInput()) {
+            for (FastItemStack item : getInput()) {
 
                 if (item != null && item.getIDorType().equals(entry.getKey())) {
 

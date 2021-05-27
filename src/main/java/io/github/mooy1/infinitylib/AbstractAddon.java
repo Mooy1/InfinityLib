@@ -9,8 +9,6 @@ import javax.annotation.Nullable;
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import lombok.Getter;
-
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
@@ -34,10 +32,9 @@ import me.mrCookieSlime.Slimefun.cscorelib2.updater.GitHubBuildsUpdater;
  */
 public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon {
 
-    private final String bugTrackerURL = "https://github.com/" + getGithubPath().substring(0, getGithubPath().lastIndexOf('/')) + "/issues";
-    @Getter
     private int globalTick;
     private AddonConfig config;
+    private final String bugTrackerURL = "https://github.com/" + getGithubPath().substring(0, getGithubPath().lastIndexOf('/')) + "/issues";
 
     /**
      * Main Constructor
@@ -95,21 +92,23 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
         // commands
         List<AbstractCommand> subCommands = setupSubCommands();
         if (subCommands != null) {
-            CommandUtils.createSubCommands(this, getCommandName(), setupSubCommands());
+            CommandUtils.setSubCommands(this, getCommandName(), setupSubCommands());
         }
     }
-
-    /**
-     * Return your metrics or null
-     */
-    @Nullable
-    protected abstract Metrics setupMetrics();
 
     /**
      * return the auto update path in the format user/repo/branch, for example Mooy1/InfinityExpansion/master
      */
     @Nonnull
     protected abstract String getGithubPath();
+
+    /**
+     * Return your metrics or null
+     */
+    @Nullable
+    protected Metrics setupMetrics() {
+        return null;
+    }
 
     /**
      * return your sub commands, use Arrays.asList(Commands...) or null for none.
@@ -133,6 +132,10 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
     @Nullable
     public String getAutoUpdatePath() {
         return "auto-update";
+    }
+
+    public final int getGlobalTick() {
+        return this.globalTick;
     }
 
     @Nonnull

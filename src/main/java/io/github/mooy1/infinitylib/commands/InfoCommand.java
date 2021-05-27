@@ -7,7 +7,7 @@ import javax.annotation.Nonnull;
 
 import org.bukkit.command.CommandSender;
 
-import io.github.mooy1.infinitylib.AbstractAddon;
+import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import me.mrCookieSlime.Slimefun.cscorelib2.chat.ChatColors;
 
@@ -15,7 +15,7 @@ final class InfoCommand extends AbstractCommand {
 
     private final String[] message;
 
-    InfoCommand(AbstractAddon addon) {
+    InfoCommand(SlimefunAddon addon) {
         super("info", "Gives addon version information", false);
         this.message = new String[] {
                 "",
