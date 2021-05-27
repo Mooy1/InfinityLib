@@ -13,11 +13,11 @@ import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 
 /**
  * Persistent data type for ItemStacks
- * 
+ *
  * @author Mooy1
  */
 final class PersistentItemStack implements PersistentDataType<String, ItemStack> {
-    
+
     @Nonnull
     @Override
     public Class<String> getPrimitiveType() {
@@ -37,7 +37,7 @@ final class PersistentItemStack implements PersistentDataType<String, ItemStack>
         config.set("item", complex);
         return config.saveToString();
     }
-    
+
     @Nonnull
     @Override
     public ItemStack fromPrimitive(@Nonnull String primitive, @Nonnull PersistentDataAdapterContext context) {

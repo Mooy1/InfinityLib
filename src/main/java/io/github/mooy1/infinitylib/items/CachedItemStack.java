@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -20,6 +21,28 @@ public final class CachedItemStack extends ItemStack {
     private final ItemStack cached;
     private Optional<ItemMeta> meta;
     private Optional<String> id;
+
+    @Nonnull
+    public static CachedItemStack of(@Nonnull ItemStack item) {
+        if (item instanceof CachedItemStack) {
+            return (CachedItemStack) item;
+        }
+        return new CachedItemStack(item);
+    }
+
+    @Nonnull
+    public static CachedItemStack[] ofArray(@Nonnull ItemStack[] items) {
+        if (items instanceof CachedItemStack[]) {
+            return (CachedItemStack[]) items;
+        }
+        CachedItemStack[] arr = new CachedItemStack[items.length];
+        for (int i = 0 ; i < items.length ; i++) {
+            if (items[i] != null) {
+                arr[i] = new CachedItemStack(items[i]);
+            }
+        }
+        return arr;
+    }
 
     @Nullable
     public String getID() {

@@ -10,11 +10,11 @@ import org.bukkit.persistence.PersistentDataType;
 
 /**
  * Persistent data type for ItemStack arrays
- * 
+ *
  * @author Mooy1
  */
 final class PersistentStackArray implements PersistentDataType<String, ItemStack[]> {
-    
+
     @Nonnull
     @Override
     public Class<String> getPrimitiveType() {
@@ -37,7 +37,7 @@ final class PersistentStackArray implements PersistentDataType<String, ItemStack
         }
         return config.saveToString();
     }
-    
+
     @Nonnull
     @Override
     public ItemStack[] fromPrimitive(@Nonnull String primitive, @Nonnull PersistentDataAdapterContext context) {

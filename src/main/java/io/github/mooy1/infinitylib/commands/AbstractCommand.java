@@ -8,17 +8,17 @@ import javax.annotation.Nonnull;
 import org.bukkit.command.CommandSender;
 
 /**
- * A command 
- * 
+ * A command
+ *
  * @author Mooy1
  */
 public abstract class AbstractCommand {
-    
+
     private final String perm;
     private final boolean op;
     public final String name;
     public final String description;
-    
+
     public AbstractCommand(@Nonnull String name, @Nonnull String description, @Nonnull String perm) {
         this.name = name.toLowerCase(Locale.ROOT);
         this.description = description;
@@ -40,5 +40,5 @@ public abstract class AbstractCommand {
     public final boolean hasPerm(CommandSender sender) {
         return this.op ? sender.isOp() : this.perm == null || sender.hasPermission(this.perm);
     }
-    
+
 }

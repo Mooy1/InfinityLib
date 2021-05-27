@@ -36,7 +36,7 @@ public abstract class AbstractContainer extends SlimefunItem {
         super(category, item, recipeType, recipe);
 
         new BlockMenuPreset(getId(), getItemName()) {
-            
+
             @Override
             public void init() {
                 setupMenu(this);
@@ -46,24 +46,24 @@ public abstract class AbstractContainer extends SlimefunItem {
             public boolean canOpen(@Nonnull Block b, @Nonnull Player p) {
                 return AbstractContainer.canOpen(b, p);
             }
-            
+
             @Override
             public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
                 return new int[0];
             }
-            
+
             @Override
             public void newInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
                 onNewInstance(menu, b);
             }
-            
+
             @Override
             public int[] getSlotsAccessedByItemTransport(DirtyChestMenu menu, ItemTransportFlow flow, ItemStack item) {
                 return getTransportSlots(menu, flow, item);
             }
-            
+
         };
-        
+
         addItemHandler(new BlockBreakHandler(false, false) {
 
             @Override
@@ -72,7 +72,7 @@ public abstract class AbstractContainer extends SlimefunItem {
             }
 
         });
-        
+
         addItemHandler(new BlockPlaceHandler(false) {
 
             @Override
@@ -99,12 +99,12 @@ public abstract class AbstractContainer extends SlimefunItem {
 
 
     @Nonnull
-    protected abstract int[] getTransportSlots(@Nonnull DirtyChestMenu menu, @Nonnull  ItemTransportFlow flow, ItemStack item);
+    protected abstract int[] getTransportSlots(@Nonnull DirtyChestMenu menu, @Nonnull ItemTransportFlow flow, ItemStack item);
 
     protected abstract void tick(@Nonnull Block b);
 
     protected abstract void setupMenu(@Nonnull BlockMenuPreset preset);
-    
+
     protected void onNewInstance(@Nonnull BlockMenu menu, @Nonnull Block b) {
 
     }
@@ -125,5 +125,5 @@ public abstract class AbstractContainer extends SlimefunItem {
         return p.hasPermission("slimefun.inventory.bypass") || SlimefunPlugin.getProtectionManager()
                 .hasPermission(p, b.getLocation(), ProtectableAction.INTERACT_BLOCK);
     }
-    
+
 }
