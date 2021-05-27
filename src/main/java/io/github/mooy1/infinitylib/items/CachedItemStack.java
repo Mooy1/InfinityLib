@@ -38,7 +38,7 @@ public final class CachedItemStack extends ItemStack {
         CachedItemStack[] arr = new CachedItemStack[items.length];
         for (int i = 0 ; i < items.length ; i++) {
             if (items[i] != null) {
-                arr[i] = new CachedItemStack(items[i]);
+                arr[i] = of(items[i]);
             }
         }
         return arr;
@@ -64,6 +64,16 @@ public final class CachedItemStack extends ItemStack {
             }
         }
         return this.id;
+    }
+
+    public boolean softEquals(@Nonnull ItemStack item) {
+        String id = getID();
+        String other = StackUtils.getID(item);
+        if (id == null) {
+            return other == null && getType() == item.getType();
+        } else {
+            return id.equals(other);
+        }
     }
 
     @Nonnull
