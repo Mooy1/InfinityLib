@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
+import io.github.mooy1.infinitylib.configuration.AddonConfig;
 
 class TestAbstractAddon {
 
@@ -30,6 +31,7 @@ class TestAbstractAddon {
     @Test
     void testDefaultAutoUpdate() {
         Assertions.assertTrue(addon.getConfig().getBoolean(addon.getAutoUpdatePath()));
+        Assertions.assertEquals(addon.getConfig().getComment(addon.getAutoUpdatePath()), AddonConfig.AUTO_UPDATE_COMMENT);
     }
 
 }
