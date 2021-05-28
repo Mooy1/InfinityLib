@@ -13,7 +13,6 @@ import lombok.experimental.UtilityClass;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
@@ -112,23 +111,24 @@ public final class StackUtils {
     @Nonnull
     public static ItemStack addLore(@Nonnull ItemStack item, @Nonnull String... lines) {
         ItemMeta meta = item.getItemMeta();
-        List<String> lore = meta.getLore();
-        if (lore == null) {
+        List<String> lore;
+
+        if (meta.hasLore()) {
+            lore = meta.getLore();
+
+            if (lore == null) {
+                lore = new ArrayList<>();
+            }
+        } else {
             lore = new ArrayList<>();
         }
+
         for (String line : lines) {
             lore.add(ChatColors.color(line));
         }
+
         meta.setLore(lore);
         item.setItemMeta(meta);
-        return item;
-    }
-
-    @Nonnull
-    public static ItemStack removeEnchants(@Nonnull ItemStack item) {
-        for (Enchantment e : item.getEnchantments().keySet()) {
-            item.removeEnchantment(e);
-        }
         return item;
     }
 

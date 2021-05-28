@@ -38,18 +38,13 @@ class TestPersistence {
 
         Location first = new Location(null, 1, 2, 3);
         Location second = new Location(world, 1, 2, 3);
-
         container.set(key, PersistenceUtils.LOCATION, first);
-
         Location third = container.get(key, PersistenceUtils.LOCATION);
-
-        Assertions.assertEquals(third, first);
-
         container.set(key, PersistenceUtils.LOCATION, second);
-
         Location fourth = container.get(key, PersistenceUtils.LOCATION);
 
-        Assertions.assertEquals(fourth, second);
+        Assertions.assertEquals(first, third);
+        Assertions.assertEquals(second, fourth);
     }
 
 }

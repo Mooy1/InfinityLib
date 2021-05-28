@@ -31,7 +31,7 @@ class TestAbstractAddon {
     @Test
     void testDefaultAutoUpdate() {
         Assertions.assertTrue(addon.getConfig().getBoolean(addon.getAutoUpdatePath()));
-        Assertions.assertEquals(addon.getConfig().getComment(addon.getAutoUpdatePath()), AddonConfig.AUTO_UPDATE_COMMENT);
+        Assertions.assertEquals(AddonConfig.AUTO_UPDATE_COMMENT, addon.getConfig().getComment(addon.getAutoUpdatePath()));
     }
 
 }

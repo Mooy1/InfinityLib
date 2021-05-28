@@ -1,7 +1,7 @@
 package io.github.mooy1.infinitylib.recipes;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
 import javax.annotation.Nonnull;
@@ -14,34 +14,45 @@ import org.bukkit.inventory.ItemStack;
 import io.github.mooy1.infinitylib.items.FastItemStack;
 
 @RequiredArgsConstructor
-public final class RecipeMap<T extends AbstractRecipe> {
+public final class RecipeMap<O> {
 
-    private final Function<FastItemStack[], T> recipeConstructor;
+    private final Function<FastItemStack[], ? extends AbstractRecipe> recipeConstructor;
 
-    private final Set<T> recipes = new HashSet<>();
+    private final Map<AbstractRecipe, O> recipes = new ConcurrentHashMap<>();
 
-    public void add(@Nonnull ItemStack[] input, @Nonnull ItemStack output) {
-        T recipe = this.recipeConstructor.apply(FastItemStack.ofArray(input));
-        recipe.setOutput(output);
-        this.recipes.add(recipe);
+    public void put(@Nonnull ItemStack[] rawInput, @Nonnull O output) {
+        this.recipes.put(toRecipe(rawInput), output);
     }
 
     @Nullable
-    public final T get(@Nonnull ItemStack input) {
-        T recipe = this.recipeConstructor.apply(new FastItemStack[] { FastItemStack.of(input) });
-        if (this.recipes.contains(recipe)) {
-            return recipe;
+    public RecipeOutput<O> get(@Nonnull ItemStack[] rawInput) {
+        AbstractRecipe input = toRecipe(rawInput);
+        O output = this.recipes.get(input);
+        if (output != null) {
+            return new RecipeOutput<>(output, input);
         }
         return null;
     }
 
     @Nullable
-    public final T get(@Nonnull ItemStack[] input) {
-        T recipe = this.recipeConstructor.apply(FastItemStack.ofArray(input));
-        if (this.recipes.contains(recipe)) {
-            return recipe;
+    public O getAndConsume(@Nonnull ItemStack[] rawInput) {
+        AbstractRecipe input = toRecipe(rawInput);
+        O output = this.recipes.get(input);
+        if (output != null) {
+            input.consume();
+            return output;
         }
         return null;
+    }
+
+    @Nullable
+    public O getNoConsume(@Nonnull ItemStack[] rawInput) {
+        return this.recipes.get(toRecipe(rawInput));
+    }
+
+    @Nonnull
+    private AbstractRecipe toRecipe(@Nonnull ItemStack[] rawInput) {
+        return this.recipeConstructor.apply(FastItemStack.fastArray(rawInput));
     }
 
 }

@@ -19,9 +19,8 @@ public final class FastItemStack extends ItemStack {
 
     @Getter
     private final ItemStack original;
-
-    private Optional<ItemMeta> metaCache;
     private Optional<String> idCache;
+    private ItemMeta metaCache;
 
     @Nonnull
     public static FastItemStack of(@Nonnull ItemStack item) {
@@ -32,7 +31,7 @@ public final class FastItemStack extends ItemStack {
     }
 
     @Nonnull
-    public static FastItemStack[] ofArray(@Nonnull ItemStack[] items) {
+    public static FastItemStack[] fastArray(@Nonnull ItemStack[] items) {
         if (items instanceof FastItemStack[]) {
             return (FastItemStack[]) items;
         }
@@ -67,7 +66,10 @@ public final class FastItemStack extends ItemStack {
         return this.idCache;
     }
 
-    public boolean fastEquals(@Nonnull ItemStack item) {
+    public boolean fastEquals(@Nullable ItemStack item) {
+        if (item == null) {
+            return false;
+        }
         String id = getID();
         String other = StackUtils.getID(item);
         if (id == null) {
@@ -87,28 +89,19 @@ public final class FastItemStack extends ItemStack {
     @Override
     public ItemMeta getItemMeta() {
         if (this.metaCache == null) {
-            if (hasItemMeta()) {
-                this.metaCache = Optional.of(cloneItemMeta());
-            } else {
-                this.metaCache = Optional.empty();
-            }
+            this.metaCache = cloneItemMeta();
         }
-        return this.metaCache.orElseGet(this::cloneItemMeta);
+        return this.metaCache;
     }
 
     @Override
     public boolean setItemMeta(@Nullable ItemMeta itemMeta) {
-        this.metaCache = Optional.ofNullable(itemMeta);
-        this.idCache = null;
-        return this.original.setItemMeta(itemMeta);
+        return this.original.setItemMeta(this.metaCache = itemMeta);
     }
 
     @Override
     public boolean hasItemMeta() {
-        if (this.metaCache == null) {
-            return this.original.hasItemMeta();
-        }
-        return this.metaCache.isPresent();
+        return this.original.hasItemMeta();
     }
 
     @Nonnull
@@ -150,7 +143,6 @@ public final class FastItemStack extends ItemStack {
 
     @Nonnull
     @Override
-    @SuppressWarnings("MethodDoesntCallSuperMethod")
     public ItemStack clone() {
         return this.original.clone();
     }
