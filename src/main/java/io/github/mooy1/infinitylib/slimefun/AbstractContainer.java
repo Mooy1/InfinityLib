@@ -106,10 +106,6 @@ public abstract class AbstractContainer extends SlimefunItem {
 
     protected abstract void tick(@Nonnull BlockMenu menu, @Nonnull Block b, @Nonnull Config data);
 
-    protected boolean synchronised() {
-        return false;
-    }
-
     protected abstract void setupMenu(@Nonnull BlockMenuPreset preset);
 
     @Nonnull
@@ -125,6 +121,10 @@ public abstract class AbstractContainer extends SlimefunItem {
 
     protected void onPlace(@Nonnull BlockPlaceEvent e, @Nonnull Block b) {
 
+    }
+
+    protected boolean synchronised() {
+        return false;
     }
 
     public static boolean canOpen(@Nonnull Block b, @Nonnull Player p) {
