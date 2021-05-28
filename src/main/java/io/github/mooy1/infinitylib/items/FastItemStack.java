@@ -15,30 +15,31 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 @RequiredArgsConstructor
-public final class CachedItemStack extends ItemStack {
+public final class FastItemStack extends ItemStack {
 
     @Getter
-    private final ItemStack cached;
-    private Optional<ItemMeta> meta;
-    private Optional<String> id;
+    private final ItemStack original;
+
+    private Optional<ItemMeta> metaCache;
+    private Optional<String> idCache;
 
     @Nonnull
-    public static CachedItemStack of(@Nonnull ItemStack item) {
-        if (item instanceof CachedItemStack) {
-            return (CachedItemStack) item;
+    public static FastItemStack of(@Nonnull ItemStack item) {
+        if (item instanceof FastItemStack) {
+            return (FastItemStack) item;
         }
-        return new CachedItemStack(item);
+        return new FastItemStack(item);
     }
 
     @Nonnull
-    public static CachedItemStack[] ofArray(@Nonnull ItemStack[] items) {
-        if (items instanceof CachedItemStack[]) {
-            return (CachedItemStack[]) items;
+    public static FastItemStack[] ofArray(@Nonnull ItemStack[] items) {
+        if (items instanceof FastItemStack[]) {
+            return (FastItemStack[]) items;
         }
-        CachedItemStack[] arr = new CachedItemStack[items.length];
+        FastItemStack[] arr = new FastItemStack[items.length];
         for (int i = 0 ; i < items.length ; i++) {
             if (items[i] != null) {
-                arr[i] = new CachedItemStack(items[i]);
+                arr[i] = of(items[i]);
             }
         }
         return arr;
@@ -56,123 +57,133 @@ public final class CachedItemStack extends ItemStack {
 
     @Nonnull
     private Optional<String> cacheID() {
-        if (this.id == null) {
+        if (this.idCache == null) {
             if (hasItemMeta()) {
-                return this.id = Optional.ofNullable(StackUtils.getID(getItemMeta()));
+                return this.idCache = Optional.ofNullable(StackUtils.getID(getItemMeta()));
             } else {
-                return this.id = Optional.empty();
+                return this.idCache = Optional.empty();
             }
         }
-        return this.id;
+        return this.idCache;
+    }
+
+    public boolean fastEquals(@Nonnull ItemStack item) {
+        String id = getID();
+        String other = StackUtils.getID(item);
+        if (id == null) {
+            return other == null && getType() == item.getType();
+        } else {
+            return id.equals(other);
+        }
     }
 
     @Nonnull
     @SuppressWarnings("ConstantConditions")
     public ItemMeta cloneItemMeta() {
-        return this.cached.getItemMeta();
+        return this.original.getItemMeta();
     }
 
     @Nonnull
     @Override
     public ItemMeta getItemMeta() {
-        if (this.meta == null) {
+        if (this.metaCache == null) {
             if (hasItemMeta()) {
-                this.meta = Optional.of(cloneItemMeta());
+                this.metaCache = Optional.of(cloneItemMeta());
             } else {
-                this.meta = Optional.empty();
+                this.metaCache = Optional.empty();
             }
         }
-        return this.meta.orElseGet(this::cloneItemMeta);
+        return this.metaCache.orElseGet(this::cloneItemMeta);
     }
 
     @Override
     public boolean setItemMeta(@Nullable ItemMeta itemMeta) {
-        this.meta = Optional.ofNullable(itemMeta);
-        this.id = null;
-        return this.cached.setItemMeta(itemMeta);
+        this.metaCache = Optional.ofNullable(itemMeta);
+        this.idCache = null;
+        return this.original.setItemMeta(itemMeta);
     }
 
     @Override
     public boolean hasItemMeta() {
-        if (this.meta == null) {
-            return this.cached.hasItemMeta();
+        if (this.metaCache == null) {
+            return this.original.hasItemMeta();
         }
-        return this.meta.isPresent();
+        return this.metaCache.isPresent();
     }
 
     @Nonnull
     @Override
     public Material getType() {
-        return this.cached.getType();
+        return this.original.getType();
     }
 
     @Override
     public void setType(@Nonnull Material type) {
-        this.cached.setType(type);
+        this.original.setType(type);
     }
 
     @Override
     public int getAmount() {
-        return this.cached.getAmount();
+        return this.original.getAmount();
     }
 
     @Override
     public void setAmount(int amount) {
-        this.cached.setAmount(amount);
+        this.original.setAmount(amount);
     }
 
     @Override
     public String toString() {
-        return this.cached.toString();
+        return this.original.toString();
     }
 
     @Override
     @SuppressWarnings("EqualsWhichDoesntCheckParameterClass")
     public boolean equals(Object obj) {
-        return this.cached.equals(obj);
+        return this.original.equals(obj);
     }
 
     @Override
     public boolean isSimilar(ItemStack stack) {
-        return this.cached.isSimilar(stack);
+        return this.original.isSimilar(stack);
     }
 
     @Nonnull
     @Override
     @SuppressWarnings("MethodDoesntCallSuperMethod")
     public ItemStack clone() {
-        return this.cached.clone();
+        return this.original.clone();
     }
 
     @Override
     public int hashCode() {
-        return this.cached.hashCode();
+        return this.original.hashCode();
     }
 
     @Override
     public boolean containsEnchantment(@Nonnull Enchantment ench) {
-        return this.cached.containsEnchantment(ench);
+        return this.original.containsEnchantment(ench);
     }
 
     @Override
     public int getEnchantmentLevel(@Nonnull Enchantment ench) {
-        return this.cached.getEnchantmentLevel(ench);
+        return this.original.getEnchantmentLevel(ench);
     }
 
     @Nonnull
     @Override
     public Map<Enchantment, Integer> getEnchantments() {
-        return this.cached.getEnchantments();
+        return this.original.getEnchantments();
     }
 
     @Override
     public void addUnsafeEnchantment(@Nonnull Enchantment ench, int level) {
-        this.cached.addUnsafeEnchantment(ench, level);
+        this.original.addUnsafeEnchantment(ench, level);
     }
 
     @Override
     public int removeEnchantment(@Nonnull Enchantment ench) {
-        return this.cached.removeEnchantment(ench);
+        return this.original.removeEnchantment(ench);
     }
 
 }

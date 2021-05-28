@@ -60,8 +60,8 @@ public final class StackUtils {
         if (item instanceof SlimefunItemStack) {
             return ((SlimefunItemStack) item).getItemId();
         }
-        if (item instanceof CachedItemStack) {
-            return ((CachedItemStack) item).getID();
+        if (item instanceof FastItemStack) {
+            return ((FastItemStack) item).getID();
         }
         if (!item.hasItemMeta()) {
             return null;
@@ -150,8 +150,8 @@ public final class StackUtils {
             field.setAccessible(true);
             TO_STRING = (Method) field.get(null);
             TO_STRING.setAccessible(true);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ignored) {
+            // MockBukkit
         }
     }
 
@@ -159,7 +159,6 @@ public final class StackUtils {
         try {
             return ChatColor.WHITE + (String) TO_STRING.invoke(GET_NAME.invoke(COPY.invoke(null, item)));
         } catch (Exception e) {
-            e.printStackTrace();
             return ChatColor.RED + "ERROR";
         }
     }
