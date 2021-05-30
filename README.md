@@ -38,6 +38,13 @@ Under your `build` section in your `pom.xml`, you should have the following:
                         <exclude>META-INF/*</exclude>
                     </excludes>
                 </filter>
+                <filter>
+                    <artifact>io.github.mooy1:InfinityLib</artifact>
+                    <excludes>
+                        <!-- Add unneeded packages here -->
+                        <exclude>**/infinitylib/EXAMPLE/**</exclude>
+                    </excludes>
+                </filter>
             </filters>
         </configuration>
         <executions>
@@ -69,7 +76,7 @@ Simply call `super.onEnable()` in your `onEnable()` method right after setting y
 BStats is shaded into this library, so no need to shade it yourself.
 
 ## Commands
-The `CommandManager` class allows you to easily add commands and tab completion for them.
+The `CommandUtils` class allows you to easily add commands and tab completion for them.
 It also adds a help and info command for you.
 
 Command functionality is created with the class `AbstractCommand`.
@@ -83,8 +90,6 @@ It can only be used for configs with a default config in your `resources` fold.
 Utility classes for `ItemStack`s.
 
 `StackUtils` contains many static utility methods for modifying and reading `ItemStack`s.
-
-`ShinyEnchant` is a useless enchant implementation which you can use to make items shiny.
 
 ## Persistence
 Implementation of a few new `PersistantDataType`s including `Block`s, `ItemStack`s, and `ItemStack` Arrays.
@@ -104,16 +109,3 @@ Utility methods for making lore and menus.
 
 ## Categories
 Slimefun Category classes like a better `MultiCategory` implementation.
-
-## Recipes
-Classes that should server as keys and values in `HashMap`s which allows for fast recipe lookup in machines.
-
-### Inputs
-The keys of a recipe `HashMap`.
-
-These implement `equals()` and `hashCode()`.
-
-### Outputs
-The values of a recipe `HashMap`.
-
-These are just holders for an output `ItemStack` and some form of input amount to be used for item consumption.

@@ -1,11 +1,12 @@
-package io.github.mooy1.infinitylib.recipes.small;
+package io.github.mooy1.infinitylib.smallrecipes;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import io.github.mooy1.infinitylib.items.FastItemStack;
 
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
 public final class SmallOutput<O> {
 
     @Getter

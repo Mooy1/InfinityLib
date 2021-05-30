@@ -1,4 +1,4 @@
-package io.github.mooy1.infinitylib.recipes.small;
+package io.github.mooy1.infinitylib.smallrecipes;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
