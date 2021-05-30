@@ -70,8 +70,6 @@ You should have a `private static` field for the instance of your plugin.
 
 Your instance field should have a short `public static` getter, something like `inst()`
 
-Simply call `super.onEnable()` in your `onEnable()` method right after setting your instance.
-
 ## BStats
 BStats is shaded into this library, so no need to shade it yourself.
 
