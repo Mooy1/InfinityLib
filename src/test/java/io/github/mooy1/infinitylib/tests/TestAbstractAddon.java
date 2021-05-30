@@ -10,12 +10,12 @@ import io.github.mooy1.infinitylib.configuration.AddonConfig;
 
 class TestAbstractAddon {
 
-    private static TestAddon addon;
+    private static MockAddon addon;
 
     @BeforeAll
     public static void load() {
         MockBukkit.mock();
-        addon = MockBukkit.load(TestAddon.class);
+        addon = MockBukkit.load(MockAddon.class);
     }
 
     @AfterAll
@@ -25,7 +25,7 @@ class TestAbstractAddon {
 
     @Test
     void testBugTrackerURL() {
-        Assertions.assertEquals("https://github.com/Mooy1/TestAddon/issues", addon.getBugTrackerURL());
+        Assertions.assertEquals("https://github.com/Mooy1/InfinityLib/issues", addon.getBugTrackerURL());
     }
 
     @Test

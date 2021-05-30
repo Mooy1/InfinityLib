@@ -1,9 +1,9 @@
-name: TestAddon
+name: MockAddon
 version: ${project.version}
 author: Mooy1
 website: https://github.com/Mooy1/InfinityLib
-description: A test addon
-main: io.github.mooy1.infinitylib.tests.TestAddon
+description: A mock addon
+main: io.github.mooy1.infinitylib.tests.MockAddon
 api-version: 1.16
 
 commands:

@@ -10,13 +10,13 @@ import io.github.mooy1.infinitylib.configuration.AddonConfig;
 
 class TestConfiguration {
 
-    private static TestAddon addon;
+    private static MockAddon addon;
     private static AddonConfig config;
 
     @BeforeAll
     public static void load() {
         MockBukkit.mock();
-        addon = MockBukkit.load(TestAddon.class);
+        addon = MockBukkit.load(MockAddon.class);
         config = new AddonConfig(addon, "test.yml");
     }
 

@@ -30,7 +30,7 @@ class TestPersistence {
     void testPersistentLocation() {
         MockBukkit.load(SlimefunPlugin.class);
 
-        NamespacedKey key = new NamespacedKey(MockBukkit.load(TestAddon.class), "key");
+        NamespacedKey key = new NamespacedKey(MockBukkit.load(MockAddon.class), "key");
         PersistentDataContainer container = new PersistentDataContainerMock();
 
         WorldMock world = new WorldMock();

@@ -11,17 +11,18 @@ import be.seeseemelk.mockbukkit.MockBukkit;
 import io.github.mooy1.infinitylib.AbstractAddon;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 
-class TestAddon extends AbstractAddon {
+class MockAddon extends AbstractAddon {
 
-    public TestAddon(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file) {
+    public MockAddon(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file) {
         super(loader, description, dataFolder, file);
+
         MockBukkit.load(SlimefunPlugin.class);
     }
 
     @Nonnull
     @Override
     protected String getGithubPath() {
-        return "Mooy1/TestAddon/master";
+        return "Mooy1/InfinityLib/master";
     }
 
 }

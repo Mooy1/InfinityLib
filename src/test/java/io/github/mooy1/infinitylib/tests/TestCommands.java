@@ -21,12 +21,12 @@ import io.github.mooy1.infinitylib.commands.CommandUtils;
 class TestCommands {
 
     private static ServerMock server;
-    private static TestAddon addon;
+    private static MockAddon addon;
 
     @BeforeAll
     public static void load() {
         server = MockBukkit.mock();
-        addon = MockBukkit.load(TestAddon.class);
+        addon = MockBukkit.load(MockAddon.class);
 
         List<AbstractCommand> commands = Collections.singletonList(new AbstractCommand("test", "test", true) {
 
