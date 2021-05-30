@@ -34,9 +34,6 @@ public final class ShapelessRecipe extends AbstractRecipe {
     protected boolean matches(@Nonnull AbstractRecipe input) {
         Map<String, Integer> inputMap = ((ShapelessRecipe) input).map;
 
-        System.out.println("RECIPE: " + this.map);
-        System.out.println("INPUT: " + inputMap);
-
         for (Map.Entry<String, Integer> entry : this.map.entrySet()) {
             if (inputMap.getOrDefault(entry.getKey(), 0) < entry.getValue()) {
                 return false;

@@ -1,6 +1,5 @@
 package io.github.mooy1.infinitylib.recipes;
 
-import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
@@ -27,8 +26,6 @@ public final class RecipeMap<O> {
 
     @Nullable
     public RecipeOutput<O> get(@Nonnull ItemStack[] rawInput) {
-        System.out.println("GETTING: " + Arrays.toString(rawInput));
-
         AbstractRecipe input = toRecipe(rawInput);
         O output = this.recipes.get(input);
         if (output != null) {
