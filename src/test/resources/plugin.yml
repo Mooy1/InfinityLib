@@ -1,5 +1,5 @@
 name: MockAddon
-version: ${project.version}
+version: Mock
 author: Mooy1
 website: https://github.com/Mooy1/InfinityLib
 description: A mock addon
