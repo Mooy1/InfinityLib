@@ -6,7 +6,6 @@ import java.util.logging.Level;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.annotation.OverridingMethodsMustInvokeSuper;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import org.bstats.bukkit.Metrics;
@@ -21,6 +20,7 @@ import org.bukkit.plugin.java.JavaPluginLoader;
 import io.github.mooy1.infinitylib.commands.AbstractCommand;
 import io.github.mooy1.infinitylib.commands.CommandUtils;
 import io.github.mooy1.infinitylib.configuration.AddonConfig;
+import io.github.thebusybiscuit.slimefun4.api.MinecraftVersion;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import me.mrCookieSlime.Slimefun.cscorelib2.updater.GitHubBuildsUpdater;
@@ -32,9 +32,10 @@ import me.mrCookieSlime.Slimefun.cscorelib2.updater.GitHubBuildsUpdater;
  */
 public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon {
 
-    private int globalTick;
-    private AddonConfig config;
     private final String bugTrackerURL = "https://github.com/" + getGithubPath().substring(0, getGithubPath().lastIndexOf('/')) + "/issues";
+
+    private AddonConfig config;
+    private int globalTick;
 
     /**
      * Main Constructor
@@ -52,11 +53,24 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
     }
 
     @Override
-    @OverridingMethodsMustInvokeSuper
-    public void onEnable() {
-
+    public final void onEnable() {
         // config
         this.config = new AddonConfig(this, "config.yml");
+
+        // global ticker
+        scheduleRepeatingSync(() -> this.globalTick++, SlimefunPlugin.getTickerTask().getTickRate());
+
+        // commands
+        List<AbstractCommand> subCommands = setupSubCommands();
+        if (subCommands != null) {
+            CommandUtils.setSubCommands(this, getCommandName(), setupSubCommands());
+        }
+
+        // Don't do metrics or auto updates in test environment
+        if (SlimefunPlugin.getMinecraftVersion() == MinecraftVersion.UNIT_TEST) {
+            onTestEnable();
+            return;
+        }
 
         // metrics
         Metrics metrics = setupMetrics();
@@ -86,14 +100,52 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
             }
         }
 
-        // global ticker
-        scheduleRepeatingSync(() -> this.globalTick++, SlimefunPlugin.getTickerTask().getTickRate());
-
-        // commands
-        List<AbstractCommand> subCommands = setupSubCommands();
-        if (subCommands != null) {
-            CommandUtils.setSubCommands(this, getCommandName(), setupSubCommands());
+        // Enable
+        try {
+            onAddonEnable();
+        } catch (Throwable e) {
+            runSync(() -> {
+                log(Level.SEVERE,
+                        "The following error has occurred during " + getName() + "'s startup!",
+                        "Not all items and features will be available because of this!",
+                        "Report this on Github or Discord and make sure to update Slimefun!"
+                );
+                e.printStackTrace();
+            });
         }
+    }
+
+    @Override
+    public final void onDisable() {
+        if (SlimefunPlugin.getMinecraftVersion() == MinecraftVersion.UNIT_TEST) {
+            onTestDisable();
+        } else {
+            onAddonDisable();
+        }
+    }
+
+    /**
+     * Called when enabled in a normal environment
+     */
+    protected abstract void onAddonEnable();
+
+    /**
+     * Called when enabled in a unit test environment
+     */
+    protected void onTestEnable() {
+        // For unit tests
+    }
+
+    /**
+     * Called when disabled in a normal environment
+     */
+    protected abstract void onAddonDisable();
+
+    /**
+     * Called when disabled in a unit test environment
+     */
+    protected void onTestDisable() {
+        // For unit tests
     }
 
     /**
@@ -164,6 +216,11 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
     @Override
     public final void saveConfig() {
         this.config.save();
+    }
+
+    @Override
+    public final void saveDefaultConfig() {
+        // Do nothing, its covered in onEnable()
     }
 
     public final NamespacedKey getKey(String s) {

@@ -1,5 +1,7 @@
 package io.github.mooy1.infinitylib.recipes;
 
+import javax.annotation.Nonnull;
+
 import io.github.mooy1.infinitylib.items.FastItemStack;
 
 public final class ShapedRecipe extends AbstractRecipe {
@@ -22,9 +24,9 @@ public final class ShapedRecipe extends AbstractRecipe {
     }
 
     @Override
-    protected boolean matches() {
-        FastItemStack[] inputArr = getRawInput();
-        FastItemStack[] recipeArr = getMatchingRecipe().getRawInput();
+    protected boolean matches(@Nonnull AbstractRecipe input) {
+        FastItemStack[] inputArr = input.getRawInput();
+        FastItemStack[] recipeArr = getRawInput();
         for (int i = 0 ; i < inputArr.length ; i++) {
             FastItemStack in = inputArr[i];
             FastItemStack re = recipeArr[i];
@@ -40,9 +42,9 @@ public final class ShapedRecipe extends AbstractRecipe {
     }
 
     @Override
-    protected void consume() {
-        FastItemStack[] inputArr = getRawInput();
-        FastItemStack[] recipeArr = getMatchingRecipe().getRawInput();
+    protected void consume(@Nonnull AbstractRecipe input) {
+        FastItemStack[] inputArr = input.getRawInput();
+        FastItemStack[] recipeArr = getRawInput();
         for (int i = 0 ; i < inputArr.length ; i++) {
             FastItemStack in = inputArr[i];
             if (in != null) {

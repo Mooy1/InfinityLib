@@ -3,6 +3,8 @@ package io.github.mooy1.infinitylib.recipes;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.Nonnull;
+
 import io.github.mooy1.infinitylib.items.FastItemStack;
 
 public final class ShapelessRecipe extends AbstractRecipe {
@@ -29,9 +31,14 @@ public final class ShapelessRecipe extends AbstractRecipe {
     }
 
     @Override
-    protected boolean matches() {
-        for (Map.Entry<String, Integer> entry : ((ShapelessRecipe) getMatchingRecipe()).map.entrySet()) {
-            if (this.map.getOrDefault(entry.getKey(), 0) < entry.getValue()) {
+    protected boolean matches(@Nonnull AbstractRecipe input) {
+        Map<String, Integer> inputMap = ((ShapelessRecipe) input).map;
+
+        System.out.println("RECIPE: " + this.map);
+        System.out.println("INPUT: " + inputMap);
+
+        for (Map.Entry<String, Integer> entry : this.map.entrySet()) {
+            if (inputMap.getOrDefault(entry.getKey(), 0) < entry.getValue()) {
                 return false;
             }
         }
@@ -39,11 +46,11 @@ public final class ShapelessRecipe extends AbstractRecipe {
     }
 
     @Override
-    protected void consume() {
-        for (Map.Entry<String, Integer> entry : ((ShapelessRecipe) getMatchingRecipe()).map.entrySet()) {
+    protected void consume(@Nonnull AbstractRecipe input) {
+        for (Map.Entry<String, Integer> entry : this.map.entrySet()) {
             int rem = entry.getValue();
 
-            for (FastItemStack item : getRawInput()) {
+            for (FastItemStack item : input.getRawInput()) {
 
                 if (item != null && item.getIDorType().equals(entry.getKey())) {
 

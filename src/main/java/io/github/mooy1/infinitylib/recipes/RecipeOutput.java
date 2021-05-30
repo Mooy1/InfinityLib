@@ -18,11 +18,11 @@ public final class RecipeOutput<O> {
     }
 
     public FastItemStack[] getRecipeInput() {
-        return this.input.getMatchingRecipe().getRawInput();
+        return this.input.getRecipeInput();
     }
 
     public void consumeInput() {
-        this.input.consume();
+        this.input.consumeMatchingRecipe();
     }
 
     public O getAndConsume() {

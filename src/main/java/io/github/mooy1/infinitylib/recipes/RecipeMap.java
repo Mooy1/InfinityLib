@@ -39,7 +39,7 @@ public final class RecipeMap<O> {
         AbstractRecipe input = toRecipe(rawInput);
         O output = this.recipes.get(input);
         if (output != null) {
-            input.consume();
+            input.consumeMatchingRecipe();
             return output;
         }
         return null;

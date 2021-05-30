@@ -19,6 +19,16 @@ class MockAddon extends AbstractAddon {
         MockBukkit.load(SlimefunPlugin.class);
     }
 
+    @Override
+    public void onAddonEnable() {
+
+    }
+
+    @Override
+    protected void onAddonDisable() {
+
+    }
+
     @Nonnull
     @Override
     protected String getGithubPath() {

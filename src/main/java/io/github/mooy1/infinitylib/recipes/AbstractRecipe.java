@@ -1,5 +1,7 @@
 package io.github.mooy1.infinitylib.recipes;
 
+import javax.annotation.Nonnull;
+
 import lombok.RequiredArgsConstructor;
 
 import io.github.mooy1.infinitylib.items.FastItemStack;
@@ -11,27 +13,30 @@ public abstract class AbstractRecipe {
     private AbstractRecipe matchingRecipe;
 
     @Override
-    public abstract int hashCode();
-
-    protected abstract boolean matches();
-
-    protected abstract void consume();
-
-    @Override
     public final boolean equals(Object recipe) {
         if (recipe instanceof AbstractRecipe) {
-            this.matchingRecipe = (AbstractRecipe) recipe;
-            return matches();
+            return (this.matchingRecipe = (AbstractRecipe) recipe).matches(this);
         }
         return false;
     }
 
-    public final FastItemStack[] getRawInput() {
+    @Override
+    public abstract int hashCode();
+
+    protected abstract boolean matches(@Nonnull AbstractRecipe input);
+
+    protected abstract void consume(@Nonnull AbstractRecipe input);
+
+    protected final FastItemStack[] getRawInput() {
         return this.rawInput;
     }
 
-    public final AbstractRecipe getMatchingRecipe() {
-        return this.matchingRecipe;
+    final FastItemStack[] getRecipeInput() {
+        return this.matchingRecipe.rawInput;
+    }
+
+    final void consumeMatchingRecipe() {
+        this.matchingRecipe.consume(this);
     }
 
 }
