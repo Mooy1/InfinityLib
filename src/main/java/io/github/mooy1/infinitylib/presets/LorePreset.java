@@ -17,11 +17,11 @@ import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 public final class LorePreset {
 
     private static final DecimalFormat FORMAT = new DecimalFormat("###,###,###,###,###,###.#");
-    private static final int TPS = 20 / SlimefunPlugin.getTickerTask().getTickRate();
+    private static final double TPS = 20D / SlimefunPlugin.getTickerTask().getTickRate();
 
     @Nonnull
     public static String energyPerSecond(int energy) {
-        return "&8\u21E8 &e\u26A1 &7" + format(energy * TPS) + " J/s";
+        return "&8\u21E8 &e\u26A1 &7" + formatEnergy(energy) + " J/s";
     }
 
     @Nonnull
@@ -37,6 +37,11 @@ public final class LorePreset {
     @Nonnull
     public static String speed(int speed) {
         return "&8\u21E8 &b\u26A1 &7Speed: &b" + speed + 'x';
+    }
+
+    @Nonnull
+    public static String formatEnergy(int energy) {
+        return FORMAT.format(energy * TPS);
     }
 
     @Nonnull
