@@ -59,9 +59,7 @@ Under your `build` section in your `pom.xml`, you should have the following:
 </plugins>
 ```
 
-Below is the main features you can use:
-
-## AbstractAddon
+# AbstractAddon
 You should extend `AbstractAddon` in your main class.
 
 It adds multiple utility methods as well as implementing auto updating, bstats, and some boilerplate configuration stuff.
@@ -69,6 +67,8 @@ It adds multiple utility methods as well as implementing auto updating, bstats, 
 You should have a `private static` field for the instance of your plugin.
 
 Your instance field should have a short `public static` getter, something like `inst()`
+
+# Packages
 
 ## BStats
 BStats is shaded into this library, so no need to shade it yourself.
@@ -85,9 +85,9 @@ It will also add an auto update field and comment to the config.yml.
 It can only be used for configs with a default config in your `resources` fold.
 
 ## Items
-Utility classes for `ItemStack`s.
-
 `StackUtils` contains many static utility methods for modifying and reading `ItemStack`s.
+`FastItemStack` wraps an `ItemStack` and caches the `ItemMeta` and slimefun ID.
+All changes to the `FastItemStack` are present on the `ItemStack`
 
 ## Persistence
 Implementation of a few new `PersistantDataType`s including `Block`s, `ItemStack`s, and `ItemStack` Arrays.
@@ -107,3 +107,7 @@ Utility methods for making lore and menus.
 
 ## Categories
 Slimefun Category classes like a better `MultiCategory` implementation.
+
+# Recipes
+Contains `RecipeMap`, `RecipeOutput`, and a `ShapelessRecipe` and `ShapedRecipe` to be used in the `RecipeMap`.
+`RecipeMap` is a fast way to do recipe lookup rather than looping and checking every recipe.

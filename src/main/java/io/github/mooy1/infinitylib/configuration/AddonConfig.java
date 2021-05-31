@@ -27,8 +27,6 @@ import io.github.mooy1.infinitylib.AbstractAddon;
  */
 public final class AddonConfig extends YamlConfiguration {
 
-    public static final String AUTO_UPDATE_COMMENT = "\n# This must be enabled to receive support!\n";
-
     private final Map<String, String> comments = new HashMap<>();
     private final AbstractAddon addon;
     private final File file;
@@ -40,7 +38,7 @@ public final class AddonConfig extends YamlConfiguration {
         reload();
     }
 
-    public int getInt(String path, int min, int max) {
+    public int getInt(@Nonnull String path, int min, int max) {
         int val = getInt(path);
         if (val < min || val > max) {
             set(path, val = getDefaults().getInt(path));
@@ -48,7 +46,7 @@ public final class AddonConfig extends YamlConfiguration {
         return val;
     }
 
-    public double getDouble(String path, double min, double max) {
+    public double getDouble(@Nonnull String path, double min, double max) {
         double val = getDouble(path);
         if (val < min || val > max) {
             set(path, val = getDefaults().getDouble(path));
@@ -182,15 +180,6 @@ public final class AddonConfig extends YamlConfiguration {
         } catch (InvalidConfigurationException e) {
             this.addon.log(Level.SEVERE, "There was an error loading the default config of '" + this.file.getPath() + "', report this to the developers!");
             return;
-        }
-
-        // Auto Update
-        if (name.equals("config.yml")) {
-            String path = this.addon.getAutoUpdatePath();
-            if (path != null) {
-                defaults.set(path, true);
-                this.comments.put(path, AUTO_UPDATE_COMMENT);
-            }
         }
 
         setDefaults(defaults);

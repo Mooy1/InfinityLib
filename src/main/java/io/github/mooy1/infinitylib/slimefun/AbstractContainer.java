@@ -14,11 +14,9 @@ import org.bukkit.inventory.ItemStack;
 import io.github.thebusybiscuit.slimefun4.core.handlers.BlockBreakHandler;
 import io.github.thebusybiscuit.slimefun4.core.handlers.BlockPlaceHandler;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
-import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.Slimefun.Lists.RecipeType;
 import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
-import me.mrCookieSlime.Slimefun.Objects.handlers.BlockTicker;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
@@ -27,9 +25,6 @@ import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 import me.mrCookieSlime.Slimefun.cscorelib2.protection.ProtectableAction;
 
-/**
- * A slimefun item with a menu and ticker
- */
 public abstract class AbstractContainer extends SlimefunItem {
 
     public AbstractContainer(Category category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
@@ -44,7 +39,8 @@ public abstract class AbstractContainer extends SlimefunItem {
 
             @Override
             public boolean canOpen(@Nonnull Block b, @Nonnull Player p) {
-                return AbstractContainer.canOpen(b, p);
+                return p.hasPermission("slimefun.inventory.bypass") || SlimefunPlugin.getProtectionManager()
+                        .hasPermission(p, b.getLocation(), ProtectableAction.INTERACT_BLOCK);
             }
 
             @Override
@@ -64,23 +60,6 @@ public abstract class AbstractContainer extends SlimefunItem {
 
         };
 
-        addItemHandler(new BlockTicker() {
-
-            @Override
-            public boolean isSynchronized() {
-                return synchronised();
-            }
-
-            @Override
-            public void tick(Block b, SlimefunItem item, Config data) {
-                BlockMenu menu = BlockStorage.getInventory(b);
-                if (menu != null) {
-                    AbstractContainer.this.tick(menu, b, data);
-                }
-            }
-
-        });
-
         addItemHandler(new BlockBreakHandler(false, false) {
 
             @Override
@@ -91,9 +70,7 @@ public abstract class AbstractContainer extends SlimefunItem {
                 }
             }
 
-        });
-
-        addItemHandler(new BlockPlaceHandler(false) {
+        }, new BlockPlaceHandler(false) {
 
             @Override
             public void onPlayerPlace(@Nonnull BlockPlaceEvent e) {
@@ -101,10 +78,7 @@ public abstract class AbstractContainer extends SlimefunItem {
             }
 
         });
-
     }
-
-    protected abstract void tick(@Nonnull BlockMenu menu, @Nonnull Block b, @Nonnull Config data);
 
     protected abstract void setupMenu(@Nonnull BlockMenuPreset preset);
 
@@ -121,15 +95,6 @@ public abstract class AbstractContainer extends SlimefunItem {
 
     protected void onPlace(@Nonnull BlockPlaceEvent e, @Nonnull Block b) {
 
-    }
-
-    protected boolean synchronised() {
-        return false;
-    }
-
-    public static boolean canOpen(@Nonnull Block b, @Nonnull Player p) {
-        return p.hasPermission("slimefun.inventory.bypass") || SlimefunPlugin.getProtectionManager()
-                .hasPermission(p, b.getLocation(), ProtectableAction.INTERACT_BLOCK);
     }
 
 }
