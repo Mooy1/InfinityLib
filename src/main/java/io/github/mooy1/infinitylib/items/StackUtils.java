@@ -181,7 +181,7 @@ public final class StackUtils {
         return getInternalName(item);
     }
 
-    public static ItemStack[] from(@Nonnull DirtyChestMenu menu, int[] slots) {
+    public static ItemStack[] arrayFrom(@Nonnull DirtyChestMenu menu, int[] slots) {
         ItemStack[] arr = new ItemStack[slots.length];
         for (int i = 0 ; i < arr.length ; i++) {
             arr[i] = menu.getItemInSlot(slots[i]);
