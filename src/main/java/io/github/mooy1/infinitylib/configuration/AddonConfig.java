@@ -74,6 +74,7 @@ public final class AddonConfig extends YamlConfiguration {
                 e.printStackTrace();
             }
         }
+        save();
     }
 
     @Nonnull
