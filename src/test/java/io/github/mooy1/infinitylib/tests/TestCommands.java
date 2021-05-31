@@ -42,7 +42,7 @@ class TestCommands {
 
         });
 
-        CommandUtils.setSubCommands(addon, "test", commands);
+        CommandUtils.addSubCommands(addon, "test", commands);
     }
 
     @AfterAll
@@ -66,7 +66,7 @@ class TestCommands {
     @Test
     void testNoSuchCommand() {
         Assertions.assertThrows(NullPointerException.class,
-                () -> CommandUtils.setSubCommands(addon, "fail", new ArrayList<>()));
+                () -> CommandUtils.addSubCommands(addon, "fail", new ArrayList<>()));
     }
 
 }

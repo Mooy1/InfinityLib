@@ -20,7 +20,7 @@ import io.github.mooy1.infinitylib.AbstractAddon;
 
 public final class CommandUtils implements TabExecutor {
 
-    public static void setSubCommands(AbstractAddon addon, String commandName, List<AbstractCommand> subCommands) {
+    public static void addSubCommands(AbstractAddon addon, String commandName, List<AbstractCommand> subCommands) {
         PluginCommand command = Objects.requireNonNull(addon.getCommand(commandName),
                 () -> "No such command '" + commandName + "'!");
 

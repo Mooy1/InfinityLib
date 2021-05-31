@@ -54,31 +54,19 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
 
     @Override
     public final void onEnable() {
-        // config
-        this.config = new AddonConfig(this, "config.yml");
-
-        // global ticker
-        scheduleRepeatingSync(() -> this.globalTick++, SlimefunPlugin.getTickerTask().getTickRate());
-
-        // commands
-        List<AbstractCommand> subCommands = setupSubCommands();
-        if (subCommands != null) {
-            CommandUtils.setSubCommands(this, getCommandName(), setupSubCommands());
-        }
-
-        // Don't do metrics or auto updates in test environment
         if (SlimefunPlugin.getMinecraftVersion() == MinecraftVersion.UNIT_TEST) {
             onTestEnable();
             return;
         }
 
-        // metrics
-        Metrics metrics = setupMetrics();
+        // config
+        this.config = new AddonConfig(this, "config.yml");
 
         // check auto update
+        Boolean autoUpdate = null;
         if (getAutoUpdatePath() != null && getDescription().getVersion().startsWith("DEV - ")) {
 
-            boolean autoUpdate = this.config.getBoolean(getAutoUpdatePath());
+            autoUpdate = this.config.getBoolean(getAutoUpdatePath());
 
             // update
             if (autoUpdate) {
@@ -92,12 +80,22 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
                         "#######################################"
                 ));
             }
+        }
 
-            // add to metrics
-            if (metrics != null) {
-                String autoUpdates = String.valueOf(autoUpdate);
-                metrics.addCustomChart(new SimplePie("auto_updates", () -> autoUpdates));
-            }
+        // global ticker
+        scheduleRepeatingSync(() -> this.globalTick++, SlimefunPlugin.getTickerTask().getTickRate());
+
+        // commands
+        List<AbstractCommand> subCommands = setupSubCommands();
+        if (subCommands != null) {
+            CommandUtils.addSubCommands(this, getCommandName(), subCommands);
+        }
+
+        // metrics
+        Metrics metrics = setupMetrics();
+        if (metrics != null && autoUpdate != null) {
+            String autoUpdates = autoUpdate.toString();
+            metrics.addCustomChart(new SimplePie("auto_updates", () -> autoUpdates));
         }
 
         // Enable

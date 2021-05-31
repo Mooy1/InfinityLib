@@ -64,14 +64,10 @@ public final class AddonConfig extends YamlConfiguration {
     }
 
     public void reload() {
-        if (this.file.exists()) {
-            try {
-                load(this.file);
-            } catch (InvalidConfigurationException e) {
-                this.addon.log(Level.SEVERE, "There was an error loading the config '" + this.file.getPath() + "', resetting to default!");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        if (this.file.exists()) try {
+            load(this.file);
+        } catch (Exception e) {
+            this.addon.log(Level.SEVERE, "There was an error loading the config '" + this.file.getPath() + "', resetting to default!");
         }
         save();
     }
@@ -131,59 +127,15 @@ public final class AddonConfig extends YamlConfiguration {
     }
 
     private void loadDefaults(String name) {
+        YamlConfiguration defaults = new YamlConfiguration();
         InputStream stream = this.addon.getResource(name);
+
         if (stream == null) {
             this.addon.log(Level.SEVERE, "No default config for " + name + "! Report this to the developers!");
-            return;
-        }
-
-        BufferedReader input = new BufferedReader(new InputStreamReader(stream, Charsets.UTF_8));
-        StringBuilder yamlBuilder = new StringBuilder();
-        StringBuilder commentBuilder = new StringBuilder();
-        PathBuilder pathBuilder = new PathBuilder();
-
-        // Load comments
-        try {
-            String line;
-
-            while ((line = input.readLine()) != null) {
-                yamlBuilder.append(line).append('\n');
-
-                if (StringUtils.isBlank(line)) {
-                    continue;
-                }
-
-                if (line.contains("#")) {
-                    commentBuilder.append(line).append('\n');
-                    continue;
-                }
-
-                if (commentBuilder.length() == 0) {
-                    pathBuilder.append(line);
-                    continue;
-                }
-
-                // add comment and reset
-                commentBuilder.insert(0, '\n');
-                this.comments.put(pathBuilder.append(line).build(), commentBuilder.toString());
-                commentBuilder = new StringBuilder();
-            }
-
-            input.close();
-
+        } else try {
+            defaults.loadFromString(readDefaults(stream));
         } catch (Exception e) {
-            e.printStackTrace();
-            return;
-        }
-
-        YamlConfiguration defaults = new YamlConfiguration();
-
-        // load values
-        try {
-            defaults.loadFromString(yamlBuilder.toString());
-        } catch (InvalidConfigurationException e) {
             this.addon.log(Level.SEVERE, "There was an error loading the default config of '" + this.file.getPath() + "', report this to the developers!");
-            return;
         }
 
         // Add an auto update thing just in case
@@ -195,6 +147,41 @@ public final class AddonConfig extends YamlConfiguration {
         }
 
         setDefaults(defaults);
+    }
+
+    private String readDefaults(@Nonnull InputStream inputStream) throws IOException {
+        BufferedReader input = new BufferedReader(new InputStreamReader(inputStream, Charsets.UTF_8));
+        StringBuilder yamlBuilder = new StringBuilder();
+        StringBuilder commentBuilder = new StringBuilder();
+        PathBuilder pathBuilder = new PathBuilder();
+        String line;
+
+        while ((line = input.readLine()) != null) {
+            yamlBuilder.append(line).append('\n');
+
+            if (StringUtils.isBlank(line)) {
+                continue;
+            }
+
+            if (line.contains("#")) {
+                commentBuilder.append(line).append('\n');
+                continue;
+            }
+
+            if (commentBuilder.length() == 0) {
+                pathBuilder.append(line);
+                continue;
+            }
+
+            // add comment and reset
+            commentBuilder.insert(0, '\n');
+            this.comments.put(pathBuilder.append(line).build(), commentBuilder.toString());
+            commentBuilder = new StringBuilder();
+        }
+
+        input.close();
+
+        return yamlBuilder.toString();
     }
 
 }
