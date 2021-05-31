@@ -27,8 +27,7 @@ class TestConfiguration {
 
     @Test
     void testNoDefaults() {
-        Assertions.assertThrows(NullPointerException.class,
-                () -> new AddonConfig(addon, "fail.yml"));
+        Assertions.assertThrows(NullPointerException.class, () -> new AddonConfig(addon, "fail.yml"));
     }
 
     @Test

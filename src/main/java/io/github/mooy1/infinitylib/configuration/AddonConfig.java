@@ -3,6 +3,7 @@ package io.github.mooy1.infinitylib.configuration;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,7 +32,7 @@ public final class AddonConfig extends YamlConfiguration {
     private final AbstractAddon addon;
     private final File file;
 
-    public AddonConfig(AbstractAddon addon, String name) {
+    public AddonConfig(@Nonnull AbstractAddon addon, @Nonnull String name) {
         this.file = new File(addon.getDataFolder(), name);
         this.addon = addon;
         loadDefaults(name);
@@ -75,6 +76,11 @@ public final class AddonConfig extends YamlConfiguration {
         save();
     }
 
+    @Nullable
+    public String getComment(String key) {
+        return this.comments.get(key);
+    }
+
     @Nonnull
     @Override
     public Configuration getDefaults() {
@@ -85,11 +91,6 @@ public final class AddonConfig extends YamlConfiguration {
     @Override
     protected String buildHeader() {
         return "";
-    }
-
-    @Nullable
-    public String getComment(String key) {
-        return this.comments.get(key);
     }
 
     @Override
@@ -130,10 +131,13 @@ public final class AddonConfig extends YamlConfiguration {
     }
 
     private void loadDefaults(String name) {
-        BufferedReader input = new BufferedReader(new InputStreamReader(
-                Objects.requireNonNull(this.addon.getResource(name),
-                        () -> "No default config for " + name + "!"), Charsets.UTF_8));
+        InputStream stream = this.addon.getResource(name);
+        if (stream == null) {
+            this.addon.log(Level.SEVERE, "No default config for " + name + "! Report this to the developers!");
+            return;
+        }
 
+        BufferedReader input = new BufferedReader(new InputStreamReader(stream, Charsets.UTF_8));
         StringBuilder yamlBuilder = new StringBuilder();
         StringBuilder commentBuilder = new StringBuilder();
         PathBuilder pathBuilder = new PathBuilder();
@@ -180,6 +184,14 @@ public final class AddonConfig extends YamlConfiguration {
         } catch (InvalidConfigurationException e) {
             this.addon.log(Level.SEVERE, "There was an error loading the default config of '" + this.file.getPath() + "', report this to the developers!");
             return;
+        }
+
+        // Add an auto update thing just in case
+        if (name.equals("config.yml")) {
+            String path = this.addon.getAutoUpdatePath();
+            if (path != null) {
+                defaults.set(path, true);
+            }
         }
 
         setDefaults(defaults);
