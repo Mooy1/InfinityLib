@@ -20,6 +20,7 @@ import org.bukkit.persistence.PersistentDataType;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
+import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.cscorelib2.chat.ChatColors;
 import me.mrCookieSlime.Slimefun.cscorelib2.inventory.ItemUtils;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
@@ -178,6 +179,14 @@ public final class StackUtils {
             }
         }
         return getInternalName(item);
+    }
+
+    public static ItemStack[] from(@Nonnull DirtyChestMenu menu, int[] slots) {
+        ItemStack[] arr = new ItemStack[slots.length];
+        for (int i = 0 ; i < arr.length ; i++) {
+            arr[i] = menu.getItemInSlot(slots[i]);
+        }
+        return arr;
     }
 
 }

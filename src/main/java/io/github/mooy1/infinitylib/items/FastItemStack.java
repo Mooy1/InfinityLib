@@ -143,6 +143,7 @@ public final class FastItemStack extends ItemStack {
 
     @Nonnull
     @Override
+    @SuppressWarnings("MethodDoesntCallSuperMethod")
     public ItemStack clone() {
         return this.original.clone();
     }
