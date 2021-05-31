@@ -12,7 +12,7 @@ import io.github.mooy1.infinitylib.recipes.RecipeMap;
 import io.github.mooy1.infinitylib.recipes.RecipeOutput;
 import io.github.mooy1.infinitylib.recipes.ShapedRecipe;
 import io.github.mooy1.infinitylib.recipes.ShapelessRecipe;
-import io.github.mooy1.infinitylib.smallrecipes.SmallRecipeMap;
+import io.github.mooy1.infinitylib.recipes.small.SmallRecipeMap;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 

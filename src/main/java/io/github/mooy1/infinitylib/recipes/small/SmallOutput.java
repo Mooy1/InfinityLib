@@ -1,4 +1,4 @@
-package io.github.mooy1.infinitylib.smallrecipes;
+package io.github.mooy1.infinitylib.recipes.small;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

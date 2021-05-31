@@ -33,14 +33,14 @@ public abstract class AbstractTickingContainer extends AbstractContainer {
             public void tick(Block b, SlimefunItem item, Config data) {
                 BlockMenu menu = BlockStorage.getInventory(b);
                 if (menu != null) {
-                    AbstractTickingContainer.this.tick(menu, b, data);
+                    AbstractTickingContainer.this.tick(menu, b);
                 }
             }
 
         });
     }
 
-    protected abstract void tick(@Nonnull BlockMenu menu, @Nonnull Block b, @Nonnull Config data);
+    protected abstract void tick(@Nonnull BlockMenu menu, @Nonnull Block b);
 
     protected boolean synchronised() {
         return false;
