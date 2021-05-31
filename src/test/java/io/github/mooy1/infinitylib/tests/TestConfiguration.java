@@ -26,11 +26,6 @@ class TestConfiguration {
     }
 
     @Test
-    void testNoDefaults() {
-        Assertions.assertThrows(NullPointerException.class, () -> new AddonConfig(addon, "fail.yml"));
-    }
-
-    @Test
     void testComments() {
         Assertions.assertEquals("\n# test\n", config.getComment("test"));
         Assertions.assertEquals("\n  # test\n", config.getComment("section.test"));
@@ -40,6 +35,13 @@ class TestConfiguration {
     void testSave() {
         String correct = "\n# test\ntest: test\nsection:\n\n  # test\n  test: test\n";
         Assertions.assertEquals(correct, config.saveToString());
+    }
+
+    @Test
+    void testNoDefaults() {
+        AddonConfig fail = new AddonConfig(addon, "fail.yml");
+        Assertions.assertNotNull(fail.getDefaults());
+        Assertions.assertEquals(fail.getDefaults().getKeys(true).size(), 0);
     }
 
 }
