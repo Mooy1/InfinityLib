@@ -7,7 +7,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
 
 import javax.annotation.Nonnull;
 
@@ -21,8 +20,11 @@ import io.github.mooy1.infinitylib.AbstractAddon;
 public final class CommandUtils implements TabExecutor {
 
     public static void addSubCommands(AbstractAddon addon, String commandName, List<AbstractCommand> subCommands) {
-        PluginCommand command = Objects.requireNonNull(addon.getCommand(commandName),
-                () -> "No such command '" + commandName + "'!");
+        PluginCommand command = addon.getCommand(commandName);
+
+        if (command == null) {
+            throw new IllegalArgumentException("No such command '" + commandName + "'! Report this to the developers!");
+        }
 
         subCommands = new ArrayList<>(subCommands);
         subCommands.add(new HelpCommand(subCommands, command));

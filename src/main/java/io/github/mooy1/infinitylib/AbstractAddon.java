@@ -30,7 +30,6 @@ import me.mrCookieSlime.Slimefun.cscorelib2.updater.GitHubBuildsUpdater;
  *
  * @author Mooy1
  */
-@SuppressWarnings("unused")
 public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon {
 
     private final String bugTrackerURL = "https://github.com/" + getGithubPath().substring(0, getGithubPath().lastIndexOf('/')) + "/issues";
@@ -55,6 +54,10 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
 
     @Override
     public final void onEnable() {
+        if (isEnabled()) {
+            throw new IllegalStateException("Do not call super.onEnable()!");
+        }
+
         // config
         this.config = new AddonConfig(this, "config.yml");
 
