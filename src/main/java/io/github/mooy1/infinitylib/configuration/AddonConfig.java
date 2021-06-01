@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -13,7 +14,6 @@ import java.util.logging.Level;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import org.apache.commons.codec.Charsets;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -151,7 +151,7 @@ public final class AddonConfig extends YamlConfiguration {
     }
 
     private String readDefaults(@Nonnull InputStream inputStream) throws IOException {
-        BufferedReader input = new BufferedReader(new InputStreamReader(inputStream, Charsets.UTF_8));
+        BufferedReader input = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
         StringBuilder yamlBuilder = new StringBuilder();
         StringBuilder commentBuilder = new StringBuilder("\n");
         PathBuilder pathBuilder = new PathBuilder();
