@@ -3,9 +3,9 @@ version: Mock
 author: Mooy1
 website: https://github.com/Mooy1/InfinityLib
 description: A mock addon
-main: io.github.mooy1.infinitylib.tests.MockAddon
+main: io.github.mooy1.infinitylib.mocks.MockAddon
 api-version: 1.16
 
 commands:
-  test:
-    description: Test command
+  mockaddon:
+    description: Mock Command

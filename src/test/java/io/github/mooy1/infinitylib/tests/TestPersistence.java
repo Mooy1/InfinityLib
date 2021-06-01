@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.WorldMock;
 import be.seeseemelk.mockbukkit.persistence.PersistentDataContainerMock;
+import io.github.mooy1.infinitylib.mocks.MockAddon;
 import io.github.mooy1.infinitylib.persistence.PersistenceUtils;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 

@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
 import io.github.mooy1.infinitylib.configuration.AddonConfig;
+import io.github.mooy1.infinitylib.mocks.MockAddon;
 
 class TestConfiguration {
 

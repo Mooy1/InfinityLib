@@ -30,6 +30,7 @@ import me.mrCookieSlime.Slimefun.cscorelib2.updater.GitHubBuildsUpdater;
  *
  * @author Mooy1
  */
+@SuppressWarnings("unused")
 public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon {
 
     private final String bugTrackerURL = "https://github.com/" + getGithubPath().substring(0, getGithubPath().lastIndexOf('/')) + "/issues";
@@ -54,14 +55,39 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
 
     @Override
     public final void onEnable() {
-        if (SlimefunPlugin.getMinecraftVersion() == MinecraftVersion.UNIT_TEST) {
-            onTestEnable();
-            return;
-        }
-
         // config
         this.config = new AddonConfig(this, "config.yml");
 
+        // Don't do auto updates and metrics in tests
+        if (SlimefunPlugin.getMinecraftVersion() != MinecraftVersion.UNIT_TEST) {
+            autoUpdateAndMetrics();
+        }
+
+        // global ticker
+        scheduleRepeatingSync(() -> this.globalTick++, SlimefunPlugin.getTickerTask().getTickRate());
+
+        // commands
+        List<AbstractCommand> subCommands = setupSubCommands();
+        if (subCommands != null) {
+            CommandUtils.addSubCommands(this, getCommandName(), subCommands);
+        }
+
+        // Enable
+        try {
+            enable();
+        } catch (Throwable e) {
+            runSync(() -> {
+                log(Level.SEVERE,
+                        "The following error has occurred during " + getName() + "'s startup!",
+                        "Not all items and features will be available because of this!",
+                        "Report this on Github or Discord and make sure to update Slimefun!"
+                );
+                e.printStackTrace();
+            });
+        }
+    }
+
+    private void autoUpdateAndMetrics() {
         // check auto update
         Boolean autoUpdate = null;
         if (getAutoUpdatePath() != null && getDescription().getVersion().startsWith("DEV - ")) {
@@ -82,69 +108,23 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
             }
         }
 
-        // global ticker
-        scheduleRepeatingSync(() -> this.globalTick++, SlimefunPlugin.getTickerTask().getTickRate());
-
-        // commands
-        List<AbstractCommand> subCommands = setupSubCommands();
-        if (subCommands != null) {
-            CommandUtils.addSubCommands(this, getCommandName(), subCommands);
-        }
-
         // metrics
         Metrics metrics = setupMetrics();
         if (metrics != null && autoUpdate != null) {
             String autoUpdates = autoUpdate.toString();
             metrics.addCustomChart(new SimplePie("auto_updates", () -> autoUpdates));
         }
-
-        // Enable
-        try {
-            onAddonEnable();
-        } catch (Throwable e) {
-            runSync(() -> {
-                log(Level.SEVERE,
-                        "The following error has occurred during " + getName() + "'s startup!",
-                        "Not all items and features will be available because of this!",
-                        "Report this on Github or Discord and make sure to update Slimefun!"
-                );
-                e.printStackTrace();
-            });
-        }
     }
 
     @Override
     public final void onDisable() {
-        if (SlimefunPlugin.getMinecraftVersion() == MinecraftVersion.UNIT_TEST) {
-            onTestDisable();
-        } else {
-            onAddonDisable();
-        }
+        Bukkit.getScheduler().cancelTasks(this);
+        disable();
     }
 
-    /**
-     * Called when enabled in a normal environment
-     */
-    protected abstract void onAddonEnable();
+    protected abstract void enable();
 
-    /**
-     * Called when enabled in a unit test environment
-     */
-    protected void onTestEnable() {
-        // For unit tests
-    }
-
-    /**
-     * Called when disabled in a normal environment
-     */
-    protected abstract void onAddonDisable();
-
-    /**
-     * Called when disabled in a unit test environment
-     */
-    protected void onTestDisable() {
-        // For unit tests
-    }
+    protected abstract void disable();
 
     /**
      * return the auto update path in the format user/repo/branch, for example Mooy1/InfinityExpansion/master
@@ -180,9 +160,7 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
      * Override this if you have a different path, or null for no auto updates
      */
     @Nullable
-    public String getAutoUpdatePath() {
-        return "auto-update";
-    }
+    public abstract String getAutoUpdatePath();
 
     public final int getGlobalTick() {
         return this.globalTick;
