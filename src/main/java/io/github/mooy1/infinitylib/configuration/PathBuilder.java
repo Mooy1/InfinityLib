@@ -7,8 +7,7 @@ import javax.annotation.Nonnull;
 
 final class PathBuilder {
 
-    private final List<Integer> dots = new ArrayList<>();
-    private StringBuilder path = new StringBuilder();
+    List<String> path = new ArrayList<>();
 
     @Nonnull
     PathBuilder append(@Nonnull String line) {
@@ -23,28 +22,34 @@ final class PathBuilder {
         }
 
         String key = line.substring(indent, line.lastIndexOf(':'));
-        indent >>= 1;
+        indent /= 2;
 
         // change path
+        int size = this.path.size();
         if (indent == 0) {
-            this.path = new StringBuilder(key);
-            if (this.dots.size() != 0) {
-                this.dots.clear();
+            this.path.clear();
+        } else if (indent < size) {
+            if (indent + 1 == size) {
+                this.path.remove(indent);
+            } else {
+                this.path.subList(indent, size).clear();
             }
-        } else if (indent <= this.dots.size()) {
-            this.path.replace(this.dots.get(indent - 1), this.path.length(), key);
-        } else {
-            this.path.append('.');
-            this.dots.add(this.path.length());
-            this.path.append(key);
         }
+        this.path.add(key);
 
         return this;
     }
 
     @Nonnull
     String build() {
-        return this.path.toString();
+        StringBuilder builder = new StringBuilder();
+        if (this.path.size() > 0) {
+            builder.append(this.path.get(0));
+            for (int i = 1 ; i < this.path.size() ; i++) {
+                builder.append(this.path.get(i)).append('.');
+            }
+        }
+        return builder.toString();
     }
 
 }
