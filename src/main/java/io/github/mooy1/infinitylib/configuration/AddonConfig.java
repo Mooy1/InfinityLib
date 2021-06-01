@@ -103,7 +103,7 @@ public final class AddonConfig extends YamlConfiguration {
     @Nonnull
     @Override
     public String saveToString() {
-        options().copyDefaults(true).copyHeader(false);
+        options().copyDefaults(true).copyHeader(false).indent(2);
         String string = super.saveToString();
 
         String[] lines = string.split("\n");
@@ -135,7 +135,9 @@ public final class AddonConfig extends YamlConfiguration {
         } else try {
             defaults.loadFromString(readDefaults(stream));
         } catch (Exception e) {
-            this.addon.log(Level.SEVERE, "There was an error loading the default config of '" + this.file.getPath() + "', report this to the developers!");
+            this.addon.log(Level.SEVERE, "An " + e.getClass().getSimpleName() +
+                    " occurred while loading the default config of '" + name + "', report it to the developers!");
+            e.printStackTrace();
         }
 
         // Add an auto update thing just in case

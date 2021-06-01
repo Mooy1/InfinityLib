@@ -42,7 +42,6 @@ public final class MenuPreset {
     public static final ItemStack LOADING = new CustomItem(
             Material.RED_STAINED_GLASS_PANE, "&cLoading..."
     );
-
     public static final int INPUT = 10;
     public static final int[] INPUT_BORDER = {
             0, 1, 2, 9, 11, 18, 19, 20
