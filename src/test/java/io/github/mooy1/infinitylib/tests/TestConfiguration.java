@@ -33,7 +33,7 @@ class TestConfiguration {
 
     @Test
     void testSave() {
-        String correct = "\n# test\ntest: test\nsection:\n\n  # test\n  test: test\n";
+        String correct = "\n# test\ntest: test\n\nsection:\n\n  # test\n  test: test\n";
         Assertions.assertEquals(correct, config.saveToString());
     }
 
