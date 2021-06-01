@@ -97,7 +97,6 @@ public final class AddonConfig extends YamlConfiguration {
                 set(key, null);
             }
         }
-        save();
     }
 
     @Nonnull
@@ -154,7 +153,7 @@ public final class AddonConfig extends YamlConfiguration {
     private String readDefaults(@Nonnull InputStream inputStream) throws IOException {
         BufferedReader input = new BufferedReader(new InputStreamReader(inputStream, Charsets.UTF_8));
         StringBuilder yamlBuilder = new StringBuilder();
-        StringBuilder commentBuilder = new StringBuilder();
+        StringBuilder commentBuilder = new StringBuilder("\n");
         PathBuilder pathBuilder = new PathBuilder();
         String line;
 
@@ -162,23 +161,23 @@ public final class AddonConfig extends YamlConfiguration {
             yamlBuilder.append(line).append('\n');
 
             if (StringUtils.isBlank(line)) {
+                // Skip
                 continue;
             }
 
             if (line.contains("#")) {
+                // Add to comment of next path
                 commentBuilder.append(line).append('\n');
                 continue;
             }
 
-            if (commentBuilder.length() == 0) {
-                pathBuilder.append(line);
-                continue;
-            }
+            pathBuilder.append(line);
 
-            // add comment and reset
-            commentBuilder.insert(0, '\n');
-            this.comments.put(pathBuilder.append(line).build(), commentBuilder.toString());
-            commentBuilder = new StringBuilder();
+            if (commentBuilder.length() != 1) {
+                // Add the comment to the path
+                this.comments.put(pathBuilder.build(), commentBuilder.toString());
+                commentBuilder = new StringBuilder("\n");
+            }
         }
 
         input.close();

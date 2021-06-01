@@ -46,7 +46,7 @@ final class PathBuilder {
         if (this.path.size() > 0) {
             builder.append(this.path.get(0));
             for (int i = 1 ; i < this.path.size() ; i++) {
-                builder.append(this.path.get(i)).append('.');
+                builder.append('.').append(this.path.get(i));
             }
         }
         return builder.toString();
