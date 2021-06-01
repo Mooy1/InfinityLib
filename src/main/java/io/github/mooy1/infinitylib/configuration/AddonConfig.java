@@ -174,9 +174,12 @@ public final class AddonConfig extends YamlConfiguration {
             pathBuilder.append(line);
 
             if (commentBuilder.length() != 1) {
-                // Add the comment to the path
+                // Add the comment to the path and clear
                 this.comments.put(pathBuilder.build(), commentBuilder.toString());
                 commentBuilder = new StringBuilder("\n");
+            } else if (pathBuilder.inMainSection()) {
+                // The main section should always have spaces between keys
+                this.comments.put(pathBuilder.build(), "\n");
             }
         }
 

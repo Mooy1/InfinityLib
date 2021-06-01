@@ -40,6 +40,10 @@ final class PathBuilder {
         return this;
     }
 
+    boolean inMainSection() {
+        return this.path.size() == 1;
+    }
+
     @Nonnull
     String build() {
         StringBuilder builder = new StringBuilder();
