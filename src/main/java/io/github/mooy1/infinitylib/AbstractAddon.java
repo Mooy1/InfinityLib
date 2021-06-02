@@ -66,12 +66,6 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
         // global ticker
         scheduleRepeatingSync(() -> this.globalTick++, SlimefunPlugin.getTickerTask().getTickRate());
 
-        // commands
-        List<AbstractCommand> subCommands = setupSubCommands();
-        if (subCommands != null) {
-            CommandUtils.addSubCommands(this, getCommandName(), subCommands);
-        }
-
         // Enable
         try {
             enable();
@@ -84,6 +78,12 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
                 );
                 e.printStackTrace();
             });
+        }
+
+        // commands
+        List<AbstractCommand> subCommands = setupSubCommands();
+        if (subCommands != null) {
+            CommandUtils.addSubCommands(this, getCommandName(), subCommands);
         }
     }
 
