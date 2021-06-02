@@ -17,6 +17,9 @@ import org.bukkit.command.TabExecutor;
 
 import io.github.mooy1.infinitylib.AbstractAddon;
 
+/**
+ * Allows you to register sub commands to a plugin command
+ */
 public final class CommandUtils implements TabExecutor {
 
     public static void addSubCommands(AbstractAddon addon, String commandName, List<AbstractCommand> subCommands) {

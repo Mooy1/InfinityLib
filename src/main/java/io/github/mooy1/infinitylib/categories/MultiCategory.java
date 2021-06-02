@@ -23,7 +23,7 @@ import me.mrCookieSlime.Slimefun.Objects.Category;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 
 /**
- * A better multi category
+ * A multi category which can hold flex categories and other multi categories
  *
  * @author Mooy1
  */
