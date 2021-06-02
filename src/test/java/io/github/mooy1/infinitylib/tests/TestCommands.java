@@ -48,7 +48,7 @@ class TestCommands {
 
     @Test
     void testNoSuchCommand() {
-        Assertions.assertThrows(NullPointerException.class,
+        Assertions.assertThrows(IllegalArgumentException.class,
                 () -> CommandUtils.addSubCommands(addon, "fail", new ArrayList<>()));
     }
 

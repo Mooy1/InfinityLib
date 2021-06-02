@@ -54,9 +54,6 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
 
     @Override
     public final void onEnable() {
-        if (isEnabled()) {
-            throw new IllegalStateException("Do not call super.onEnable()!");
-        }
 
         // config
         this.config = new AddonConfig(this, "config.yml");
