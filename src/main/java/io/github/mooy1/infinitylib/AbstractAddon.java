@@ -71,12 +71,13 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
             enable();
         } catch (Throwable e) {
             runSync(() -> {
-                log(Level.SEVERE,
+                log(Level.SEVERE, "#################################################################",
                         "The following error has occurred during " + getName() + "'s startup!",
                         "Not all items and features will be available because of this!",
                         "Report this on Github or Discord and make sure to update Slimefun!"
                 );
                 e.printStackTrace();
+                log(Level.SEVERE, "#################################################################");
             });
         }
 
