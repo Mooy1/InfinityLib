@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
+import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 
 class TestRecipeMap {
@@ -16,6 +17,7 @@ class TestRecipeMap {
     @BeforeAll
     public static void load() {
         MockBukkit.mock();
+        MockBukkit.load(SlimefunPlugin.class);
     }
 
     @AfterAll
