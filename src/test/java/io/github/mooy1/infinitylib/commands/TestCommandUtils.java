@@ -1,4 +1,4 @@
-package io.github.mooy1.infinitylib.tests;
+package io.github.mooy1.infinitylib.commands;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,11 +11,9 @@ import org.junit.jupiter.api.Test;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.ServerMock;
-import io.github.mooy1.infinitylib.commands.CommandUtils;
-import io.github.mooy1.infinitylib.mocks.MockAddon;
-import io.github.mooy1.infinitylib.mocks.MockCommand;
+import io.github.mooy1.infinitylib.MockAddon;
 
-class TestCommands {
+class TestCommandUtils {
 
     private static ServerMock server;
     private static MockAddon addon;
@@ -34,7 +32,7 @@ class TestCommands {
     }
 
     @Test
-    void testCommands() {
+    void testCommandExecute() {
         server.execute("mockaddon", server.addPlayer(), "test").assertFailed();
         server.executeConsole("mockaddon", "test").assertResponse("test");
     }

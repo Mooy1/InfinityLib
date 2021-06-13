@@ -5,17 +5,19 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 
-import io.github.mooy1.infinitylib.items.FastItemStack;
+import org.bukkit.inventory.ItemStack;
+
+import io.github.mooy1.infinitylib.items.StackUtils;
 
 public final class ShapelessRecipe extends AbstractRecipe {
 
     private final Map<String, Integer> map = new HashMap<>(8);
 
-    public ShapelessRecipe(FastItemStack[] input) {
+    public ShapelessRecipe(ItemStack[] input) {
         super(input);
-        for (FastItemStack item : input) {
+        for (ItemStack item : input) {
             if (item != null) {
-                this.map.compute(item.getIDorType(),
+                this.map.compute(StackUtils.getIDorType(item),
                         (k, v) -> v == null ? item.getAmount() : v + item.getAmount());
             }
         }
@@ -47,9 +49,9 @@ public final class ShapelessRecipe extends AbstractRecipe {
         for (Map.Entry<String, Integer> entry : this.map.entrySet()) {
             int rem = entry.getValue();
 
-            for (FastItemStack item : input.getRawInput()) {
+            for (ItemStack item : input.getRawInput()) {
 
-                if (item != null && item.getIDorType().equals(entry.getKey())) {
+                if (item != null && StackUtils.getIDorType(item).equals(entry.getKey())) {
 
                     int amt = item.getAmount();
 

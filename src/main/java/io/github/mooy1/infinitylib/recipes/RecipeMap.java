@@ -11,22 +11,20 @@ import lombok.RequiredArgsConstructor;
 
 import org.bukkit.inventory.ItemStack;
 
-import io.github.mooy1.infinitylib.items.FastItemStack;
-
 @RequiredArgsConstructor
 public final class RecipeMap<O> {
 
-    private final Function<FastItemStack[], ? extends AbstractRecipe> recipeConstructor;
+    private final Function<ItemStack[], ? extends AbstractRecipe> recipeConstructor;
 
     private final Map<AbstractRecipe, O> recipes = new ConcurrentHashMap<>();
 
     public void put(@Nonnull ItemStack[] rawInput, @Nonnull O output) {
-        this.recipes.put(toRecipe(rawInput), output);
+        this.recipes.put(this.recipeConstructor.apply(rawInput), output);
     }
 
     @Nullable
     public RecipeOutput<O> get(@Nonnull ItemStack[] rawInput) {
-        AbstractRecipe input = toRecipe(rawInput);
+        AbstractRecipe input = this.recipeConstructor.apply(rawInput);
         O output = this.recipes.get(input);
         if (output != null) {
             return new RecipeOutput<>(output, input);
@@ -36,7 +34,7 @@ public final class RecipeMap<O> {
 
     @Nullable
     public O getAndConsume(@Nonnull ItemStack[] rawInput) {
-        AbstractRecipe input = toRecipe(rawInput);
+        AbstractRecipe input = this.recipeConstructor.apply(rawInput);
         O output = this.recipes.get(input);
         if (output != null) {
             input.consumeMatchingRecipe();
@@ -47,12 +45,7 @@ public final class RecipeMap<O> {
 
     @Nullable
     public O getNoConsume(@Nonnull ItemStack[] rawInput) {
-        return this.recipes.get(toRecipe(rawInput));
-    }
-
-    @Nonnull
-    private AbstractRecipe toRecipe(@Nonnull ItemStack[] rawInput) {
-        return this.recipeConstructor.apply(FastItemStack.fastArray(rawInput));
+        return this.recipes.get(this.recipeConstructor.apply(rawInput));
     }
 
 }

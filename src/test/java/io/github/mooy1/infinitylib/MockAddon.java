@@ -1,4 +1,4 @@
-package io.github.mooy1.infinitylib.mocks;
+package io.github.mooy1.infinitylib;
 
 import java.io.File;
 import java.util.Collections;
@@ -7,16 +7,21 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import lombok.Getter;
+
 import org.bstats.bukkit.Metrics;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPluginLoader;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
-import io.github.mooy1.infinitylib.AbstractAddon;
 import io.github.mooy1.infinitylib.commands.AbstractCommand;
+import io.github.mooy1.infinitylib.commands.MockCommand;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 
 public final class MockAddon extends AbstractAddon {
+
+    @Getter
+    private boolean metricsCreated;
 
     public MockAddon(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file) {
         super(loader, description, dataFolder, file);
@@ -26,7 +31,12 @@ public final class MockAddon extends AbstractAddon {
 
     @Override
     protected void enable() {
-        throw new Error();
+        throw new Error() {
+            @Override
+            public void printStackTrace() {
+                // Don't need to print anything since its a test
+            }
+        };
     }
 
     @Override
@@ -40,10 +50,11 @@ public final class MockAddon extends AbstractAddon {
         return Collections.singletonList(new MockCommand());
     }
 
-    @Nonnull
+    @Nullable
     @Override
     protected Metrics setupMetrics() {
-        return new MockMetrics(this, -1);
+        this.metricsCreated = true;
+        return null;
     }
 
     @Nullable

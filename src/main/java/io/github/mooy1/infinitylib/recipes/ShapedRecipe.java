@@ -2,20 +2,22 @@ package io.github.mooy1.infinitylib.recipes;
 
 import javax.annotation.Nonnull;
 
-import io.github.mooy1.infinitylib.items.FastItemStack;
+import org.bukkit.inventory.ItemStack;
+
+import io.github.mooy1.infinitylib.items.StackUtils;
 
 public final class ShapedRecipe extends AbstractRecipe {
 
-    public ShapedRecipe(FastItemStack[] input) {
+    public ShapedRecipe(ItemStack[] input) {
         super(input);
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        for (FastItemStack item : getRawInput()) {
+        for (ItemStack item : getRawInput()) {
             if (item != null) {
-                hash += item.getIDorType().hashCode();
+                hash += StackUtils.getIDorType(item).hashCode();
             } else {
                 hash += 1;
             }
@@ -25,16 +27,17 @@ public final class ShapedRecipe extends AbstractRecipe {
 
     @Override
     protected boolean matches(@Nonnull AbstractRecipe input) {
-        FastItemStack[] inputArr = input.getRawInput();
-        FastItemStack[] recipeArr = getRawInput();
+        ItemStack[] inputArr = input.getRawInput();
+        ItemStack[] recipeArr = getRawInput();
         for (int i = 0 ; i < inputArr.length ; i++) {
-            FastItemStack in = inputArr[i];
-            FastItemStack re = recipeArr[i];
+            ItemStack in = inputArr[i];
+            ItemStack re = recipeArr[i];
             if (in == null) {
                 if (re != null) {
                     return false;
                 }
-            } else if (re != null && (in.getAmount() < re.getAmount() || !in.fastEquals(re))) {
+            } else if (re != null && (in.getAmount() < re.getAmount()
+                    || !StackUtils.getIDorType(in).equals(StackUtils.getIDorType(re)))) {
                 return false;
             }
         }
@@ -43,10 +46,10 @@ public final class ShapedRecipe extends AbstractRecipe {
 
     @Override
     protected void consume(@Nonnull AbstractRecipe input) {
-        FastItemStack[] inputArr = input.getRawInput();
-        FastItemStack[] recipeArr = getRawInput();
+        ItemStack[] inputArr = input.getRawInput();
+        ItemStack[] recipeArr = getRawInput();
         for (int i = 0 ; i < inputArr.length ; i++) {
-            FastItemStack in = inputArr[i];
+            ItemStack in = inputArr[i];
             if (in != null) {
                 in.setAmount(in.getAmount() - recipeArr[i].getAmount());
             }

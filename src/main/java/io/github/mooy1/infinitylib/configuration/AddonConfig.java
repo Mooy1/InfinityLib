@@ -20,6 +20,8 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import io.github.mooy1.infinitylib.AbstractAddon;
+import io.github.thebusybiscuit.slimefun4.api.MinecraftVersion;
+import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 
 /**
  * A config which is able to save all of it's comments and has some additional utility methods
@@ -36,7 +38,6 @@ public final class AddonConfig extends YamlConfiguration {
         this.file = new File(addon.getDataFolder(), name);
         this.addon = addon;
         loadDefaults(name);
-        reload();
     }
 
     public int getInt(@Nonnull String path, int min, int max) {
@@ -63,6 +64,13 @@ public final class AddonConfig extends YamlConfiguration {
         }
     }
 
+    @Override
+    public void save(@Nonnull File file) throws IOException {
+        if (SlimefunPlugin.getMinecraftVersion() != MinecraftVersion.UNIT_TEST) {
+            super.save(file);
+        }
+    }
+
     public void reload() {
         if (this.file.exists()) try {
             load(this.file);
@@ -73,7 +81,7 @@ public final class AddonConfig extends YamlConfiguration {
     }
 
     @Nullable
-    public String getComment(String key) {
+    String getComment(String key) {
         return this.comments.get(key);
     }
 
@@ -148,6 +156,7 @@ public final class AddonConfig extends YamlConfiguration {
         }
 
         setDefaults(defaults);
+        reload();
     }
 
     private String readDefaults(@Nonnull InputStream inputStream) throws IOException {

@@ -86,8 +86,6 @@ It can only be used for configs with a default config in your `resources` fold.
 
 ## Items
 `StackUtils` contains many static utility methods for modifying and reading `ItemStack`s.
-`FastItemStack` wraps an `ItemStack` and caches the `ItemMeta` and slimefun ID.
-All changes to the `FastItemStack` are present on the `ItemStack`
 
 ## Persistence
 Implementation of a few new `PersistantDataType`s including `Block`s, `ItemStack`s, and `ItemStack` Arrays.

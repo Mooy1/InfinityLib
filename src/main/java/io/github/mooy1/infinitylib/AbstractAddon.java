@@ -3,6 +3,7 @@ package io.github.mooy1.infinitylib;
 import java.io.File;
 import java.util.List;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -14,6 +15,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginDescriptionFile;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.JavaPluginLoader;
 
@@ -32,8 +34,7 @@ import me.mrCookieSlime.Slimefun.cscorelib2.updater.GitHubBuildsUpdater;
  */
 public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon {
 
-    private final String bugTrackerURL = "https://github.com/" + getGithubPath().substring(0, getGithubPath().lastIndexOf('/')) + "/issues";
-
+    private String bugTrackerURL;
     private AddonConfig config;
     private int globalTick;
 
@@ -54,6 +55,9 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
 
     @Override
     public final void onEnable() {
+        // bug track url
+        String userSlashRepo = getGithubPath().substring(0, getGithubPath().lastIndexOf('/'));
+        this.bugTrackerURL = "https://github.com/" + userSlashRepo + "/issues";
 
         // config
         this.config = new AddonConfig(this, "config.yml");
@@ -65,6 +69,12 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
 
         // global ticker
         scheduleRepeatingSync(() -> this.globalTick++, SlimefunPlugin.getTickerTask().getTickRate());
+
+        // commands
+        List<AbstractCommand> subCommands = setupSubCommands();
+        if (subCommands != null) {
+            CommandUtils.addSubCommands(this, getCommandName(), subCommands);
+        }
 
         // Enable
         try {
@@ -79,12 +89,6 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
                 e.printStackTrace();
                 log(Level.SEVERE, "#################################################################");
             });
-        }
-
-        // commands
-        List<AbstractCommand> subCommands = setupSubCommands();
-        if (subCommands != null) {
-            CommandUtils.addSubCommands(this, getCommandName(), subCommands);
         }
     }
 
@@ -220,14 +224,18 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
     }
 
     public final void log(Level level, String... messages) {
-        for (String msg : messages) {
-            getLogger().log(level, msg);
+        if (SlimefunPlugin.getMinecraftVersion() != MinecraftVersion.UNIT_TEST) {
+            Logger logger = getLogger();
+            for (String msg : messages) {
+                logger.log(level, msg);
+            }
         }
     }
 
     public final void registerListener(Listener... listeners) {
+        PluginManager manager = Bukkit.getPluginManager();
         for (Listener listener : listeners) {
-            Bukkit.getPluginManager().registerEvents(listener, this);
+            manager.registerEvents(listener, this);
         }
     }
 

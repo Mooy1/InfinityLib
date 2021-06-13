@@ -3,7 +3,7 @@ version: Mock
 author: Mooy1
 website: https://github.com/Mooy1/InfinityLib
 description: A mock addon
-main: io.github.mooy1.infinitylib.mocks.MockAddon
+main: io.github.mooy1.infinitylib.MockAddon
 api-version: 1.16
 
 commands:

@@ -1,16 +1,21 @@
 package io.github.mooy1.infinitylib.items;
 
+import java.lang.invoke.LambdaMetafactory;
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.function.Function;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import lombok.experimental.UtilityClass;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
@@ -24,6 +29,7 @@ import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.cscorelib2.chat.ChatColors;
 import me.mrCookieSlime.Slimefun.cscorelib2.inventory.ItemUtils;
 import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
+import me.mrCookieSlime.Slimefun.cscorelib2.reflection.ReflectionUtils;
 
 /**
  * Collection of utils for modifying ItemStacks and getting their ids
@@ -34,6 +40,10 @@ import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 public final class StackUtils {
 
     private static final NamespacedKey KEY = SlimefunPlugin.getItemDataService().getKey();
+    private static final Function<Object, String> TO_STRING;
+    private static final Function<Object, Object> GET_NAME;
+    private static final Function<ItemStack, Object> COPY;
+    private static final Field ITEM_META;
 
     @Nonnull
     public static String getIDorType(@Nonnull ItemStack item) {
@@ -59,9 +69,6 @@ public final class StackUtils {
     public static String getID(@Nonnull ItemStack item) {
         if (item instanceof SlimefunItemStack) {
             return ((SlimefunItemStack) item).getItemId();
-        }
-        if (item instanceof FastItemStack) {
-            return ((FastItemStack) item).getID();
         }
         if (!item.hasItemMeta()) {
             return null;
@@ -89,6 +96,14 @@ public final class StackUtils {
         }
     }
 
+    public static ItemStack[] arrayFrom(@Nonnull DirtyChestMenu menu, int[] slots) {
+        ItemStack[] arr = new ItemStack[slots.length];
+        for (int i = 0 ; i < arr.length ; i++) {
+            arr[i] = menu.getItemInSlot(slots[i]);
+        }
+        return arr;
+    }
+
     @Nullable
     public static ItemStack getItemByIDorType(@Nonnull String id) {
         return getItemByIDorType(id, 1);
@@ -111,15 +126,12 @@ public final class StackUtils {
 
     @Nonnull
     public static ItemStack addLore(@Nonnull ItemStack item, @Nonnull String... lines) {
+
         ItemMeta meta = item.getItemMeta();
         List<String> lore;
 
         if (meta.hasLore()) {
             lore = meta.getLore();
-
-            if (lore == null) {
-                lore = new ArrayList<>();
-            }
         } else {
             lore = new ArrayList<>();
         }
@@ -133,60 +145,105 @@ public final class StackUtils {
         return item;
     }
 
-    private static Method COPY;
-    private static Method GET_NAME;
-    private static Method TO_STRING;
+    @Nonnull
+    public static ItemStack addLoreNew(@Nonnull ItemStack item, @Nonnull String... lines) {
+        boolean hasMeta = item.hasItemMeta();
+        ItemMeta meta;
 
-    static {
+        if (hasMeta) {
+            meta = getLiveMeta(item);
+        } else {
+            meta = item.getItemMeta();
+        }
+
+        List<String> lore;
+
+        if (meta.hasLore()) {
+            lore = meta.getLore();
+        } else {
+            lore = new ArrayList<>();
+        }
+
+        for (String line : lines) {
+            lore.add(ChatColors.color(line));
+        }
+
+        meta.setLore(lore);
+
+        if (!hasMeta) {
+            item.setItemMeta(meta);
+        }
+        return item;
+    }
+
+    public static ItemMeta getLiveMeta(@Nonnull ItemStack stack) {
         try {
-            Field field = ItemUtils.class.getDeclaredField("copy");
-            field.setAccessible(true);
-            COPY = (Method) field.get(null);
-            COPY.setAccessible(true);
-            field = ItemUtils.class.getDeclaredField("getName");
-            field.setAccessible(true);
-            GET_NAME = (Method) field.get(null);
-            GET_NAME.setAccessible(true);
-            field = ItemUtils.class.getDeclaredField("toString");
-            field.setAccessible(true);
-            TO_STRING = (Method) field.get(null);
-            TO_STRING.setAccessible(true);
-        } catch (Exception ignored) {
-            // MockBukkit
+            return (ItemMeta) ITEM_META.get(stack);
+        } catch (IllegalAccessException e) {
+            return Objects.requireNonNull(stack.getItemMeta());
         }
     }
 
-    public static String getInternalName(@Nonnull ItemStack item) {
-        try {
-            return ChatColor.WHITE + (String) TO_STRING.invoke(GET_NAME.invoke(COPY.invoke(null, item)));
-        } catch (Exception e) {
-            return ChatColor.RED + "ERROR";
-        }
+    public static String getDisplayName(@Nonnull ItemStack item) {
+        return TO_STRING.apply(GET_NAME.apply(COPY.apply(item)));
     }
 
     public static String getDisplayName(@Nonnull ItemStack item, @Nonnull ItemMeta meta) {
         if (meta.hasDisplayName()) {
             return meta.getDisplayName();
         }
-        return getInternalName(item);
+        return getDisplayName(item);
     }
 
-    public static String getDisplayName(@Nonnull ItemStack item) {
-        if (item.hasItemMeta()) {
-            ItemMeta meta = item.getItemMeta();
-            if (meta.hasDisplayName()) {
-                return meta.getDisplayName();
-            }
+    static {
+        Function<Object, String> toString;
+        Function<Object, Object> getName;
+        Function<ItemStack, Object> copy;
+        if (ReflectionUtils.isUnitTestEnvironment()) {
+            toString = obj -> "TESTING";
+            getName = obj -> obj;
+            copy = obj -> obj;
+        } else try {
+            toString = lambdaItemUtilsMethod("toString");
+            getName = lambdaItemUtilsMethod("getName");
+            copy = lambdaItemUtilsMethod("copy");
+        } catch (Throwable e) {
+            e.printStackTrace();
+            toString = obj -> "ERROR";
+            getName = obj -> obj;
+            copy = obj -> obj;
         }
-        return getInternalName(item);
+        TO_STRING = toString;
+        GET_NAME = getName;
+        COPY = copy;
+
+        Field itemMeta;
+        try {
+            itemMeta = ItemStack.class.getDeclaredField("meta");
+            itemMeta.setAccessible(true);
+        } catch (Exception e) {
+            itemMeta = null;
+            e.printStackTrace();
+        }
+        ITEM_META = itemMeta;
     }
 
-    public static ItemStack[] arrayFrom(@Nonnull DirtyChestMenu menu, int[] slots) {
-        ItemStack[] arr = new ItemStack[slots.length];
-        for (int i = 0 ; i < arr.length ; i++) {
-            arr[i] = menu.getItemInSlot(slots[i]);
-        }
-        return arr;
+    @SuppressWarnings("unchecked")
+    private static <T, V> Function<T, V> lambdaItemUtilsMethod(String name) throws Throwable {
+        // Reflect to access the reflected method
+        Field field = ItemUtils.class.getDeclaredField(name);
+        field.setAccessible(true);
+        Method method = (Method) field.get(null);
+        method.setAccessible(true);
+
+        // Create lambda from method
+        MethodHandles.Lookup lookup = MethodHandles.lookup();
+        MethodHandle handle = lookup.unreflect(method);
+        return (Function<T, V>) LambdaMetafactory.metafactory(
+                lookup, "apply", MethodType.methodType(Function.class),
+                MethodType.methodType(Object.class, Object.class),
+                handle, handle.type()
+        ).getTarget().invokeExact();
     }
 
 }

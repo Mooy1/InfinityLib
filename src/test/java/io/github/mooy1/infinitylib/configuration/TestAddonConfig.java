@@ -1,4 +1,4 @@
-package io.github.mooy1.infinitylib.tests;
+package io.github.mooy1.infinitylib.configuration;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
@@ -6,10 +6,9 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
-import io.github.mooy1.infinitylib.configuration.AddonConfig;
-import io.github.mooy1.infinitylib.mocks.MockAddon;
+import io.github.mooy1.infinitylib.MockAddon;
 
-class TestConfiguration {
+class TestAddonConfig {
 
     private static MockAddon addon;
     private static AddonConfig config;

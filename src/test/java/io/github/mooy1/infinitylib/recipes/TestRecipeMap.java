@@ -1,4 +1,4 @@
-package io.github.mooy1.infinitylib.tests;
+package io.github.mooy1.infinitylib.recipes;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -8,15 +8,9 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
-import io.github.mooy1.infinitylib.recipes.RecipeMap;
-import io.github.mooy1.infinitylib.recipes.RecipeOutput;
-import io.github.mooy1.infinitylib.recipes.ShapedRecipe;
-import io.github.mooy1.infinitylib.recipes.ShapelessRecipe;
-import io.github.mooy1.infinitylib.recipes.small.SmallRecipeMap;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
-import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 
-class TestRecipes {
+class TestRecipeMap {
 
     @BeforeAll
     public static void load() {
@@ -26,22 +20,6 @@ class TestRecipes {
     @AfterAll
     public static void unload() {
         MockBukkit.unmock();
-    }
-
-    @Test
-    void testSmallRecipe() {
-        ItemStack out = new ItemStack(Material.DIAMOND);
-        ItemStack first = SlimefunItems.SILVER_INGOT.clone();
-        ItemStack second = new SlimefunItemStack(SlimefunItems.SILVER_INGOT, 2);
-        ItemStack third = new ItemStack(Material.STONE);
-
-        SmallRecipeMap<ItemStack> map = new SmallRecipeMap<>();
-        map.put(first, out);
-
-        Assertions.assertSame(out, map.getNoConsume(first));
-        Assertions.assertSame(out, map.getAndConsume(second));
-        Assertions.assertNull(map.get(third));
-        Assertions.assertEquals(1, second.getAmount());
     }
 
     @Test

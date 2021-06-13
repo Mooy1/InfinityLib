@@ -1,4 +1,4 @@
-package io.github.mooy1.infinitylib.tests;
+package io.github.mooy1.infinitylib;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
@@ -7,8 +7,6 @@ import org.junit.jupiter.api.Test;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.ServerMock;
-import io.github.mooy1.infinitylib.mocks.MockAddon;
-import io.github.mooy1.infinitylib.mocks.MockMetrics;
 
 class TestAbstractAddon {
 
@@ -27,8 +25,13 @@ class TestAbstractAddon {
     }
 
     @Test
-    void testCatchEnableThrowable() {
-        Assertions.assertDoesNotThrow(() -> MockBukkit.load(MockAddon.class));
+    void testEnableErrorCaught() {
+        Assertions.assertDoesNotThrow(() -> addon.onEnable());
+    }
+
+    @Test
+    void testMetricsNotCreated() {
+        Assertions.assertFalse(addon.isMetricsCreated());
     }
 
     @Test
@@ -42,7 +45,7 @@ class TestAbstractAddon {
     }
 
     @Test
-    void testConfig() {
+    void testMainConfig() {
         Assertions.assertNotNull(addon.getConfig());
     }
 
@@ -50,11 +53,6 @@ class TestAbstractAddon {
     void testGlobalTick() {
         server.getScheduler().performOneTick();
         Assertions.assertEquals(1, addon.getGlobalTick());
-    }
-
-    @Test
-    void testNoMetrics() {
-        Assertions.assertFalse(MockMetrics.created);
     }
 
 }

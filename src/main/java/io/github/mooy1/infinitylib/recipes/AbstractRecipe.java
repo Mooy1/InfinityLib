@@ -4,12 +4,12 @@ import javax.annotation.Nonnull;
 
 import lombok.RequiredArgsConstructor;
 
-import io.github.mooy1.infinitylib.items.FastItemStack;
+import org.bukkit.inventory.ItemStack;
 
 @RequiredArgsConstructor
 public abstract class AbstractRecipe {
 
-    private final FastItemStack[] rawInput;
+    private final ItemStack[] rawInput;
     private AbstractRecipe matchingRecipe;
 
     @Override
@@ -27,11 +27,11 @@ public abstract class AbstractRecipe {
 
     protected abstract void consume(@Nonnull AbstractRecipe input);
 
-    protected final FastItemStack[] getRawInput() {
+    protected final ItemStack[] getRawInput() {
         return this.rawInput;
     }
 
-    final FastItemStack[] getRecipeInput() {
+    final ItemStack[] getRecipeInput() {
         return this.matchingRecipe.rawInput;
     }
 
