@@ -20,6 +20,7 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
@@ -73,7 +74,7 @@ public final class StackUtils {
         if (!item.hasItemMeta()) {
             return null;
         }
-        return getID(item.getItemMeta());
+        return getID(getLiveMeta(item));
     }
 
     @Nullable
@@ -96,6 +97,7 @@ public final class StackUtils {
         }
     }
 
+    @Nonnull
     public static ItemStack[] arrayFrom(@Nonnull DirtyChestMenu menu, int[] slots) {
         ItemStack[] arr = new ItemStack[slots.length];
         for (int i = 0 ; i < arr.length ; i++) {
@@ -126,27 +128,6 @@ public final class StackUtils {
 
     @Nonnull
     public static ItemStack addLore(@Nonnull ItemStack item, @Nonnull String... lines) {
-
-        ItemMeta meta = item.getItemMeta();
-        List<String> lore;
-
-        if (meta.hasLore()) {
-            lore = meta.getLore();
-        } else {
-            lore = new ArrayList<>();
-        }
-
-        for (String line : lines) {
-            lore.add(ChatColors.color(line));
-        }
-
-        meta.setLore(lore);
-        item.setItemMeta(meta);
-        return item;
-    }
-
-    @Nonnull
-    public static ItemStack addLoreNew(@Nonnull ItemStack item, @Nonnull String... lines) {
         boolean hasMeta = item.hasItemMeta();
         ItemMeta meta;
 
@@ -176,11 +157,15 @@ public final class StackUtils {
         return item;
     }
 
+    public static PersistentDataContainer getLivePDC(@Nonnull ItemStack stack) {
+        return getLiveMeta(stack).getPersistentDataContainer();
+    }
+
     public static ItemMeta getLiveMeta(@Nonnull ItemStack stack) {
         try {
             return (ItemMeta) ITEM_META.get(stack);
         } catch (IllegalAccessException e) {
-            return Objects.requireNonNull(stack.getItemMeta());
+            return stack.getItemMeta();
         }
     }
 

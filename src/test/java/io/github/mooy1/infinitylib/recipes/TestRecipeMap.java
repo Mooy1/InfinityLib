@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
+import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 
 class TestRecipeMap {
 
@@ -24,18 +25,20 @@ class TestRecipeMap {
 
     @Test
     void testShapedRecipe() {
+        ItemStack stone = new ItemStack(Material.STONE);
+        stone.setItemMeta(stone.getItemMeta());
         ItemStack out = new ItemStack(Material.DIAMOND);
         ItemStack[] first = new ItemStack[] {
-                new ItemStack(Material.STONE), SlimefunItems.SILVER_INGOT.clone()
+                stone, SlimefunItems.SILVER_INGOT.clone()
         };
         ItemStack[] second = new ItemStack[] {
-                new ItemStack(Material.STONE), null
+                stone, null
         };
         ItemStack[] third = new ItemStack[] {
-                new ItemStack(Material.STONE, 2), SlimefunItems.SILVER_INGOT.clone()
+                new CustomItem(stone, 2), SlimefunItems.SILVER_INGOT.clone()
         };
         ItemStack[] fourth = new ItemStack[] {
-                new ItemStack(Material.STONE, 2), SlimefunItems.SILVER_INGOT.clone()
+                new CustomItem(stone, 2), SlimefunItems.SILVER_INGOT.clone()
         };
 
         RecipeMap<ItemStack> map = new RecipeMap<>(ShapedRecipe::new);
@@ -57,18 +60,20 @@ class TestRecipeMap {
 
     @Test
     void testShapelessRecipe() {
+        ItemStack stone = new ItemStack(Material.STONE);
+        stone.setItemMeta(stone.getItemMeta());
         ItemStack out = new ItemStack(Material.DIAMOND);
         ItemStack[] first = new ItemStack[] {
-                new ItemStack(Material.STONE), SlimefunItems.SILVER_INGOT.clone()
+                stone, SlimefunItems.SILVER_INGOT.clone()
         };
         ItemStack[] second = new ItemStack[] {
-                new ItemStack(Material.STONE), null
+                stone, null
         };
         ItemStack[] third = new ItemStack[] {
-                new ItemStack(Material.STONE, 2), SlimefunItems.SILVER_INGOT.clone()
+                new CustomItem(stone, 2), SlimefunItems.SILVER_INGOT.clone()
         };
         ItemStack[] fourth = new ItemStack[] {
-                new ItemStack(Material.STONE), new ItemStack(Material.STONE), SlimefunItems.SILVER_INGOT.clone()
+                new CustomItem(stone, 2), SlimefunItems.SILVER_INGOT.clone()
         };
 
         RecipeMap<ItemStack> map = new RecipeMap<>(ShapelessRecipe::new);

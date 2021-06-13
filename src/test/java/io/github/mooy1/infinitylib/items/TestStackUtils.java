@@ -14,6 +14,7 @@ import be.seeseemelk.mockbukkit.MockBukkit;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import io.github.thebusybiscuit.slimefun4.implementation.setup.SlimefunItemSetup;
+import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
 
 class TestStackUtils {
 
@@ -31,6 +32,7 @@ class TestStackUtils {
     void testGetID() {
         ItemStack salt = SlimefunItems.SALT.clone();
         ItemStack stone = new ItemStack(Material.STONE);
+        stone.setItemMeta(stone.getItemMeta());
         String saltID = SlimefunItems.SALT.getItemId();
 
         Assertions.assertNull(StackUtils.getID(stone));
@@ -56,8 +58,10 @@ class TestStackUtils {
     @Test
     void testGetDisplayName() {
         ItemStack salt = SlimefunItems.SALT.clone();
+        ItemMeta meta = salt.getItemMeta();
 
-        Assertions.assertEquals(SlimefunItems.SALT.getDisplayName(), StackUtils.getDisplayName(salt, salt.getItemMeta()));
+        Assertions.assertNotNull(meta);
+        Assertions.assertEquals(SlimefunItems.SALT.getDisplayName(), StackUtils.getDisplayName(salt, meta));
         Assertions.assertEquals("TESTING", StackUtils.getDisplayName(salt));
         Assertions.assertEquals("TESTING", StackUtils.getDisplayName(new ItemStack(Material.STONE)));
     }
@@ -65,6 +69,7 @@ class TestStackUtils {
     @Test
     void testAddLore() {
         ItemStack item = new ItemStack(Material.STONE);
+        item.setItemMeta(item.getItemMeta());
         StackUtils.addLore(item, "test");
         ItemMeta meta = item.getItemMeta();
 
@@ -90,6 +95,16 @@ class TestStackUtils {
         Assertions.assertEquals("test", check.getDisplayName());
         Assertions.assertEquals(1111, check.getCustomModelData());
         Assertions.assertEquals(Arrays.asList("lore", "lore"), check.getLore());
+    }
+
+    @Test
+    void testGetLivePDC() {
+        ItemStack sf = new CustomItem(SlimefunItems.ELECTRO_MAGNET);
+        ItemMeta meta = sf.getItemMeta();
+
+        Assertions.assertNotNull(meta);
+        Assertions.assertEquals(meta.getPersistentDataContainer(), StackUtils.getLivePDC(sf));
+        Assertions.assertThrows(NullPointerException.class, () -> StackUtils.getLivePDC(new ItemStack(Material.STONE)));
     }
 
 }
