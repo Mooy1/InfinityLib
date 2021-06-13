@@ -82,7 +82,7 @@ Command functionality is created with the class `AbstractCommand`.
 ## Configuration
 The `AddonConfig` class improves on some other config implementations by allowing for comments to be saved.
 It will also add an auto update field and comment to the config.yml. 
-It can only be used for configs with a default config in your `resources` fold.
+It can only be used for configs with a default config in your `resources` folder.
 
 ## Items
 `StackUtils` contains many static utility methods for modifying and reading `ItemStack`s.
