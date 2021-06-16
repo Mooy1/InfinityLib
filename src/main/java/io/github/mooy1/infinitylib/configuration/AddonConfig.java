@@ -111,26 +111,29 @@ public final class AddonConfig extends YamlConfiguration {
     @Override
     public String saveToString() {
         options().copyDefaults(true).copyHeader(false).indent(2);
-        String string = super.saveToString();
+        String defaultSave = super.saveToString();
 
-        String[] lines = string.split("\n");
-        StringBuilder save = new StringBuilder();
-        PathBuilder pathBuilder = new PathBuilder();
+        try {
+            String[] lines = defaultSave.split("\n");
+            StringBuilder save = new StringBuilder();
+            PathBuilder pathBuilder = new PathBuilder();
 
-        for (String line : lines) {
-            if (line.isEmpty()) {
-                continue;
+            for (String line : lines) {
+                if (line.contains(":")) {
+                    String comment = getComment(pathBuilder.append(line).build());
+                    if (comment != null) {
+                        save.append(comment);
+                    }
+                }
+                save.append(line).append('\n');
             }
+            return save.toString();
 
-            // append the comment and line
-            String comment = getComment(pathBuilder.append(line).build());
-            if (comment != null) {
-                save.append(comment);
-            }
-            save.append(line).append('\n');
+        } catch (Exception e) {
+            this.addon.log(Level.SEVERE, "An error occured while saving a config to " + this.file.getPath() + "! Report this to the developers!");
+            e.printStackTrace();
+            return defaultSave;
         }
-
-        return save.toString();
     }
 
     private void loadDefaults(String name) {
@@ -180,7 +183,12 @@ public final class AddonConfig extends YamlConfiguration {
                 continue;
             }
 
-            pathBuilder.append(line);
+            if (line.contains(":")) {
+                // Its part of the path
+                pathBuilder.append(line);
+            } else {
+                continue;
+            }
 
             if (commentBuilder.length() != 1) {
                 // Add the comment to the path and clear

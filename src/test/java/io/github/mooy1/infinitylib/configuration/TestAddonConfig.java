@@ -33,7 +33,7 @@ class TestAddonConfig {
 
     @Test
     void testSave() {
-        String correct = "\n# test\ntest: test\n\nsection:\n\n  # test\n  test: test\n";
+        String correct = "\n# test\ntest: test\n\nsection:\n\n  # test\n  list:\n  - a\n  - b\n\n  # test\n  test: test\n";
         Assertions.assertEquals(correct, config.saveToString());
     }
 
