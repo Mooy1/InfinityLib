@@ -7,6 +7,6 @@ import org.bukkit.inventory.ItemStack;
 public interface RecipeType extends Function<ItemStack[], AbstractRecipe> {
 
     RecipeType SHAPELESS = ShapelessRecipe::new;
-    RecipeType Shaped = ShapedRecipe::new;
+    RecipeType SHAPED = ShapedRecipe::new;
 
 }

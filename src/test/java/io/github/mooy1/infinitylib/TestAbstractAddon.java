@@ -12,6 +12,7 @@ import io.github.mooy1.infinitylib.mocks.MockCommandAddon;
 import io.github.mooy1.infinitylib.mocks.MockErrorAddon;
 import io.github.mooy1.infinitylib.mocks.MockFailAddon;
 import io.github.mooy1.infinitylib.mocks.MockMetricsAddon;
+import io.github.mooy1.infinitylib.mocks.MockUtils;
 
 class TestAbstractAddon {
 
@@ -21,38 +22,12 @@ class TestAbstractAddon {
     @BeforeAll
     public static void load() {
         server = MockBukkit.mock();
-        addon = MockBukkit.load(MockAddon.class);
+        addon = MockUtils.mock(MockAddon.class);
     }
 
     @AfterAll
     public static void unload() {
         MockBukkit.unmock();
-    }
-
-    @Test
-    void testEnableErrorCaught() {
-        Assertions.assertDoesNotThrow(() -> MockBukkit.load(MockErrorAddon.class));
-    }
-
-    @Test
-    void testMetricsNotCreated() {
-        Assertions.assertFalse(MockBukkit.load(MockMetricsAddon.class).isMetricsCreated());
-    }
-
-    @Test
-    void testBugTrackerURL() {
-        Assertions.assertEquals("https://github.com/Mooy1/InfinityLib/issues", addon.getBugTrackerURL());
-    }
-
-    @Test
-    void testSubCommands() {
-        MockBukkit.load(MockCommandAddon.class);
-        server.executeConsole("mockaddon", "test").assertSucceeded();
-    }
-
-    @Test
-    void testBadGithubPath() {
-        Assertions.assertThrows(RuntimeException.class, () -> MockBukkit.load(MockFailAddon.class));
     }
 
     @Test
@@ -62,7 +37,7 @@ class TestAbstractAddon {
 
     @Test
     void testNotTesting() {
-        Assertions.assertTrue(addon.isNotTesting());
+        Assertions.assertFalse(addon.isNotTesting());
     }
 
     @Test
@@ -74,6 +49,32 @@ class TestAbstractAddon {
     void testGlobalTick() {
         server.getScheduler().performOneTick();
         Assertions.assertEquals(1, addon.getGlobalTick());
+    }
+
+    @Test
+    void testEnableErrorCaught() {
+        Assertions.assertDoesNotThrow(() -> MockUtils.mock(MockErrorAddon.class));
+    }
+
+    @Test
+    void testMetricsNotCreated() {
+        Assertions.assertFalse(MockUtils.mock(MockMetricsAddon.class).isMetricsCreated());
+    }
+
+    @Test
+    void testSubCommands() {
+        MockBukkit.load(MockCommandAddon.class);
+        server.executeConsole("mockaddon", "test").assertSucceeded();
+    }
+
+    @Test
+    void testBadGithubPath() {
+        Assertions.assertThrows(RuntimeException.class, () -> MockUtils.mock(MockFailAddon.class));
+    }
+
+    @Test
+    void testBugTrackerURL() {
+        Assertions.assertEquals("https://github.com/Mooy1/InfinityLib/issues", addon.getBugTrackerURL());
     }
 
 }

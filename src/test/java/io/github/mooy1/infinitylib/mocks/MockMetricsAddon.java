@@ -22,7 +22,7 @@ public final class MockMetricsAddon extends MockAddon {
     @Nullable
     @Override
     protected Metrics setupMetrics() {
-        metricsCreated = true;
+        this.metricsCreated = true;
         return super.setupMetrics();
     }
 

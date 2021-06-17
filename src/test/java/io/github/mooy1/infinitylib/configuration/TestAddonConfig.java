@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
 import io.github.mooy1.infinitylib.mocks.MockAddon;
+import io.github.mooy1.infinitylib.mocks.MockUtils;
 
 class TestAddonConfig {
 
@@ -16,7 +17,7 @@ class TestAddonConfig {
     @BeforeAll
     public static void load() {
         MockBukkit.mock();
-        addon = MockBukkit.load(MockAddon.class);
+        addon = MockUtils.mock(MockAddon.class);
         config = new AddonConfig(addon, "test.yml");
     }
 
@@ -51,13 +52,6 @@ class TestAddonConfig {
                 "  # test\n" + 
                 "  test: test\n";
         Assertions.assertEquals(correct, config.saveToString());
-    }
-
-    @Test
-    void testResetToDefaults() {
-        config.set("test", "incorrect");
-        config.resetToDefaults();
-        Assertions.assertEquals("test", config.get("test"));
     }
 
     @Test

@@ -22,11 +22,6 @@ public final class MockErrorAddon extends MockAddon {
         throw new Error();
     }
 
-    @Override
-    protected void disable() {
-        throw new Error();
-    }
-
     @Nullable
     @Override
     protected Metrics setupMetrics() {

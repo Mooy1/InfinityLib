@@ -1,13 +1,7 @@
 name: MockAddon
 version: Mock
-author: Mooy1
-website: https://github.com/Mooy1/InfinityLib
-description: A mock addon
-main: io.github.mooy1.infinitylib.mocks.MockAddon
-api-version: 1.16
+main: io.github.mooy1.infinitylib.mocks.MockCommandAddon
 
 commands:
   mockaddon:
     description: Mock Addon Command
-  mockcommand:
-    description: Mock Command

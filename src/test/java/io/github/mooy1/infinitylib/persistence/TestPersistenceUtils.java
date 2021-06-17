@@ -13,6 +13,7 @@ import be.seeseemelk.mockbukkit.ServerMock;
 import be.seeseemelk.mockbukkit.WorldMock;
 import be.seeseemelk.mockbukkit.persistence.PersistentDataContainerMock;
 import io.github.mooy1.infinitylib.mocks.MockAddon;
+import io.github.mooy1.infinitylib.mocks.MockUtils;
 
 class TestPersistenceUtils {
 
@@ -30,7 +31,7 @@ class TestPersistenceUtils {
 
     @Test
     void testPersistentLocation() {
-        NamespacedKey key = new NamespacedKey(MockBukkit.load(MockAddon.class), "key");
+        NamespacedKey key = new NamespacedKey(MockUtils.mock(MockAddon.class), "key");
         PersistentDataContainer container = new PersistentDataContainerMock();
 
         WorldMock world = new WorldMock();

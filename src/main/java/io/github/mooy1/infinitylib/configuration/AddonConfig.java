@@ -77,13 +77,6 @@ public final class AddonConfig extends YamlConfiguration {
         save();
     }
 
-    public void resetToDefaults() {
-        for (String key : this.defaults.getKeys(true)) {
-            set(key, this.defaults.get(key));
-        }
-        save();
-    }
-
     @Nonnull
     @Override
     public YamlConfiguration getDefaults() {
