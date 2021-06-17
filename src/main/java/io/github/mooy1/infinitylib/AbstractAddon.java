@@ -22,7 +22,6 @@ import org.bukkit.plugin.java.JavaPluginLoader;
 import io.github.mooy1.infinitylib.commands.AbstractCommand;
 import io.github.mooy1.infinitylib.commands.CommandUtils;
 import io.github.mooy1.infinitylib.configuration.AddonConfig;
-import io.github.thebusybiscuit.slimefun4.api.MinecraftVersion;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import me.mrCookieSlime.Slimefun.cscorelib2.updater.GitHubBuildsUpdater;
@@ -34,6 +33,7 @@ import me.mrCookieSlime.Slimefun.cscorelib2.updater.GitHubBuildsUpdater;
  */
 public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon {
 
+    private final boolean notTesting;
     private String bugTrackerURL;
     private AddonConfig config;
     private int globalTick;
@@ -42,7 +42,7 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
      * Main Constructor
      */
     public AbstractAddon() {
-
+        this.notTesting = true;
     }
 
     /**
@@ -51,6 +51,7 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
     @ParametersAreNonnullByDefault
     public AbstractAddon(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file) {
         super(loader, description, dataFolder, file);
+        this.notTesting = false;
     }
 
     @Override
@@ -63,7 +64,7 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
         this.config = new AddonConfig(this, "config.yml");
 
         // Don't do auto updates and metrics in tests
-        if (SlimefunPlugin.getMinecraftVersion() != MinecraftVersion.UNIT_TEST) {
+        if (this.notTesting) {
             autoUpdateAndMetrics();
         }
 
@@ -182,6 +183,10 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
         return this.globalTick;
     }
 
+    public final boolean notTesting() {
+        return this.notTesting;
+    }
+
     @Nonnull
     @Override
     public final JavaPlugin getJavaPlugin() {
@@ -224,7 +229,7 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
     }
 
     public final void log(Level level, String... messages) {
-        if (SlimefunPlugin.getMinecraftVersion() != MinecraftVersion.UNIT_TEST) {
+        if (this.notTesting) {
             Logger logger = getLogger();
             for (String msg : messages) {
                 logger.log(level, msg);

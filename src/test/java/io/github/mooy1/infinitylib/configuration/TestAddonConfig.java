@@ -28,12 +28,28 @@ class TestAddonConfig {
     @Test
     void testComments() {
         Assertions.assertEquals("\n# test\n", config.getComment("test"));
+        Assertions.assertEquals("\n# line a\n# line b\n", config.getComment("section"));
         Assertions.assertEquals("\n  # test\n", config.getComment("section.test"));
     }
 
     @Test
     void testSaveToString() {
-        String correct = "\n# test\ntest: test\n\nsection:\n\n  # test\n  list:\n  - a\n  - b\n\n  # test\n  test: test\n";
+        String correct =
+                "\n" +
+                "# test\n" + 
+                "test: test\n" + 
+                "\n" + 
+                "# line a\n" + 
+                "# line b\n" + 
+                "section:\n" + 
+                "\n" + 
+                "  # test\n" + 
+                "  list:\n" + 
+                "  - a\n" + 
+                "  - b\n" + 
+                "\n" + 
+                "  # test\n" + 
+                "  test: test\n";
         Assertions.assertEquals(correct, config.saveToString());
     }
 

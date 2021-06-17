@@ -19,8 +19,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import com.google.common.annotations.VisibleForTesting;
 import io.github.mooy1.infinitylib.AbstractAddon;
-import io.github.thebusybiscuit.slimefun4.api.MinecraftVersion;
-import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 
 /**
  * A config which is able to save all of it's comments and has some additional utility methods
@@ -66,7 +64,7 @@ public final class AddonConfig extends YamlConfiguration {
 
     @Override
     public void save(@Nonnull File file) throws IOException {
-        if (SlimefunPlugin.getMinecraftVersion() != MinecraftVersion.UNIT_TEST) {
+        if (this.addon.notTesting()) {
             super.save(file);
         }
     }
@@ -192,7 +190,7 @@ public final class AddonConfig extends YamlConfiguration {
             }
 
             if (line.contains(":")) {
-                // Its part of the path
+                // Its part of a path
                 pathBuilder.append(line);
             } else {
                 continue;
