@@ -6,7 +6,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
-import io.github.mooy1.infinitylib.MockAddon;
+import io.github.mooy1.infinitylib.mocks.MockAddon;
 
 class TestAddonConfig {
 
@@ -62,9 +62,7 @@ class TestAddonConfig {
 
     @Test
     void testNoDefaults() {
-        AddonConfig fail = new AddonConfig(addon, "fail.yml");
-        Assertions.assertNotNull(fail.getDefaults());
-        Assertions.assertEquals(fail.getDefaults().getKeys(true).size(), 0);
+        Assertions.assertThrows(IllegalStateException.class, () -> new AddonConfig(addon, "fail.yml"));
     }
 
 }

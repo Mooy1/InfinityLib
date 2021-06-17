@@ -11,7 +11,8 @@ import org.junit.jupiter.api.Test;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.ServerMock;
-import io.github.mooy1.infinitylib.MockAddon;
+import io.github.mooy1.infinitylib.mocks.MockAddon;
+import io.github.mooy1.infinitylib.mocks.MockCommand;
 
 class TestCommandUtils {
 
@@ -23,7 +24,7 @@ class TestCommandUtils {
         server = MockBukkit.mock();
         addon = MockBukkit.load(MockAddon.class);
 
-        CommandUtils.addSubCommands(addon, "mockaddon", Collections.singletonList(new MockCommand()));
+        CommandUtils.addSubCommands(addon, "mockcommand", Collections.singletonList(new MockCommand()));
     }
 
     @AfterAll
@@ -32,16 +33,21 @@ class TestCommandUtils {
     }
 
     @Test
+    void testInfoAndHelp() {
+        // TODO implement
+    }
+
+    @Test
     void testCommandExecute() {
-        server.execute("mockaddon", server.addPlayer(), "test").assertFailed();
-        server.executeConsole("mockaddon", "test").assertResponse("test");
+        server.execute("mockcommand", server.addPlayer(), "test").assertFailed();
+        server.executeConsole("mockcommand", "test").assertResponse("test");
     }
 
     @Test
     void testTabComplete() {
         CommandMap map = server.getCommandMap();
-        Assertions.assertFalse(map.tabComplete(server.addPlayer(), "mockaddon ").contains("test"));
-        Assertions.assertTrue(map.tabComplete(server.getConsoleSender(), "mockaddon ").contains("test"));
+        Assertions.assertFalse(map.tabComplete(server.addPlayer(), "mockcommand ").contains("test"));
+        Assertions.assertTrue(map.tabComplete(server.getConsoleSender(), "mockcommand ").contains("test"));
     }
 
     @Test

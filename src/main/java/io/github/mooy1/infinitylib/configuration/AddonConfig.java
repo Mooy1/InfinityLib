@@ -8,7 +8,6 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -17,7 +16,6 @@ import org.apache.commons.lang.StringUtils;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import com.google.common.annotations.VisibleForTesting;
 import io.github.mooy1.infinitylib.AbstractAddon;
 
 /**
@@ -34,6 +32,7 @@ public final class AddonConfig extends YamlConfiguration {
 
     public AddonConfig(@Nonnull AbstractAddon addon, @Nonnull String name) {
         this.file = new File(addon.getDataFolder(), name);
+        super.defaults = this.defaults;
         this.addon = addon;
         loadDefaults(name);
     }
@@ -64,7 +63,7 @@ public final class AddonConfig extends YamlConfiguration {
 
     @Override
     public void save(@Nonnull File file) throws IOException {
-        if (this.addon.notTesting()) {
+        if (this.addon.isNotTesting()) {
             super.save(file);
         }
     }
@@ -72,8 +71,8 @@ public final class AddonConfig extends YamlConfiguration {
     public void reload() {
         if (this.file.exists()) try {
             load(this.file);
-        } catch (Exception e) {
-            this.addon.log(Level.SEVERE, "There was an error loading the config at '" + this.file.getPath() + "', resetting to default!");
+        } catch (Throwable e) {
+            e.printStackTrace();
         }
         save();
     }
@@ -92,7 +91,6 @@ public final class AddonConfig extends YamlConfiguration {
     }
 
     @Nullable
-    @VisibleForTesting
     String getComment(String key) {
         return this.comments.get(key);
     }
@@ -136,7 +134,6 @@ public final class AddonConfig extends YamlConfiguration {
             return save.toString();
 
         } catch (Exception e) {
-            this.addon.log(Level.SEVERE, "An error occured while saving a config to " + this.file.getPath() + "! Report this to the developers!");
             e.printStackTrace();
             return defaultSave;
         }
@@ -146,13 +143,11 @@ public final class AddonConfig extends YamlConfiguration {
         InputStream stream = this.addon.getResource(name);
 
         if (stream == null) {
-            this.addon.log(Level.SEVERE, "No default config for " + name + "! Report this to the developers!");
+            throw new IllegalStateException("No default config for " + name + "!");
         } else try {
             String def = readDefaults(stream);
             this.defaults.loadFromString(def);
-        } catch (Exception e) {
-            this.addon.log(Level.SEVERE, "An " + e.getClass().getSimpleName() +
-                    " occurred while loading the default config of '" + name + "', report it to the developers!");
+        } catch (Throwable e) {
             e.printStackTrace();
         }
 
@@ -164,7 +159,6 @@ public final class AddonConfig extends YamlConfiguration {
             }
         }
 
-        super.defaults = this.defaults;
         reload();
     }
 

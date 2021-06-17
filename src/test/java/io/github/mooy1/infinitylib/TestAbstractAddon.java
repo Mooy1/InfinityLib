@@ -7,6 +7,11 @@ import org.junit.jupiter.api.Test;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.ServerMock;
+import io.github.mooy1.infinitylib.mocks.MockAddon;
+import io.github.mooy1.infinitylib.mocks.MockCommandAddon;
+import io.github.mooy1.infinitylib.mocks.MockErrorAddon;
+import io.github.mooy1.infinitylib.mocks.MockFailAddon;
+import io.github.mooy1.infinitylib.mocks.MockMetricsAddon;
 
 class TestAbstractAddon {
 
@@ -26,12 +31,12 @@ class TestAbstractAddon {
 
     @Test
     void testEnableErrorCaught() {
-        Assertions.assertDoesNotThrow(() -> addon.onEnable());
+        Assertions.assertDoesNotThrow(() -> MockBukkit.load(MockErrorAddon.class));
     }
 
     @Test
     void testMetricsNotCreated() {
-        Assertions.assertFalse(addon.isMetricsCreated());
+        Assertions.assertFalse(MockBukkit.load(MockMetricsAddon.class).isMetricsCreated());
     }
 
     @Test
@@ -41,7 +46,23 @@ class TestAbstractAddon {
 
     @Test
     void testSubCommands() {
+        MockBukkit.load(MockCommandAddon.class);
         server.executeConsole("mockaddon", "test").assertSucceeded();
+    }
+
+    @Test
+    void testBadGithubPath() {
+        Assertions.assertThrows(RuntimeException.class, () -> MockBukkit.load(MockFailAddon.class));
+    }
+
+    @Test
+    void testOfficialBuild() {
+        Assertions.assertFalse(addon.isOfficialBuild());
+    }
+
+    @Test
+    void testNotTesting() {
+        Assertions.assertTrue(addon.isNotTesting());
     }
 
     @Test

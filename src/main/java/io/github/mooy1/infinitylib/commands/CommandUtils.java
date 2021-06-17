@@ -26,7 +26,7 @@ public final class CommandUtils implements TabExecutor {
         PluginCommand command = addon.getCommand(commandName);
 
         if (command == null) {
-            throw new IllegalArgumentException("No such command '" + commandName + "'! Report this to the developers!");
+            throw new IllegalArgumentException("No such command '" + commandName +  "'!");
         }
 
         subCommands = new ArrayList<>(subCommands);

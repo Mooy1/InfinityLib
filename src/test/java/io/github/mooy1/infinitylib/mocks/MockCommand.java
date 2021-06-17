@@ -1,10 +1,12 @@
-package io.github.mooy1.infinitylib.commands;
+package io.github.mooy1.infinitylib.mocks;
 
 import java.util.List;
 
 import javax.annotation.Nonnull;
 
 import org.bukkit.command.CommandSender;
+
+import io.github.mooy1.infinitylib.commands.AbstractCommand;
 
 public final class MockCommand extends AbstractCommand {
 
