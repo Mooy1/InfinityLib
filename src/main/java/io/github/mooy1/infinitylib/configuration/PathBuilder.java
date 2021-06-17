@@ -21,7 +21,7 @@ final class PathBuilder {
             }
         }
 
-        String key = line.substring(indent, line.lastIndexOf(':'));
+        String key = line.substring(indent, line.indexOf(':'));
         indent /= 2;
 
         // change path
