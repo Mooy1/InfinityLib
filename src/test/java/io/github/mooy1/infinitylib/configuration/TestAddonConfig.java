@@ -32,9 +32,16 @@ class TestAddonConfig {
     }
 
     @Test
-    void testSave() {
+    void testSaveToString() {
         String correct = "\n# test\ntest: test\n\nsection:\n\n  # test\n  list:\n  - a\n  - b\n\n  # test\n  test: test\n";
         Assertions.assertEquals(correct, config.saveToString());
+    }
+
+    @Test
+    void testResetToDefaults() {
+        config.set("test", "incorrect");
+        config.resetToDefaults();
+        Assertions.assertEquals("test", config.get("test"));
     }
 
     @Test

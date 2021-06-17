@@ -13,12 +13,11 @@ import java.util.logging.Level;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import lombok.Getter;
-
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import com.google.common.annotations.VisibleForTesting;
 import io.github.mooy1.infinitylib.AbstractAddon;
 import io.github.thebusybiscuit.slimefun4.api.MinecraftVersion;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
@@ -33,7 +32,6 @@ public final class AddonConfig extends YamlConfiguration {
     private final YamlConfiguration defaults = new YamlConfiguration();
     private final Map<String, String> comments = new HashMap<>();
     private final AbstractAddon addon;
-    @Getter
     private final File file;
 
     public AddonConfig(@Nonnull AbstractAddon addon, @Nonnull String name) {
@@ -82,6 +80,13 @@ public final class AddonConfig extends YamlConfiguration {
         save();
     }
 
+    public void resetToDefaults() {
+        for (String key : this.defaults.getKeys(true)) {
+            set(key, this.defaults.get(key));
+        }
+        save();
+    }
+
     @Nonnull
     @Override
     public YamlConfiguration getDefaults() {
@@ -89,6 +94,7 @@ public final class AddonConfig extends YamlConfiguration {
     }
 
     @Nullable
+    @VisibleForTesting
     String getComment(String key) {
         return this.comments.get(key);
     }
