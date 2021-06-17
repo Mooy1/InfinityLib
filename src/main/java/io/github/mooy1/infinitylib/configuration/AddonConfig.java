@@ -30,10 +30,9 @@ import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
  */
 public final class AddonConfig extends YamlConfiguration {
 
+    private final YamlConfiguration defaults = new YamlConfiguration();
     private final Map<String, String> comments = new HashMap<>();
     private final AbstractAddon addon;
-    @Getter
-    private final YamlConfiguration defaults = new YamlConfiguration();
     @Getter
     private final File file;
 
@@ -81,6 +80,12 @@ public final class AddonConfig extends YamlConfiguration {
             this.addon.log(Level.SEVERE, "There was an error loading the config at '" + this.file.getPath() + "', resetting to default!");
         }
         save();
+    }
+
+    @Nonnull
+    @Override
+    public YamlConfiguration getDefaults() {
+        return this.defaults;
     }
 
     @Nullable
