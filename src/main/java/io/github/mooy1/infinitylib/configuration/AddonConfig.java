@@ -8,14 +8,14 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.logging.Level;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import lombok.Getter;
+
 import org.apache.commons.lang.StringUtils;
-import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -32,6 +32,9 @@ public final class AddonConfig extends YamlConfiguration {
 
     private final Map<String, String> comments = new HashMap<>();
     private final AbstractAddon addon;
+    @Getter
+    private final YamlConfiguration defaults = new YamlConfiguration();
+    @Getter
     private final File file;
 
     public AddonConfig(@Nonnull AbstractAddon addon, @Nonnull String name) {
@@ -87,12 +90,6 @@ public final class AddonConfig extends YamlConfiguration {
 
     @Nonnull
     @Override
-    public Configuration getDefaults() {
-        return Objects.requireNonNull(super.getDefaults());
-    }
-
-    @Nonnull
-    @Override
     protected String buildHeader() {
         return "";
     }
@@ -137,13 +134,13 @@ public final class AddonConfig extends YamlConfiguration {
     }
 
     private void loadDefaults(String name) {
-        YamlConfiguration defaults = new YamlConfiguration();
         InputStream stream = this.addon.getResource(name);
 
         if (stream == null) {
             this.addon.log(Level.SEVERE, "No default config for " + name + "! Report this to the developers!");
         } else try {
-            defaults.loadFromString(readDefaults(stream));
+            String def = readDefaults(stream);
+            this.defaults.loadFromString(def);
         } catch (Exception e) {
             this.addon.log(Level.SEVERE, "An " + e.getClass().getSimpleName() +
                     " occurred while loading the default config of '" + name + "', report it to the developers!");
@@ -153,12 +150,12 @@ public final class AddonConfig extends YamlConfiguration {
         // Add an auto update thing just in case
         if (name.equals("config.yml")) {
             String path = this.addon.getAutoUpdatePath();
-            if (path != null && !defaults.contains(path)) {
-                defaults.set(path, true);
+            if (path != null && !this.defaults.contains(path)) {
+                this.defaults.set(path, true);
             }
         }
 
-        setDefaults(defaults);
+        super.defaults = this.defaults;
         reload();
     }
 
