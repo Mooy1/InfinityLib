@@ -66,7 +66,7 @@ It adds multiple utility methods as well as implementing auto updating, bstats, 
 
 You should have a `private static` field for the instance of your plugin.
 
-Your instance field should have a short `public static` getter, something like `inst()`
+Your instance field should have a short `public static` getter, something like `inst()` to access the utility methods from anywhere
 
 # Packages
 
@@ -81,7 +81,6 @@ Command functionality is created with the class `AbstractCommand`.
 
 ## Configuration
 The `AddonConfig` class improves on some other config implementations by allowing for comments to be saved.
-It will also add an auto update field and comment to the config.yml. 
 It can only be used for configs with a default config in your `resources` folder.
 
 ## Items

@@ -2,7 +2,6 @@ package io.github.mooy1.infinitylib.recipes;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -14,17 +13,16 @@ import org.bukkit.inventory.ItemStack;
 @RequiredArgsConstructor
 public final class RecipeMap<O> {
 
-    private final Function<ItemStack[], ? extends AbstractRecipe> recipeConstructor;
-
     private final Map<AbstractRecipe, O> recipes = new ConcurrentHashMap<>();
+    private final RecipeType type;
 
     public void put(@Nonnull ItemStack[] rawInput, @Nonnull O output) {
-        this.recipes.put(this.recipeConstructor.apply(rawInput), output);
+        this.recipes.put(this.type.apply(rawInput), output);
     }
 
     @Nullable
     public RecipeOutput<O> get(@Nonnull ItemStack[] rawInput) {
-        AbstractRecipe input = this.recipeConstructor.apply(rawInput);
+        AbstractRecipe input = this.type.apply(rawInput);
         O output = this.recipes.get(input);
         if (output != null) {
             return new RecipeOutput<>(output, input);
@@ -34,7 +32,7 @@ public final class RecipeMap<O> {
 
     @Nullable
     public O getAndConsume(@Nonnull ItemStack[] rawInput) {
-        AbstractRecipe input = this.recipeConstructor.apply(rawInput);
+        AbstractRecipe input = this.type.apply(rawInput);
         O output = this.recipes.get(input);
         if (output != null) {
             input.consumeMatchingRecipe();
@@ -45,7 +43,7 @@ public final class RecipeMap<O> {
 
     @Nullable
     public O getNoConsume(@Nonnull ItemStack[] rawInput) {
-        return this.recipes.get(this.recipeConstructor.apply(rawInput));
+        return this.recipes.get(this.type.apply(rawInput));
     }
 
 }
