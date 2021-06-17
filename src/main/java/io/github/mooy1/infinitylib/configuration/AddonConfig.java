@@ -78,7 +78,7 @@ public final class AddonConfig extends YamlConfiguration {
         if (this.file.exists()) try {
             load(this.file);
         } catch (Exception e) {
-            this.addon.log(Level.SEVERE, "There was an error loading the config '" + this.file.getPath() + "', resetting to default!");
+            this.addon.log(Level.SEVERE, "There was an error loading the config at '" + this.file.getPath() + "', resetting to default!");
         }
         save();
     }
