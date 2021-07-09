@@ -60,7 +60,7 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
 
         // Check path
         String githubPath = getGithubPath();
-        if (!githubPath.matches("\\w+/\\w+/\\w+")) {
+        if (!githubPath.matches("[\\w-]+/[\\w-]+/[\\w-]+")) {
             throw new IllegalStateException("Invalid Github Path '" + githubPath + "', It should be 'User/Repo/branch'!");
         }
 
