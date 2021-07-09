@@ -33,7 +33,6 @@ class TestStackUtils {
     void testGetID() {
         ItemStack salt = SlimefunItems.SALT.clone();
         ItemStack stone = new ItemStack(Material.STONE);
-        stone.setItemMeta(stone.getItemMeta());
         String saltID = SlimefunItems.SALT.getItemId();
 
         Assertions.assertNull(StackUtils.getID(stone));
@@ -70,7 +69,6 @@ class TestStackUtils {
     @Test
     void testAddLore() {
         ItemStack item = new ItemStack(Material.STONE);
-        item.setItemMeta(item.getItemMeta());
         StackUtils.addLore(item, "test");
         ItemMeta meta = item.getItemMeta();
 
