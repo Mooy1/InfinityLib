@@ -8,7 +8,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Function;
 
 import javax.annotation.Nonnull;
@@ -40,7 +39,7 @@ import me.mrCookieSlime.Slimefun.cscorelib2.reflection.ReflectionUtils;
 @UtilityClass
 public final class StackUtils {
 
-    private static final NamespacedKey KEY = SlimefunPlugin.getItemDataService().getKey();
+    private static final NamespacedKey ID_KEY = SlimefunPlugin.getItemDataService().getKey();
     private static final Function<Object, String> TO_STRING;
     private static final Function<Object, Object> GET_NAME;
     private static final Function<ItemStack, Object> COPY;
@@ -79,7 +78,7 @@ public final class StackUtils {
 
     @Nullable
     public static String getID(@Nonnull ItemMeta meta) {
-        return meta.getPersistentDataContainer().get(KEY, PersistentDataType.STRING);
+        return meta.getPersistentDataContainer().get(ID_KEY, PersistentDataType.STRING);
     }
 
     @Nullable
