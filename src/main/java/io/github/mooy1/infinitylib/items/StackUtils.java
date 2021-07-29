@@ -19,7 +19,6 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
@@ -39,11 +38,10 @@ import me.mrCookieSlime.Slimefun.cscorelib2.reflection.ReflectionUtils;
 @UtilityClass
 public final class StackUtils {
 
-    private static final NamespacedKey KEY = SlimefunPlugin.getItemDataService().getKey();
+    private static final NamespacedKey ID_KEY = SlimefunPlugin.getItemDataService().getKey();
     private static final Function<Object, String> TO_STRING;
     private static final Function<Object, Object> GET_NAME;
     private static final Function<ItemStack, Object> COPY;
-    private static final Field ITEM_META;
 
     @Nonnull
     public static String getIDorType(@Nonnull ItemStack item) {
@@ -70,15 +68,12 @@ public final class StackUtils {
         if (item instanceof SlimefunItemStack) {
             return ((SlimefunItemStack) item).getItemId();
         }
-        if (!item.hasItemMeta()) {
-            return null;
-        }
-        return getID(getLiveMeta(item));
+        return item.hasItemMeta() ? getID(item.getItemMeta()) : null;
     }
 
     @Nullable
     public static String getID(@Nonnull ItemMeta meta) {
-        return meta.getPersistentDataContainer().get(KEY, PersistentDataType.STRING);
+        return meta.getPersistentDataContainer().get(ID_KEY, PersistentDataType.STRING);
     }
 
     @Nullable
@@ -127,14 +122,7 @@ public final class StackUtils {
 
     @Nonnull
     public static ItemStack addLore(@Nonnull ItemStack item, @Nonnull String... lines) {
-        boolean hasMeta = item.hasItemMeta();
-        ItemMeta meta;
-
-        if (hasMeta) {
-            meta = getLiveMeta(item);
-        } else {
-            meta = item.getItemMeta();
-        }
+        ItemMeta meta = item.getItemMeta();
 
         List<String> lore;
 
@@ -149,23 +137,8 @@ public final class StackUtils {
         }
 
         meta.setLore(lore);
-
-        if (!hasMeta) {
-            item.setItemMeta(meta);
-        }
+        item.setItemMeta(meta);
         return item;
-    }
-
-    public static PersistentDataContainer getLivePDC(@Nonnull ItemStack stack) {
-        return getLiveMeta(stack).getPersistentDataContainer();
-    }
-
-    public static ItemMeta getLiveMeta(@Nonnull ItemStack stack) {
-        try {
-            return (ItemMeta) ITEM_META.get(stack);
-        } catch (IllegalAccessException e) {
-            return stack.getItemMeta();
-        }
     }
 
     public static String getDisplayName(@Nonnull ItemStack item) {
@@ -200,16 +173,6 @@ public final class StackUtils {
         TO_STRING = toString;
         GET_NAME = getName;
         COPY = copy;
-
-        Field itemMeta;
-        try {
-            itemMeta = ItemStack.class.getDeclaredField("meta");
-            itemMeta.setAccessible(true);
-        } catch (Exception e) {
-            itemMeta = null;
-            e.printStackTrace();
-        }
-        ITEM_META = itemMeta;
     }
 
     @SuppressWarnings("unchecked")
