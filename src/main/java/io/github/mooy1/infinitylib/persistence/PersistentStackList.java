@@ -2,16 +2,23 @@ package io.github.mooy1.infinitylib.persistence;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import org.bukkit.Location;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataAdapterContext;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 
-final class PersistentLocation implements PersistentDataType<byte[], Location> {
+/**
+ * Persistent data type for ItemStack arrays
+ *
+ * @author Mooy1
+ */
+final class PersistentStackList implements PersistentDataType<byte[], List<ItemStack>> {
 
     @Nonnull
     @Override
@@ -21,17 +28,20 @@ final class PersistentLocation implements PersistentDataType<byte[], Location> {
 
     @Nonnull
     @Override
-    public Class<Location> getComplexType() {
-        return Location.class;
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    public Class<List<ItemStack>> getComplexType() {
+        return (Class) List.class;
     }
 
     @Nonnull
     @Override
-    public byte[] toPrimitive(@Nonnull Location complex, @Nonnull PersistentDataAdapterContext context) {
+    public byte[] toPrimitive(@Nonnull List<ItemStack> complex, @Nonnull PersistentDataAdapterContext context) {
         try {
             ByteArrayOutputStream bytes = new ByteArrayOutputStream();
             BukkitObjectOutputStream output = new BukkitObjectOutputStream(bytes);
-            output.writeObject(complex);
+            for (ItemStack item : complex) {
+                output.writeObject(item);
+            }
             return bytes.toByteArray();
         } catch (Exception e) {
             e.printStackTrace();
@@ -41,14 +51,18 @@ final class PersistentLocation implements PersistentDataType<byte[], Location> {
 
     @Nonnull
     @Override
-    public Location fromPrimitive(@Nonnull byte[] primitive, @Nonnull PersistentDataAdapterContext context) {
+    public List<ItemStack> fromPrimitive(@Nonnull byte[] primitive, @Nonnull PersistentDataAdapterContext context) {
         try {
             ByteArrayInputStream bytes = new ByteArrayInputStream(primitive);
             BukkitObjectInputStream input = new BukkitObjectInputStream(bytes);
-            return (Location) input.readObject();
+            List<ItemStack> list = new ArrayList<>();
+            while (bytes.available() > 0) {
+                list.add((ItemStack) input.readObject());
+            }
+            return list;
         } catch (Exception e) {
             e.printStackTrace();
-            return new Location(null, 0, 0, 0);
+            return new ArrayList<>();
         }
     }
 
