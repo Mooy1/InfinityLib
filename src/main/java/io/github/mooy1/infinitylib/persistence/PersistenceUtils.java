@@ -12,5 +12,6 @@ public final class PersistenceUtils {
     public static final PersistentDataType<String, ItemStack> ITEM_STACK = new PersistentItemStack();
     public static final PersistentDataType<String, ItemStack[]> STACK_ARRAY = new PersistentStackArray();
     public static final PersistentDataType<String, Location> LOCATION = new PersistentLocation();
+    public static final PersistentDataType<String, String[]> STRING_ARRAY = new PersistentStringArray();
 
 }

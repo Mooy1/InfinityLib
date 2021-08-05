@@ -37,15 +37,27 @@ class TestPersistenceUtils {
         WorldMock world = new WorldMock();
         server.addWorld(world);
 
-        Location first = new Location(null, 1, 2, 3);
-        Location second = new Location(world, 1, 2, 3);
-        container.set(key, PersistenceUtils.LOCATION, first);
-        Location third = container.get(key, PersistenceUtils.LOCATION);
-        container.set(key, PersistenceUtils.LOCATION, second);
-        Location fourth = container.get(key, PersistenceUtils.LOCATION);
+        Location location = new Location(null, 1, 2, 3);
+        container.set(key, PersistenceUtils.LOCATION, location);
+        Assertions.assertEquals(location, container.get(key, PersistenceUtils.LOCATION));
 
-        Assertions.assertEquals(first, third);
-        Assertions.assertEquals(second, fourth);
+        location = new Location(world, 1, 2, 3);
+        container.set(key, PersistenceUtils.LOCATION, location);
+        Assertions.assertEquals(location, container.get(key, PersistenceUtils.LOCATION));
+    }
+
+    @Test
+    void testPersistentStringArray() {
+        NamespacedKey key = new NamespacedKey(MockUtils.mock(MockAddon.class), "key");
+        PersistentDataContainer container = new PersistentDataContainerMock();
+
+        String[] array = new String[0];
+        container.set(key, PersistenceUtils.STRING_ARRAY, array);
+        Assertions.assertArrayEquals(array, container.get(key, PersistenceUtils.STRING_ARRAY));
+
+        array = new String[] { "a", "b", "c" };
+        container.set(key, PersistenceUtils.STRING_ARRAY, array);
+        Assertions.assertArrayEquals(array, container.get(key, PersistenceUtils.STRING_ARRAY));
     }
 
 }
