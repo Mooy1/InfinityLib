@@ -50,7 +50,7 @@ final class PersistentStringList implements PersistentDataType<byte[], List<Stri
             List<String> list = new ArrayList<>(primitive.length / 20);
             while (bytes.available() > 0) {
                 byte[] arr = new byte[bytes.read()];
-                bytes.readNBytes(arr, 0, arr.length);
+                bytes.read(arr, 0, arr.length);
                 list.add(new String(arr));
             }
             return list;
