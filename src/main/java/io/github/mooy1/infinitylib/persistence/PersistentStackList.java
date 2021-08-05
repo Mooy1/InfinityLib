@@ -36,34 +36,30 @@ final class PersistentStackList implements PersistentDataType<byte[], List<ItemS
     @Nonnull
     @Override
     public byte[] toPrimitive(@Nonnull List<ItemStack> complex, @Nonnull PersistentDataAdapterContext context) {
-        try {
-            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-            BukkitObjectOutputStream output = new BukkitObjectOutputStream(bytes);
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        try (BukkitObjectOutputStream output = new BukkitObjectOutputStream(bytes)) {
             for (ItemStack item : complex) {
                 output.writeObject(item);
             }
-            return bytes.toByteArray();
         } catch (Exception e) {
             e.printStackTrace();
-            return new byte[0];
         }
+        return bytes.toByteArray();
     }
 
     @Nonnull
     @Override
     public List<ItemStack> fromPrimitive(@Nonnull byte[] primitive, @Nonnull PersistentDataAdapterContext context) {
-        try {
-            ByteArrayInputStream bytes = new ByteArrayInputStream(primitive);
-            BukkitObjectInputStream input = new BukkitObjectInputStream(bytes);
-            List<ItemStack> list = new ArrayList<>();
+        ByteArrayInputStream bytes = new ByteArrayInputStream(primitive);
+        List<ItemStack> list = new ArrayList<>();
+        try (BukkitObjectInputStream input = new BukkitObjectInputStream(bytes)) {
             while (bytes.available() > 0) {
                 list.add((ItemStack) input.readObject());
             }
-            return list;
         } catch (Exception e) {
             e.printStackTrace();
-            return new ArrayList<>();
         }
+        return list;
     }
 
 }

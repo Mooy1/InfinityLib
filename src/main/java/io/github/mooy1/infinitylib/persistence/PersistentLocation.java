@@ -28,23 +28,20 @@ final class PersistentLocation implements PersistentDataType<byte[], Location> {
     @Nonnull
     @Override
     public byte[] toPrimitive(@Nonnull Location complex, @Nonnull PersistentDataAdapterContext context) {
-        try {
-            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-            BukkitObjectOutputStream output = new BukkitObjectOutputStream(bytes);
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        try (BukkitObjectOutputStream output = new BukkitObjectOutputStream(bytes)) {
             output.writeObject(complex);
-            return bytes.toByteArray();
         } catch (Exception e) {
             e.printStackTrace();
-            return new byte[0];
         }
+        return bytes.toByteArray();
     }
 
     @Nonnull
     @Override
     public Location fromPrimitive(@Nonnull byte[] primitive, @Nonnull PersistentDataAdapterContext context) {
-        try {
-            ByteArrayInputStream bytes = new ByteArrayInputStream(primitive);
-            BukkitObjectInputStream input = new BukkitObjectInputStream(bytes);
+        ByteArrayInputStream bytes = new ByteArrayInputStream(primitive);
+        try (BukkitObjectInputStream input = new BukkitObjectInputStream(bytes)) {
             return (Location) input.readObject();
         } catch (Exception e) {
             e.printStackTrace();
