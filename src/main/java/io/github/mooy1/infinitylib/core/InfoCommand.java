@@ -1,4 +1,4 @@
-package io.github.mooy1.infinitylib.commands;
+package io.github.mooy1.infinitylib.core;
 
 import java.util.List;
 import java.util.Objects;
@@ -8,10 +8,10 @@ import javax.annotation.Nonnull;
 import org.bukkit.command.CommandSender;
 
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
-import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
-import me.mrCookieSlime.Slimefun.cscorelib2.chat.ChatColors;
+import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
+import io.github.thebusybiscuit.slimefun4.libraries.dough.common.ChatColors;
 
-final class InfoCommand extends AbstractCommand {
+final class InfoCommand extends SubCommand {
 
     private final String[] message;
 
@@ -20,7 +20,7 @@ final class InfoCommand extends AbstractCommand {
         this.message = new String[] {
                 "",
                 ChatColors.color("&b" + addon.getName() + " Info"),
-                ChatColors.color("&bSlimefun Version: &7" + Objects.requireNonNull(SlimefunPlugin.instance()).getPluginVersion()),
+                ChatColors.color("&bSlimefun Version: &7" + Objects.requireNonNull(Slimefun.instance()).getPluginVersion()),
                 ChatColors.color("&bSlimefun Discord: &7Discord.gg/slimefun"),
                 ChatColors.color("&bAddon Version: &7" + addon.getPluginVersion()),
                 ChatColors.color("&bAddon Community: &7Discord.gg/SqD3gg5SAU"),
@@ -30,12 +30,12 @@ final class InfoCommand extends AbstractCommand {
     }
 
     @Override
-    public void onExecute(@Nonnull CommandSender sender, @Nonnull String[] args) {
+    protected void execute(@Nonnull CommandSender sender, @Nonnull String[] args) {
         sender.sendMessage(this.message);
     }
 
     @Override
-    public void onTab(@Nonnull CommandSender sender, @Nonnull String[] args, @Nonnull List<String> tabs) {
+    protected void complete(@Nonnull CommandSender sender, @Nonnull String[] args, @Nonnull List<String> tabs) {
 
     }
 

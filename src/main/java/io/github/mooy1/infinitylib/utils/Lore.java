@@ -1,12 +1,13 @@
-package io.github.mooy1.infinitylib.presets;
+package io.github.mooy1.infinitylib.utils;
 
 import java.text.DecimalFormat;
 
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import lombok.experimental.UtilityClass;
 
-import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
+import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 
 /**
  * Collection of utils for building item lore
@@ -14,10 +15,11 @@ import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
  * @author Mooy1
  */
 @UtilityClass
-public final class LorePreset {
+@ParametersAreNonnullByDefault
+public final class Lore {
 
     private static final DecimalFormat FORMAT = new DecimalFormat("###,###,###,###,###,###.#");
-    private static final double TPS = 20D / SlimefunPlugin.getTickerTask().getTickRate();
+    private static final double TPS = 20D / Slimefun.getTickerTask().getTickRate();
 
     @Nonnull
     public static String energyPerSecond(int energy) {

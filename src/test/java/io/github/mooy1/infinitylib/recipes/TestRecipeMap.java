@@ -43,7 +43,7 @@ class TestRecipeMap {
                 new CustomItem(stone, 2), SlimefunItems.SILVER_INGOT.clone()
         };
 
-        RecipeMap<ItemStack> map = new RecipeMap<>(RecipeType.SHAPED);
+        RecipeMap<ItemStack> map = new RecipeMap<>(RecipeMapType.SHAPED);
         map.put(first, out);
         RecipeOutput<ItemStack> output = map.get(fourth);
 
@@ -78,7 +78,7 @@ class TestRecipeMap {
                 new CustomItem(stone, 2), SlimefunItems.SILVER_INGOT.clone()
         };
 
-        RecipeMap<ItemStack> map = new RecipeMap<>(RecipeType.SHAPELESS);
+        RecipeMap<ItemStack> map = new RecipeMap<>(RecipeMapType.SHAPELESS);
         map.put(first, out);
 
         Assertions.assertSame(out, map.getNoConsume(first));

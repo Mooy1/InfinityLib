@@ -6,21 +6,21 @@ import javax.annotation.Nonnull;
 
 import org.bukkit.command.CommandSender;
 
-import io.github.mooy1.infinitylib.commands.AbstractCommand;
+import io.github.mooy1.infinitylib.core.SubCommand;
 
-public final class MockCommand extends AbstractCommand {
+public final class MockCommand extends SubCommand {
 
     public MockCommand() {
         super("test", "test", true);
     }
 
     @Override
-    public void onExecute(@Nonnull CommandSender sender, @Nonnull String[] args) {
+    protected void execute(@Nonnull CommandSender sender, @Nonnull String[] args) {
         sender.sendMessage("test");
     }
 
     @Override
-    public void onTab(@Nonnull CommandSender sender, @Nonnull String[] args, @Nonnull List<String> tabs) {
+    protected void complete(@Nonnull CommandSender sender, @Nonnull String[] args, @Nonnull List<String> tabs) {
         tabs.add("test");
     }
 

@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.ServerMock;
+import io.github.mooy1.infinitylib.utils.CoolDowns;
 
 class TestCoolDownMap {
 
@@ -26,8 +27,8 @@ class TestCoolDownMap {
 
     @Test
     void testCheckAndReset() {
-        CoolDownMap min = new CoolDownMap(0);
-        CoolDownMap max = new CoolDownMap(System.currentTimeMillis());
+        CoolDowns min = new CoolDowns(0);
+        CoolDowns max = new CoolDowns(System.currentTimeMillis());
         UUID uuid = server.addPlayer().getUniqueId();
 
         Assertions.assertTrue(min.checkAndReset(uuid));

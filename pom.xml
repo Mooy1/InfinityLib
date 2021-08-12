@@ -38,7 +38,7 @@
         <dependency>
             <groupId>com.github.TheBusyBiscuit</groupId>
             <artifactId>Slimefun4</artifactId>
-            <version>RC-26</version>
+            <version>breaking-changes~class-relocation-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
 
@@ -117,8 +117,8 @@
                 <configuration>
                     <relocations>
                         <relocation>
-                            <pattern>org.bstats</pattern>
-                            <shadedPattern>io.github.mooy1.infinitylib.bstats</shadedPattern>
+                            <pattern>org.bstats.bukkit</pattern>
+                            <shadedPattern>io.github.mooy1.infinitylib.metrics</shadedPattern>
                         </relocation>
                     </relocations>
                     <filters>

@@ -9,7 +9,7 @@ import javax.annotation.Nonnull;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPluginLoader;
 
-import io.github.mooy1.infinitylib.commands.AbstractCommand;
+import io.github.mooy1.infinitylib.core.SubCommand;
 
 public final class MockCommandAddon extends MockAddon {
 
@@ -19,7 +19,7 @@ public final class MockCommandAddon extends MockAddon {
 
     @Nonnull
     @Override
-    protected List<AbstractCommand> setupSubCommands() {
+    protected List<SubCommand> setupSubCommands() {
         return Collections.singletonList(new MockCommand());
     }
 

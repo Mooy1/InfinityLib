@@ -1,4 +1,4 @@
-package io.github.mooy1.infinitylib.categories;
+package io.github.mooy1.infinitylib.slimefun;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -6,42 +6,42 @@ import java.util.Comparator;
 import javax.annotation.Nonnull;
 
 import org.bukkit.ChatColor;
-import org.bukkit.NamespacedKey;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import io.github.mooy1.infinitylib.core.AbstractAddon;
+import io.github.mooy1.infinitylib.utils.Items;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
+import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
+import io.github.thebusybiscuit.slimefun4.api.items.groups.FlexItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
-import io.github.thebusybiscuit.slimefun4.core.categories.FlexCategory;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuide;
+import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideImplementation;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideMode;
-import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
-import io.github.thebusybiscuit.slimefun4.implementation.guide.SurvivalSlimefunGuide;
+import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
-import me.mrCookieSlime.Slimefun.Objects.Category;
-import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
-
 /**
- * A multi category which can hold flex categories and other multi categories
+ * A multi group which can hold other groups
  *
  * @author Mooy1
  */
-public final class MultiCategory extends FlexCategory {
+@SuppressWarnings("deprecation")
+public final class MultiGroup extends FlexItemGroup {
 
-    public static final SurvivalSlimefunGuide SURVIVAL_GUIDE = (SurvivalSlimefunGuide)
-            SlimefunPlugin.getRegistry().getSlimefunGuide(SlimefunGuideMode.SURVIVAL_MODE);
+    private final ItemGroup[] subGroups;
+    private final String name;
 
-    private final Category[] subCategories;
-
-    public MultiCategory(NamespacedKey key, ItemStack item, Category... subCategories) {
-        this(key, item, 3, subCategories);
+    public MultiGroup(String key, ItemStack item, ItemGroup... subGroups) {
+        this(key, item, 3, subGroups);
     }
 
-    public MultiCategory(NamespacedKey key, ItemStack item, int tier, Category... subCategories) {
-        super(key, item, tier);
-        Arrays.sort(subCategories, Comparator.comparingInt(Category::getTier));
-        this.subCategories = subCategories;
+    public MultiGroup(String key, ItemStack item, int tier, ItemGroup... subGroups) {
+        super(AbstractAddon.makeKey(key), item, tier);
+        Arrays.sort(subGroups, Comparator.comparingInt(ItemGroup::getTier));
+        this.subGroups = subGroups;
+        this.name = Items.getName(item);
     }
 
     @Override
@@ -55,17 +55,21 @@ public final class MultiCategory extends FlexCategory {
     }
 
     private void openGuide(Player p, PlayerProfile profile, SlimefunGuideMode mode, int page) {
+        SlimefunGuideImplementation guide = Slimefun.getRegistry().getSlimefunGuide(mode);
+
         profile.getGuideHistory().add(this, page);
 
-        ChestMenu menu = new ChestMenu(SlimefunPlugin.getLocalization().getMessage(p, "guide.title.main"));
+        ChestMenu menu = new ChestMenu(this.name);
 
         menu.setEmptySlotsClickable(false);
-        menu.addMenuOpeningHandler(pl -> pl.playSound(pl.getLocation(), SURVIVAL_GUIDE.getSound(), 1, 1));
-        SURVIVAL_GUIDE.createHeader(p, profile, menu);
+        menu.addMenuOpeningHandler(pl -> pl.playSound(pl.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, 1, 1));
 
-        menu.addItem(1, new CustomItem(ChestMenuUtils.getBackButton(p, "", ChatColor.GRAY + SlimefunPlugin.getLocalization().getMessage(p, "guide.back.guide"))));
+        // TODO header
+
+        String back = ChatColor.GRAY + Slimefun.getLocalization().getMessage(p, "guide.back.guide");
+        menu.addItem(1, ChestMenuUtils.getBackButton(p, "", back));
         menu.addMenuClickHandler(1, (pl, s, is, action) -> {
-            profile.getGuideHistory().goBack(SURVIVAL_GUIDE);
+            profile.getGuideHistory().goBack(guide);
             return false;
         });
 
@@ -73,10 +77,10 @@ public final class MultiCategory extends FlexCategory {
 
         int target = (36 * (page - 1)) - 1;
 
-        while (target < (this.subCategories.length - 1) && index < 45) {
+        while (target < (this.subGroups.length - 1) && index < 45) {
             target++;
 
-            Category category = this.subCategories[target];
+            ItemGroup category = this.subGroups[target];
             menu.addItem(index, category.getItem(p));
             menu.addMenuClickHandler(index, (pl, slot, item, action) -> {
                 SlimefunGuide.openCategory(profile, category, mode, 1);
@@ -86,7 +90,7 @@ public final class MultiCategory extends FlexCategory {
             index++;
         }
 
-        int pages = target == this.subCategories.length - 1 ? page : (this.subCategories.length - 1) / 36 + 1;
+        int pages = target == this.subGroups.length - 1 ? page : (this.subGroups.length - 1) / 36 + 1;
 
         menu.addItem(46, ChestMenuUtils.getPreviousButton(p, page, pages));
         menu.addMenuClickHandler(46, (pl, slot, item, action) -> {
@@ -113,7 +117,7 @@ public final class MultiCategory extends FlexCategory {
     @Override
     public void register(@Nonnull SlimefunAddon addon) {
         super.register(addon);
-        for (Category category : this.subCategories) {
+        for (ItemGroup category : this.subGroups) {
             if (!category.isRegistered()) {
                 category.register(addon);
             }

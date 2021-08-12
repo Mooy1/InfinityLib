@@ -9,7 +9,7 @@ import org.bstats.bukkit.Metrics;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPluginLoader;
 
-import io.github.mooy1.infinitylib.commands.AbstractCommand;
+import io.github.mooy1.infinitylib.core.SubCommand;
 
 public final class MockErrorAddon extends MockAddon {
 
@@ -30,7 +30,7 @@ public final class MockErrorAddon extends MockAddon {
 
     @Nullable
     @Override
-    protected List<AbstractCommand> setupSubCommands() {
+    protected List<SubCommand> setupSubCommands() {
         throw new Error();
     }
 

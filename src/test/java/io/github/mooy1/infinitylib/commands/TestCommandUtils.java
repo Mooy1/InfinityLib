@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.ServerMock;
+import io.github.mooy1.infinitylib.core.Commands;
 import io.github.mooy1.infinitylib.mocks.MockAddon;
 import io.github.mooy1.infinitylib.mocks.MockCommand;
 import io.github.mooy1.infinitylib.mocks.MockCommandAddon;
@@ -25,7 +26,7 @@ class TestCommandUtils {
         server = MockBukkit.mock();
         addon = MockBukkit.load(MockCommandAddon.class);
 
-        CommandUtils.addSubCommands(addon, "mockaddon", Collections.singletonList(new MockCommand()));
+        Commands.addSubCommands(addon, "mockaddon", Collections.singletonList(new MockCommand()));
     }
 
     @AfterAll
@@ -56,7 +57,7 @@ class TestCommandUtils {
     @Test
     void testNoSuchCommand() {
         Assertions.assertThrows(IllegalArgumentException.class,
-                () -> CommandUtils.addSubCommands(addon, "fail", new ArrayList<>()));
+                () -> Commands.addSubCommands(addon, "fail", new ArrayList<>()));
     }
 
 }

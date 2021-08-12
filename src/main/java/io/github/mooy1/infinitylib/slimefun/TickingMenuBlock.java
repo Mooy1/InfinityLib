@@ -1,39 +1,41 @@
 package io.github.mooy1.infinitylib.slimefun;
 
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 
+import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
+import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
 import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
-import me.mrCookieSlime.Slimefun.Lists.RecipeType;
-import me.mrCookieSlime.Slimefun.Objects.Category;
-import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
 import me.mrCookieSlime.Slimefun.Objects.handlers.BlockTicker;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
-import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 
 /**
  * A slimefun item with a menu and ticker
  */
-public abstract class AbstractTickingContainer extends AbstractContainer {
+@ParametersAreNonnullByDefault
+public abstract class TickingMenuBlock extends MenuBlock {
 
-    public AbstractTickingContainer(Category category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
+    public TickingMenuBlock(ItemGroup category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
         super(category, item, recipeType, recipe);
 
         addItemHandler(new BlockTicker() {
 
             @Override
             public boolean isSynchronized() {
-                return synchronised();
+                return synchronous();
             }
 
             @Override
             public void tick(Block b, SlimefunItem item, Config data) {
                 BlockMenu menu = BlockStorage.getInventory(b);
                 if (menu != null) {
-                    AbstractTickingContainer.this.tick(menu, b);
+                    TickingMenuBlock.this.tick(menu, b);
                 }
             }
 
@@ -42,7 +44,7 @@ public abstract class AbstractTickingContainer extends AbstractContainer {
 
     protected abstract void tick(@Nonnull BlockMenu menu, @Nonnull Block b);
 
-    protected boolean synchronised() {
+    protected boolean synchronous() {
         return false;
     }
 

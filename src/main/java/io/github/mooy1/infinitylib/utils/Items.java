@@ -1,4 +1,4 @@
-package io.github.mooy1.infinitylib.items;
+package io.github.mooy1.infinitylib.utils;
 
 import java.lang.invoke.LambdaMetafactory;
 import java.lang.invoke.MethodHandle;
@@ -12,6 +12,7 @@ import java.util.function.Function;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import lombok.experimental.UtilityClass;
 
@@ -21,14 +22,14 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
-import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
-import me.mrCookieSlime.Slimefun.Objects.SlimefunItem.SlimefunItem;
-import me.mrCookieSlime.Slimefun.api.SlimefunItemStack;
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
+import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
+import io.github.thebusybiscuit.slimefun4.libraries.dough.common.ChatColors;
+import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
+import io.github.thebusybiscuit.slimefun4.libraries.dough.items.nms.ItemNameAdapter;
+import io.github.thebusybiscuit.slimefun4.libraries.dough.versions.MinecraftVersion;
 import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
-import me.mrCookieSlime.Slimefun.cscorelib2.chat.ChatColors;
-import me.mrCookieSlime.Slimefun.cscorelib2.inventory.ItemUtils;
-import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
-import me.mrCookieSlime.Slimefun.cscorelib2.reflection.ReflectionUtils;
 
 /**
  * Collection of utils for modifying ItemStacks and getting their ids
@@ -36,16 +37,17 @@ import me.mrCookieSlime.Slimefun.cscorelib2.reflection.ReflectionUtils;
  * @author Mooy1
  */
 @UtilityClass
-public final class StackUtils {
+@ParametersAreNonnullByDefault
+public final class Items {
 
-    private static final NamespacedKey ID_KEY = SlimefunPlugin.getItemDataService().getKey();
+    private static final NamespacedKey ID_KEY = Slimefun.getItemDataService().getKey();
     private static final Function<Object, String> TO_STRING;
     private static final Function<Object, Object> GET_NAME;
     private static final Function<ItemStack, Object> COPY;
 
     @Nonnull
-    public static String getIDorType(@Nonnull ItemStack item) {
-        String id = getID(item);
+    public static String getIdOrType(@Nonnull ItemStack item) {
+        String id = getId(item);
         if (id == null) {
             return item.getType().toString();
         } else {
@@ -54,45 +56,7 @@ public final class StackUtils {
     }
 
     @Nonnull
-    public static String getIDorType(@Nonnull ItemStack item, @Nonnull ItemMeta meta) {
-        String id = getID(meta);
-        if (id == null) {
-            return item.getType().toString();
-        } else {
-            return id;
-        }
-    }
-
-    @Nullable
-    public static String getID(@Nonnull ItemStack item) {
-        if (item instanceof SlimefunItemStack) {
-            return ((SlimefunItemStack) item).getItemId();
-        }
-        return item.hasItemMeta() ? getID(item.getItemMeta()) : null;
-    }
-
-    @Nullable
-    public static String getID(@Nonnull ItemMeta meta) {
-        return meta.getPersistentDataContainer().get(ID_KEY, PersistentDataType.STRING);
-    }
-
-    @Nullable
-    public static ItemStack getItemByID(@Nonnull String id) {
-        return getItemByID(id, 1);
-    }
-
-    @Nullable
-    public static ItemStack getItemByID(@Nonnull String id, int amount) {
-        SlimefunItem sfItem = SlimefunItem.getByID(id);
-        if (sfItem != null) {
-            return new CustomItem(sfItem.getItem(), amount);
-        } else {
-            return null;
-        }
-    }
-
-    @Nonnull
-    public static ItemStack[] arrayFrom(@Nonnull DirtyChestMenu menu, int[] slots) {
+    public static ItemStack[] arrayFrom(DirtyChestMenu menu, int[] slots) {
         ItemStack[] arr = new ItemStack[slots.length];
         for (int i = 0 ; i < arr.length ; i++) {
             arr[i] = menu.getItemInSlot(slots[i]);
@@ -100,16 +64,54 @@ public final class StackUtils {
         return arr;
     }
 
-    @Nullable
-    public static ItemStack getItemByIDorType(@Nonnull String id) {
-        return getItemByIDorType(id, 1);
+    @Nonnull
+    public static String getIdOrType(ItemStack item, ItemMeta meta) {
+        String id = getId(meta);
+        if (id == null) {
+            return item.getType().toString();
+        } else {
+            return id;
+        }
     }
 
     @Nullable
-    public static ItemStack getItemByIDorType(@Nonnull String id, int amount) {
-        SlimefunItem sfItem = SlimefunItem.getByID(id);
+    public static String getId(ItemStack item) {
+        if (item instanceof SlimefunItemStack) {
+            return ((SlimefunItemStack) item).getItemId();
+        }
+        return item.hasItemMeta() ? getId(item.getItemMeta()) : null;
+    }
+
+    @Nullable
+    public static String getId(ItemMeta meta) {
+        return meta.getPersistentDataContainer().get(ID_KEY, PersistentDataType.STRING);
+    }
+
+    @Nullable
+    public static ItemStack fromId(String id) {
+        return fromId(id, 1);
+    }
+
+    @Nullable
+    public static ItemStack fromId(String id, int amount) {
+        SlimefunItem sfItem = SlimefunItem.getById(id);
         if (sfItem != null) {
-            return new CustomItem(sfItem.getItem(), amount);
+            return new CustomItemStack(sfItem.getItem(), amount);
+        } else {
+            return null;
+        }
+    }
+
+    @Nullable
+    public static ItemStack fromIdOrType(String id) {
+        return fromIdOrType(id, 1);
+    }
+
+    @Nullable
+    public static ItemStack fromIdOrType(String id, int amount) {
+        SlimefunItem sfItem = SlimefunItem.getById(id);
+        if (sfItem != null) {
+            return new CustomItemStack(sfItem.getItem(), amount);
         } else {
             Material material = Material.getMaterial(id);
             if (material != null) {
@@ -121,7 +123,7 @@ public final class StackUtils {
     }
 
     @Nonnull
-    public static ItemStack addLore(@Nonnull ItemStack item, @Nonnull String... lines) {
+    public static ItemStack addLore(ItemStack item, String... lines) {
         ItemMeta meta = item.getItemMeta();
 
         List<String> lore;
@@ -141,29 +143,32 @@ public final class StackUtils {
         return item;
     }
 
-    public static String getDisplayName(@Nonnull ItemStack item) {
+    public static String getName(ItemStack item) {
         return TO_STRING.apply(GET_NAME.apply(COPY.apply(item)));
     }
 
-    public static String getDisplayName(@Nonnull ItemStack item, @Nonnull ItemMeta meta) {
+    public static String getName(ItemStack item, ItemMeta meta) {
         if (meta.hasDisplayName()) {
             return meta.getDisplayName();
         }
-        return getDisplayName(item);
+        return getName(item);
     }
 
+    // TODO pr to dough
     static {
         Function<Object, String> toString;
         Function<Object, Object> getName;
         Function<ItemStack, Object> copy;
-        if (ReflectionUtils.isUnitTestEnvironment()) {
+        ItemNameAdapter adapter = ItemNameAdapter.get();
+        if (adapter == null || MinecraftVersion.isMocked()) {
             toString = obj -> "TESTING";
             getName = obj -> obj;
             copy = obj -> obj;
         } else try {
-            toString = lambdaItemUtilsMethod("toString");
-            getName = lambdaItemUtilsMethod("getName");
-            copy = lambdaItemUtilsMethod("copy");
+            Class<?> clazz = adapter.getClass();
+            toString = lambdaMethodInField(clazz, "toString");
+            getName = lambdaMethodInField(clazz, "getName");
+            copy = lambdaMethodInField(clazz, "copy");
         } catch (Throwable e) {
             e.printStackTrace();
             toString = obj -> "ERROR";
@@ -176,9 +181,9 @@ public final class StackUtils {
     }
 
     @SuppressWarnings("unchecked")
-    private static <T, V> Function<T, V> lambdaItemUtilsMethod(String name) throws Throwable {
+    private static <T, V> Function<T, V> lambdaMethodInField(Class<?> clazz, String name) throws Throwable {
         // Reflect to access the reflected method
-        Field field = ItemUtils.class.getDeclaredField(name);
+        Field field = clazz.getDeclaredField(name);
         field.setAccessible(true);
         Method method = (Method) field.get(null);
         method.setAccessible(true);

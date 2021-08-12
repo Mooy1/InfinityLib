@@ -21,6 +21,7 @@ import be.seeseemelk.mockbukkit.WorldMock;
 import be.seeseemelk.mockbukkit.persistence.PersistentDataContainerMock;
 import io.github.mooy1.infinitylib.mocks.MockAddon;
 import io.github.mooy1.infinitylib.mocks.MockUtils;
+import io.github.mooy1.infinitylib.utils.DataType;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 
 class TestPersistenceUtils {
@@ -45,24 +46,24 @@ class TestPersistenceUtils {
     @Disabled(value = "MockBukkit issue")
     void testItemStack() {
         ItemStack item = new ItemStack(Material.OBSIDIAN);
-        container.set(key, PersistenceUtils.ITEM_STACK, item);
-        Assertions.assertEquals(item, container.get(key, PersistenceUtils.ITEM_STACK));
+        container.set(key, DataType.ITEM_STACK, item);
+        Assertions.assertEquals(item, container.get(key, DataType.ITEM_STACK));
 
         item = SlimefunItems.ANCIENT_ALTAR;
-        container.set(key, PersistenceUtils.ITEM_STACK, item);
-        Assertions.assertEquals(item, container.get(key, PersistenceUtils.ITEM_STACK));
+        container.set(key, DataType.ITEM_STACK, item);
+        Assertions.assertEquals(item, container.get(key, DataType.ITEM_STACK));
     }
 
     @Test
     @Disabled(value = "MockBukkit issue")
     void testItemStackList() {
         List<ItemStack> list = new ArrayList<>();
-        container.set(key, PersistenceUtils.ITEM_STACK_LIST, list);
-        Assertions.assertEquals(list, container.get(key, PersistenceUtils.ITEM_STACK_LIST));
+        container.set(key, DataType.ITEM_STACK_LIST, list);
+        Assertions.assertEquals(list, container.get(key, DataType.ITEM_STACK_LIST));
 
         list = Arrays.asList(new ItemStack(Material.PUMPKIN), SlimefunItems.ADVANCED_CIRCUIT_BOARD);
-        container.set(key, PersistenceUtils.ITEM_STACK_LIST, list);
-        Assertions.assertEquals(list, container.get(key, PersistenceUtils.ITEM_STACK_LIST));
+        container.set(key, DataType.ITEM_STACK_LIST, list);
+        Assertions.assertEquals(list, container.get(key, DataType.ITEM_STACK_LIST));
     }
 
     @Test
@@ -71,23 +72,23 @@ class TestPersistenceUtils {
         server.addWorld(world);
 
         Location location = new Location(null, 1, 2, 3);
-        container.set(key, PersistenceUtils.LOCATION, location);
-        Assertions.assertEquals(location, container.get(key, PersistenceUtils.LOCATION));
+        container.set(key, DataType.LOCATION, location);
+        Assertions.assertEquals(location, container.get(key, DataType.LOCATION));
 
         location = new Location(world, 1, 2, 3);
-        container.set(key, PersistenceUtils.LOCATION, location);
-        Assertions.assertEquals(location, container.get(key, PersistenceUtils.LOCATION));
+        container.set(key, DataType.LOCATION, location);
+        Assertions.assertEquals(location, container.get(key, DataType.LOCATION));
     }
 
     @Test
     void testStringList() {
         List<String> list = new ArrayList<>();
-        container.set(key, PersistenceUtils.STRING_LIST, list);
-        Assertions.assertEquals(list, container.get(key, PersistenceUtils.STRING_LIST));
+        container.set(key, DataType.STRING_LIST, list);
+        Assertions.assertEquals(list, container.get(key, DataType.STRING_LIST));
 
         list = Arrays.asList("a", "b", "c");
-        container.set(key, PersistenceUtils.STRING_LIST, list);
-        Assertions.assertEquals(list, container.get(key, PersistenceUtils.STRING_LIST));
+        container.set(key, DataType.STRING_LIST, list);
+        Assertions.assertEquals(list, container.get(key, DataType.STRING_LIST));
     }
 
 }

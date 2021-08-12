@@ -14,7 +14,7 @@ import org.bukkit.inventory.ItemStack;
 public final class RecipeMap<O> {
 
     private final Map<AbstractRecipe, O> recipes = new ConcurrentHashMap<>();
-    private final RecipeType type;
+    private final RecipeMapType type;
 
     public void put(@Nonnull ItemStack[] rawInput, @Nonnull O output) {
         this.recipes.put(this.type.apply(rawInput), output);

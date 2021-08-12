@@ -1,4 +1,4 @@
-package io.github.mooy1.infinitylib.configuration;
+package io.github.mooy1.infinitylib.core;
 
 import java.util.ArrayList;
 import java.util.List;

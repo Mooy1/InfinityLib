@@ -1,28 +1,34 @@
-package io.github.mooy1.infinitylib.players;
+package io.github.mooy1.infinitylib.utils;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * An object for holding cool downs based on uuids
+ *
+ * @author Mooy1
+ */
 @RequiredArgsConstructor
-public final class CoolDownMap {
+@ParametersAreNonnullByDefault
+public final class CoolDowns {
 
     private final Map<UUID, Long> map = new HashMap<>();
     private final long cd;
 
-    public boolean check(@Nonnull UUID uuid) {
+    public boolean check(UUID uuid) {
         return System.currentTimeMillis() - this.map.getOrDefault(uuid, 0L) >= this.cd;
     }
 
-    public void reset(@Nonnull UUID uuid) {
+    public void reset(UUID uuid) {
         this.map.put(uuid, System.currentTimeMillis());
     }
 
-    public boolean checkAndReset(@Nonnull UUID uuid) {
+    public boolean checkAndReset(UUID uuid) {
         boolean check = check(uuid);
         if (check) {
             reset(uuid);

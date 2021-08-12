@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
+import io.github.mooy1.infinitylib.core.AddonConfig;
 import io.github.mooy1.infinitylib.mocks.MockAddon;
 import io.github.mooy1.infinitylib.mocks.MockUtils;
 

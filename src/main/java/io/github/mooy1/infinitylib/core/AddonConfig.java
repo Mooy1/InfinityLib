@@ -1,4 +1,4 @@
-package io.github.mooy1.infinitylib.configuration;
+package io.github.mooy1.infinitylib.core;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -13,13 +13,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.apache.commons.lang.StringUtils;
-import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import io.github.mooy1.infinitylib.AbstractAddon;
-
 /**
- * A config which is able to save all of it's comments and has some additional utility methods
+ * A config which is able to save all of its comments and has some additional utility methods
  *
  * @author Mooy1
  */
@@ -27,14 +24,13 @@ public final class AddonConfig extends YamlConfiguration {
 
     private final YamlConfiguration defaults = new YamlConfiguration();
     private final Map<String, String> comments = new HashMap<>();
-    private final AbstractAddon addon;
     private final File file;
 
-    public AddonConfig(@Nonnull AbstractAddon addon, @Nonnull String name) {
-        this.file = new File(addon.getDataFolder(), name);
+    public AddonConfig(@Nonnull String path) {
+        AbstractAddon addon = AbstractAddon.instance();
+        this.file = new File(addon.getDataFolder(), path);
         super.defaults = this.defaults;
-        this.addon = addon;
-        loadDefaults(name);
+        loadDefaults(addon, path);
     }
 
     public int getInt(@Nonnull String path, int min, int max) {
@@ -53,6 +49,17 @@ public final class AddonConfig extends YamlConfiguration {
         return val;
     }
 
+    /**
+     * Removes unused/old keys from the users config
+     */
+    public void removeUnusedKeys() {
+        for (String key : getKeys(true)) {
+            if (!this.defaults.contains(key)) {
+                set(key, null);
+            }
+        }
+    }
+
     public void save() {
         try {
             save(this.file);
@@ -63,7 +70,7 @@ public final class AddonConfig extends YamlConfiguration {
 
     @Override
     public void save(@Nonnull File file) throws IOException {
-        if (this.addon.isNotTesting()) {
+        if (AbstractAddon.isNotTesting()) {
             super.save(file);
         }
     }
@@ -94,16 +101,6 @@ public final class AddonConfig extends YamlConfiguration {
         return "";
     }
 
-    @Override
-    public void loadFromString(@Nonnull String contents) throws InvalidConfigurationException {
-        super.loadFromString(contents);
-        for (String key : getKeys(true)) {
-            if (!this.defaults.contains(key)) {
-                set(key, null);
-            }
-        }
-    }
-
     @Nonnull
     @Override
     public String saveToString() {
@@ -132,8 +129,8 @@ public final class AddonConfig extends YamlConfiguration {
         }
     }
 
-    private void loadDefaults(String name) {
-        InputStream stream = this.addon.getResource(name);
+    private void loadDefaults(AbstractAddon addon, String name) {
+        InputStream stream = addon.getResource(name);
 
         if (stream == null) {
             throw new IllegalStateException("No default config for " + name + "!");
@@ -142,14 +139,6 @@ public final class AddonConfig extends YamlConfiguration {
             this.defaults.loadFromString(def);
         } catch (Throwable e) {
             e.printStackTrace();
-        }
-
-        // Add an auto update thing just in case
-        if (name.equals("config.yml")) {
-            String path = this.addon.getAutoUpdatePath();
-            if (path != null && !this.defaults.contains(path)) {
-                this.defaults.set(path, true);
-            }
         }
 
         reload();
