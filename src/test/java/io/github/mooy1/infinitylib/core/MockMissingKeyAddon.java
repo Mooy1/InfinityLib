@@ -8,7 +8,7 @@ import org.bukkit.plugin.java.JavaPluginLoader;
 class MockMissingKeyAddon extends MockAddon {
 
     protected MockMissingKeyAddon(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file) {
-        super(loader, description(MockMissingKeyAddon.class), dataFolder, file,
+        super(loader, description, dataFolder, file,
                 "Mooy1", "InfinityLib", "master", "fail");
     }
 

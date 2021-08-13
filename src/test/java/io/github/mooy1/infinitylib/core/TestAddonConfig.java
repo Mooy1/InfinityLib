@@ -14,6 +14,7 @@ class TestAddonConfig {
     @BeforeAll
     public static void load() {
         MockBukkit.mock();
+        MockBukkit.load(MockAddon.class);
         config = new AddonConfig("test.yml");
     }
 

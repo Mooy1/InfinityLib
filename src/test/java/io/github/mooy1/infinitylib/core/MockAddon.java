@@ -23,10 +23,6 @@ class MockAddon extends AbstractAddon {
         MockBukkit.load(Slimefun.class);
     }
 
-    protected static PluginDescriptionFile description(Class<? extends MockAddon> clazz) {
-        return new PluginDescriptionFile("MockAddon", "MockVersion", clazz.getName());
-    }
-
     @Override
     protected void enable() {
 

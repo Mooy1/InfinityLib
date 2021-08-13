@@ -8,7 +8,7 @@ import org.bukkit.plugin.java.JavaPluginLoader;
 class MockSuperDisableAddon extends MockAddon {
 
     protected MockSuperDisableAddon(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file) {
-        super(loader, description(MockSuperDisableAddon.class), dataFolder, file);
+        super(loader, description, dataFolder, file);
     }
 
     @Override

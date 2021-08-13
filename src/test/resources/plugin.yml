@@ -4,10 +4,6 @@ main: io.github.mooy1.infinitylib.core.MockAddon
 
 commands:
   mockaddon:
-    description: MockAddon Command
+    description: MockCommand
   test:
-    description: Test AddonCommand
-
-permissions:
-  test:
-    default: op
+    description: TestCommand

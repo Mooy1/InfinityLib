@@ -28,7 +28,7 @@ public final class Events implements Listener {
     /**
      * Registers the given listener class
      */
-    public static void register(Listener listener) {
+    public static void registerListener(Listener listener) {
         Bukkit.getPluginManager().registerEvents(listener, AbstractAddon.instance());
     }
 
@@ -36,7 +36,7 @@ public final class Events implements Listener {
      * Registers the given handler to the given event
      */
     @SuppressWarnings("unchecked")
-    public static <T extends Event> void register(Class<T> eventClass, EventPriority priority, boolean ignoreCancelled, Consumer<T> handler) {
+    public static <T extends Event> void addHandler(Class<T> eventClass, EventPriority priority, boolean ignoreCancelled, Consumer<T> handler) {
         AbstractAddon instance = AbstractAddon.instance();
         Bukkit.getPluginManager().registerEvent(eventClass, LISTENER, priority, (listener, event) -> {
             handler.accept((T) event);

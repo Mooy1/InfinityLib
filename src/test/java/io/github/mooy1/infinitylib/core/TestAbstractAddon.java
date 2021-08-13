@@ -1,7 +1,10 @@
 package io.github.mooy1.infinitylib.core;
 
+import java.io.StringReader;
 import java.util.logging.Level;
 
+import org.bukkit.plugin.InvalidDescriptionException;
+import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
@@ -101,35 +104,45 @@ class TestAbstractAddon {
     @Order(Integer.MAX_VALUE)
     void testMissingAutoUpdateKey() {
         manager.clearPlugins();
-        Assertions.assertThrows(RuntimeException.class, () -> MockBukkit.load(MockSuperEnableAddon.class));
+        Assertions.assertThrows(RuntimeException.class, () -> loadAlternate(MockMissingKeyAddon.class));
     }
 
     @Test
     @Order(Integer.MAX_VALUE)
     void testSuperEnable() {
         manager.clearPlugins();
-        Assertions.assertDoesNotThrow(() -> MockBukkit.load(MockSuperEnableAddon.class));
+        Assertions.assertDoesNotThrow(() -> loadAlternate(MockSuperEnableAddon.class));
     }
 
     @Test
     @Order(Integer.MAX_VALUE)
     void testSuperDisable() {
         manager.clearPlugins();
-        Assertions.assertDoesNotThrow(() -> MockBukkit.load(MockSuperDisableAddon.class));
+        Assertions.assertDoesNotThrow(() -> loadAlternate(MockSuperDisableAddon.class));
     }
 
     @Test
     @Order(Integer.MAX_VALUE)
     void testEnableErrorCaught() {
         manager.clearPlugins();
-        Assertions.assertDoesNotThrow(() -> MockBukkit.load(MockCaughtErrorAddon.class));
+        Assertions.assertDoesNotThrow(() -> loadAlternate(MockCaughtErrorAddon.class));
     }
 
     @Test
     @Order(Integer.MAX_VALUE)
     void testBadGithubStrings() {
         manager.clearPlugins();
-        Assertions.assertThrows(RuntimeException.class, () -> MockBukkit.load(MockFailAddon.class));
+        Assertions.assertThrows(RuntimeException.class, () -> loadAlternate(MockFailAddon.class));
+    }
+
+    private static void loadAlternate(Class<? extends MockAddon> clazz) throws InvalidDescriptionException {
+        String pluginYML = "name: MockAddon\n" +
+                "version: MockVersion\n" +
+                "main: " + clazz.getName() + '\n' +
+                "commands:\n" +
+                "  mockaddon:\n" +
+                "    description: MockCommand\n";
+        MockBukkit.loadWith(clazz, new PluginDescriptionFile(new StringReader(pluginYML)));
     }
 
 }

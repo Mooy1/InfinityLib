@@ -12,6 +12,12 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabExecutor;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.server.ServerCommandEvent;
+
+import io.github.mooy1.infinitylib.utils.Events;
 
 /**
  * The main command of an addon, which can hold multiple sub commands
@@ -19,7 +25,10 @@ import org.bukkit.command.TabExecutor;
  * @author Mooy1
  */
 @ParametersAreNonnullByDefault
-public final class AddonCommand extends ParentCommand implements TabExecutor {
+public final class AddonCommand extends ParentCommand implements TabExecutor, Listener {
+
+    private final String help;
+    private final String slashHelp;
 
     public AddonCommand(String command) {
         this(Objects.requireNonNull(AbstractAddon.instance().getCommand(command),
@@ -30,6 +39,23 @@ public final class AddonCommand extends ParentCommand implements TabExecutor {
         super(command.getName(), command.getDescription());
         command.setExecutor(this);
         command.setTabCompleter(this);
+        Events.registerListener(this);
+        this.help = "help" + command.getName();
+        this.slashHelp = "/" + this.help;
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    private void onServerCommand(ServerCommandEvent e) {
+        if (e.getCommand().toLowerCase(Locale.ROOT).startsWith(this.help)) {
+            e.setCommand(name());
+        }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    private void onPlayerCommand(ServerCommandEvent e) {
+        if (e.getCommand().toLowerCase(Locale.ROOT).startsWith(this.slashHelp)) {
+            e.setCommand(name());
+        }
     }
 
     @Override

@@ -8,12 +8,17 @@ import org.bukkit.plugin.java.JavaPluginLoader;
 class MockCaughtErrorAddon extends MockAddon {
 
     public MockCaughtErrorAddon(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file) {
-        super(loader, description(MockCaughtErrorAddon.class), dataFolder, file);
+        super(loader, description, dataFolder, file);
     }
 
     @Override
     protected void enable() {
-        throw new Error();
+        throw new Error() {
+            @Override
+            public void printStackTrace() {
+                // It's meant to fail, no need to show stacktrace
+            }
+        };
     }
 
 }

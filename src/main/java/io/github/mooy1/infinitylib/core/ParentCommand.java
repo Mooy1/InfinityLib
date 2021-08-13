@@ -20,14 +20,17 @@ public class ParentCommand extends SubCommand {
 
     public ParentCommand(String name, String description, String perm) {
         super(name, description, perm);
+        addSub(this.helpCommand);
     }
 
     public ParentCommand(String name, String description, boolean op) {
         super(name, description, op);
+        addSub(this.helpCommand);
     }
 
     public ParentCommand(String name, String description) {
         super(name, description);
+        addSub(this.helpCommand);
     }
 
     @Nonnull
@@ -69,16 +72,14 @@ public class ParentCommand extends SubCommand {
 
     @Override
     protected final void complete(CommandSender sender, String[] args, List<String> completions) {
-        if (args.length == 0) {
-            for (SubCommand command : this.commands.values()) {
-                if (command.canUse(sender)) {
-                    completions.add(command.name());
-                }
-            }
+        SubCommand command = this.commands.get(args[0]);
+        if (command != null && command.canUse(sender)) {
+            command.complete(sender, Arrays.copyOfRange(args, 1, args.length), completions);
         } else {
-            SubCommand command = this.commands.get(args[0]);
-            if (command != null && command.canUse(sender)) {
-                command.complete(sender, Arrays.copyOfRange(args, 1, args.length), completions);
+            for (SubCommand sub : this.commands.values()) {
+                if (sub.canUse(sender)) {
+                    completions.add(sub.name());
+                }
             }
         }
     }
