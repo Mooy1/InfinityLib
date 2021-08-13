@@ -1,4 +1,4 @@
-package io.github.mooy1.infinitylib.players;
+package io.github.mooy1.infinitylib.utils;
 
 import java.util.UUID;
 
@@ -9,9 +9,8 @@ import org.junit.jupiter.api.Test;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.ServerMock;
-import io.github.mooy1.infinitylib.utils.CoolDowns;
 
-class TestCoolDownMap {
+class TestCoolDowns {
 
     private static ServerMock server;
 

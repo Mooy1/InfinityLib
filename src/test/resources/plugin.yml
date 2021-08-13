@@ -1,7 +1,13 @@
 name: MockAddon
-version: Mock
-main: io.github.mooy1.infinitylib.mocks.MockCommandAddon
+version: MockVersion
+main: io.github.mooy1.infinitylib.core.MockAddon
 
 commands:
   mockaddon:
-    description: Mock Addon Command
+    description: MockAddon Command
+  test:
+    description: Test AddonCommand
+
+permissions:
+  test:
+    default: op

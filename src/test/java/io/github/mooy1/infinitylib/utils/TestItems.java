@@ -1,4 +1,6 @@
-package io.github.mooy1.infinitylib.items;
+package io.github.mooy1.infinitylib.utils;
+
+import java.util.Objects;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -9,18 +11,18 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
-import io.github.mooy1.infinitylib.utils.MenuItem;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
-import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import io.github.thebusybiscuit.slimefun4.implementation.setup.SlimefunItemSetup;
 
-class TestStackUtils {
+class TestItems {
+
+    private static Slimefun slimefun;
 
     @BeforeAll
     public static void load() {
         MockBukkit.mock();
-        MockBukkit.load(SlimefunPlugin.class);
+        slimefun = MockBukkit.load(Slimefun.class);
     }
 
     @AfterAll
@@ -34,10 +36,10 @@ class TestStackUtils {
         ItemStack stone = new ItemStack(Material.STONE);
         String saltID = SlimefunItems.SALT.getItemId();
 
-        Assertions.assertNull(MenuItem.getID(stone));
-        Assertions.assertEquals(saltID, MenuItem.getID(salt));
-        Assertions.assertEquals(Material.STONE.name(), MenuItem.getIDorType(stone));
-        Assertions.assertEquals(saltID, MenuItem.getIDorType(salt));
+        Assertions.assertNull(Items.getId(stone));
+        Assertions.assertEquals(saltID, Items.getId(salt));
+        Assertions.assertEquals(Material.STONE.name(), Items.getIdOrType(stone));
+        Assertions.assertEquals(saltID, Items.getIdOrType(salt));
     }
 
     @Test
@@ -46,29 +48,28 @@ class TestStackUtils {
         String saltID = SlimefunItems.SALT.getItemId();
         String stoneID = Material.STONE.name();
 
-        SlimefunItemSetup.setup(MockBukkit.load(Slimefun.class));
+        SlimefunItemSetup.setup(slimefun);
 
-        Assertions.assertNull(MenuItem.getItemByID(stoneID));
-        Assertions.assertEquals(salt, MenuItem.getItemByID(saltID));
-        Assertions.assertEquals(salt, MenuItem.getItemByIDorType(saltID));
-        Assertions.assertEquals(new ItemStack(Material.STONE), MenuItem.getItemByIDorType(stoneID));
+        Assertions.assertNull(Items.fromId(stoneID));
+        Assertions.assertEquals(salt, Items.fromId(saltID));
+        Assertions.assertEquals(salt, Items.fromIdOrType(saltID));
+        Assertions.assertEquals(new ItemStack(Material.STONE), Items.fromIdOrType(stoneID));
     }
 
     @Test
     void testGetDisplayName() {
         ItemStack salt = SlimefunItems.SALT.clone();
-        ItemMeta meta = salt.getItemMeta();
+        ItemMeta meta = Objects.requireNonNull(salt.getItemMeta());
 
-        Assertions.assertNotNull(meta);
-        Assertions.assertEquals(SlimefunItems.SALT.getDisplayName(), MenuItem.getName(salt, meta));
-        Assertions.assertEquals("TESTING", MenuItem.getName(salt));
-        Assertions.assertEquals("TESTING", MenuItem.getName(new ItemStack(Material.STONE)));
+        Assertions.assertEquals(SlimefunItems.SALT.getDisplayName(), Items.getName(salt, meta));
+        Assertions.assertEquals("TESTING", Items.getName(salt));
+        Assertions.assertEquals("TESTING", Items.getName(new ItemStack(Material.STONE)));
     }
 
     @Test
     void testAddLore() {
         ItemStack item = new ItemStack(Material.STONE);
-        MenuItem.addLore(item, "test");
+        Items.addLore(item, "test");
         ItemMeta meta = item.getItemMeta();
 
         Assertions.assertNotNull(meta);

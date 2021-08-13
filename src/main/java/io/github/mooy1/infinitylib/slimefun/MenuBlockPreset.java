@@ -10,13 +10,11 @@ import org.bukkit.inventory.ItemStack;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.protection.Interaction;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
-import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 
-@SuppressWarnings("deprecation")
 @ParametersAreNonnullByDefault
 public final class MenuBlockPreset extends BlockMenuPreset {
 
@@ -53,9 +51,8 @@ public final class MenuBlockPreset extends BlockMenuPreset {
         return new int[0];
     }
 
-    @Override
-    public ChestMenu addItem(int slot, @Nullable ItemStack item) {
-        return addItem(slot, item, ChestMenuUtils.getEmptyClickHandler());
+    public void addBackground(int slot, @Nullable ItemStack item) {
+        addItem(slot, item, ChestMenuUtils.getEmptyClickHandler());
     }
 
 }

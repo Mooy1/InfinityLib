@@ -16,7 +16,7 @@ import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
  */
 @UtilityClass
 @ParametersAreNonnullByDefault
-public final class Lore {
+public final class ItemLore {
 
     private static final DecimalFormat FORMAT = new DecimalFormat("###,###,###,###,###,###.#");
     private static final double TPS = 20D / Slimefun.getTickerTask().getTickRate();

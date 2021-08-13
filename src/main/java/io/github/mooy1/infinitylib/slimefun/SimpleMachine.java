@@ -58,7 +58,7 @@ public class SimpleMachine extends TickingMenuBlock implements EnergyNetComponen
         preset.drawBackground(MenuItem.STATUS_BORDER, this.statusBorder);
         preset.drawBackground(MenuItem.OUTPUT_BORDER, this.outputBorder);
         preset.drawBackground(MenuItem.INPUT_BORDER, this.inputBorder);
-        preset.addItem(this.statusSlot, MenuItem.LOADING);
+        preset.addBackground(this.statusSlot, MenuItem.LOADING);
     }
 
     @Override

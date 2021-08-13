@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import org.bukkit.command.CommandSender;
@@ -17,39 +18,38 @@ public class ParentCommand extends SubCommand {
     private final Map<String, SubCommand> commands = new HashMap<>();
     private final SubCommand helpCommand = new HelpCommand(this);
 
-    public ParentCommand(String name, String description, String perm, SubCommand... subCommands) {
+    public ParentCommand(String name, String description, String perm) {
         super(name, description, perm);
-        initialize(subCommands);
     }
 
-    public ParentCommand(String name, String description, boolean op, SubCommand... subCommands) {
+    public ParentCommand(String name, String description, boolean op) {
         super(name, description, op);
-        initialize(subCommands);
     }
 
-    public ParentCommand(String name, String description, SubCommand... subCommands) {
+    public ParentCommand(String name, String description) {
         super(name, description);
-        initialize(subCommands);
     }
 
-    void addCommand(SubCommand command) {
+    @Nonnull
+    ParentCommand addSub(SubCommand command) {
+        if (command == this) {
+            throw new IllegalArgumentException("'" + command.name() + "' cannot be added to itself!");
+        }
+        if (command == this.parent) {
+            throw new IllegalArgumentException("Parent command '" + command.name() + "' cannot be added to child " + this.name());
+        }
         this.commands.compute(command.name(), (name, cmd) -> {
             if (cmd != null) {
-                throw new IllegalStateException("Duplicate command '" + command.name() + "' registered too" + ParentCommand.this.name());
+                throw new IllegalArgumentException("Duplicate command '" + command.name() + "' cannot be added to " + this.name());
             }
+            command.parent = this;
             return command;
         });
-    }
-
-    private void initialize(SubCommand[] subCommands) {
-        addCommand(this.helpCommand);
-        for (SubCommand command : subCommands) {
-            addCommand(command);
-        }
+        return this;
     }
 
     @Override
-    protected void execute(CommandSender sender, String[] args) {
+    protected final void execute(CommandSender sender, String[] args) {
         if (args.length == 0) {
             execute(sender);
         } else {
@@ -63,7 +63,7 @@ public class ParentCommand extends SubCommand {
     /**
      * This is called when no sub command is used
      */
-    protected final void execute(CommandSender sender) {
+    protected void execute(CommandSender sender) {
         this.helpCommand.execute(sender, new String[0]);
     }
 
@@ -83,7 +83,7 @@ public class ParentCommand extends SubCommand {
         }
     }
 
-    protected final Set<SubCommand> available(CommandSender sender) {
+    final Set<SubCommand> available(CommandSender sender) {
         Set<SubCommand> set = new HashSet<>();
         for (SubCommand command : this.commands.values()) {
             if (command.canUse(sender)) {

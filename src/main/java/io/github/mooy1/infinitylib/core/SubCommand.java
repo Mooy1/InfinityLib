@@ -18,9 +18,9 @@ public abstract class SubCommand {
 
     private final Predicate<CommandSender> permission;
     private final String description;
-    private ParentCommand parent;
     private final String name;
     private String fullName;
+    ParentCommand parent;
 
     protected SubCommand(String name, String description, String perm) {
         this.name = name.toLowerCase(Locale.ROOT);

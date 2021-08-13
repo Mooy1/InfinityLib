@@ -1,4 +1,4 @@
-package io.github.mooy1.infinitylib.persistence;
+package io.github.mooy1.infinitylib.utils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,12 +19,9 @@ import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.ServerMock;
 import be.seeseemelk.mockbukkit.WorldMock;
 import be.seeseemelk.mockbukkit.persistence.PersistentDataContainerMock;
-import io.github.mooy1.infinitylib.mocks.MockAddon;
-import io.github.mooy1.infinitylib.mocks.MockUtils;
-import io.github.mooy1.infinitylib.utils.DataType;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 
-class TestPersistenceUtils {
+class TestDataTypes {
 
     private static ServerMock server;
     private static PersistentDataContainer container;
@@ -34,7 +31,7 @@ class TestPersistenceUtils {
     public static void load() {
         server = MockBukkit.mock();
         container = new PersistentDataContainerMock();
-        key = new NamespacedKey(MockUtils.mock(MockAddon.class), "key");
+        key = new NamespacedKey(MockBukkit.createMockPlugin(), "key");
     }
 
     @AfterAll

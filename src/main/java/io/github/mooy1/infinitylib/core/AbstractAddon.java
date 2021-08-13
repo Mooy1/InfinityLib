@@ -33,24 +33,25 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
 
     private static AbstractAddon instance;
 
+    private final String githubUserName;
+    private final String githubRepo;
+    private final String githubBranch;
+    private final String autoUpdateKey;
     private final boolean notTesting;
-    private boolean autoUpdateEnabled;
+
+    private boolean autoUpdatesEnabled;
     private boolean officialBuild;
-    private boolean enabled;
-
-    private String autoUpdateKey;
-    private String githubUserName;
-    private String githubRepo;
-    private String githubBranch;
     private String bugTrackerURL;
+    private boolean disabling;
 
-    private AddonCommand command;
+    private ParentCommand command;
     private AddonConfig config;
     private int tickCount;
 
     /**
      * Main Constructor
      */
+    @SuppressWarnings("unused")
     public AbstractAddon(String githubUserName, String githubRepo, String githubBranch, @Nullable String autoUpdateKey) {
         this.notTesting = true;
         this.githubUserName = githubUserName;
@@ -62,31 +63,33 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
     /**
      * MockBukkit Constructor
      */
-    protected AbstractAddon(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file) {
+    protected AbstractAddon(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file,
+                            String githubUserName, String githubRepo, String githubBranch, @Nullable String autoUpdateKey) {
         super(loader, description, dataFolder, file);
         this.notTesting = false;
+        this.githubUserName = githubUserName;
+        this.githubBranch = githubBranch;
+        this.githubRepo = githubRepo;
+        this.autoUpdateKey = autoUpdateKey;
     }
 
     @Override
     public final void onEnable() {
-        if (this.enabled) {
-            throw new IllegalStateException(getName() + " is already enabled! Do not call super.onEnable()!");
+        if (instance != null) {
+            throw new IllegalStateException(getName() + " is already enabled! Do not call super.onEnable()! Use your own InfinityLib!");
         }
 
+        // Set static instance
         instance = this;
 
-        this.enabled = true;
-
         // Validate GitHub path
-        if (isNotTesting()) {
-            Pattern valid = Pattern.compile("[\\w-]+");
-            Validate.isTrue(valid.matcher(this.githubUserName).matches());
-            Validate.isTrue(valid.matcher(this.githubRepo).matches());
-            Validate.isTrue(valid.matcher(this.githubBranch).matches());
+        Pattern valid = Pattern.compile("[\\w-]+");
+        Validate.isTrue(valid.matcher(this.githubUserName).matches());
+        Validate.isTrue(valid.matcher(this.githubRepo).matches());
+        Validate.isTrue(valid.matcher(this.githubBranch).matches());
 
-            // Create bug track url
-            this.bugTrackerURL = "https://github.com/" + this.githubUserName + "/" + this.githubRepo + "/issues";
-        }
+        // Create bug track url
+        this.bugTrackerURL = "https://github.com/" + this.githubUserName + "/" + this.githubRepo + "/issues";
 
         // Check if it's an official build
         this.officialBuild = getDescription().getVersion().matches("DEV - \\d+ \\(git \\w+\\)");
@@ -109,43 +112,59 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
         }
 
         // Check if auto updates are enabled
-        this.autoUpdateEnabled = updater != null && this.config.getBoolean(this.autoUpdateKey);
+        this.autoUpdatesEnabled = updater != null && this.config.getBoolean(this.autoUpdateKey);
 
         // Auto update if enabled
-        if (this.autoUpdateEnabled) {
+        if (this.autoUpdatesEnabled) {
             updater.start();
         }
 
-        // Add default commands
+        // Make sure config has an auto update key available to the user
+        if (this.autoUpdateKey != null && !this.config.getDefaults().contains(this.autoUpdateKey)) {
+            throw new IllegalStateException("Tell the dev to add their auto update key to the config! (Maybe a comment too)");
+        }
+
+        // Get plugin command
         PluginCommand command = getCommand(getName());
         if (command == null) {
-            throw new IllegalStateException("Add a command with the same name as your addon to your plugin.yml!");
+            throw new IllegalStateException("Tell the dev to add a command with the same name as the addon to the plugin.yml!");
         }
-        this.command = new AddonCommand(command);
+
+        // Add default commands
+        this.command = new AddonCommand(command)
+            .addSub(new InfoCommand(this))
+            .addSub(new AliasesCommand(command));
 
         // Create total tick count
         Tasks.repeat(Slimefun.getTickerTask().getTickRate(), () -> this.tickCount++);
 
-        // Enable
+        // Call addon enable
         try {
             enable();
         } catch (Throwable e) {
-            if (isNotTesting()) {
-                e.printStackTrace();
-            }
+            e.printStackTrace();
         }
     }
 
     @Override
     public final void onDisable() {
-        if (!this.enabled) {
+        if (this.disabling) {
             throw new IllegalStateException(getName() + " is already disabled! Do not call super.onDisable()!");
         }
-        this.enabled = false;
+
+        this.disabling = true;
 
         Bukkit.getScheduler().cancelTasks(this);
 
-        disable();
+        try {
+            disable();
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+
+        this.disabling = false;
+
+        instance = null;
     }
 
     /**
@@ -159,10 +178,18 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
     protected abstract void disable();
 
     /**
-     * Adds a sub command to the command of the same name as this addon
+     * Gets the command of the same name as this addon
      */
-    protected final void addCommand(SubCommand subCommand) {
-        this.command.addCommand(subCommand);
+    @Nonnull
+    protected final ParentCommand getCommand() {
+        return this.command;
+    }
+
+    /**
+     * Returns whether auto updates are enabled, for use in metrics
+     */
+    protected final boolean autoUpdatesEnabled() {
+        return this.autoUpdatesEnabled;
     }
 
     @Nonnull
@@ -198,11 +225,13 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
         // Do nothing, it's covered in onEnable()
     }
 
+    @Nonnull
     @SuppressWarnings("unchecked")
     public static <T extends AbstractAddon> T instance() {
-        return Objects.requireNonNull((T) AbstractAddon.instance, "Addon is not enabled!");
+        return (T) Objects.requireNonNull(AbstractAddon.instance, "Addon is not enabled!");
     }
 
+    @Nonnull
     public static AddonConfig config() {
         return instance().getConfig();
     }
@@ -236,15 +265,9 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
     }
 
     /**
-     * Returns whether auto updates are enabled
-     */
-    public static boolean areAutoUpdatesEnabled() {
-        return instance.autoUpdateEnabled;
-    }
-
-    /**
      * Creates a NameSpacedKey from the given string
      */
+    @Nonnull
     public static NamespacedKey makeKey(String s) {
         return new NamespacedKey(instance(), s);
     }

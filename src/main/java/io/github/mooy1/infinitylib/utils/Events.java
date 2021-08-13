@@ -2,9 +2,10 @@ package io.github.mooy1.infinitylib.utils;
 
 import java.util.function.Consumer;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import lombok.experimental.UtilityClass;
 
 import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
@@ -18,7 +19,7 @@ import io.github.mooy1.infinitylib.core.AbstractAddon;
  *
  * @author Mooy1
  */
-@UtilityClass
+@ParametersAreNonnullByDefault
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Events implements Listener {
 

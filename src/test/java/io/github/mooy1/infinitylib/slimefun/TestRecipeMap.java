@@ -1,4 +1,4 @@
-package io.github.mooy1.infinitylib.recipes;
+package io.github.mooy1.infinitylib.slimefun;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -8,16 +8,19 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
+import io.github.mooy1.infinitylib.todo.recipes.RecipeMap;
+import io.github.mooy1.infinitylib.todo.recipes.RecipeMapType;
+import io.github.mooy1.infinitylib.todo.recipes.RecipeOutput;
+import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
-import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
-import me.mrCookieSlime.Slimefun.cscorelib2.item.CustomItem;
+import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
 
 class TestRecipeMap {
 
     @BeforeAll
     public static void load() {
         MockBukkit.mock();
-        MockBukkit.load(SlimefunPlugin.class);
+        MockBukkit.load(Slimefun.class);
     }
 
     @AfterAll
@@ -37,10 +40,10 @@ class TestRecipeMap {
                 stone, null
         };
         ItemStack[] third = new ItemStack[] {
-                new CustomItem(stone, 2), SlimefunItems.SILVER_INGOT.clone()
+                new CustomItemStack(stone, 2), SlimefunItems.SILVER_INGOT.clone()
         };
         ItemStack[] fourth = new ItemStack[] {
-                new CustomItem(stone, 2), SlimefunItems.SILVER_INGOT.clone()
+                new CustomItemStack(stone, 2), SlimefunItems.SILVER_INGOT.clone()
         };
 
         RecipeMap<ItemStack> map = new RecipeMap<>(RecipeMapType.SHAPED);
@@ -72,10 +75,10 @@ class TestRecipeMap {
                 stone, null
         };
         ItemStack[] third = new ItemStack[] {
-                new CustomItem(stone, 2), SlimefunItems.SILVER_INGOT.clone()
+                new CustomItemStack(stone, 2), SlimefunItems.SILVER_INGOT.clone()
         };
         ItemStack[] fourth = new ItemStack[] {
-                new CustomItem(stone, 2), SlimefunItems.SILVER_INGOT.clone()
+                new CustomItemStack(stone, 2), SlimefunItems.SILVER_INGOT.clone()
         };
 
         RecipeMap<ItemStack> map = new RecipeMap<>(RecipeMapType.SHAPELESS);

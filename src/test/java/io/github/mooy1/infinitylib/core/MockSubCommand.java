@@ -1,4 +1,4 @@
-package io.github.mooy1.infinitylib.mocks;
+package io.github.mooy1.infinitylib.core;
 
 import java.util.List;
 
@@ -6,12 +6,18 @@ import javax.annotation.Nonnull;
 
 import org.bukkit.command.CommandSender;
 
-import io.github.mooy1.infinitylib.core.SubCommand;
+class MockSubCommand extends SubCommand {
 
-public final class MockCommand extends SubCommand {
+    protected MockSubCommand(String name, String perm) {
+        super(name, "test", perm);
+    }
 
-    public MockCommand() {
-        super("test", "test", true);
+    protected MockSubCommand(String name, boolean op) {
+        super(name, "test", op);
+    }
+
+    protected MockSubCommand(String name) {
+        super(name, "test");
     }
 
     @Override

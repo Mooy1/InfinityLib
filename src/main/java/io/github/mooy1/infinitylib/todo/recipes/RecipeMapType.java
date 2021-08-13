@@ -1,4 +1,4 @@
-package io.github.mooy1.infinitylib.recipes;
+package io.github.mooy1.infinitylib.todo.recipes;
 
 import java.util.function.Function;
 

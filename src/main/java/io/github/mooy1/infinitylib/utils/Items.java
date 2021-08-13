@@ -36,6 +36,7 @@ import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
  *
  * @author Mooy1
  */
+// TODO rename
 @UtilityClass
 @ParametersAreNonnullByDefault
 public final class Items {

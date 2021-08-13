@@ -4,40 +4,42 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.TabExecutor;
 
-import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
-
 /**
  * The main command of an addon, which can hold multiple sub commands
  *
  * @author Mooy1
  */
-final class AddonCommand extends ParentCommand implements TabExecutor {
+@ParametersAreNonnullByDefault
+public final class AddonCommand extends ParentCommand implements TabExecutor {
 
-    AddonCommand(PluginCommand command) {
-        super(command.getName(), command.getDescription(),
-                new InfoCommand((SlimefunAddon) command.getPlugin()),
-                new AliasesCommand(command)
-        );
+    public AddonCommand(String command) {
+        this(Objects.requireNonNull(AbstractAddon.instance().getCommand(command),
+                "No such command '" + command + "'! Add it it to your plugin.yml!"));
+    }
+
+    public AddonCommand(PluginCommand command) {
+        super(command.getName(), command.getDescription());
         command.setExecutor(this);
         command.setTabCompleter(this);
     }
 
     @Override
-    public boolean onCommand(@Nonnull CommandSender sender, @Nonnull Command command, @Nonnull String label, @Nonnull String[] args) {
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         execute(sender, args);
         return true;
     }
 
     @Override
-    public List<String> onTabComplete(@Nonnull CommandSender sender, @Nonnull Command command, @Nonnull String alias, String[] args) {
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         List<String> strings = new ArrayList<>();
         complete(sender, args, strings);
         List<String> returnList = new ArrayList<>();

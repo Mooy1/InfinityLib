@@ -1,4 +1,4 @@
-package io.github.mooy1.infinitylib.configuration;
+package io.github.mooy1.infinitylib.core;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
@@ -6,25 +6,25 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
-import io.github.mooy1.infinitylib.core.AddonConfig;
-import io.github.mooy1.infinitylib.mocks.MockAddon;
-import io.github.mooy1.infinitylib.mocks.MockUtils;
 
 class TestAddonConfig {
 
-    private static MockAddon addon;
     private static AddonConfig config;
 
     @BeforeAll
     public static void load() {
         MockBukkit.mock();
-        addon = MockUtils.mock(MockAddon.class);
-        config = new AddonConfig(addon, "test.yml");
+        config = new AddonConfig("test.yml");
     }
 
     @AfterAll
     public static void unload() {
         MockBukkit.unmock();
+    }
+
+    @Test
+    void testNoDefaults() {
+        Assertions.assertThrows(IllegalStateException.class, () -> new AddonConfig("fail.yml"));
     }
 
     @Test
@@ -53,11 +53,6 @@ class TestAddonConfig {
                 "  # test\n" + 
                 "  test: test\n";
         Assertions.assertEquals(correct, config.saveToString());
-    }
-
-    @Test
-    void testNoDefaults() {
-        Assertions.assertThrows(IllegalStateException.class, () -> new AddonConfig(addon, "fail.yml"));
     }
 
 }

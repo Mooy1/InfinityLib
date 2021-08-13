@@ -22,12 +22,12 @@ import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideMode;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
+
 /**
  * A multi group which can hold other groups
  *
  * @author Mooy1
  */
-@SuppressWarnings("deprecation")
 public final class MultiGroup extends FlexItemGroup {
 
     private final ItemGroup[] subGroups;
@@ -59,6 +59,7 @@ public final class MultiGroup extends FlexItemGroup {
 
         profile.getGuideHistory().add(this, page);
 
+        // TODO deprecation
         ChestMenu menu = new ChestMenu(this.name);
 
         menu.setEmptySlotsClickable(false);
