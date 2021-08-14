@@ -7,7 +7,7 @@ import javax.annotation.Nonnull;
 
 import org.bukkit.inventory.ItemStack;
 
-import io.github.mooy1.infinitylib.utils.Items;
+import io.github.mooy1.infinitylib.utils.ItemStacks;
 
 public final class ShapelessRecipe extends AbstractRecipe {
 
@@ -17,7 +17,7 @@ public final class ShapelessRecipe extends AbstractRecipe {
         super(input);
         for (ItemStack item : input) {
             if (item != null) {
-                this.map.compute(Items.getIdOrType(item),
+                this.map.compute(ItemStacks.getIdOrType(item),
                         (k, v) -> v == null ? item.getAmount() : v + item.getAmount());
             }
         }
@@ -51,7 +51,7 @@ public final class ShapelessRecipe extends AbstractRecipe {
 
             for (ItemStack item : input.getRawInput()) {
 
-                if (item != null && Items.getIdOrType(item).equals(entry.getKey())) {
+                if (item != null && ItemStacks.getIdOrType(item).equals(entry.getKey())) {
 
                     int amt = item.getAmount();
 

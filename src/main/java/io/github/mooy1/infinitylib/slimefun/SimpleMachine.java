@@ -7,13 +7,14 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 
 import io.github.mooy1.infinitylib.core.AbstractAddon;
-import io.github.mooy1.infinitylib.utils.Items;
+import io.github.mooy1.infinitylib.utils.ItemStacks;
 import io.github.mooy1.infinitylib.utils.MenuItem;
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
@@ -24,6 +25,7 @@ import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 
 @Setter
+@Accessors(chain = true)
 @ParametersAreNonnullByDefault
 public class SimpleMachine extends TickingMenuBlock implements EnergyNetComponent {
 
@@ -46,7 +48,7 @@ public class SimpleMachine extends TickingMenuBlock implements EnergyNetComponen
     private int[] inputSlot = DEFAULT_INPUT;
     private ItemStack processingItem = DEFAULT_PROCESSING_ITEM;
     private int ticksPerOutput = 1;
-    private int energy = 10;
+    private int energyPerTick = 10;
 
     public SimpleMachine(ItemGroup category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
         super(category, item, recipeType, recipe);
@@ -73,7 +75,7 @@ public class SimpleMachine extends TickingMenuBlock implements EnergyNetComponen
 
     @Nonnull
     public SimpleMachine addRecipe(ItemStack input, ItemStack output) {
-        this.recipes.put(Items.getId(input), new Duo<>(output, input.getAmount()));
+        this.recipes.put(ItemStacks.getId(input), new Duo<>(output, input.getAmount()));
         return this;
     }
 
@@ -96,8 +98,8 @@ public class SimpleMachine extends TickingMenuBlock implements EnergyNetComponen
     }
 
     @Override
-    protected void tick(@Nonnull BlockMenu menu, @Nonnull Block b) {
-        if (getCharge(menu.getLocation()) < this.energy) {
+    protected void tick(BlockMenu menu, Block b) {
+        if (getCharge(menu.getLocation()) < this.energyPerTick) {
             if (menu.hasViewer()) {
                 menu.replaceExistingItem(this.statusSlot, MenuItem.NO_ENERGY);
             }
@@ -113,7 +115,7 @@ public class SimpleMachine extends TickingMenuBlock implements EnergyNetComponen
             return;
         }
 
-        Duo<ItemStack, Integer> output = this.recipes.get(Items.getIdOrType(input));
+        Duo<ItemStack, Integer> output = this.recipes.get(ItemStacks.getIdOrType(input));
 
         if (output == null || input.getAmount() < output.second()) {
             if (menu.hasViewer()) {
@@ -136,7 +138,7 @@ public class SimpleMachine extends TickingMenuBlock implements EnergyNetComponen
             }
         }
 
-        removeCharge(menu.getLocation(), this.energy);
+        removeCharge(menu.getLocation(), this.energyPerTick);
     }
 
     @Nonnull
@@ -147,7 +149,8 @@ public class SimpleMachine extends TickingMenuBlock implements EnergyNetComponen
 
     @Override
     public final int getCapacity() {
-        return this.energy * 2;
+        return this.energyPerTick * 2;
     }
 
 }
+

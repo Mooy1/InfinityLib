@@ -49,7 +49,7 @@ final class PathBuilder {
         StringBuilder builder = new StringBuilder();
         if (this.path.size() > 0) {
             builder.append(this.path.get(0));
-            for (int i = 1 ; i < this.path.size() ; i++) {
+            for (int i = 1; i < this.path.size(); i++) {
                 builder.append('.').append(this.path.get(i));
             }
         }

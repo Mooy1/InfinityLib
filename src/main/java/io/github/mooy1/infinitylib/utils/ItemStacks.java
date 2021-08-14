@@ -39,7 +39,7 @@ import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 // TODO rename
 @UtilityClass
 @ParametersAreNonnullByDefault
-public final class Items {
+public final class ItemStacks {
 
     private static final NamespacedKey ID_KEY = Slimefun.getItemDataService().getKey();
     private static final Function<Object, String> TO_STRING;
@@ -59,7 +59,7 @@ public final class Items {
     @Nonnull
     public static ItemStack[] arrayFrom(DirtyChestMenu menu, int[] slots) {
         ItemStack[] arr = new ItemStack[slots.length];
-        for (int i = 0 ; i < arr.length ; i++) {
+        for (int i = 0; i < arr.length; i++) {
             arr[i] = menu.getItemInSlot(slots[i]);
         }
         return arr;

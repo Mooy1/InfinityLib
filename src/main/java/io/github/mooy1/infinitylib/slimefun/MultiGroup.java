@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import io.github.mooy1.infinitylib.core.AbstractAddon;
-import io.github.mooy1.infinitylib.utils.Items;
+import io.github.mooy1.infinitylib.utils.ItemStacks;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.groups.FlexItemGroup;
@@ -41,7 +41,7 @@ public final class MultiGroup extends FlexItemGroup {
         super(AbstractAddon.makeKey(key), item, tier);
         Arrays.sort(subGroups, Comparator.comparingInt(ItemGroup::getTier));
         this.subGroups = subGroups;
-        this.name = Items.getName(item);
+        this.name = ItemStacks.getName(item);
     }
 
     @Override
@@ -65,7 +65,9 @@ public final class MultiGroup extends FlexItemGroup {
         menu.setEmptySlotsClickable(false);
         menu.addMenuOpeningHandler(pl -> pl.playSound(pl.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, 1, 1));
 
-        // TODO header
+        for (int i = 0; i < 9; i++) {
+            menu.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
+        }
 
         String back = ChatColor.GRAY + Slimefun.getLocalization().getMessage(p, "guide.back.guide");
         menu.addItem(1, ChestMenuUtils.getBackButton(p, "", back));
@@ -92,6 +94,10 @@ public final class MultiGroup extends FlexItemGroup {
         }
 
         int pages = target == this.subGroups.length - 1 ? page : (this.subGroups.length - 1) / 36 + 1;
+
+        for (int i = 45; i < 54; i++) {
+            menu.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
+        }
 
         menu.addItem(46, ChestMenuUtils.getPreviousButton(p, page, pages));
         menu.addMenuClickHandler(46, (pl, slot, item, action) -> {
