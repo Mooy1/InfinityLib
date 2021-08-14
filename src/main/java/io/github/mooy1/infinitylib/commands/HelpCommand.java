@@ -1,4 +1,4 @@
-package io.github.mooy1.infinitylib.core;
+package io.github.mooy1.infinitylib.commands;
 
 import java.util.List;
 

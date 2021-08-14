@@ -118,7 +118,7 @@
                     <relocations>
                         <relocation>
                             <pattern>org.bstats.bukkit</pattern>
-                            <shadedPattern>io.github.mooy1.infinitylib.metrics</shadedPattern>
+                            <shadedPattern>io.github.mooy1.infinitylib.bstats</shadedPattern>
                         </relocation>
                     </relocations>
                     <filters>

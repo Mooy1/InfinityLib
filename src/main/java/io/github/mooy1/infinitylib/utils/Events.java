@@ -15,7 +15,7 @@ import org.bukkit.event.Listener;
 import io.github.mooy1.infinitylib.core.AbstractAddon;
 
 /**
- * A class for registering event handlers
+ * A class for registering listeners and event handlers
  *
  * @author Mooy1
  */
@@ -36,11 +36,11 @@ public final class Events implements Listener {
      * Registers the given handler to the given event
      */
     @SuppressWarnings("unchecked")
-    public static <T extends Event> void addHandler(Class<T> eventClass, EventPriority priority, boolean ignoreCancelled, Consumer<T> handler) {
-        AbstractAddon instance = AbstractAddon.instance();
+    public static <T extends Event> void addHandler(Class<T> eventClass, EventPriority priority,
+                                                    boolean ignoreCancelled, Consumer<T> handler) {
         Bukkit.getPluginManager().registerEvent(eventClass, LISTENER, priority, (listener, event) -> {
             handler.accept((T) event);
-        }, instance, ignoreCancelled);
+        }, AbstractAddon.instance(), ignoreCancelled);
     }
 
 }

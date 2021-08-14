@@ -1,4 +1,4 @@
-package io.github.mooy1.infinitylib.core;
+package io.github.mooy1.infinitylib.commands;
 
 import java.util.List;
 import java.util.Objects;
@@ -12,8 +12,9 @@ import org.junit.jupiter.api.Test;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.ServerMock;
-import be.seeseemelk.mockbukkit.command.ConsoleCommandSenderMock;
 import be.seeseemelk.mockbukkit.entity.PlayerMock;
+import io.github.mooy1.infinitylib.core.AbstractAddon;
+import io.github.mooy1.infinitylib.core.MockAddon;
 
 class TestAddonCommand {
 
@@ -83,21 +84,28 @@ class TestAddonCommand {
     }
 
     @Test
+    void testDefaultCommands() {
+        PlayerMock p = server.addPlayer();
+        Assertions.assertTrue(getResponse(p, command, "info").contains("Info"));
+        Assertions.assertTrue(getResponse(p, command, "aliases").contains("Aliases"));
+    }
+
+    @Test
     void testOpSubCommand() {
         String op = "op";
         addonCommand.addSub(new MockSubCommand("op", true));
 
         PlayerMock p = server.addPlayer();
+        Assertions.assertFalse(getResponse(p, command).contains(op));
         assertNoResponse(p, op);
         assertNoCompletion(p, op);
         assertNoCompletion(p, op, op);
 
         p.setOp(true);
+        Assertions.assertTrue(getResponse(p, command).contains(op));
         assertResponse(p, op);
         assertCompletion(p, op);
         assertCompletion(p, op, op);
-
-        // TODO add help checks
     }
 
     @Test
@@ -106,38 +114,38 @@ class TestAddonCommand {
         addonCommand.addSub(new MockSubCommand(perm, perm));
 
         PlayerMock p = server.addPlayer();
+        Assertions.assertFalse(getResponse(p, command).contains(perm));
         assertNoResponse(p, perm);
         assertNoCompletion(p, perm);
         assertNoCompletion(p, perm, perm);
 
         p.addAttachment(AbstractAddon.instance()).setPermission(perm, true);
+        Assertions.assertTrue(getResponse(p, command).contains(perm));
         assertResponse(p, perm);
         assertCompletion(p, perm);
         assertCompletion(p, perm, perm);
-
-        // TODO add help checks
     }
 
     @Test
     void testHelp() {
-        ConsoleCommandSenderMock sender = (ConsoleCommandSenderMock) console;
+        String help = "help";
+        PlayerMock p = server.addPlayer();
+
+        String help1 = getResponse(p, command);
+        String help2 = getResponse(p, command, help);
+
+        Assertions.assertTrue(help1.contains("Help"));
+        Assertions.assertEquals(help1, help2);
+    }
+
+    private static String getResponse(PlayerMock p, String... args) {
+        p.performCommand(String.join(" ", args));
         String temp;
-
-        // TODO move help string to method
-
-        server.executeConsole(command).assertSucceeded();
-        StringBuilder help1 = new StringBuilder();
-        while ((temp = sender.nextMessage()) != null) {
-            help1.append(temp);
+        StringBuilder response = new StringBuilder();
+        while ((temp = p.nextMessage()) != null) {
+            response.append(temp);
         }
-
-        server.executeConsole(command, "help").assertSucceeded();
-        StringBuilder help2 = new StringBuilder();
-        while ((temp = sender.nextMessage()) != null) {
-            help2.append(temp);
-        }
-
-        Assertions.assertEquals(help1.toString(), help2.toString());
+        return response.toString();
     }
 
     private static void assertResponse(CommandSender sender, String... args) {

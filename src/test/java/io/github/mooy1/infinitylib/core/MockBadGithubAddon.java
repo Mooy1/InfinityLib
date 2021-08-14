@@ -5,11 +5,11 @@ import java.io.File;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPluginLoader;
 
-public class MockMissingKeyAddon extends MockAddon {
+public class MockBadGithubAddon extends MockAddon {
 
-    protected MockMissingKeyAddon(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file) {
+    protected MockBadGithubAddon(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file) {
         super(loader, description, dataFolder, file,
-                "Mooy1", "InfinityLib", "master", "missing");
+                "#&", "fail", "\n", "auto-update");
     }
 
     @Override

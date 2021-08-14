@@ -7,7 +7,7 @@ A shaded library for slimefun addons that adds a bunch of useful stuff.
 # Usage
 First you need to add InfinityLib to the `dependencies` section in your `pom.xml`:
 
-```xml 
+```xml
 <dependency>
     <groupId>io.github.mooy1</groupId>
     <artifactId>InfinityLib</artifactId>

@@ -1,11 +1,13 @@
-package io.github.mooy1.infinitylib.core;
+package io.github.mooy1.infinitylib.commands;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import org.bukkit.command.CommandSender;
 
+import io.github.mooy1.infinitylib.commands.ParentCommand;
+
 @ParametersAreNonnullByDefault
-class MockParentCommand extends ParentCommand {
+public class MockParentCommand extends ParentCommand {
 
     public MockParentCommand(String name) {
         super(name, name);

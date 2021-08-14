@@ -1,4 +1,4 @@
-package io.github.mooy1.infinitylib.core;
+package io.github.mooy1.infinitylib.commands;
 
 import java.util.List;
 import java.util.Objects;
@@ -16,7 +16,7 @@ final class InfoCommand extends SubCommand {
     private final String[] message;
 
     InfoCommand(SlimefunAddon addon) {
-        super("info", "Gives addon version information", false);
+        super("info", "Gives addon and slimefun version and discord links");
         this.message = new String[] {
                 "",
                 ChatColors.color("&b" + addon.getName() + " Info"),

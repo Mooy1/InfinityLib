@@ -1,4 +1,4 @@
-package io.github.mooy1.infinitylib.core;
+package io.github.mooy1.infinitylib.commands;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ final class AliasesCommand extends SubCommand {
 
     AliasesCommand(PluginCommand command) {
         super("aliases", "lists the available aliases for this command");
-        this.message = command.getAliases().toString();
+        this.message = "Aliases for /" + command.getName() + command.getAliases();
     }
 
     @Override

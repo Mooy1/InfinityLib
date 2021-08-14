@@ -1,4 +1,4 @@
-package io.github.mooy1.infinitylib.core;
+package io.github.mooy1.infinitylib.commands;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -34,7 +34,7 @@ public class ParentCommand extends SubCommand {
     }
 
     @Nonnull
-    ParentCommand addSub(SubCommand command) {
+    public final ParentCommand addSub(SubCommand command) {
         if (command == this) {
             throw new IllegalArgumentException("'" + command.name() + "' cannot be added to itself!");
         }

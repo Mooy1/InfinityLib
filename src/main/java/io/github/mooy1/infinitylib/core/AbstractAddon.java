@@ -7,7 +7,6 @@ import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import org.apache.commons.lang.Validate;
@@ -18,7 +17,9 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.JavaPluginLoader;
 
-import io.github.mooy1.infinitylib.utils.Tasks;
+import io.github.mooy1.infinitylib.commands.AddonCommand;
+import io.github.mooy1.infinitylib.commands.ParentCommand;
+import io.github.mooy1.infinitylib.utils.Scheduler;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.updater.GitHubBuildsUpdater;
@@ -33,60 +34,90 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
 
     private static AbstractAddon instance;
 
+    private final String autoUpdateKey;
     private final String githubUserName;
     private final String githubRepo;
-    private final String githubBranch;
-    private final String autoUpdateKey;
+    private final String autoUpdateBranch;
     private final boolean notTesting;
 
     private boolean autoUpdatesEnabled;
     private boolean officialBuild;
     private String bugTrackerURL;
     private boolean disabling;
+    private boolean loading;
 
     private ParentCommand command;
     private AddonConfig config;
     private int tickCount;
 
     /**
-     * Main Constructor
+     * Subclass Main Constructor
      */
     @SuppressWarnings("unused")
-    public AbstractAddon(String githubUserName, String githubRepo, String githubBranch, @Nullable String autoUpdateKey) {
+    public AbstractAddon(String githubUserName, String githubRepo, String autoUpdateBranch, String autoUpdateKey) {
         this.notTesting = true;
         this.githubUserName = githubUserName;
-        this.githubBranch = githubBranch;
+        this.autoUpdateBranch = autoUpdateBranch;
         this.githubRepo = githubRepo;
         this.autoUpdateKey = autoUpdateKey;
     }
 
     /**
-     * MockBukkit Constructor
+     * Subclass Testing Constructor
      */
     protected AbstractAddon(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file,
-                            String githubUserName, String githubRepo, String githubBranch, @Nullable String autoUpdateKey) {
+                            String githubUserName, String githubRepo, String autoUpdateBranch, String autoUpdateKey) {
         super(loader, description, dataFolder, file);
         this.notTesting = false;
         this.githubUserName = githubUserName;
-        this.githubBranch = githubBranch;
+        this.autoUpdateBranch = autoUpdateBranch;
         this.githubRepo = githubRepo;
         this.autoUpdateKey = autoUpdateKey;
+    }
+
+    /**
+     * InfinityLib Testing Constructor
+     */
+    AbstractAddon(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file) {
+        super(loader, description, dataFolder, file);
+        this.notTesting = false;
+        this.githubUserName = "Mooy1";
+        this.autoUpdateBranch = "InfinityLib";
+        this.githubRepo = "master";
+        this.autoUpdateKey = "auto-update";
+    }
+
+    @Override
+    public final void onLoad() {
+        if (this.loading) {
+            throw new IllegalStateException(getName() + " is already loaded! Do not call super.onLoad()! Shade your own InfinityLib");
+        }
+
+        this.loading = true;
+
+        try {
+            load();
+        } catch (RuntimeException e) {
+            throwIfAddonTest(e);
+        } finally {
+            this.loading = false;
+        }
     }
 
     @Override
     public final void onEnable() {
         if (instance != null) {
-            throw new IllegalStateException(getName() + " is already enabled! Do not call super.onEnable()! Use your own InfinityLib!");
+            throw new IllegalStateException(getName() + " is already enabled! Do not call super.onEnable()!");
         }
 
         // Set static instance
         instance = this;
 
-        // Validate GitHub path
-        Pattern valid = Pattern.compile("[\\w-]+");
-        Validate.isTrue(valid.matcher(this.githubUserName).matches());
-        Validate.isTrue(valid.matcher(this.githubRepo).matches());
-        Validate.isTrue(valid.matcher(this.githubBranch).matches());
+        // Validate GitHub strings
+        Pattern validGithubString = Pattern.compile("[\\w-]+");
+        Validate.isTrue(validGithubString.matcher(this.githubUserName).matches(), "Invalid githubUserName");
+        Validate.isTrue(validGithubString.matcher(this.githubRepo).matches(), "Invalid githubRepo");
+        Validate.isTrue(validGithubString.matcher(this.autoUpdateBranch).matches(), "Invalid autoUpdateBranch");
 
         // Create bug track url
         this.bugTrackerURL = "https://github.com/" + this.githubUserName + "/" + this.githubRepo + "/issues";
@@ -95,54 +126,58 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
         this.officialBuild = getDescription().getVersion().matches("DEV - \\d+ \\(git \\w+\\)");
 
         // Check if it can auto update
-        GitHubBuildsUpdater updater = !isOfficialBuild() || this.autoUpdateKey == null ? null :
-                new GitHubBuildsUpdater(this, getFile(),
-                        this.githubUserName + "/" + this.githubRepo + "/" + this.githubBranch);
+        GitHubBuildsUpdater updater = isOfficialBuild() ? new GitHubBuildsUpdater(this, getFile(),
+                this.githubUserName + "/" + this.githubRepo + "/" + this.autoUpdateBranch) : null;
+
+        // This is used to mark when the config is broken, so we should always auto update
+        boolean brokenConfig = false;
 
         // Create Config
         try {
             this.config = new AddonConfig("config.yml");
-        } catch (Throwable e) {
-            // There was an error within the config code, attempt auto update to fix this
+        } catch (RuntimeException e) {
+            brokenConfig = true;
             e.printStackTrace();
-            if (updater != null) {
-                updater.start();
-                updater = null;
-            }
         }
 
-        // Check if auto updates are enabled
-        this.autoUpdatesEnabled = updater != null && this.config.getBoolean(this.autoUpdateKey);
+        // Validate configAutoUpdateKey
+        if (this.autoUpdateKey == null) {
+            brokenConfig = true;
+            throwIfAddonTest(new IllegalStateException("Null auto update key"));
+        } else if (this.autoUpdateKey.isEmpty()) {
+            brokenConfig = true;
+            throwIfAddonTest(new IllegalStateException("Empty auto update key!"));
+        } else if (!this.config.getDefaults().contains(this.autoUpdateKey, true)) {
+            brokenConfig = true;
+            throwIfAddonTest(new IllegalStateException("Auto update key missing from the default config!"));
+        }
 
         // Auto update if enabled
-        if (this.autoUpdatesEnabled) {
-            updater.start();
-        }
-
-        // Make sure config has an auto update key available to the user
-        if (this.autoUpdateKey != null && !this.config.getDefaults().contains(this.autoUpdateKey)) {
-            throw new IllegalStateException("Tell the dev to add their auto update key to the config! (Maybe a comment too)");
+        if (updater != null) {
+            if (brokenConfig) {
+                updater.start();
+            } else if (this.config.getBoolean(this.autoUpdateKey)) {
+                this.autoUpdatesEnabled = true;
+                updater.start();
+            }
         }
 
         // Get plugin command
         PluginCommand command = getCommand(getName());
         if (command == null) {
-            throw new IllegalStateException("Tell the dev to add a command with the same name as the addon to the plugin.yml!");
+            throwIfAddonTest(new IllegalStateException("Command named '" + getName() + "' missing from plugin.yml!"));
+        } else {
+            this.command = new AddonCommand(command);
         }
 
-        // Add default commands
-        this.command = new AddonCommand(command)
-            .addSub(new InfoCommand(this))
-            .addSub(new AliasesCommand(command));
-
         // Create total tick count
-        Tasks.repeat(Slimefun.getTickerTask().getTickRate(), () -> this.tickCount++);
+        Scheduler.repeat(Slimefun.getTickerTask().getTickRate(), () -> this.tickCount++);
 
         // Call addon enable
         try {
             enable();
-        } catch (Throwable e) {
-            e.printStackTrace();
+        } catch (RuntimeException e) {
+            throwIfAddonTest(e);
         }
     }
 
@@ -158,13 +193,30 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
 
         try {
             disable();
-        } catch (Throwable e) {
-            e.printStackTrace();
+        } catch (RuntimeException e) {
+            throwIfAddonTest(e);
+        } finally {
+            this.disabling = false;
+            instance = null;
         }
+    }
 
-        this.disabling = false;
+    /**
+     * Throws an exception if in a test environment, otherwise just logs the stacktrace so that the plugin functions
+     */
+    private void throwIfAddonTest(RuntimeException e) {
+        if (this.notTesting) {
+            e.printStackTrace();
+        } else {
+            throw e;
+        }
+    }
 
-        instance = null;
+    /**
+     * Called when the plugin is loaded
+     */
+    protected void load() {
+
     }
 
     /**
@@ -226,9 +278,20 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
     }
 
     @Nonnull
+    @Override
+    public final String getPluginVersion() {
+        return getDescription().getVersion();
+    }
+
+    @Override
+    public final boolean hasDependency(String dependency) {
+        return SlimefunAddon.super.hasDependency(dependency);
+    }
+
+    @Nonnull
     @SuppressWarnings("unchecked")
     public static <T extends AbstractAddon> T instance() {
-        return (T) Objects.requireNonNull(AbstractAddon.instance, "Addon is not enabled!");
+        return (T) Objects.requireNonNull(instance, "Addon is not enabled!");
     }
 
     @Nonnull

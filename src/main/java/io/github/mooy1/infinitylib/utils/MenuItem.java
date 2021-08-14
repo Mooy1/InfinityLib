@@ -8,7 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
 
 /**
- * A class with utility methods and fields for menus
+ * A class with items for menus
  *
  * @author Mooy1
  */

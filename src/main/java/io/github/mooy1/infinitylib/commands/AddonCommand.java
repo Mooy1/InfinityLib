@@ -1,4 +1,4 @@
-package io.github.mooy1.infinitylib.core;
+package io.github.mooy1.infinitylib.commands;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,8 +15,10 @@ import org.bukkit.command.TabExecutor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.server.ServerCommandEvent;
 
+import io.github.mooy1.infinitylib.core.AbstractAddon;
 import io.github.mooy1.infinitylib.utils.Events;
 
 /**
@@ -37,13 +39,20 @@ public final class AddonCommand extends ParentCommand implements TabExecutor, Li
 
     public AddonCommand(PluginCommand command) {
         super(command.getName(), command.getDescription());
+
         command.setExecutor(this);
         command.setTabCompleter(this);
+
         Events.registerListener(this);
+
         this.help = "help" + command.getName();
         this.slashHelp = "/" + this.help;
+
+        addSub(new InfoCommand(AbstractAddon.instance()));
+        addSub(new AliasesCommand(command));
     }
 
+    // TODO test
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     private void onServerCommand(ServerCommandEvent e) {
         if (e.getCommand().toLowerCase(Locale.ROOT).startsWith(this.help)) {
@@ -51,10 +60,11 @@ public final class AddonCommand extends ParentCommand implements TabExecutor, Li
         }
     }
 
+    // TODO test
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    private void onPlayerCommand(ServerCommandEvent e) {
-        if (e.getCommand().toLowerCase(Locale.ROOT).startsWith(this.slashHelp)) {
-            e.setCommand(name());
+    private void onPlayerCommand(PlayerCommandPreprocessEvent e) {
+        if (e.getMessage().toLowerCase(Locale.ROOT).startsWith(this.slashHelp)) {
+            e.setMessage("/" + name());
         }
     }
 
