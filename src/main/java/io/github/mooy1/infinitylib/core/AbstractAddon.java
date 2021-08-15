@@ -78,6 +78,7 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
     /**
      * InfinityLib Testing Constructor
      */
+    // TODO implement tests
     AbstractAddon(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file) {
         super(loader, description, dataFolder, file);
         this.notTesting = false;
