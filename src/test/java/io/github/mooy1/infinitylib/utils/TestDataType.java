@@ -21,7 +21,7 @@ import be.seeseemelk.mockbukkit.WorldMock;
 import be.seeseemelk.mockbukkit.persistence.PersistentDataContainerMock;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 
-class TestDataTypes {
+class TestDataType {
 
     private static ServerMock server;
     private static PersistentDataContainer container;

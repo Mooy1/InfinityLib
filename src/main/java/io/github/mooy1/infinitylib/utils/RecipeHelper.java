@@ -20,25 +20,14 @@ import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
  *
  * @author Mooy1
  */
-// TODO rename
+// TODO rename?
 @UtilityClass
 @ParametersAreNonnullByDefault
-public final class ItemStacks {
+public final class RecipeHelper {
 
     private static final NamespacedKey ID_KEY = Slimefun.getItemDataService().getKey();
 
-    // TODO move to recipes
-    @Nonnull
-    public static String getIdOrType(@Nonnull ItemStack item) {
-        String id = getId(item);
-        if (id == null) {
-            return item.getType().toString();
-        } else {
-            return id;
-        }
-    }
-
-    // TODO move to recipes
+    // TODO move into recipe classes
     @Nonnull
     public static ItemStack[] arrayFrom(DirtyChestMenu menu, int[] slots) {
         ItemStack[] arr = new ItemStack[slots.length];
@@ -48,18 +37,6 @@ public final class ItemStacks {
         return arr;
     }
 
-    // TODO move to recipes
-    @Nonnull
-    public static String getIdOrType(ItemStack item, ItemMeta meta) {
-        String id = getId(meta);
-        if (id == null) {
-            return item.getType().toString();
-        } else {
-            return id;
-        }
-    }
-
-    // TODO move to SFUtils
     @Nullable
     public static String getId(ItemStack item) {
         if (item instanceof SlimefunItemStack) {

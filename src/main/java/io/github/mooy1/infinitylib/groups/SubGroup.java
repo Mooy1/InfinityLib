@@ -1,4 +1,4 @@
-package io.github.mooy1.infinitylib.slimefun;
+package io.github.mooy1.infinitylib.groups;
 
 import javax.annotation.Nonnull;
 

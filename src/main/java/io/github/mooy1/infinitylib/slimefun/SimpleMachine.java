@@ -14,8 +14,8 @@ import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 
 import io.github.mooy1.infinitylib.core.AbstractAddon;
-import io.github.mooy1.infinitylib.utils.ItemStacks;
-import io.github.mooy1.infinitylib.utils.MenuItem;
+import io.github.mooy1.infinitylib.utils.RecipeHelper;
+import io.github.mooy1.infinitylib.utils.MenuItems;
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
 import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
@@ -57,10 +57,10 @@ public class SimpleMachine extends TickingMenuBlock implements EnergyNetComponen
     @Override
     protected void setup(MenuBlockPreset preset) {
         preset.drawBackground(this.background);
-        preset.drawBackground(MenuItem.STATUS_BORDER, this.statusBorder);
-        preset.drawBackground(MenuItem.OUTPUT_BORDER, this.outputBorder);
-        preset.drawBackground(MenuItem.INPUT_BORDER, this.inputBorder);
-        preset.addBackground(this.statusSlot, MenuItem.LOADING);
+        preset.drawBackground(MenuItems.STATUS_BORDER, this.statusBorder);
+        preset.drawBackground(MenuItems.OUTPUT_BORDER, this.outputBorder);
+        preset.drawBackground(MenuItems.INPUT_BORDER, this.inputBorder);
+        preset.addBackground(this.statusSlot, MenuItems.LOADING);
     }
 
     @Override
@@ -75,7 +75,7 @@ public class SimpleMachine extends TickingMenuBlock implements EnergyNetComponen
 
     @Nonnull
     public SimpleMachine addRecipe(ItemStack input, ItemStack output) {
-        this.recipes.put(ItemStacks.getId(input), new Duo<>(output, input.getAmount()));
+        this.recipes.put(RecipeHelper.getId(input), new Duo<>(output, input.getAmount()));
         return this;
     }
 
@@ -101,7 +101,7 @@ public class SimpleMachine extends TickingMenuBlock implements EnergyNetComponen
     protected void tick(BlockMenu menu, Block b) {
         if (getCharge(menu.getLocation()) < this.energyPerTick) {
             if (menu.hasViewer()) {
-                menu.replaceExistingItem(this.statusSlot, MenuItem.NO_ENERGY);
+                menu.replaceExistingItem(this.statusSlot, MenuItems.NO_ENERGY);
             }
             return;
         }
@@ -110,16 +110,16 @@ public class SimpleMachine extends TickingMenuBlock implements EnergyNetComponen
 
         if (input == null) {
             if (menu.hasViewer()) {
-                menu.replaceExistingItem(this.statusSlot, MenuItem.NO_INPUT);
+                menu.replaceExistingItem(this.statusSlot, MenuItems.NO_INPUT);
             }
             return;
         }
 
-        Duo<ItemStack, Integer> output = this.recipes.get(ItemStacks.getIdOrType(input));
+        Duo<ItemStack, Integer> output = this.recipes.get(RecipeHelper.getIdOrType(input));
 
         if (output == null || input.getAmount() < output.second()) {
             if (menu.hasViewer()) {
-                menu.replaceExistingItem(this.statusSlot, MenuItem.INVALID_INPUT);
+                menu.replaceExistingItem(this.statusSlot, MenuItems.INVALID_INPUT);
             }
             return;
         }
@@ -133,7 +133,7 @@ public class SimpleMachine extends TickingMenuBlock implements EnergyNetComponen
                 input.setAmount(input.getAmount() - output.second());
                 menu.pushItem(output.first().clone(), this.outputSlot);
             } else if (menu.hasViewer()) {
-                menu.replaceExistingItem(this.statusSlot, MenuItem.NO_ROOM);
+                menu.replaceExistingItem(this.statusSlot, MenuItems.NO_ROOM);
                 return;
             }
         }

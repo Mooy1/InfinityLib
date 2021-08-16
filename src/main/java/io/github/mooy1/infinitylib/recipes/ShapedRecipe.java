@@ -1,10 +1,10 @@
-package io.github.mooy1.infinitylib.todo.recipes;
+package io.github.mooy1.infinitylib.recipes;
 
 import javax.annotation.Nonnull;
 
 import org.bukkit.inventory.ItemStack;
 
-import io.github.mooy1.infinitylib.utils.ItemStacks;
+import io.github.mooy1.infinitylib.utils.RecipeHelper;
 
 public final class ShapedRecipe extends AbstractRecipe {
 
@@ -17,7 +17,7 @@ public final class ShapedRecipe extends AbstractRecipe {
         int hash = 0;
         for (ItemStack item : getRawInput()) {
             if (item != null) {
-                hash += ItemStacks.getIdOrType(item).hashCode();
+                hash += RecipeHelper.getIdOrType(item).hashCode();
             } else {
                 hash += 1;
             }
@@ -37,7 +37,7 @@ public final class ShapedRecipe extends AbstractRecipe {
                     return false;
                 }
             } else if (re != null && (in.getAmount() < re.getAmount()
-                    || !ItemStacks.getIdOrType(in).equals(ItemStacks.getIdOrType(re)))) {
+                    || !RecipeHelper.getIdOrType(in).equals(RecipeHelper.getIdOrType(re)))) {
                 return false;
             }
         }

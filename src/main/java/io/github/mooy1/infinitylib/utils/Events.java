@@ -33,14 +33,20 @@ public final class Events implements Listener {
     }
 
     /**
+     * Calls the given event
+     */
+    public static void callEvent(Event event) {
+        Bukkit.getPluginManager().callEvent(event);
+    }
+
+    /**
      * Registers the given handler to the given event
      */
     @SuppressWarnings("unchecked")
     public static <T extends Event> void addHandler(Class<T> eventClass, EventPriority priority,
                                                     boolean ignoreCancelled, Consumer<T> handler) {
-        Bukkit.getPluginManager().registerEvent(eventClass, LISTENER, priority, (listener, event) -> {
-            handler.accept((T) event);
-        }, AbstractAddon.instance(), ignoreCancelled);
+        Bukkit.getPluginManager().registerEvent(eventClass, LISTENER, priority,
+                (listener, event) -> handler.accept((T) event), AbstractAddon.instance(), ignoreCancelled);
     }
 
 }

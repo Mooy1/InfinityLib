@@ -16,29 +16,30 @@ import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
  */
 @UtilityClass
 @ParametersAreNonnullByDefault
-public final class ItemLore {
+public final class MachineLore {
 
     private static final DecimalFormat FORMAT = new DecimalFormat("###,###,###,###,###,###.#");
     private static final double TPS = 20D / Slimefun.getTickerTask().getTickRate();
+    private static final String PREFIX = "&8\u21E8 &e\u26A1 &7";
 
     @Nonnull
     public static String energyPerSecond(int energy) {
-        return "&8\u21E8 &e\u26A1 &7" + formatEnergy(energy) + " J/s";
+        return PREFIX + formatEnergy(energy) + " J/s";
     }
 
     @Nonnull
     public static String energyBuffer(int energy) {
-        return "&8\u21E8 &e\u26A1 &7" + format(energy) + " J Buffer";
+        return PREFIX + format(energy) + " J Buffer";
     }
 
     @Nonnull
     public static String energy(int energy) {
-        return "&8\u21E8 &e\u26A1 &7" + format(energy) + " J ";
+        return PREFIX + format(energy) + " J ";
     }
 
     @Nonnull
     public static String speed(int speed) {
-        return "&8\u21E8 &b\u26A1 &7Speed: &b" + speed + 'x';
+        return PREFIX + "Speed: &b" + speed + 'x';
     }
 
     @Nonnull

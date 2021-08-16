@@ -13,7 +13,7 @@ import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
  * @author Mooy1
  */
 @UtilityClass
-public final class MenuItem {
+public final class MenuItems {
 
     public static final ItemStack INVALID_INPUT =
             new CustomItemStack(Material.BARRIER, "&cInvalid Input!");

@@ -8,9 +8,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
-import io.github.mooy1.infinitylib.todo.recipes.RecipeMap;
-import io.github.mooy1.infinitylib.todo.recipes.RecipeMapType;
-import io.github.mooy1.infinitylib.todo.recipes.RecipeOutput;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;

@@ -1,4 +1,4 @@
-package io.github.mooy1.infinitylib.todo.recipes;
+package io.github.mooy1.infinitylib.recipes;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -7,7 +7,8 @@ import javax.annotation.Nonnull;
 
 import org.bukkit.inventory.ItemStack;
 
-import io.github.mooy1.infinitylib.utils.ItemStacks;
+import io.github.mooy1.infinitylib.utils.RecipeHelper;
+import io.github.thebusybiscuit.slimefun4.implementation.items.autocrafters.AbstractRecipe;
 
 public final class ShapelessRecipe extends AbstractRecipe {
 
@@ -17,7 +18,7 @@ public final class ShapelessRecipe extends AbstractRecipe {
         super(input);
         for (ItemStack item : input) {
             if (item != null) {
-                this.map.compute(ItemStacks.getIdOrType(item),
+                this.map.compute(RecipeHelper.getIdOrType(item),
                         (k, v) -> v == null ? item.getAmount() : v + item.getAmount());
             }
         }
@@ -51,7 +52,7 @@ public final class ShapelessRecipe extends AbstractRecipe {
 
             for (ItemStack item : input.getRawInput()) {
 
-                if (item != null && ItemStacks.getIdOrType(item).equals(entry.getKey())) {
+                if (item != null && RecipeHelper.getIdOrType(item).equals(entry.getKey())) {
 
                     int amt = item.getAmount();
 
