@@ -1,4 +1,4 @@
-package io.github.mooy1.infinitylib.slimefun;
+package io.github.mooy1.infinitylib.recipes;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;

@@ -19,7 +19,7 @@ import org.bukkit.plugin.java.JavaPluginLoader;
 
 import io.github.mooy1.infinitylib.commands.AddonCommand;
 import io.github.mooy1.infinitylib.commands.ParentCommand;
-import io.github.mooy1.infinitylib.utils.Scheduler;
+import io.github.mooy1.infinitylib.common.Scheduler;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.updater.GitHubBuildsUpdater;

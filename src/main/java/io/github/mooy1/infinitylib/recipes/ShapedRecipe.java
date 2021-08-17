@@ -1,57 +1,48 @@
 package io.github.mooy1.infinitylib.recipes;
 
-import javax.annotation.Nonnull;
+import lombok.Getter;
 
 import org.bukkit.inventory.ItemStack;
 
-import io.github.mooy1.infinitylib.utils.RecipeHelper;
+final class ShapedRecipe extends AbstractRecipe<ItemStack[], ShapedRecipe> {
 
-public final class ShapedRecipe extends AbstractRecipe {
+    @Getter
+    private final int hashCode;
+    private final String[] strings;
+    private final int[] amounts;
 
     public ShapedRecipe(ItemStack[] input) {
         super(input);
-    }
-
-    @Override
-    public int hashCode() {
         int hash = 0;
-        for (ItemStack item : getRawInput()) {
-            if (item != null) {
-                hash += RecipeHelper.getIdOrType(item).hashCode();
-            } else {
-                hash += 1;
-            }
+        this.strings = new String[input.length];
+        this.amounts = new int[input.length];
+        for (int i = 0; i < input.length; i++) {
+            String string = this.strings[i] = getString(input[i]);
+            this.amounts[i] = string == AIR ? 0 : input[i].getAmount();
+            hash += string.hashCode();
         }
-        return hash;
+        this.hashCode = hash;
     }
 
     @Override
-    protected boolean matches(@Nonnull AbstractRecipe input) {
-        ItemStack[] inputArr = input.getRawInput();
-        ItemStack[] recipeArr = getRawInput();
-        for (int i = 0; i < inputArr.length; i++) {
-            ItemStack in = inputArr[i];
-            ItemStack re = recipeArr[i];
-            if (in == null) {
-                if (re != null) {
+    public boolean equals(Object obj) {
+        if (obj instanceof ShapedRecipe) {
+            ShapedRecipe recipe = ((ShapedRecipe) obj);
+            for (int i = 0; i < this.original.length; i++) {
+                if (this.amounts[i] < recipe.amounts[i] || !this.strings[i].equals(recipe.strings[i])) {
                     return false;
                 }
-            } else if (re != null && (in.getAmount() < re.getAmount()
-                    || !RecipeHelper.getIdOrType(in).equals(RecipeHelper.getIdOrType(re)))) {
-                return false;
             }
+            return true;
         }
         return true;
     }
 
     @Override
-    protected void consume(@Nonnull AbstractRecipe input) {
-        ItemStack[] inputArr = input.getRawInput();
-        ItemStack[] recipeArr = getRawInput();
-        for (int i = 0; i < inputArr.length; i++) {
-            ItemStack in = inputArr[i];
-            if (in != null) {
-                in.setAmount(in.getAmount() - recipeArr[i].getAmount());
+    protected void consumeRecipe() {
+        for (int i = 0; i < this.original.length; i++) {
+            if (this.strings[i] != AIR) {
+                this.original[i].setAmount(this.amounts[i] - this.recipe.amounts[i]);
             }
         }
     }

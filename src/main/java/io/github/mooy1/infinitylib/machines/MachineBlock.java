@@ -1,22 +1,30 @@
-package io.github.mooy1.infinitylib.slimefun;
+package io.github.mooy1.infinitylib.machines;
 
+import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
 import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
+import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 
 @ParametersAreNonnullByDefault
-public class CraftingBlock extends MenuBlock {
+public final class MachineBlock extends TickingMenuBlock {
 
-    public CraftingBlock(ItemGroup category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
+    public MachineBlock(ItemGroup category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
         super(category, item, recipeType, recipe);
     }
 
     @Override
     protected void setup(MenuBlockPreset preset) {
+
+    }
+
+    @Override
+    protected void tick(@Nonnull BlockMenu menu, @Nonnull Block b) {
 
     }
 

@@ -1,4 +1,4 @@
-package io.github.mooy1.infinitylib.slimefun;
+package io.github.mooy1.infinitylib.machines;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -16,7 +16,7 @@ import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 
 /**
- * A slimefun item with a menu and ticker
+ * A machines item with a menu and ticker
  */
 @ParametersAreNonnullByDefault
 public abstract class TickingMenuBlock extends MenuBlock {

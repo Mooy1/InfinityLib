@@ -1,4 +1,4 @@
-package io.github.mooy1.infinitylib.utils;
+package io.github.mooy1.infinitylib.common;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;

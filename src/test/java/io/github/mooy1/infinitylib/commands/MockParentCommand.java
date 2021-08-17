@@ -4,8 +4,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import org.bukkit.command.CommandSender;
 
-import io.github.mooy1.infinitylib.commands.ParentCommand;
-
 @ParametersAreNonnullByDefault
 public class MockParentCommand extends ParentCommand {
 

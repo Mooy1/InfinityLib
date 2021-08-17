@@ -6,7 +6,6 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPluginLoader;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
-import io.github.mooy1.infinitylib.core.AbstractAddon;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 
 public class MockAddon extends AbstractAddon {

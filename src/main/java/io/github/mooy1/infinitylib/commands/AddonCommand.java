@@ -19,7 +19,7 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.server.ServerCommandEvent;
 
 import io.github.mooy1.infinitylib.core.AbstractAddon;
-import io.github.mooy1.infinitylib.utils.Events;
+import io.github.mooy1.infinitylib.common.Events;
 
 /**
  * The main command of an addon, which can hold multiple sub commands

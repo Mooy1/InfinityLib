@@ -1,4 +1,4 @@
-package io.github.mooy1.infinitylib.utils;
+package io.github.mooy1.infinitylib.common;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

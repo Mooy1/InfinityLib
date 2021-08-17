@@ -1,4 +1,4 @@
-package io.github.mooy1.infinitylib.utils;
+package io.github.mooy1.infinitylib.common;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 

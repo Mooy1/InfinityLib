@@ -1,4 +1,4 @@
-package io.github.mooy1.infinitylib.utils;
+package io.github.mooy1.infinitylib.machines;
 
 import java.text.DecimalFormat;
 
@@ -10,7 +10,7 @@ import lombok.experimental.UtilityClass;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 
 /**
- * Collection of utils for building item lore
+ * Collection of common for building item lore
  *
  * @author Mooy1
  */

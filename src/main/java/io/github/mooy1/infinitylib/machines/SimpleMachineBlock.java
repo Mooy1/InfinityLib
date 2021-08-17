@@ -1,9 +1,7 @@
-package io.github.mooy1.infinitylib.slimefun;
-
-import java.util.HashMap;
-import java.util.Map;
+package io.github.mooy1.infinitylib.machines;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import lombok.Setter;
@@ -14,8 +12,7 @@ import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 
 import io.github.mooy1.infinitylib.core.AbstractAddon;
-import io.github.mooy1.infinitylib.utils.RecipeHelper;
-import io.github.mooy1.infinitylib.utils.MenuItems;
+import io.github.mooy1.infinitylib.recipes.SimpleRecipes;
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
 import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
@@ -27,22 +24,21 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 @Setter
 @Accessors(chain = true)
 @ParametersAreNonnullByDefault
-public class SimpleMachine extends TickingMenuBlock implements EnergyNetComponent {
+public final class SimpleMachineBlock extends TickingMenuBlock implements EnergyNetComponent {
 
     public static final int[] DEFAULT_INPUT = { 10 };
     public static final int[] DEFAULT_INPUT_BORDER = { 0, 1, 2, 9, 11, 18, 19, 20 };
     public static final int DEFAULT_STATUS = 13;
-    public static final int[] DEFAULT_STATUS_BORDER = { 3, 4, 5, 12, 14, 21, 22, 23 };
+    public static final int[] DEFAULT_BACKGROUND = { 3, 4, 5, 12, 14, 21, 22, 23 };
     public static final int[] DEFAULT_OUTPUT = { 16 };
     public static final int[] DEFAULT_OUTPUT_BORDER = { 6, 7, 8, 15, 17, 24, 25, 26 };
     private static final ItemStack DEFAULT_PROCESSING_ITEM =
             new CustomItemStack(Material.LIME_STAINED_GLASS_PANE, "&aProcessing...");
 
-    private final Map<String, Duo<ItemStack, Integer>> recipes = new HashMap<>();
-    private int[] statusBorder = DEFAULT_STATUS_BORDER;
+    private final SimpleRecipes recipes = new SimpleRecipes();
     private int[] outputBorder = DEFAULT_OUTPUT_BORDER;
     private int[] inputBorder = DEFAULT_INPUT_BORDER;
-    private int[] background = new int[0];
+    private int[] background = DEFAULT_BACKGROUND;
     private int statusSlot = DEFAULT_STATUS;
     private int[] outputSlot = DEFAULT_OUTPUT;
     private int[] inputSlot = DEFAULT_INPUT;
@@ -50,17 +46,16 @@ public class SimpleMachine extends TickingMenuBlock implements EnergyNetComponen
     private int ticksPerOutput = 1;
     private int energyPerTick = 10;
 
-    public SimpleMachine(ItemGroup category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
+    public SimpleMachineBlock(ItemGroup category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
         super(category, item, recipeType, recipe);
     }
 
     @Override
     protected void setup(MenuBlockPreset preset) {
-        preset.drawBackground(this.background);
-        preset.drawBackground(MenuItems.STATUS_BORDER, this.statusBorder);
-        preset.drawBackground(MenuItems.OUTPUT_BORDER, this.outputBorder);
-        preset.drawBackground(MenuItems.INPUT_BORDER, this.inputBorder);
-        preset.addBackground(this.statusSlot, MenuItems.LOADING);
+        preset.drawBackground(MachineItem.OUTPUT_BORDER, this.outputBorder);
+        preset.drawBackground(MachineItem.INPUT_BORDER, this.inputBorder);
+        preset.drawBackground(MachineItem.BACKGROUND, this.background);
+        preset.addBackground(this.statusSlot, MachineItem.IDLE);
     }
 
     @Override
@@ -74,26 +69,25 @@ public class SimpleMachine extends TickingMenuBlock implements EnergyNetComponen
     }
 
     @Nonnull
-    public SimpleMachine addRecipe(ItemStack input, ItemStack output) {
-        this.recipes.put(RecipeHelper.getId(input), new Duo<>(output, input.getAmount()));
+    public SimpleMachineBlock addRecipe(@Nullable ItemStack input, @Nullable ItemStack output) {
+        this.recipes.addRecipe(input, output);
         return this;
     }
 
     @Nonnull
-    public SimpleMachine copyRecipesFrom(SimpleMachine toCopy) {
-        this.recipes.putAll(toCopy.recipes);
+    public SimpleMachineBlock copyRecipesFrom(SimpleMachineBlock toCopy) {
+        this.recipes.copyRecipes(toCopy.recipes);
         return this;
     }
 
     @Nonnull
-    public SimpleMachine copySlotsFrom(SimpleMachine toCopy) {
+    public SimpleMachineBlock copySlotsFrom(SimpleMachineBlock toCopy) {
         this.background = toCopy.background;
         this.inputSlot = toCopy.inputSlot;
         this.inputBorder = toCopy.inputBorder;
         this.outputSlot = toCopy.outputSlot;
         this.outputBorder = toCopy.outputBorder;
         this.statusSlot = toCopy.statusSlot;
-        this.statusBorder = toCopy.statusBorder;
         return this;
     }
 
@@ -101,7 +95,7 @@ public class SimpleMachine extends TickingMenuBlock implements EnergyNetComponen
     protected void tick(BlockMenu menu, Block b) {
         if (getCharge(menu.getLocation()) < this.energyPerTick) {
             if (menu.hasViewer()) {
-                menu.replaceExistingItem(this.statusSlot, MenuItems.NO_ENERGY);
+                menu.replaceExistingItem(this.statusSlot, MachineItem.NO_ENERGY);
             }
             return;
         }
@@ -110,32 +104,33 @@ public class SimpleMachine extends TickingMenuBlock implements EnergyNetComponen
 
         if (input == null) {
             if (menu.hasViewer()) {
-                menu.replaceExistingItem(this.statusSlot, MenuItems.NO_INPUT);
+                menu.replaceExistingItem(this.statusSlot, MachineItem.IDLE);
             }
             return;
         }
 
-        Duo<ItemStack, Integer> output = this.recipes.get(RecipeHelper.getIdOrType(input));
+        ItemStack output = this.recipes.getOutput(input);
 
-        if (output == null || input.getAmount() < output.second()) {
+        if (output == null) {
             if (menu.hasViewer()) {
-                menu.replaceExistingItem(this.statusSlot, MenuItems.INVALID_INPUT);
+                menu.replaceExistingItem(this.statusSlot, MachineItem.IDLE);
             }
             return;
-        }
-
-        if (menu.hasViewer()) {
-            menu.replaceExistingItem(this.statusSlot, this.processingItem);
         }
 
         if (AbstractAddon.tickCount() % this.ticksPerOutput == 0) {
-            if (menu.fits(output.first(), this.outputSlot)) {
-                input.setAmount(input.getAmount() - output.second());
-                menu.pushItem(output.first().clone(), this.outputSlot);
+            if (menu.fits(output, this.outputSlot)) {
+                this.recipes.consumeLastRecipe();
+                menu.pushItem(output.clone(), this.outputSlot);
+                if (menu.hasViewer()) {
+                    menu.replaceExistingItem(this.statusSlot, this.processingItem);
+                }
             } else if (menu.hasViewer()) {
-                menu.replaceExistingItem(this.statusSlot, MenuItems.NO_ROOM);
+                menu.replaceExistingItem(this.statusSlot, MachineItem.NO_ROOM);
                 return;
             }
+        } else if (menu.hasViewer()) {
+            menu.replaceExistingItem(this.statusSlot, this.processingItem);
         }
 
         removeCharge(menu.getLocation(), this.energyPerTick);

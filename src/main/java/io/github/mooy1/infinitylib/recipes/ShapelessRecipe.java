@@ -1,67 +1,63 @@
 package io.github.mooy1.infinitylib.recipes;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
-import javax.annotation.Nonnull;
+import lombok.Getter;
 
 import org.bukkit.inventory.ItemStack;
 
-import io.github.mooy1.infinitylib.utils.RecipeHelper;
-import io.github.thebusybiscuit.slimefun4.implementation.items.autocrafters.AbstractRecipe;
+final class ShapelessRecipe extends AbstractRecipe<ItemStack[], ShapelessRecipe> {
 
-public final class ShapelessRecipe extends AbstractRecipe {
-
-    private final Map<String, Integer> map = new HashMap<>(8);
+    @Getter
+    private final int hashCode;
+    private final Map<String, Integer> amounts = new HashMap<>(4);
+    private final Map<String, Set<Integer>> items = new HashMap<>(4);
 
     public ShapelessRecipe(ItemStack[] input) {
         super(input);
-        for (ItemStack item : input) {
-            if (item != null) {
-                this.map.compute(RecipeHelper.getIdOrType(item),
-                        (k, v) -> v == null ? item.getAmount() : v + item.getAmount());
-            }
-        }
-    }
-
-    @Override
-    public int hashCode() {
         int hash = 0;
-        for (String s : this.map.keySet()) {
-            hash += s.hashCode();
-        }
-        return hash;
-    }
-
-    @Override
-    protected boolean matches(@Nonnull AbstractRecipe input) {
-        Map<String, Integer> inputMap = ((ShapelessRecipe) input).map;
-
-        for (Map.Entry<String, Integer> entry : this.map.entrySet()) {
-            if (inputMap.getOrDefault(entry.getKey(), 0) < entry.getValue()) {
-                return false;
+        for (int i = 0; i < input.length; i++) {
+            ItemStack item = input[i];
+            String string = getString(item);
+            if (string != AIR) {
+                this.amounts.put(string, item.getAmount());
+                this.items.computeIfAbsent(string, k -> new HashSet<>(2)).add(i);
             }
+            hash += string.hashCode();
         }
-        return true;
+        this.hashCode = hash;
     }
 
     @Override
-    protected void consume(@Nonnull AbstractRecipe input) {
-        for (Map.Entry<String, Integer> entry : this.map.entrySet()) {
-            int rem = entry.getValue();
+    public boolean equals(Object obj) {
+        if (obj instanceof ShapelessRecipe) {
+            ShapelessRecipe recipe = (ShapelessRecipe) obj;
+            for (Map.Entry<String, Integer> entry : this.amounts.entrySet()) {
+                if (entry.getValue() < recipe.amounts.getOrDefault(entry.getKey(), 0)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
 
-            for (ItemStack item : input.getRawInput()) {
-
-                if (item != null && RecipeHelper.getIdOrType(item).equals(entry.getKey())) {
-
-                    int amt = item.getAmount();
-
-                    if (amt >= rem) {
-                        item.setAmount(amt - rem);
-                        break;
-                    }
-
-                    rem -= amt;
+    @Override
+    protected void consumeRecipe() {
+        for (Map.Entry<String, Integer> entry : this.recipe.amounts.entrySet()) {
+            int consume = entry.getValue();
+            for (Integer index : this.items.get(entry.getKey())) {
+                ItemStack item = this.original[index];
+                int amount = item.getAmount() - consume;
+                if (amount < 0) {
+                    consume = -amount;
+                    item.setAmount(0);
+                } else {
+                    item.setAmount(amount);
+                    break;
                 }
             }
         }

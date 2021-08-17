@@ -1,4 +1,4 @@
-package io.github.mooy1.infinitylib.utils;
+package io.github.mooy1.infinitylib.recipes;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -32,18 +32,6 @@ class TestRecipeHelper {
         Assertions.assertNull(RecipeHelper.getId(stone.getItemMeta()));
         Assertions.assertEquals(saltID, RecipeHelper.getId(salt));
         Assertions.assertEquals(saltID, RecipeHelper.getId(salt.getItemMeta()));
-    }
-
-    @Test
-    void testGetIdOrType() {
-        ItemStack stone = new ItemStack(Material.STONE);
-        ItemStack salt = SlimefunItems.SALT.clone();
-        String saltID = SlimefunItems.SALT.getItemId();
-
-        Assertions.assertEquals(Material.STONE.name(), RecipeHelper.getIdOrType(stone));
-        Assertions.assertEquals(Material.STONE.name(), RecipeHelper.getIdOrType(stone, stone.getItemMeta()));
-        Assertions.assertEquals(saltID, RecipeHelper.getIdOrType(salt));
-        Assertions.assertEquals(saltID, RecipeHelper.getIdOrType(salt, salt.getItemMeta()));
     }
 
 }

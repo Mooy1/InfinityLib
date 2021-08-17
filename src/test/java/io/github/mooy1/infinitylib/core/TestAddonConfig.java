@@ -39,20 +39,20 @@ class TestAddonConfig {
     void testSaveToString() {
         String correct =
                 "\n" +
-                "# test\n" + 
-                "test: test\n" + 
-                "\n" + 
-                "# line a\n" + 
-                "# line b\n" + 
-                "section:\n" + 
-                "\n" + 
-                "  # test\n" + 
-                "  list:\n" + 
-                "  - a\n" + 
-                "  - b\n" + 
-                "\n" + 
-                "  # test\n" + 
-                "  test: test\n";
+                        "# test\n" +
+                        "test: test\n" +
+                        "\n" +
+                        "# line a\n" +
+                        "# line b\n" +
+                        "section:\n" +
+                        "\n" +
+                        "  # test\n" +
+                        "  list:\n" +
+                        "  - a\n" +
+                        "  - b\n" +
+                        "\n" +
+                        "  # test\n" +
+                        "  test: test\n";
         Assertions.assertEquals(correct, config.saveToString());
     }
 
