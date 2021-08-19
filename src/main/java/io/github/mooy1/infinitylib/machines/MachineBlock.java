@@ -12,20 +12,6 @@ import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 
 @ParametersAreNonnullByDefault
-public final class MachineBlock extends TickingMenuBlock {
-
-    public MachineBlock(ItemGroup category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
-        super(category, item, recipeType, recipe);
-    }
-
-    @Override
-    protected void setup(MenuBlockPreset preset) {
-
-    }
-
-    @Override
-    protected void tick(@Nonnull BlockMenu menu, @Nonnull Block b) {
-
-    }
+public final class MachineBlock extends AbstractMachine {
 
 }

@@ -1,6 +1,5 @@
 package io.github.mooy1.infinitylib.machines;
 
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import org.bukkit.block.Block;
@@ -9,14 +8,13 @@ import org.bukkit.inventory.ItemStack;
 
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.protection.Interaction;
-import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 
 @ParametersAreNonnullByDefault
-public final class MenuBlockPreset extends BlockMenuPreset {
+final class MenuBlockPreset extends BlockMenuPreset {
 
     private final MenuBlock menuBlock;
 
@@ -49,10 +47,6 @@ public final class MenuBlockPreset extends BlockMenuPreset {
     @Override
     public int[] getSlotsAccessedByItemTransport(ItemTransportFlow flow) {
         return new int[0];
-    }
-
-    public void addBackground(int slot, @Nullable ItemStack item) {
-        addItem(slot, item, ChestMenuUtils.getEmptyClickHandler());
     }
 
 }

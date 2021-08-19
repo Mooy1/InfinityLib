@@ -9,7 +9,9 @@ import lombok.RequiredArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
+import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
+
+@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 abstract class AbstractRecipe<I, R extends AbstractRecipe<I, R>> {
 
     protected static final String AIR = Material.AIR.name();
@@ -27,12 +29,8 @@ abstract class AbstractRecipe<I, R extends AbstractRecipe<I, R>> {
 
     @Nonnull
     protected static String getString(@Nullable ItemStack item) {
-        if (item == null || item.getType().isAir()) {
-            return AIR;
-        } else {
-            String id = RecipeHelper.getId(item);
-            return id == null ? item.getType().name() : id;
-        }
+        return item == null || item.getType().isAir() ? AIR
+                : Slimefun.getItemDataService().getItemData(item).orElseGet(() -> item.getType().name());
     }
 
 }
