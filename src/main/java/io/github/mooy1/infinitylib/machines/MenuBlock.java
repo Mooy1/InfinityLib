@@ -28,6 +28,8 @@ public abstract class MenuBlock extends SlimefunItem {
     public MenuBlock(ItemGroup category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
         super(category, item, recipeType, recipe);
 
+        new MenuBlockPreset(this);
+
         addItemHandler(new BlockBreakHandler(false, false) {
 
             @Override
@@ -48,11 +50,6 @@ public abstract class MenuBlock extends SlimefunItem {
         });
     }
 
-    @Override
-    public void postRegister() {
-        new MenuBlockPreset(this);
-    }
-
     protected abstract void setup(MenuBlockPreset preset);
 
     @Nonnull
@@ -71,13 +68,9 @@ public abstract class MenuBlock extends SlimefunItem {
         return getInputSlots();
     }
 
-    protected int[] getInputSlots() {
-        return new int[0];
-    }
+    protected abstract int[] getInputSlots();
 
-    protected int[] getOutputSlots() {
-        return new int[0];
-    }
+    protected abstract int[] getOutputSlots();
 
     protected void onNewInstance(BlockMenu menu, Block b) {
 

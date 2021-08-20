@@ -21,7 +21,7 @@ import be.seeseemelk.mockbukkit.WorldMock;
 import be.seeseemelk.mockbukkit.persistence.PersistentDataContainerMock;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 
-class TestDataType {
+class TestCustomDataType {
 
     private static ServerMock server;
     private static PersistentDataContainer container;
@@ -43,24 +43,24 @@ class TestDataType {
     @Disabled(value = "MockBukkit issue")
     void testItemStack() {
         ItemStack item = new ItemStack(Material.OBSIDIAN);
-        container.set(key, DataType.ITEM_STACK, item);
-        Assertions.assertEquals(item, container.get(key, DataType.ITEM_STACK));
+        container.set(key, CustomDataType.ITEM_STACK, item);
+        Assertions.assertEquals(item, container.get(key, CustomDataType.ITEM_STACK));
 
         item = SlimefunItems.ANCIENT_ALTAR;
-        container.set(key, DataType.ITEM_STACK, item);
-        Assertions.assertEquals(item, container.get(key, DataType.ITEM_STACK));
+        container.set(key, CustomDataType.ITEM_STACK, item);
+        Assertions.assertEquals(item, container.get(key, CustomDataType.ITEM_STACK));
     }
 
     @Test
     @Disabled(value = "MockBukkit issue")
     void testItemStackList() {
         List<ItemStack> list = new ArrayList<>();
-        container.set(key, DataType.ITEM_STACK_LIST, list);
-        Assertions.assertEquals(list, container.get(key, DataType.ITEM_STACK_LIST));
+        container.set(key, CustomDataType.ITEM_STACK_LIST, list);
+        Assertions.assertEquals(list, container.get(key, CustomDataType.ITEM_STACK_LIST));
 
         list = Arrays.asList(new ItemStack(Material.PUMPKIN), SlimefunItems.ADVANCED_CIRCUIT_BOARD);
-        container.set(key, DataType.ITEM_STACK_LIST, list);
-        Assertions.assertEquals(list, container.get(key, DataType.ITEM_STACK_LIST));
+        container.set(key, CustomDataType.ITEM_STACK_LIST, list);
+        Assertions.assertEquals(list, container.get(key, CustomDataType.ITEM_STACK_LIST));
     }
 
     @Test
@@ -69,23 +69,23 @@ class TestDataType {
         server.addWorld(world);
 
         Location location = new Location(null, 1, 2, 3);
-        container.set(key, DataType.LOCATION, location);
-        Assertions.assertEquals(location, container.get(key, DataType.LOCATION));
+        container.set(key, CustomDataType.LOCATION, location);
+        Assertions.assertEquals(location, container.get(key, CustomDataType.LOCATION));
 
         location = new Location(world, 1, 2, 3);
-        container.set(key, DataType.LOCATION, location);
-        Assertions.assertEquals(location, container.get(key, DataType.LOCATION));
+        container.set(key, CustomDataType.LOCATION, location);
+        Assertions.assertEquals(location, container.get(key, CustomDataType.LOCATION));
     }
 
     @Test
     void testStringList() {
         List<String> list = new ArrayList<>();
-        container.set(key, DataType.STRING_LIST, list);
-        Assertions.assertEquals(list, container.get(key, DataType.STRING_LIST));
+        container.set(key, CustomDataType.STRING_LIST, list);
+        Assertions.assertEquals(list, container.get(key, CustomDataType.STRING_LIST));
 
         list = Arrays.asList("a", "b", "c");
-        container.set(key, DataType.STRING_LIST, list);
-        Assertions.assertEquals(list, container.get(key, DataType.STRING_LIST));
+        container.set(key, CustomDataType.STRING_LIST, list);
+        Assertions.assertEquals(list, container.get(key, CustomDataType.STRING_LIST));
     }
 
 }

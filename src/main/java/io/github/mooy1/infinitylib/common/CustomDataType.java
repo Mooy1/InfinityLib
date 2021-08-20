@@ -30,9 +30,9 @@ import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
  */
 @RequiredArgsConstructor
 @ParametersAreNonnullByDefault
-public final class DataType<T, Z> implements PersistentDataType<T, Z> {
+public final class CustomDataType<T, Z> implements PersistentDataType<T, Z> {
 
-    public static final PersistentDataType<String, ItemStack> ITEM_STACK = new DataType<>(
+    public static final PersistentDataType<String, ItemStack> ITEM_STACK = new CustomDataType<>(
             String.class, ItemStack.class,
             itemStack -> {
                 YamlConfiguration config = new YamlConfiguration();
@@ -53,7 +53,7 @@ public final class DataType<T, Z> implements PersistentDataType<T, Z> {
     );
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    public static final PersistentDataType<byte[], List<ItemStack>> ITEM_STACK_LIST = new DataType<byte[], List<ItemStack>>(
+    public static final PersistentDataType<byte[], List<ItemStack>> ITEM_STACK_LIST = new CustomDataType<byte[], List<ItemStack>>(
             byte[].class, (Class) List.class,
             list -> {
                 ByteArrayOutputStream bytes = new ByteArrayOutputStream();
@@ -80,7 +80,7 @@ public final class DataType<T, Z> implements PersistentDataType<T, Z> {
             }
     );
 
-    public static final PersistentDataType<byte[], Location> LOCATION = new DataType<>(
+    public static final PersistentDataType<byte[], Location> LOCATION = new CustomDataType<>(
             byte[].class, Location.class,
             location -> {
                 ByteArrayOutputStream bytes = new ByteArrayOutputStream();
@@ -103,7 +103,7 @@ public final class DataType<T, Z> implements PersistentDataType<T, Z> {
     );
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    public static final PersistentDataType<byte[], List<String>> STRING_LIST = new DataType<byte[], List<String>>(
+    public static final PersistentDataType<byte[], List<String>> STRING_LIST = new CustomDataType<byte[], List<String>>(
             byte[].class, (Class) List.class,
             list -> {
                 ByteArrayOutputStream bytes = new ByteArrayOutputStream(list.size() * 20);
