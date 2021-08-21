@@ -4,8 +4,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.function.Predicate;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import org.bukkit.command.CommandSender;
 
 /**
@@ -13,7 +11,6 @@ import org.bukkit.command.CommandSender;
  *
  * @author Mooy1
  */
-@ParametersAreNonnullByDefault
 public abstract class SubCommand {
 
     private final Predicate<CommandSender> permission;
@@ -43,32 +40,32 @@ public abstract class SubCommand {
     protected abstract void complete(CommandSender sender, String[] args, List<String> completions);
 
     public final boolean canUse(CommandSender sender) {
-        return this.permission.test(sender);
+        return permission.test(sender);
     }
 
     public final String name() {
-        return this.name;
+        return name;
     }
 
     public final String description() {
-        return this.description;
+        return description;
     }
 
     String fullName() {
-        if (this.fullName == null) {
-            this.fullName = this.parent.fullName() + " " + this.name();
+        if (fullName == null) {
+            fullName = parent.fullName() + " " + name();
         }
-        return this.fullName;
+        return fullName;
     }
 
     @Override
     public int hashCode() {
-        return this.name.hashCode();
+        return name.hashCode();
     }
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof SubCommand && ((SubCommand) obj).name.equals(this.name);
+        return obj instanceof SubCommand && ((SubCommand) obj).name.equals(name);
     }
 
 }

@@ -1,7 +1,5 @@
 package io.github.mooy1.infinitylib.groups;
 
-import javax.annotation.Nonnull;
-
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -24,7 +22,7 @@ public final class SubGroup extends ItemGroup {
     }
 
     @Override
-    public boolean isHidden(@Nonnull Player p) {
+    public boolean isHidden(Player p) {
         return true;
     }
 

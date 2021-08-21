@@ -3,7 +3,6 @@ package io.github.mooy1.infinitylib.machines;
 import java.text.DecimalFormat;
 
 import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
 
 import lombok.experimental.UtilityClass;
 
@@ -15,7 +14,6 @@ import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
  * @author Mooy1
  */
 @UtilityClass
-@ParametersAreNonnullByDefault
 public final class MachineLore {
 
     private static final DecimalFormat FORMAT = new DecimalFormat("###,###,###,###,###,###.#");

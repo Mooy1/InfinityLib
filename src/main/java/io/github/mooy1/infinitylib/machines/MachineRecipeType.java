@@ -22,13 +22,13 @@ public final class MachineRecipeType extends RecipeType {
 
     @Override
     public void register(ItemStack[] recipe, ItemStack result) {
-        this.callbacks.forEach(c -> c.accept(recipe, result));
-        this.recipes.put(recipe, result);
+        callbacks.forEach(c -> c.accept(recipe, result));
+        recipes.put(recipe, result);
     }
 
     public void subscribe(BiConsumer<ItemStack[], ItemStack> callback) {
-        this.recipes.forEach(callback);
-        this.callbacks.add(callback);
+        recipes.forEach(callback);
+        callbacks.add(callback);
     }
 
 }

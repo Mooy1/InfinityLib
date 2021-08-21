@@ -25,32 +25,32 @@ final class PathBuilder {
         indent /= 2;
 
         // change path
-        int size = this.path.size();
+        int size = path.size();
         if (indent == 0) {
-            this.path.clear();
+            path.clear();
         } else if (indent < size) {
             if (indent + 1 == size) {
-                this.path.remove(indent);
+                path.remove(indent);
             } else {
-                this.path.subList(indent, size).clear();
+                path.subList(indent, size).clear();
             }
         }
-        this.path.add(key);
+        path.add(key);
 
         return this;
     }
 
     boolean inMainSection() {
-        return this.path.size() == 1;
+        return path.size() == 1;
     }
 
     @Nonnull
     String build() {
         StringBuilder builder = new StringBuilder();
-        if (this.path.size() > 0) {
-            builder.append(this.path.get(0));
-            for (int i = 1; i < this.path.size(); i++) {
-                builder.append('.').append(this.path.get(i));
+        if (path.size() > 0) {
+            builder.append(path.get(0));
+            for (int i = 1; i < path.size(); i++) {
+                builder.append('.').append(path.get(i));
             }
         }
         return builder.toString();

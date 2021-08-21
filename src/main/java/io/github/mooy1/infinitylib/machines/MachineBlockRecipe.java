@@ -1,6 +1,6 @@
 package io.github.mooy1.infinitylib.machines;
 
-import java.util.Optional;
+import java.util.Map;
 
 import javax.annotation.Nullable;
 
@@ -22,10 +22,10 @@ final class MachineBlockRecipe {
         if (item != null && !item.getType().isAir()) {
             String string = Slimefun.getItemDataService().getItemData(item).orElseGet(() -> item.getType().name());
 
-            int len = this.strings.length;
+            int len = strings.length;
             for (int i = 0; i < len; i++) {
-                if (this.strings[i].equals(string)) {
-                    this.amounts[i]+= item.getAmount();
+                if (strings[i].equals(string)) {
+                    amounts[i]+= item.getAmount();
                     return;
                 }
             }
@@ -33,19 +33,45 @@ final class MachineBlockRecipe {
             String[] expanded = new String[len + 1];
             int[] expandedAmounts = new int[len + 1];
 
-            System.arraycopy(this.strings, 0, expanded, 0, len);
-            System.arraycopy(this.amounts, 0, expandedAmounts, 0, len);
+            System.arraycopy(strings, 0, expanded, 0, len);
+            System.arraycopy(amounts, 0, expandedAmounts, 0, len);
 
             expanded[len] = string;
             expandedAmounts[len] = item.getAmount();
 
-            this.strings = expanded;
-            this.amounts = expandedAmounts;
+            strings = expanded;
+            amounts = expandedAmounts;
         }
     }
 
     boolean isValid() {
-        return this.strings != ArrayUtils.EMPTY_STRING_ARRAY;
+        return strings != ArrayUtils.EMPTY_STRING_ARRAY;
+    }
+
+    boolean check(Map<String, MachineInput> map) {
+        for (int i = 0; i < strings.length; i++) {
+            MachineInput input = map.get(strings[i]);
+            if (input == null || input.amount < amounts[i]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    void consume(Map<String, MachineInput> map) {
+        for (int i = 0; i < strings.length; i++) {
+            int consume = amounts[i];
+            for (ItemStack item : map.get(strings[i]).items) {
+                int amt = item.getAmount();
+                if (amt >= consume) {
+                    item.setAmount(amt - consume);
+                    break;
+                } else {
+                    item.setAmount(0);
+                    consume -= amt;
+                }
+            }
+        }
     }
 
 }

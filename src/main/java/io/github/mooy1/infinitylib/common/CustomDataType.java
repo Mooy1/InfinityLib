@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.function.Function;
 
 import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
 
 import lombok.RequiredArgsConstructor;
 
@@ -29,7 +28,6 @@ import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
  * @author Mooy1
  */
 @RequiredArgsConstructor
-@ParametersAreNonnullByDefault
 public final class CustomDataType<T, Z> implements PersistentDataType<T, Z> {
 
     public static final PersistentDataType<String, ItemStack> ITEM_STACK = new CustomDataType<>(
@@ -138,25 +136,25 @@ public final class CustomDataType<T, Z> implements PersistentDataType<T, Z> {
     @Nonnull
     @Override
     public Class<T> getPrimitiveType() {
-        return this.primitive;
+        return primitive;
     }
 
     @Nonnull
     @Override
     public Class<Z> getComplexType() {
-        return this.complex;
+        return complex;
     }
 
     @Nonnull
     @Override
     public T toPrimitive(Z complex, PersistentDataAdapterContext context) {
-        return this.toPrimitive.apply(complex);
+        return toPrimitive.apply(complex);
     }
 
     @Nonnull
     @Override
     public Z fromPrimitive(T primitive, PersistentDataAdapterContext context) {
-        return this.toComplex.apply(primitive);
+        return toComplex.apply(primitive);
     }
 
 }

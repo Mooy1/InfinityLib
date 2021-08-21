@@ -3,8 +3,6 @@ package io.github.mooy1.infinitylib.commands;
 import java.util.List;
 import java.util.Objects;
 
-import javax.annotation.Nonnull;
-
 import org.bukkit.command.CommandSender;
 
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
@@ -17,7 +15,7 @@ final class InfoCommand extends SubCommand {
 
     InfoCommand(SlimefunAddon addon) {
         super("info", "Gives addon and machines version and discord links");
-        this.message = new String[] {
+        message = new String[] {
                 "",
                 ChatColors.color("&b" + addon.getName() + " Info"),
                 ChatColors.color("&bSlimefun Version: &7" + Objects.requireNonNull(Slimefun.instance()).getPluginVersion()),
@@ -30,12 +28,12 @@ final class InfoCommand extends SubCommand {
     }
 
     @Override
-    protected void execute(@Nonnull CommandSender sender, @Nonnull String[] args) {
-        sender.sendMessage(this.message);
+    protected void execute(CommandSender sender, String[] args) {
+        sender.sendMessage(message);
     }
 
     @Override
-    protected void complete(@Nonnull CommandSender sender, @Nonnull String[] args, @Nonnull List<String> tabs) {
+    protected void complete(CommandSender sender, String[] args, List<String> tabs) {
 
     }
 

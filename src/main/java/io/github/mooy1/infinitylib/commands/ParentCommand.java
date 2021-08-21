@@ -20,17 +20,17 @@ public class ParentCommand extends SubCommand {
 
     public ParentCommand(String name, String description, String perm) {
         super(name, description, perm);
-        addSub(this.helpCommand);
+        addSub(helpCommand);
     }
 
     public ParentCommand(String name, String description, boolean op) {
         super(name, description, op);
-        addSub(this.helpCommand);
+        addSub(helpCommand);
     }
 
     public ParentCommand(String name, String description) {
         super(name, description);
-        addSub(this.helpCommand);
+        addSub(helpCommand);
     }
 
     @Nonnull
@@ -38,12 +38,12 @@ public class ParentCommand extends SubCommand {
         if (command == this) {
             throw new IllegalArgumentException("'" + command.name() + "' cannot be added to itself!");
         }
-        if (command == this.parent) {
-            throw new IllegalArgumentException("Parent command '" + command.name() + "' cannot be added to child " + this.name());
+        if (command == parent) {
+            throw new IllegalArgumentException("Parent command '" + command.name() + "' cannot be added to child " + name());
         }
-        this.commands.compute(command.name(), (name, cmd) -> {
+        commands.compute(command.name(), (name, cmd) -> {
             if (cmd != null) {
-                throw new IllegalArgumentException("Duplicate command '" + command.name() + "' cannot be added to " + this.name());
+                throw new IllegalArgumentException("Duplicate command '" + command.name() + "' cannot be added to " + name());
             }
             command.parent = this;
             return command;
@@ -56,7 +56,7 @@ public class ParentCommand extends SubCommand {
         if (args.length == 0) {
             execute(sender);
         } else {
-            SubCommand command = this.commands.get(args[0]);
+            SubCommand command = commands.get(args[0]);
             if (command != null && command.canUse(sender)) {
                 command.execute(sender, Arrays.copyOfRange(args, 1, args.length));
             }
@@ -67,16 +67,16 @@ public class ParentCommand extends SubCommand {
      * This is called when no sub command is used
      */
     protected void execute(CommandSender sender) {
-        this.helpCommand.execute(sender, new String[0]);
+        helpCommand.execute(sender, new String[0]);
     }
 
     @Override
     protected final void complete(CommandSender sender, String[] args, List<String> completions) {
-        SubCommand command = this.commands.get(args[0]);
+        SubCommand command = commands.get(args[0]);
         if (command != null && command.canUse(sender)) {
             command.complete(sender, Arrays.copyOfRange(args, 1, args.length), completions);
         } else {
-            for (SubCommand sub : this.commands.values()) {
+            for (SubCommand sub : commands.values()) {
                 if (sub.canUse(sender)) {
                     completions.add(sub.name());
                 }
@@ -84,9 +84,10 @@ public class ParentCommand extends SubCommand {
         }
     }
 
+    @Nonnull
     final Set<SubCommand> available(CommandSender sender) {
         Set<SubCommand> set = new HashSet<>();
-        for (SubCommand command : this.commands.values()) {
+        for (SubCommand command : commands.values()) {
             if (command.canUse(sender)) {
                 set.add(command);
             }

@@ -3,7 +3,6 @@ package io.github.mooy1.infinitylib.machines;
 import java.util.List;
 
 import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
 
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -22,7 +21,6 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 
-@ParametersAreNonnullByDefault
 public abstract class MenuBlock extends SlimefunItem {
 
     public MenuBlock(ItemGroup category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
@@ -33,7 +31,7 @@ public abstract class MenuBlock extends SlimefunItem {
         addItemHandler(new BlockBreakHandler(false, false) {
 
             @Override
-            public void onPlayerBreak(@Nonnull BlockBreakEvent e, @Nonnull ItemStack itemStack, @Nonnull List<ItemStack> list) {
+            public void onPlayerBreak(BlockBreakEvent e, ItemStack itemStack, List<ItemStack> list) {
                 BlockMenu menu = BlockStorage.getInventory(e.getBlock());
                 if (menu != null) {
                     onBreak(e, menu);
@@ -43,7 +41,7 @@ public abstract class MenuBlock extends SlimefunItem {
         }, new BlockPlaceHandler(false) {
 
             @Override
-            public void onPlayerPlace(@Nonnull BlockPlaceEvent e) {
+            public void onPlayerPlace(BlockPlaceEvent e) {
                 onPlace(e, e.getBlockPlaced());
             }
 

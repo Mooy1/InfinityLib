@@ -3,8 +3,6 @@ package io.github.mooy1.infinitylib.groups;
 import java.util.Arrays;
 import java.util.Comparator;
 
-import javax.annotation.Nonnull;
-
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -45,7 +43,7 @@ public final class MultiGroup extends FlexItemGroup {
     }
 
     @Override
-    public boolean isVisible(@Nonnull Player p, @Nonnull PlayerProfile profile, @Nonnull SlimefunGuideMode mode) {
+    public boolean isVisible(Player p, PlayerProfile profile, SlimefunGuideMode mode) {
         return true;
     }
 
@@ -60,7 +58,7 @@ public final class MultiGroup extends FlexItemGroup {
         profile.getGuideHistory().add(this, page);
 
         // TODO deprecation
-        ChestMenu menu = new ChestMenu(this.name);
+        ChestMenu menu = new ChestMenu(name);
 
         menu.setEmptySlotsClickable(false);
         menu.addMenuOpeningHandler(pl -> pl.playSound(pl.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, 1, 1));
@@ -80,10 +78,10 @@ public final class MultiGroup extends FlexItemGroup {
 
         int target = (36 * (page - 1)) - 1;
 
-        while (target < (this.subGroups.length - 1) && index < 45) {
+        while (target < (subGroups.length - 1) && index < 45) {
             target++;
 
-            ItemGroup category = this.subGroups[target];
+            ItemGroup category = subGroups[target];
             menu.addItem(index, category.getItem(p));
             menu.addMenuClickHandler(index, (pl, slot, item, action) -> {
                 SlimefunGuide.openCategory(profile, category, mode, 1);
@@ -93,7 +91,7 @@ public final class MultiGroup extends FlexItemGroup {
             index++;
         }
 
-        int pages = target == this.subGroups.length - 1 ? page : (this.subGroups.length - 1) / 36 + 1;
+        int pages = target == subGroups.length - 1 ? page : (subGroups.length - 1) / 36 + 1;
 
         for (int i = 45; i < 54; i++) {
             menu.addItem(i, ChestMenuUtils.getBackground(), ChestMenuUtils.getEmptyClickHandler());
@@ -122,9 +120,9 @@ public final class MultiGroup extends FlexItemGroup {
     }
 
     @Override
-    public void register(@Nonnull SlimefunAddon addon) {
+    public void register(SlimefunAddon addon) {
         super.register(addon);
-        for (ItemGroup category : this.subGroups) {
+        for (ItemGroup category : subGroups) {
             if (!category.isRegistered()) {
                 category.register(addon);
             }

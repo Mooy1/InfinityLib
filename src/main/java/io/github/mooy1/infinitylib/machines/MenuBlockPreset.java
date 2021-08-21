@@ -1,7 +1,5 @@
 package io.github.mooy1.infinitylib.machines;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -13,7 +11,6 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 
-@ParametersAreNonnullByDefault
 final class MenuBlockPreset extends BlockMenuPreset {
 
     private final MenuBlock menuBlock;
@@ -25,23 +22,23 @@ final class MenuBlockPreset extends BlockMenuPreset {
 
     @Override
     public void newInstance(BlockMenu menu, Block b) {
-        this.menuBlock.onNewInstance(menu, b);
+        menuBlock.onNewInstance(menu, b);
     }
 
     @Override
     public int[] getSlotsAccessedByItemTransport(DirtyChestMenu menu, ItemTransportFlow flow, ItemStack item) {
-        return this.menuBlock.getTransportSlots(menu, flow, item);
+        return menuBlock.getTransportSlots(menu, flow, item);
     }
 
     @Override
     public void init() {
-        this.menuBlock.setup(this);
+        menuBlock.setup(this);
     }
 
     @Override
     public boolean canOpen(Block b, Player p) {
         return Slimefun.getProtectionManager().hasPermission(p, b.getLocation(), Interaction.INTERACT_BLOCK)
-                && this.menuBlock.canUse(p, false);
+                && menuBlock.canUse(p, false);
     }
 
     @Override

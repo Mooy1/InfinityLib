@@ -28,8 +28,8 @@ public final class AddonConfig extends YamlConfiguration {
 
     public AddonConfig(@Nonnull String path) {
         AbstractAddon addon = AbstractAddon.instance();
-        this.file = new File(addon.getDataFolder(), path);
-        super.defaults = this.defaults;
+        file = new File(addon.getDataFolder(), path);
+        super.defaults = defaults;
         loadDefaults(addon, path);
     }
 
@@ -54,7 +54,7 @@ public final class AddonConfig extends YamlConfiguration {
      */
     public void removeUnusedKeys() {
         for (String key : getKeys(true)) {
-            if (!this.defaults.contains(key)) {
+            if (!defaults.contains(key)) {
                 set(key, null);
             }
         }
@@ -62,7 +62,7 @@ public final class AddonConfig extends YamlConfiguration {
 
     public void save() {
         try {
-            save(this.file);
+            save(file);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -76,8 +76,8 @@ public final class AddonConfig extends YamlConfiguration {
     }
 
     public void reload() {
-        if (this.file.exists()) try {
-            load(this.file);
+        if (file.exists()) try {
+            load(file);
         } catch (Throwable e) {
             e.printStackTrace();
         }
@@ -87,12 +87,12 @@ public final class AddonConfig extends YamlConfiguration {
     @Nonnull
     @Override
     public YamlConfiguration getDefaults() {
-        return this.defaults;
+        return defaults;
     }
 
     @Nullable
     String getComment(String key) {
-        return this.comments.get(key);
+        return comments.get(key);
     }
 
     @Nonnull
@@ -136,7 +136,7 @@ public final class AddonConfig extends YamlConfiguration {
             throw new IllegalStateException("No default config for " + name + "!");
         } else try {
             String def = readDefaults(stream);
-            this.defaults.loadFromString(def);
+            defaults.loadFromString(def);
         } catch (Throwable e) {
             e.printStackTrace();
         }
@@ -174,11 +174,11 @@ public final class AddonConfig extends YamlConfiguration {
 
             if (commentBuilder.length() != 1) {
                 // Add the comment to the path and clear
-                this.comments.put(pathBuilder.build(), commentBuilder.toString());
+                comments.put(pathBuilder.build(), commentBuilder.toString());
                 commentBuilder = new StringBuilder("\n");
             } else if (pathBuilder.inMainSection()) {
                 // The main section should always have spaces between keys
-                this.comments.put(pathBuilder.build(), "\n");
+                comments.put(pathBuilder.build(), "\n");
             }
         }
 

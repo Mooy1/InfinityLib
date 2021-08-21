@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
@@ -18,15 +16,14 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.server.ServerCommandEvent;
 
-import io.github.mooy1.infinitylib.core.AbstractAddon;
 import io.github.mooy1.infinitylib.common.Events;
+import io.github.mooy1.infinitylib.core.AbstractAddon;
 
 /**
  * The main command of an addon, which can hold multiple sub commands
  *
  * @author Mooy1
  */
-@ParametersAreNonnullByDefault
 public final class AddonCommand extends ParentCommand implements TabExecutor, Listener {
 
     private final String help;
@@ -45,8 +42,8 @@ public final class AddonCommand extends ParentCommand implements TabExecutor, Li
 
         Events.registerListener(this);
 
-        this.help = "help" + command.getName();
-        this.slashHelp = "/" + this.help;
+        help = "help" + command.getName();
+        slashHelp = "/" + help;
 
         addSub(new InfoCommand(AbstractAddon.instance()));
         addSub(new AliasesCommand(command));
@@ -55,7 +52,7 @@ public final class AddonCommand extends ParentCommand implements TabExecutor, Li
     // TODO test
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     private void onServerCommand(ServerCommandEvent e) {
-        if (e.getCommand().toLowerCase(Locale.ROOT).startsWith(this.help)) {
+        if (e.getCommand().toLowerCase(Locale.ROOT).startsWith(help)) {
             e.setCommand(name());
         }
     }
@@ -63,7 +60,7 @@ public final class AddonCommand extends ParentCommand implements TabExecutor, Li
     // TODO test
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     private void onPlayerCommand(PlayerCommandPreprocessEvent e) {
-        if (e.getMessage().toLowerCase(Locale.ROOT).startsWith(this.slashHelp)) {
+        if (e.getMessage().toLowerCase(Locale.ROOT).startsWith(slashHelp)) {
             e.setMessage("/" + name());
         }
     }

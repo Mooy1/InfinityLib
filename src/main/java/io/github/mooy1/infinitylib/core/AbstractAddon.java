@@ -7,7 +7,6 @@ import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
 
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
@@ -29,7 +28,6 @@ import io.github.thebusybiscuit.slimefun4.libraries.dough.updater.GitHubBuildsUp
  *
  * @author Mooy1
  */
-@ParametersAreNonnullByDefault
 public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon {
 
     private static AbstractAddon instance;
@@ -81,27 +79,27 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
     // TODO implement tests
     AbstractAddon(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file) {
         super(loader, description, dataFolder, file);
-        this.notTesting = false;
-        this.githubUserName = "Mooy1";
-        this.autoUpdateBranch = "InfinityLib";
-        this.githubRepo = "master";
-        this.autoUpdateKey = "auto-update";
+        notTesting = false;
+        githubUserName = "Mooy1";
+        autoUpdateBranch = "InfinityLib";
+        githubRepo = "master";
+        autoUpdateKey = "auto-update";
     }
 
     @Override
     public final void onLoad() {
-        if (this.loading) {
+        if (loading) {
             throw new IllegalStateException(getName() + " is already loaded! Do not call super.onLoad()! Shade your own InfinityLib");
         }
 
-        this.loading = true;
+        loading = true;
 
         try {
             load();
         } catch (RuntimeException e) {
             throwIfAddonTest(e);
         } finally {
-            this.loading = false;
+            loading = false;
         }
     }
 
@@ -116,39 +114,39 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
 
         // Validate GitHub strings
         Pattern validGithubString = Pattern.compile("[\\w-]+");
-        Validate.isTrue(validGithubString.matcher(this.githubUserName).matches(), "Invalid githubUserName");
-        Validate.isTrue(validGithubString.matcher(this.githubRepo).matches(), "Invalid githubRepo");
-        Validate.isTrue(validGithubString.matcher(this.autoUpdateBranch).matches(), "Invalid autoUpdateBranch");
+        Validate.isTrue(validGithubString.matcher(githubUserName).matches(), "Invalid githubUserName");
+        Validate.isTrue(validGithubString.matcher(githubRepo).matches(), "Invalid githubRepo");
+        Validate.isTrue(validGithubString.matcher(autoUpdateBranch).matches(), "Invalid autoUpdateBranch");
 
         // Create bug track url
-        this.bugTrackerURL = "https://github.com/" + this.githubUserName + "/" + this.githubRepo + "/issues";
+        bugTrackerURL = "https://github.com/" + githubUserName + "/" + githubRepo + "/issues";
 
         // Check if it's an official build
-        this.officialBuild = getDescription().getVersion().matches("DEV - \\d+ \\(git \\w+\\)");
+        officialBuild = getDescription().getVersion().matches("DEV - \\d+ \\(git \\w+\\)");
 
         // Check if it can auto update
         GitHubBuildsUpdater updater = isOfficialBuild() ? new GitHubBuildsUpdater(this, getFile(),
-                this.githubUserName + "/" + this.githubRepo + "/" + this.autoUpdateBranch) : null;
+                githubUserName + "/" + githubRepo + "/" + autoUpdateBranch) : null;
 
         // This is used to mark when the config is broken, so we should always auto update
         boolean brokenConfig = false;
 
         // Create Config
         try {
-            this.config = new AddonConfig("config.yml");
+            config = new AddonConfig("config.yml");
         } catch (RuntimeException e) {
             brokenConfig = true;
             e.printStackTrace();
         }
 
         // Validate configAutoUpdateKey
-        if (this.autoUpdateKey == null) {
+        if (autoUpdateKey == null) {
             brokenConfig = true;
             throwIfAddonTest(new IllegalStateException("Null auto update key"));
-        } else if (this.autoUpdateKey.isEmpty()) {
+        } else if (autoUpdateKey.isEmpty()) {
             brokenConfig = true;
             throwIfAddonTest(new IllegalStateException("Empty auto update key!"));
-        } else if (!this.config.getDefaults().contains(this.autoUpdateKey, true)) {
+        } else if (!config.getDefaults().contains(autoUpdateKey, true)) {
             brokenConfig = true;
             throwIfAddonTest(new IllegalStateException("Auto update key missing from the default config!"));
         }
@@ -157,22 +155,22 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
         if (updater != null) {
             if (brokenConfig) {
                 updater.start();
-            } else if (this.config.getBoolean(this.autoUpdateKey)) {
-                this.autoUpdatesEnabled = true;
+            } else if (config.getBoolean(autoUpdateKey)) {
+                autoUpdatesEnabled = true;
                 updater.start();
             }
         }
 
         // Get plugin command
-        PluginCommand command = getCommand(getName());
-        if (command == null) {
+        PluginCommand pluginCommand = getCommand(getName());
+        if (pluginCommand == null) {
             throwIfAddonTest(new IllegalStateException("Command named '" + getName() + "' missing from plugin.yml!"));
         } else {
-            this.command = new AddonCommand(command);
+            command = new AddonCommand(pluginCommand);
         }
 
         // Create total tick count
-        Scheduler.repeat(Slimefun.getTickerTask().getTickRate(), () -> this.tickCount++);
+        Scheduler.repeat(Slimefun.getTickerTask().getTickRate(), () -> tickCount++);
 
         // Call addon enable
         try {
@@ -184,11 +182,11 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
 
     @Override
     public final void onDisable() {
-        if (this.disabling) {
+        if (disabling) {
             throw new IllegalStateException(getName() + " is already disabled! Do not call super.onDisable()!");
         }
 
-        this.disabling = true;
+        disabling = true;
 
         Bukkit.getScheduler().cancelTasks(this);
 
@@ -197,7 +195,7 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
         } catch (RuntimeException e) {
             throwIfAddonTest(e);
         } finally {
-            this.disabling = false;
+            disabling = false;
             instance = null;
         }
     }
@@ -206,7 +204,7 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
      * Throws an exception if in a test environment, otherwise just logs the stacktrace so that the plugin functions
      */
     private void throwIfAddonTest(RuntimeException e) {
-        if (this.notTesting) {
+        if (notTesting) {
             e.printStackTrace();
         } else {
             throw e;
@@ -235,14 +233,14 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
      */
     @Nonnull
     protected final ParentCommand getCommand() {
-        return this.command;
+        return command;
     }
 
     /**
      * Returns whether auto updates are enabled, for use in metrics
      */
     protected final boolean autoUpdatesEnabled() {
-        return this.autoUpdatesEnabled;
+        return autoUpdatesEnabled;
     }
 
     @Nonnull
@@ -254,23 +252,23 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
     @Nonnull
     @Override
     public final String getBugTrackerURL() {
-        return this.bugTrackerURL;
+        return bugTrackerURL;
     }
 
     @Nonnull
     @Override
     public final AddonConfig getConfig() {
-        return this.config;
+        return config;
     }
 
     @Override
     public final void reloadConfig() {
-        this.config.reload();
+        config.reload();
     }
 
     @Override
     public final void saveConfig() {
-        this.config.save();
+        config.save();
     }
 
     @Override
