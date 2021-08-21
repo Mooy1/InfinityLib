@@ -61,20 +61,21 @@ public final class MachineBlock extends AbstractMachineBlock {
         }
 
         for (MachineBlockRecipe recipe : recipes) {
-             if (recipe.check(map)) {
-                 if (quickPush(recipe.output.clone(), menu)) {
-                     recipe.consume(map);
-                     if (menu.hasViewer()) {
-                         menu.replaceExistingItem(layout.statusSlot(), PROCESSING_ITEM);
-                     }
-                     return true;
-                 } else {
-                     if (menu.hasViewer()) {
+            if (recipe.check(map)) {
+                if (quickPush(recipe.output.clone(), menu)) {
+                    recipe.consume(map);
+                    if (menu.hasViewer()) {
+                        menu.replaceExistingItem(layout.statusSlot(), PROCESSING_ITEM);
+                    }
+                    return true;
+                }
+                else {
+                    if (menu.hasViewer()) {
                         menu.replaceExistingItem(layout.statusSlot(), NO_ROOM_ITEM);
-                     }
-                     return false;
-                 }
-             }
+                    }
+                    return false;
+                }
+            }
         }
 
         if (menu.hasViewer()) {
@@ -111,7 +112,8 @@ public final class MachineBlock extends AbstractMachineBlock {
             if (target == null) {
                 menu.replaceExistingItem(slot, item, false);
                 return true;
-            } else if (type == target.getType()) {
+            }
+            else if (type == target.getType()) {
                 int targetAmount = target.getAmount();
                 int max = target.getMaxStackSize() - targetAmount;
                 if (max > 0) {
@@ -125,7 +127,8 @@ public final class MachineBlock extends AbstractMachineBlock {
                                 continue;
                             }
                         }
-                    } else if (target.hasItemMeta()) {
+                    }
+                    else if (target.hasItemMeta()) {
                         continue;
                     }
 
@@ -134,7 +137,8 @@ public final class MachineBlock extends AbstractMachineBlock {
 
                     if (push == amount) {
                         return true;
-                    } else {
+                    }
+                    else {
                         amount -= push;
                     }
                 }
@@ -143,4 +147,5 @@ public final class MachineBlock extends AbstractMachineBlock {
 
         return amount < item.getAmount();
     }
+
 }

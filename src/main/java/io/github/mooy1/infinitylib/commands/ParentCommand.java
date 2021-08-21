@@ -55,7 +55,8 @@ public class ParentCommand extends SubCommand {
     protected final void execute(CommandSender sender, String[] args) {
         if (args.length == 0) {
             execute(sender);
-        } else {
+        }
+        else {
             SubCommand command = commands.get(args[0]);
             if (command != null && command.canUse(sender)) {
                 command.execute(sender, Arrays.copyOfRange(args, 1, args.length));
@@ -75,7 +76,8 @@ public class ParentCommand extends SubCommand {
         SubCommand command = commands.get(args[0]);
         if (command != null && command.canUse(sender)) {
             command.complete(sender, Arrays.copyOfRange(args, 1, args.length), completions);
-        } else {
+        }
+        else {
             for (SubCommand sub : commands.values()) {
                 if (sub.canUse(sender)) {
                     completions.add(sub.name());

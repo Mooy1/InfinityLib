@@ -83,7 +83,8 @@ public final class AddonCommand extends ParentCommand implements TabExecutor, Li
                 if (returnList.size() >= 64) {
                     break;
                 }
-            } else if (item.equalsIgnoreCase(arg)) {
+            }
+            else if (item.equalsIgnoreCase(arg)) {
                 return Collections.emptyList();
             }
         }

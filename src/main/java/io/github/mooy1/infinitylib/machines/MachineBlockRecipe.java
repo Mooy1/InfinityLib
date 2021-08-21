@@ -25,7 +25,7 @@ final class MachineBlockRecipe {
             int len = strings.length;
             for (int i = 0; i < len; i++) {
                 if (strings[i].equals(string)) {
-                    amounts[i]+= item.getAmount();
+                    amounts[i] += item.getAmount();
                     return;
                 }
             }
@@ -66,7 +66,8 @@ final class MachineBlockRecipe {
                 if (amt >= consume) {
                     item.setAmount(amt - consume);
                     break;
-                } else {
+                }
+                else {
                     item.setAmount(0);
                     consume -= amt;
                 }

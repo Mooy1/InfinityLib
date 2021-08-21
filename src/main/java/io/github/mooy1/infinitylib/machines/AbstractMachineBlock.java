@@ -47,7 +47,8 @@ public abstract class AbstractMachineBlock extends TickingMenuBlock implements E
             if (menu.hasViewer()) {
                 menu.replaceExistingItem(layout.statusSlot(), NO_ENERGY_ITEM);
             }
-        } else if (process(b, menu)) {
+        }
+        else if (process(b, menu)) {
             removeCharge(menu.getLocation(), energyPerTick);
         }
     }

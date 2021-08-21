@@ -41,7 +41,8 @@ public final class CustomDataType<T, Z> implements PersistentDataType<T, Z> {
                 YamlConfiguration config = new YamlConfiguration();
                 try {
                     config.loadFromString(string);
-                } catch (InvalidConfigurationException e) {
+                }
+                catch (InvalidConfigurationException e) {
                     e.printStackTrace();
                     return new CustomItemStack(Material.STONE, "&cERROR");
                 }
@@ -59,7 +60,8 @@ public final class CustomDataType<T, Z> implements PersistentDataType<T, Z> {
                     for (ItemStack item : list) {
                         output.writeObject(item);
                     }
-                } catch (Exception e) {
+                }
+                catch (Exception e) {
                     e.printStackTrace();
                 }
                 return bytes.toByteArray();
@@ -71,7 +73,8 @@ public final class CustomDataType<T, Z> implements PersistentDataType<T, Z> {
                     while (bytes.available() > 0) {
                         list.add((ItemStack) input.readObject());
                     }
-                } catch (Exception e) {
+                }
+                catch (Exception e) {
                     e.printStackTrace();
                 }
                 return list;
@@ -84,7 +87,8 @@ public final class CustomDataType<T, Z> implements PersistentDataType<T, Z> {
                 ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                 try (BukkitObjectOutputStream output = new BukkitObjectOutputStream(bytes)) {
                     output.writeObject(location);
-                } catch (Exception e) {
+                }
+                catch (Exception e) {
                     e.printStackTrace();
                 }
                 return bytes.toByteArray();
@@ -93,7 +97,8 @@ public final class CustomDataType<T, Z> implements PersistentDataType<T, Z> {
                 ByteArrayInputStream bytes = new ByteArrayInputStream(arr);
                 try (BukkitObjectInputStream input = new BukkitObjectInputStream(bytes)) {
                     return (Location) input.readObject();
-                } catch (Exception e) {
+                }
+                catch (Exception e) {
                     e.printStackTrace();
                     return new Location(null, 0, 0, 0);
                 }
@@ -121,7 +126,8 @@ public final class CustomDataType<T, Z> implements PersistentDataType<T, Z> {
                         bytes.read(string, 0, string.length);
                         list.add(new String(string));
                     }
-                } catch (Exception e) {
+                }
+                catch (Exception e) {
                     e.printStackTrace();
                 }
                 return list;

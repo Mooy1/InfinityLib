@@ -96,7 +96,8 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
 
         try {
             load();
-        } catch (RuntimeException e) {
+        }
+        catch (RuntimeException e) {
             throwIfAddonTest(e);
         } finally {
             loading = false;
@@ -134,7 +135,8 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
         // Create Config
         try {
             config = new AddonConfig("config.yml");
-        } catch (RuntimeException e) {
+        }
+        catch (RuntimeException e) {
             brokenConfig = true;
             e.printStackTrace();
         }
@@ -143,10 +145,12 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
         if (autoUpdateKey == null) {
             brokenConfig = true;
             throwIfAddonTest(new IllegalStateException("Null auto update key"));
-        } else if (autoUpdateKey.isEmpty()) {
+        }
+        else if (autoUpdateKey.isEmpty()) {
             brokenConfig = true;
             throwIfAddonTest(new IllegalStateException("Empty auto update key!"));
-        } else if (!config.getDefaults().contains(autoUpdateKey, true)) {
+        }
+        else if (!config.getDefaults().contains(autoUpdateKey, true)) {
             brokenConfig = true;
             throwIfAddonTest(new IllegalStateException("Auto update key missing from the default config!"));
         }
@@ -155,7 +159,8 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
         if (updater != null) {
             if (brokenConfig) {
                 updater.start();
-            } else if (config.getBoolean(autoUpdateKey)) {
+            }
+            else if (config.getBoolean(autoUpdateKey)) {
                 autoUpdatesEnabled = true;
                 updater.start();
             }
@@ -165,7 +170,8 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
         PluginCommand pluginCommand = getCommand(getName());
         if (pluginCommand == null) {
             throwIfAddonTest(new IllegalStateException("Command named '" + getName() + "' missing from plugin.yml!"));
-        } else {
+        }
+        else {
             command = new AddonCommand(pluginCommand);
         }
 
@@ -175,7 +181,8 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
         // Call addon enable
         try {
             enable();
-        } catch (RuntimeException e) {
+        }
+        catch (RuntimeException e) {
             throwIfAddonTest(e);
         }
     }
@@ -192,7 +199,8 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
 
         try {
             disable();
-        } catch (RuntimeException e) {
+        }
+        catch (RuntimeException e) {
             throwIfAddonTest(e);
         } finally {
             disabling = false;
@@ -206,7 +214,8 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
     private void throwIfAddonTest(RuntimeException e) {
         if (notTesting) {
             e.printStackTrace();
-        } else {
+        }
+        else {
             throw e;
         }
     }
