@@ -20,7 +20,7 @@ public final class SubGroup extends ItemGroup {
     }
 
     public SubGroup(String key, ItemStack item, int tier) {
-        super(AbstractAddon.makeKey(key), item, tier);
+        super(AbstractAddon.createKey(key), item, tier);
     }
 
     @Override

@@ -38,7 +38,7 @@ public final class MultiGroup extends FlexItemGroup {
     }
 
     public MultiGroup(String key, ItemStack item, int tier, ItemGroup... subGroups) {
-        super(AbstractAddon.makeKey(key), item, tier);
+        super(AbstractAddon.createKey(key), item, tier);
         Arrays.sort(subGroups, Comparator.comparingInt(ItemGroup::getTier));
         this.subGroups = subGroups;
         this.name = ItemUtils.getItemName(item);

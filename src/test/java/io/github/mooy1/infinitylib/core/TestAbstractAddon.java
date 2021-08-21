@@ -44,7 +44,7 @@ class TestAbstractAddon {
 
     @Test
     void testMakeKey() {
-        Assertions.assertNotNull(MockAddon.makeKey("test"));
+        Assertions.assertNotNull(MockAddon.createKey("test"));
     }
 
     @Test

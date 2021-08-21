@@ -332,7 +332,7 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
      * Creates a NameSpacedKey from the given string
      */
     @Nonnull
-    public static NamespacedKey makeKey(String s) {
+    public static NamespacedKey createKey(String s) {
         return new NamespacedKey(instance(), s);
     }
 

@@ -12,23 +12,19 @@ import org.bukkit.inventory.ItemStack;
 
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
-import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
 import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
 import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
-import me.mrCookieSlime.CSCoreLibPlugin.Configuration.Config;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
-import me.mrCookieSlime.Slimefun.Objects.handlers.BlockTicker;
-import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 
 @Setter
 @Accessors(chain = true)
 @ParametersAreNonnullByDefault
-public abstract class AbstractMachineBlock extends MenuBlock implements EnergyNetComponent {
+public abstract class AbstractMachineBlock extends TickingMenuBlock implements EnergyNetComponent {
 
     protected static final ItemStack DEFAULT_PROCESSING_ITEM = new CustomItemStack(Material.LIME_STAINED_GLASS_PANE, "&aProcessing...");
     protected static final ItemStack NO_ENERGY_ITEM = new CustomItemStack(Material.RED_STAINED_GLASS_PANE, "&cNot enough energy!");
@@ -46,37 +42,20 @@ public abstract class AbstractMachineBlock extends MenuBlock implements EnergyNe
 
     public AbstractMachineBlock(ItemGroup category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
         super(category, item, recipeType, recipe);
-
-        addItemHandler(new BlockTicker() {
-
-            @Override
-            public boolean isSynchronized() {
-                return synchronous();
-            }
-
-            @Override
-            public void tick(Block b, SlimefunItem item, Config data) {
-                BlockMenu menu = BlockStorage.getInventory(b);
-                if (menu != null) {
-                    AbstractMachineBlock.this.tick(b, menu);
-                }
-            }
-
-        });
     }
 
-    private void tick(Block b, BlockMenu menu) {
+    @Override
+    protected void tick(Block b, BlockMenu menu) {
         if (getCharge(menu.getLocation()) < this.energyPerTick) {
             if (menu.hasViewer()) {
                 menu.replaceExistingItem(this.layout.statusSlot(), NO_ENERGY_ITEM);
             }
-            return;
+        } else if (process(b, menu)) {
+            removeCharge(menu.getLocation(), this.energyPerTick);
         }
-
-        // TODO call process here, boolean to consume energy?
-
-        removeCharge(menu.getLocation(), this.energyPerTick);
     }
+
+    protected abstract boolean process(Block b, BlockMenu menu);
 
     @Override
     protected void setup(MenuBlockPreset preset) {
@@ -110,10 +89,6 @@ public abstract class AbstractMachineBlock extends MenuBlock implements EnergyNe
     @Override
     public final void register(@Nonnull SlimefunAddon addon) {
         // TODO impl
-    }
-
-    protected boolean synchronous() {
-        return false;
     }
 
 }
