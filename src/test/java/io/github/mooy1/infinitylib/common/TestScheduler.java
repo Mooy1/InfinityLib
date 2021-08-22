@@ -71,7 +71,9 @@ class TestScheduler {
 
         Scheduler.repeat(1, a::incrementAndGet);
         Scheduler.repeatAsync(1, () -> {
-            if (b.incrementAndGet() == times) c.complete(true);
+            if (b.incrementAndGet() == times) {
+                c.complete(true);
+            }
         });
 
         for (int i = 0; i < times; i++) {
@@ -91,7 +93,9 @@ class TestScheduler {
 
         Scheduler.repeat(1, 2, a::incrementAndGet);
         Scheduler.repeatAsync(1, 2, () -> {
-            if (b.incrementAndGet() == times) c.complete(true);
+            if (b.incrementAndGet() == times) {
+                c.complete(true);
+            }
         });
 
         for (int i = 0; i < times + 1; i++) {

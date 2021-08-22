@@ -47,7 +47,7 @@ public final class MachineBlock extends AbstractMachineBlock {
 
     @Override
     protected boolean process(Block b, BlockMenu menu) {
-        if (AbstractAddon.tickCount() % ticksPerOutput != 0) {
+        if (AbstractAddon.slimefunTickCount() % ticksPerOutput != 0) {
             return true;
         }
 

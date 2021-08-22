@@ -26,14 +26,14 @@ public final class AddonConfig extends YamlConfiguration {
     private final Map<String, String> comments = new HashMap<>();
     private final File file;
 
-    public AddonConfig(@Nonnull String path) {
+    public AddonConfig(String path) {
         AbstractAddon addon = AbstractAddon.instance();
         file = new File(addon.getDataFolder(), path);
         super.defaults = defaults;
         loadDefaults(addon, path);
     }
 
-    public int getInt(@Nonnull String path, int min, int max) {
+    public int getInt(String path, int min, int max) {
         int val = getInt(path);
         if (val < min || val > max) {
             set(path, val = getDefaults().getInt(path));
@@ -41,7 +41,7 @@ public final class AddonConfig extends YamlConfiguration {
         return val;
     }
 
-    public double getDouble(@Nonnull String path, double min, double max) {
+    public double getDouble(String path, double min, double max) {
         double val = getDouble(path);
         if (val < min || val > max) {
             set(path, val = getDefaults().getDouble(path));
@@ -71,7 +71,7 @@ public final class AddonConfig extends YamlConfiguration {
 
     @Override
     public void save(@Nonnull File file) throws IOException {
-        if (AbstractAddon.isNotTesting()) {
+        if (AbstractAddon.environment() == Environment.LIVE) {
             super.save(file);
         }
     }

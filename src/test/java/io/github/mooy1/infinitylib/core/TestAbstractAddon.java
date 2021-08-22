@@ -5,12 +5,16 @@ import java.util.logging.Level;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.function.ThrowingSupplier;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.ServerMock;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class TestAbstractAddon {
 
     private static ServerMock server;
@@ -28,13 +32,8 @@ class TestAbstractAddon {
     }
 
     @Test
-    void testOfficialBuild() {
-        Assertions.assertFalse(MockAddon.isOfficialBuild());
-    }
-
-    @Test
-    void testNotTesting() {
-        Assertions.assertFalse(MockAddon.isNotTesting());
+    void testNotNullEnvironment() {
+        Assertions.assertNotNull(MockAddon.environment());
     }
 
     @Test
@@ -43,7 +42,7 @@ class TestAbstractAddon {
     }
 
     @Test
-    void testMakeKey() {
+    void testCreateKey() {
         Assertions.assertNotNull(MockAddon.createKey("test"));
     }
 
@@ -62,11 +61,10 @@ class TestAbstractAddon {
         Assertions.assertDoesNotThrow(() -> MockAddon.log(Level.INFO));
     }
 
-
     @Test
     void testGlobalTick() {
         server.getScheduler().performOneTick();
-        Assertions.assertEquals(1, MockAddon.tickCount());
+        Assertions.assertEquals(1, MockAddon.slimefunTickCount());
     }
 
     @Test
@@ -84,6 +82,12 @@ class TestAbstractAddon {
     @Test
     void testInstance() {
         Assertions.assertDoesNotThrow((ThrowingSupplier<Object>) MockAddon::instance);
+    }
+
+    @Test
+    @Order(Integer.MAX_VALUE)
+    void testNullInstance() {
+        Assertions.assertThrows(NullPointerException.class, AbstractAddon::instance);
     }
 
 }
