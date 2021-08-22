@@ -1,10 +1,12 @@
 package io.github.mooy1.infinitylib.core;
 
+import org.bukkit.plugin.Plugin;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.ThrowingSupplier;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.plugin.PluginManagerMock;
@@ -29,6 +31,12 @@ class TestAddonTesting {
     }
 
     @Test
+    void testBadGithubStrings() {
+        Assertions.assertThrows(RuntimeException.class,
+                () -> MockBukkit.load(MockAddon.class, Environment.TESTING, MockAddonTest.BAD_GITHUB_PATH));
+    }
+
+    @Test
     void testMissingAutoUpdateKey() {
         Assertions.assertThrows(RuntimeException.class,
                 () -> MockBukkit.load(MockAddon.class, Environment.TESTING, MockAddonTest.MISSING_KEY));
@@ -38,26 +46,28 @@ class TestAddonTesting {
     void testSuperEnable() {
         Assertions.assertThrows(IllegalStateException.class,
                 () -> MockBukkit.load(MockAddon.class, Environment.TESTING, MockAddonTest.CALL_SUPER));
+        Assertions.assertThrows(NullPointerException.class, MockAddon::instance);
+        Plugin plugin = manager.getPlugin("MockAddon");
+        Assertions.assertNotNull(plugin);
         Assertions.assertThrows(IllegalStateException.class,
-                () -> manager.enablePlugin(MockAddon.instance()));
+                () -> manager.enablePlugin(plugin));
+        Assertions.assertDoesNotThrow((ThrowingSupplier<Object>) MockAddon::instance);
         Assertions.assertThrows(IllegalStateException.class,
-                () -> manager.disablePlugin(MockAddon.instance()));
+                () -> manager.disablePlugin(plugin));
     }
 
     @Test
     void testErrorThrown() {
-        Assertions.assertThrows(Error.class,
-                () -> MockBukkit.load(MockAddon.class, Environment.TESTING, MockAddonTest.THROW_ERROR));
-        Assertions.assertThrows(Error.class,
-                () -> manager.enablePlugin(MockAddon.instance()));
-        Assertions.assertThrows(Error.class,
-                () -> manager.disablePlugin(MockAddon.instance()));
-    }
-
-    @Test
-    void testBadGithubStrings() {
-        Assertions.assertThrows(IllegalArgumentException.class,
-                () -> MockBukkit.load(MockAddon.class, Environment.TESTING, MockAddonTest.BAD_GITHUB_PATH));
+        Assertions.assertThrows(RuntimeException.class,
+                () -> MockBukkit.load(MockAddon.class, Environment.TESTING, MockAddonTest.THROW_EXCEPTION));
+        Assertions.assertThrows(NullPointerException.class, MockAddon::instance);
+        Plugin plugin = manager.getPlugin("MockAddon");
+        Assertions.assertNotNull(plugin);
+        Assertions.assertThrows(RuntimeException.class,
+                () -> manager.enablePlugin(plugin));
+        Assertions.assertDoesNotThrow((ThrowingSupplier<Object>) MockAddon::instance);
+        Assertions.assertThrows(RuntimeException.class,
+                () -> manager.disablePlugin(plugin));
     }
 
 }

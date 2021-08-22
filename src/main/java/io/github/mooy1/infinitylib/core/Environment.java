@@ -11,12 +11,12 @@ public enum Environment {
     LIBRARY_TESTING,
 
     /**
-     * This is used when an Addon is testing
+     * This is used when the Addon is testing
      */
     TESTING,
 
     /**
-     * This is used when the Addon is on an actual server
+     * This is used when the Addon is running on an actual server
      */
     LIVE
 

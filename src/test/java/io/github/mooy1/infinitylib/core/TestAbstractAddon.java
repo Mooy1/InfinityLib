@@ -75,8 +75,7 @@ class TestAbstractAddon {
 
     @Test
     void testSharedInfinityLib() {
-        Assertions.assertThrows(IllegalStateException.class, () -> MockBukkit.load(MockAddon.class));
-        Assertions.assertSame(addon, MockAddon.instance());
+        Assertions.assertThrows(RuntimeException.class, () -> MockBukkit.load(MockAddon.class));
     }
 
     @Test
@@ -87,6 +86,7 @@ class TestAbstractAddon {
     @Test
     @Order(Integer.MAX_VALUE)
     void testNullInstance() {
+        server.getPluginManager().clearPlugins();
         Assertions.assertThrows(NullPointerException.class, AbstractAddon::instance);
     }
 

@@ -42,6 +42,7 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
     private boolean autoUpdatesEnabled;
     private boolean disabling;
     private boolean enabling;
+    private boolean loading;
     private int slimefunTickCount;
 
     /**
@@ -57,7 +58,7 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
         this.githubRepo = githubRepo;
         this.autoUpdateKey = autoUpdateKey;
         this.bugTrackerURL = "https://github.com/" + githubUserName + "/" + githubRepo + "/issues";
-        validateGithub();
+        validateConstructor();
     }
 
     /**
@@ -82,26 +83,51 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
         this.githubRepo = githubRepo;
         this.autoUpdateKey = autoUpdateKey;
         this.bugTrackerURL = "https://github.com/" + githubUserName + "/" + githubRepo + "/issues";
-        validateGithub();
+        validateConstructor();
     }
 
-    private void validateGithub() {
+    private void validateConstructor() {
+        if (instance != null) {
+            throw new IllegalStateException("An addon has already used this AbstractAddon class! Shade your own InfinityLib!");
+        }
         if (!githubUserName.matches("[\\w-]+")) {
-            throw new IllegalStateException("Invalid githubUserName");
+            throw new IllegalArgumentException("Invalid githubUserName");
         }
         if (!githubRepo.matches("[\\w-]+")) {
-            throw new IllegalStateException("Invalid githubRepo");
+            throw new IllegalArgumentException("Invalid githubRepo");
         }
         if (!autoUpdateBranch.matches("[\\w-]+")) {
-            throw new IllegalStateException("Invalid autoUpdateBranch");
+            throw new IllegalArgumentException("Invalid autoUpdateBranch");
         }
     }
 
     @Override
     public final void onLoad() {
-        if (instance != null) {
-            throw new IllegalStateException(getName() + " is already loaded! Do not call super.onLoad()! Shade your own InfinityLib");
+        if (loading) {
+            throw new IllegalStateException(getName() + " is already loading! Do not call super.onLoad()!");
         }
+
+        loading = true;
+
+        // Load
+        try {
+            load();
+        }
+        catch (RuntimeException e) {
+            handle(e);
+        }
+        finally {
+            loading = false;
+        }
+    }
+
+    @Override
+    public final void onEnable() {
+        if (enabling) {
+            throw new IllegalStateException(getName() + " is already enabling! Do not call super.onEnable()!");
+        }
+
+        enabling = true;
 
         // Set static instance
         instance = this;
@@ -121,15 +147,15 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
         // Validate configAutoUpdateKey
         if (autoUpdateKey == null) {
             brokenConfig = true;
-            throwIfAddonTest(new IllegalStateException("Null auto update key"));
+            handle(new IllegalStateException("Null auto update key"));
         }
         else if (autoUpdateKey.isEmpty()) {
             brokenConfig = true;
-            throwIfAddonTest(new IllegalStateException("Empty auto update key!"));
+            handle(new IllegalStateException("Empty auto update key!"));
         }
         else if (!brokenConfig && !config.getDefaults().contains(autoUpdateKey, true)) {
             brokenConfig = true;
-            throwIfAddonTest(new IllegalStateException("Auto update key missing from the default config!"));
+            handle(new IllegalStateException("Auto update key missing from the default config!"));
         }
 
         // Auto update if enabled
@@ -143,27 +169,10 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
             }
         }
 
-        // Load
-        try {
-            load();
-        }
-        catch (RuntimeException e) {
-            throwIfAddonTest(e);
-        }
-    }
-
-    @Override
-    public final void onEnable() {
-        if (enabling) {
-            throw new IllegalStateException(getName() + " is already enabling! Do not call super.onEnable()!");
-        }
-
-        enabling = true;
-
         // Get plugin command
         PluginCommand pluginCommand = getCommand(getName());
         if (pluginCommand == null) {
-            throwIfAddonTest(new IllegalStateException("Command named '" + getName() + "' missing from plugin.yml!"));
+            handle(new IllegalStateException("Command named '" + getName() + "' missing from plugin.yml!"));
         }
         else {
             command = new AddonCommand(pluginCommand);
@@ -177,7 +186,7 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
             enable();
         }
         catch (RuntimeException e) {
-            throwIfAddonTest(e);
+            handle(e);
         }
         finally {
             enabling = false;
@@ -196,7 +205,7 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
             disable();
         }
         catch (RuntimeException e) {
-            throwIfAddonTest(e);
+            handle(e);
         }
         finally {
             disabling = false;
@@ -207,12 +216,10 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
     /**
      * Throws an exception if in a test environment, otherwise just logs the stacktrace so that the plugin functions
      */
-    private void throwIfAddonTest(RuntimeException e) {
-        if (this.environment == Environment.TESTING) {
-            throw e;
-        }
-        else {
-            e.printStackTrace();
+    private void handle(RuntimeException e) {
+        switch (this.environment) {
+            case TESTING: throw e;
+            case LIVE: e.printStackTrace();
         }
     }
 

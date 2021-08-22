@@ -30,13 +30,8 @@ public final class MockAddon extends AbstractAddon {
 
     @Override
     protected void load() {
-        if (test == MockAddonTest.THROW_ERROR) {
-            throw new Error() {
-                @Override
-                public void printStackTrace() {
-                    // It's meant to fail, no need to show stacktrace
-                }
-            };
+        if (test == MockAddonTest.THROW_EXCEPTION) {
+            throw new RuntimeException();
         }
         else if (test == MockAddonTest.CALL_SUPER) {
             super.onLoad();
@@ -45,13 +40,8 @@ public final class MockAddon extends AbstractAddon {
 
     @Override
     protected void enable() {
-        if (test == MockAddonTest.THROW_ERROR) {
-            throw new Error() {
-                @Override
-                public void printStackTrace() {
-                    // It's meant to fail, no need to show stacktrace
-                }
-            };
+        if (test == MockAddonTest.THROW_EXCEPTION) {
+            throw new RuntimeException();
         }
         else if (test == MockAddonTest.CALL_SUPER) {
             super.onEnable();
@@ -60,13 +50,8 @@ public final class MockAddon extends AbstractAddon {
 
     @Override
     protected void disable() {
-        if (test == MockAddonTest.THROW_ERROR) {
-            throw new Error() {
-                @Override
-                public void printStackTrace() {
-                    // It's meant to fail, no need to show stacktrace
-                }
-            };
+        if (test == MockAddonTest.THROW_EXCEPTION) {
+            throw new RuntimeException();
         }
         else if (test == MockAddonTest.CALL_SUPER) {
             super.onDisable();

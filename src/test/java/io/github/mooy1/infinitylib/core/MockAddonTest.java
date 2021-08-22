@@ -4,7 +4,7 @@ enum MockAddonTest {
 
     BAD_GITHUB_PATH,
     CALL_SUPER,
-    THROW_ERROR,
+    THROW_EXCEPTION,
     MISSING_KEY
 
 }
