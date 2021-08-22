@@ -6,13 +6,17 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.github.mooy1</groupId>
     <artifactId>InfinityLib</artifactId>
-    <version>Testing</version>
+    <version>Unofficial</version>
+    <developers>
+        <developer>
+            <name>Mooy1</name>
+        </developer>
+    </developers>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <author>Mooy1</author>
     </properties>
 
     <repositories>
@@ -110,6 +114,21 @@
             </plugin>
 
             <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>templating-maven-plugin</artifactId>
+                <version>1.0.0</version>
+
+                <executions>
+                    <execution>
+                        <id>filter-src</id>
+                        <goals>
+                            <goal>filter-sources</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>3.2.4</version>
@@ -118,7 +137,7 @@
                     <relocations>
                         <relocation>
                             <pattern>org.bstats.bukkit</pattern>
-                            <shadedPattern>io.github.mooy1.infinitylib.bstats</shadedPattern>
+                            <shadedPattern>io.github.mooy1.infinitylib.metrics</shadedPattern>
                         </relocation>
                     </relocations>
                     <filters>

@@ -10,7 +10,7 @@ import org.bukkit.plugin.java.JavaPluginLoader;
 import be.seeseemelk.mockbukkit.MockBukkit;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 
-public final class MockAddon extends AbstractAddon {
+public class MockAddon extends AbstractAddon {
 
     private final MockAddonTest test;
 

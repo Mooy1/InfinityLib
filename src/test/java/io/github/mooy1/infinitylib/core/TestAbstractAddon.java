@@ -1,20 +1,14 @@
 package io.github.mooy1.infinitylib.core;
 
-import java.util.logging.Level;
-
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.function.ThrowingSupplier;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.ServerMock;
 
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class TestAbstractAddon {
 
     private static ServerMock server;
@@ -57,11 +51,6 @@ class TestAbstractAddon {
     }
 
     @Test
-    void testLog() {
-        Assertions.assertDoesNotThrow(() -> MockAddon.log(Level.INFO));
-    }
-
-    @Test
     void testGlobalTick() {
         server.getScheduler().performOneTick();
         Assertions.assertEquals(1, MockAddon.slimefunTickCount());
@@ -74,20 +63,18 @@ class TestAbstractAddon {
     }
 
     @Test
-    void testSharedInfinityLib() {
-        Assertions.assertThrows(RuntimeException.class, () -> MockBukkit.load(MockAddon.class));
-    }
-
-    @Test
     void testInstance() {
         Assertions.assertDoesNotThrow((ThrowingSupplier<Object>) MockAddon::instance);
     }
 
     @Test
-    @Order(Integer.MAX_VALUE)
-    void testNullInstance() {
-        server.getPluginManager().clearPlugins();
-        Assertions.assertThrows(NullPointerException.class, AbstractAddon::instance);
+    void testDuplicateInstance() {
+        Assertions.assertThrows(RuntimeException.class, () -> MockBukkit.load(MockAddon.class));
+    }
+
+    @Test
+    void testNotRelocatedLive() {
+        Assertions.assertThrows(RuntimeException.class, () -> MockBukkit.load(MockAddon.class, Environment.LIVE, null));
     }
 
 }

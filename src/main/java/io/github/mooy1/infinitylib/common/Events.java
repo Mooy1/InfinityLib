@@ -23,17 +23,18 @@ public final class Events implements Listener {
     private static final Listener LISTENER = new Events();
 
     /**
+     * Calls the given event
+     */
+    public static <T extends Event> T call(T event) {
+        Bukkit.getPluginManager().callEvent(event);
+        return event;
+    }
+
+    /**
      * Registers the given listener class
      */
     public static void registerListener(Listener listener) {
         Bukkit.getPluginManager().registerEvents(listener, AbstractAddon.instance());
-    }
-
-    /**
-     * Calls the given event
-     */
-    public static void callEvent(Event event) {
-        Bukkit.getPluginManager().callEvent(event);
     }
 
     /**

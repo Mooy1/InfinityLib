@@ -1,5 +1,6 @@
 package io.github.mooy1.infinitylib.core;
 
+import org.bukkit.plugin.PluginDescriptionFile;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -8,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.plugin.PluginManagerMock;
+import io.github.mooy1.otheraddon.MockOtherAddon;
 
 class TestAddonLive {
 
@@ -26,6 +28,17 @@ class TestAddonLive {
     @BeforeEach
     void clear() {
         manager.clearPlugins();
+    }
+
+    @Test
+    void testNullInstance() {
+        Assertions.assertThrows(NullPointerException.class, AbstractAddon::instance);
+    }
+
+    @Test
+    void testSharedInfinityLib() {
+        PluginDescriptionFile desc = new PluginDescriptionFile("MockAddon", "", MockOtherAddon.class.getName());
+        Assertions.assertThrows(RuntimeException.class, () ->  MockBukkit.load(MockOtherAddon.class, desc, Environment.LIBRARY_TESTING));
     }
 
     @Test

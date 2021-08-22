@@ -13,6 +13,7 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.JavaPluginLoader;
 
+import io.github.mooy1.infinitylib.InfinityLib;
 import io.github.mooy1.infinitylib.commands.AddonCommand;
 import io.github.mooy1.infinitylib.commands.ParentCommand;
 import io.github.mooy1.infinitylib.common.Scheduler;
@@ -39,17 +40,17 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
 
     private AddonCommand command;
     private AddonConfig config;
+    private int slimefunTickCount;
     private boolean autoUpdatesEnabled;
     private boolean disabling;
     private boolean enabling;
     private boolean loading;
-    private int slimefunTickCount;
 
     /**
      * Live Addon Constructor
      */
     public AbstractAddon(String githubUserName, String githubRepo, String autoUpdateBranch, String autoUpdateKey) {
-        boolean official = getDescription().getVersion().matches(("DEV - \\d+ \\(git \\w+\\)"));
+        boolean official = getDescription().getVersion().matches("DEV - \\d+ \\(git \\w+\\)");
         this.updater = official ? new GitHubBuildsUpdater(this, getFile(),
                 githubUserName + "/" + githubRepo + "/" + autoUpdateBranch) : null;
         this.environment = Environment.LIVE;
@@ -58,7 +59,7 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
         this.githubRepo = githubRepo;
         this.autoUpdateKey = autoUpdateKey;
         this.bugTrackerURL = "https://github.com/" + githubUserName + "/" + githubRepo + "/issues";
-        validateConstructor();
+        validate();
     }
 
     /**
@@ -83,12 +84,19 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
         this.githubRepo = githubRepo;
         this.autoUpdateKey = autoUpdateKey;
         this.bugTrackerURL = "https://github.com/" + githubUserName + "/" + githubRepo + "/issues";
-        validateConstructor();
+        validate();
     }
 
-    private void validateConstructor() {
+    private void validate() {
+        if (environment == Environment.LIVE && InfinityLib.PACKAGE.contains("mooy1.infinitylib")) {
+            throw new IllegalStateException("You must relocate InfinityLib to your own package!");
+        }
+        String addonPackage = getClass().getPackage().getName();
+        if (!addonPackage.contains(InfinityLib.ADDON_PACKAGE)) {
+            throw new IllegalStateException("Shade and relocate your own InfinityLib!");
+        }
         if (instance != null) {
-            throw new IllegalStateException("An addon has already used this AbstractAddon class! Shade your own InfinityLib!");
+            throw new IllegalStateException("Addon " + instance.getName() + " is already using this InfinityLib, Shade an relocate your own!");
         }
         if (!githubUserName.matches("[\\w-]+")) {
             throw new IllegalArgumentException("Invalid githubUserName");
@@ -144,7 +152,7 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
             e.printStackTrace();
         }
 
-        // Validate configAutoUpdateKey
+        // Validate autoUpdateKey
         if (autoUpdateKey == null) {
             brokenConfig = true;
             handle(new IllegalStateException("Null auto update key"));
@@ -210,6 +218,9 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
         finally {
             disabling = false;
             instance = null;
+            slimefunTickCount = 0;
+            command = null;
+            config = null;
         }
     }
 
@@ -310,6 +321,7 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
         return instance().getConfig();
     }
 
+    @SuppressWarnings("unused")
     public static void log(Level level, String... messages) {
         Logger logger = instance().getLogger();
         for (String msg : messages) {

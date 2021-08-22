@@ -1,10 +1,10 @@
 package io.github.mooy1.infinitylib.common;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.server.PluginDisableEvent;
-import org.bukkit.event.server.PluginEnableEvent;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -15,13 +15,12 @@ import io.github.mooy1.infinitylib.core.MockAddon;
 
 class TestEvents implements Listener {
 
-    private static boolean eventFired;
-    private static MockAddon addon;
+    private static boolean listenerCalled;
 
     @BeforeAll
     public static void load() {
         MockBukkit.mock();
-        addon = MockBukkit.load(MockAddon.class);
+        MockBukkit.load(MockAddon.class);
     }
 
     @AfterAll
@@ -30,26 +29,29 @@ class TestEvents implements Listener {
     }
 
     @Test
+    void testCallEvent() {
+        Events.call(new MockEvent());
+        MockBukkit.getMock().getPluginManager().assertEventFired(MockEvent.class);
+    }
+
+    @Test
     void testRegisterListener() {
-        eventFired = false;
         Events.registerListener(this);
-        Events.callEvent(new PluginEnableEvent(addon));
-        Assertions.assertTrue(eventFired);
+        Events.call(new MockEvent());
+        Assertions.assertTrue(listenerCalled);
     }
 
     @Test
     void testAddHandler() {
-        eventFired = false;
-        Events.addHandler(PluginDisableEvent.class, EventPriority.MONITOR, true, e -> {
-            eventFired = true;
-        });
-        Events.callEvent(new PluginDisableEvent(addon));
-        Assertions.assertTrue(eventFired);
+        AtomicBoolean called = new AtomicBoolean();
+        Events.addHandler(MockEvent.class, EventPriority.MONITOR, true, e -> called.set(true));
+        Events.call(new MockEvent());
+        Assertions.assertTrue(called.get());
     }
 
     @EventHandler
-    void onEvent(PluginEnableEvent e) {
-        eventFired = true;
+    void onEvent(MockEvent e) {
+        listenerCalled = true;
     }
 
 }
