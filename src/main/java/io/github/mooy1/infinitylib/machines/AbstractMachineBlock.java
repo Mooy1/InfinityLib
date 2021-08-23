@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataContainer;
 
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
@@ -44,9 +45,7 @@ public abstract class AbstractMachineBlock extends TickingMenuBlock implements E
     @Override
     protected void tick(Block b, BlockMenu menu) {
         if (getCharge(menu.getLocation()) < energyPerTick) {
-            if (menu.hasViewer()) {
-                menu.replaceExistingItem(layout.statusSlot(), NO_ENERGY_ITEM);
-            }
+            updateStatus(menu, NO_ENERGY_ITEM);
         }
         else if (process(b, menu)) {
             removeCharge(menu.getLocation(), energyPerTick);
@@ -96,6 +95,64 @@ public abstract class AbstractMachineBlock extends TickingMenuBlock implements E
             layout = MachineLayout.DEFAULT;
         }
         super.register(addon);
+    }
+
+    protected final void updateStatus(BlockMenu menu, ItemStack item) {
+        int slot = layout.statusSlot();
+        if (menu.getItemInSlot(slot).getType() != item.getType()) {
+            menu.replaceExistingItem(layout.statusSlot(), item);
+        }
+    }
+
+    /**
+     * Pushes an item into the menu's output slots, returns true if at least 1 item was pushed
+     */
+    protected final boolean quickPush(ItemStack item, BlockMenu menu) {
+        int amount = item.getAmount();
+        Material type = item.getType();
+        PersistentDataContainer container = null;
+        boolean hasItemMeta = item.hasItemMeta();
+
+        for (int slot : getOutputSlots()) {
+            ItemStack target = menu.getItemInSlot(slot);
+
+            if (target == null) {
+                menu.replaceExistingItem(slot, item, false);
+                return true;
+            }
+            else if (type == target.getType()) {
+                int targetAmount = target.getAmount();
+                int max = target.getMaxStackSize() - targetAmount;
+                if (max > 0) {
+                    if (hasItemMeta) {
+                        if (target.hasItemMeta()) {
+                            if (container == null) {
+                                container = item.getItemMeta().getPersistentDataContainer();
+                            }
+                            PersistentDataContainer other = target.getItemMeta().getPersistentDataContainer();
+                            if (!container.equals(other)) {
+                                continue;
+                            }
+                        }
+                    }
+                    else if (target.hasItemMeta()) {
+                        continue;
+                    }
+
+                    int push = Math.min(amount, max);
+                    target.setAmount(push + targetAmount);
+
+                    if (push == amount) {
+                        return true;
+                    }
+                    else {
+                        amount -= push;
+                    }
+                }
+            }
+        }
+
+        return amount < item.getAmount();
     }
 
 }

@@ -26,8 +26,6 @@ public abstract class MenuBlock extends SlimefunItem {
     public MenuBlock(ItemGroup category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
         super(category, item, recipeType, recipe);
 
-        new MenuBlockPreset(this);
-
         addItemHandler(new BlockBreakHandler(false, false) {
 
             @Override
@@ -46,6 +44,11 @@ public abstract class MenuBlock extends SlimefunItem {
             }
 
         });
+    }
+
+    @Override
+    public final void postRegister() {
+        new MenuBlockPreset(this);
     }
 
     protected abstract void setup(MenuBlockPreset preset);

@@ -26,6 +26,7 @@ import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
  *
  * @author Mooy1
  */
+// TODO check if it works in cheat mode
 public final class MultiGroup extends FlexItemGroup {
 
     private final ItemGroup[] subGroups;
@@ -57,7 +58,6 @@ public final class MultiGroup extends FlexItemGroup {
 
         profile.getGuideHistory().add(this, page);
 
-        // TODO deprecation
         ChestMenu menu = new ChestMenu(name);
 
         menu.setEmptySlotsClickable(false);

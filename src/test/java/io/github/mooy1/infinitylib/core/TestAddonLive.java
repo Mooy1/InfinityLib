@@ -38,7 +38,7 @@ class TestAddonLive {
     @Test
     void testSharedInfinityLib() {
         PluginDescriptionFile desc = new PluginDescriptionFile("MockAddon", "", MockOtherAddon.class.getName());
-        Assertions.assertThrows(RuntimeException.class, () ->  MockBukkit.load(MockOtherAddon.class, desc, Environment.LIBRARY_TESTING));
+        Assertions.assertThrows(RuntimeException.class, () -> MockBukkit.load(MockOtherAddon.class, desc, Environment.LIBRARY_TESTING));
     }
 
     @Test

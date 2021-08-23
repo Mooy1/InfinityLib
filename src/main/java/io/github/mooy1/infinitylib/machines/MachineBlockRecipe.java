@@ -14,9 +14,9 @@ import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 @RequiredArgsConstructor
 final class MachineBlockRecipe {
 
+    private String[] strings = ArrayUtils.EMPTY_STRING_ARRAY;
+    private int[] amounts = ArrayUtils.EMPTY_INT_ARRAY;
     final ItemStack output;
-    String[] strings = ArrayUtils.EMPTY_STRING_ARRAY;
-    int[] amounts = ArrayUtils.EMPTY_INT_ARRAY;
 
     void add(@Nullable ItemStack item) {
         if (item != null && !item.getType().isAir()) {
@@ -42,10 +42,6 @@ final class MachineBlockRecipe {
             strings = expanded;
             amounts = expandedAmounts;
         }
-    }
-
-    boolean isValid() {
-        return strings != ArrayUtils.EMPTY_STRING_ARRAY;
     }
 
     boolean check(Map<String, MachineInput> map) {

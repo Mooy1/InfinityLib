@@ -18,6 +18,7 @@ final class MenuBlockPreset extends BlockMenuPreset {
     MenuBlockPreset(MenuBlock menuBlock) {
         super(menuBlock.getId(), menuBlock.getItemName());
         this.menuBlock = menuBlock;
+        menuBlock.setup(this);
     }
 
     @Override
@@ -32,7 +33,7 @@ final class MenuBlockPreset extends BlockMenuPreset {
 
     @Override
     public void init() {
-        menuBlock.setup(this);
+
     }
 
     @Override

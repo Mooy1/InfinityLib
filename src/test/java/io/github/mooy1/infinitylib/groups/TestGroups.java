@@ -1,5 +1,6 @@
 package io.github.mooy1.infinitylib.groups;
 
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -8,7 +9,6 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
@@ -22,6 +22,8 @@ import io.github.mooy1.infinitylib.common.Events;
 import io.github.mooy1.infinitylib.core.MockAddon;
 import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideMode;
+import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
+import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.MenuListener;
 
 class TestGroups {
 
@@ -47,20 +49,24 @@ class TestGroups {
         CompletableFuture<PlayerProfile> profile = new CompletableFuture<>();
         PlayerProfile.get(p, profile::complete);
 
+        new MenuListener(Objects.requireNonNull(Slimefun.instance()));
         multi.register(addon);
-        // TODO check cheat mode and implement it?
         multi.open(p, profile.get(), SlimefunGuideMode.SURVIVAL_MODE);
-        InventoryView multiMenu = p.getOpenInventory();
 
         Assertions.assertTrue(sub.isRegistered());
         Assertions.assertTrue(sub.isHidden(p));
         Assertions.assertFalse(multi.isHidden(p));
         Assertions.assertEquals(sub.getItem(p), p.getOpenInventory().getItem(9));
 
-        Events.call(new InventoryClickEvent(multiMenu, InventoryType.SlotType.CONTAINER,
+        Events.call(new InventoryClickEvent(p.getOpenInventory(), InventoryType.SlotType.CONTAINER,
                 9, ClickType.LEFT, InventoryAction.PICKUP_ALL));
 
         Assertions.assertNull(p.getOpenInventory().getItem(9));
+
+        Events.call(new InventoryClickEvent(p.getOpenInventory(), InventoryType.SlotType.CONTAINER,
+                1, ClickType.LEFT, InventoryAction.PICKUP_ALL));
+
+        Assertions.assertEquals(sub.getItem(p), p.getOpenInventory().getItem(9));
     }
 
 }
