@@ -16,16 +16,11 @@ public final class InfinityLib {
     /**
      * The package of this class, for example: me.name.addon.infinitylib
      */
-    public static final String PACKAGE;
+    public static final String PACKAGE = InfinityLib.class.getPackage().getName();
 
     /**
      * The package of the addon that shaded this, for example: me.name.addon
      */
-    public static final String ADDON_PACKAGE;
-
-    static {
-        PACKAGE = InfinityLib.class.getPackage().getName();
-        ADDON_PACKAGE = PACKAGE.substring(0, PACKAGE.lastIndexOf('.'));
-    }
+    public static final String ADDON_PACKAGE = PACKAGE.substring(0, PACKAGE.lastIndexOf('.'));
 
 }

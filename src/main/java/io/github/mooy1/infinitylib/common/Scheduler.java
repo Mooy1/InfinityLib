@@ -39,11 +39,11 @@ public final class Scheduler {
     }
 
     public static void repeat(int intervalTicks, int delayTicks, Runnable runnable) {
-        Bukkit.getScheduler().runTaskTimer(AbstractAddon.instance(), runnable, delayTicks, intervalTicks);
+        Bukkit.getScheduler().runTaskTimer(AbstractAddon.instance(), runnable, delayTicks, Math.max(1, intervalTicks));
     }
 
     public static void repeatAsync(int intervalTicks, int delayTicks, Runnable runnable) {
-        Bukkit.getScheduler().runTaskTimerAsynchronously(AbstractAddon.instance(), runnable, delayTicks, intervalTicks);
+        Bukkit.getScheduler().runTaskTimerAsynchronously(AbstractAddon.instance(), runnable, delayTicks, Math.max(1, intervalTicks));
     }
 
 }
