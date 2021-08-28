@@ -1,0 +1,22 @@
+name: Update Version
+
+on:
+  push:
+    branches:
+      - breaking-changes
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
+      - id: bump_version
+        uses: anothrNick/github-tag-action@1.34.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEFAULT_BUMP: none
+          DRY_RUN: true
+          WITH_V: true
+      - run: mvn versions:set -DnewVersion=${{ bump_version.outputs.new_tag }}
