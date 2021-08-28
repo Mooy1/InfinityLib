@@ -19,4 +19,4 @@ jobs:
           DEFAULT_BUMP: none
           DRY_RUN: true
           WITH_V: true
-      - run: mvn versions:set -DnewVersion=${{ bump_version.outputs.new_tag }}
+      - run: mvn versions:set -DnewVersion=${{ steps.bump_version.outputs.new_tag }}
