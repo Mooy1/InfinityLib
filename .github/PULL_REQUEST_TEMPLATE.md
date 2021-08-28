@@ -19,4 +19,3 @@
 - [ ] I have added `Nullable` or `Nonnull` annotations to my methods
 and/or `ParametersAreNonnullByDefault` annotations to my classes
 - [ ] I added sufficient Unit Tests to cover my code.
-- [ ] I have included #patch, #minor, or #major in my branch to indicate the type of change being made

@@ -1,4 +1,4 @@
-name: Update Version
+name: Bump Version
 
 on:
   push:
@@ -15,15 +15,15 @@ jobs:
       - id: bump_version
         uses: anothrNick/github-tag-action@1.34.0
         env:
-          RELEASE_BRANCHES: breaking-changes
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DEFAULT_BUMP: none
+          RELEASE_BRANCHES: breaking-changes
           DRY_RUN: true
           WITH_V: true
       - run: |
-          mvn versions:set -DnewVersion=${{ steps.bump_version.outputs.new_tag }}
+          version=$(echo ${{ steps.bump_version.outputs.new_tag }} | cut -dv -f2)
+          mvn versions:set -DnewVersion=$version
           git config user.name github-actions
-          git config user.email github-actions@github.com
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
           git add pom.xml
-          git commit -m "Auto Update Version"
+          git commit -m "Bump Version"
           git push origin breaking-changes
