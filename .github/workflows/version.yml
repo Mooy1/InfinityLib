@@ -20,4 +20,10 @@ jobs:
           DEFAULT_BUMP: none
           DRY_RUN: true
           WITH_V: true
-      - run: mvn versions:set -DnewVersion=${{ steps.bump_version.outputs.new_tag }}
+      - run: |
+          mvn versions:set -DnewVersion=${{ steps.bump_version.outputs.new_tag }}
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add pom.xml
+          git commit -m "Auto Update Version"
+          git push origin breaking-changes

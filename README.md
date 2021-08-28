@@ -37,8 +37,6 @@ SubGroup is an ItemGroup that is hidden from the main page, for use in MultiGrou
 ## Machines
 Not yet completed
 
-Usage with Gradle not yet completed.
-
 First you need to add InfinityLib to the `dependencies` section in your `pom.xml`:
 
 ```xml
@@ -59,9 +57,9 @@ Under the `build` section in your `pom.xml`, you should have the following:
     <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
-        <version>3.1.0</version>
+        <version>3.2.4</version>
         <configuration>
-            <!-- This will exclude any unused classes from libraries to reduce your file size -->
+            <!-- This will exclude any unused classes from libraries to reduce file size -->
             <minimizeJar>true</minimizeJar>
             <relocations>
                 <!-- This is the relocation, make sure to replace the package name -->
