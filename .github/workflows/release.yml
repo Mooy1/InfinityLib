@@ -34,23 +34,27 @@ jobs:
           DRY_RUN: true
       - id: update_version
         run: |
+          git tag -d 0.0.1
+          git push origin :0.0.1
+          git tag -d 0.1.0
+          git push origin :0.1.0
           mvn versions:set -DnewVersion=${{ steps.get_version.outputs.new_tag }}
           git add pom.xml
           git commit -m "set version to ${{ steps.get_version.outputs.new_tag }}"
           git push origin release
+          echo '::set-output name=commit::$(git rev-parse HEAD)'
       - id: maven
         run: mvn package
-      - id: changelog
-        uses: Bullrich/generate-release-changelog@2.0.1
-        env:
-          REPO: ${{ github.repository }}
+      #- id: changelog
+      #  uses: Bullrich/generate-release-changelog@2.0.1
+      #  env:
+      #    REPO: ${{ github.repository }}
       - id: release
         uses: actions/create-release@v1.1.4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ steps.get_version.outputs.new_tag }}
-          release_name: Release v${{ steps.get_version.outputs.new_tag }}
-          body: ${{ steps.changelog.outputs.changelog }}
-          draft: false
-          prerelease: false
+          release_name: ${{ steps.get_version.outputs.new_tag }}
+          body: ""# ${{ steps.changelog.outputs.changelog }}
+          commitish: steps.update_version.outputs.commit
