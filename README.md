@@ -2,40 +2,48 @@
 A shaded library for slimefun addons that adds a bunch of useful stuff.
 
 # Packages & Features
-
 ## Core
-AbstractAddon is an implementation of JavaPlugin
+<b>AbstractAddon</b>: An implementation of JavaPlugin
 which you will need to extend for many of the other features to work.
 It provides multiple utility methods and does some basic setup for you.
 
-AddonConfig is an implementation of YamlConfiguration
+<b>AddonConfig</b>: is an implementation of YamlConfiguration
 which makes comments available in the user's config
 and provides utility methods such as getting a value from within a range
 and removing unused/old keys from the user's config.
 
 ## Common
-CoolDowns is a utility object for keeping track of cool downs of players/uuids
+<b>CoolDowns</b>: A utility object for keeping track of cool downs of players/uuids
 
-CustomDataType contains some PersistentDataTypes for
+<b>CustomDataType</b>: Contains some PersistentDataTypes for
 ItemStack's, ItemStack Array's, Locations, and String Arrays.
-It also provides a constructor for PersistentDataType that uses lambda parameters.
+Also provides a constructor for PersistentDataType that uses lambda parameters.
 
-Event contains static utility methods for registering listeners, creating handlers, and calling events
+<b>Events</b>: Contains static utility methods for registering listeners, creating handlers, and calling events
 
-Scheduler provides static utility methods for running and repeating tasks
+<b>Scheduler</b>: Contains static utility methods for running and repeating tasks
 
 ## Commands
-AddonCommand allows you to add commands easily with a parent-child structure,
+<b>AddonCommand</b>: allows you to add commands easily with a parent-child structure,
 so you could have a command with a sub command which has a sub command.
 It also adds some default commands such as an addon info, aliases, and help command.
 
 ## Groups
-MultiGroup is an implementation of ItemGroup which lets you organize your groups into SubGroups
+<b>MultiGroup</b>: An implementation of ItemGroup which lets you organize your groups into SubGroups
 
-SubGroup is an ItemGroup that is hidden from the main page, for use in MultiGroup
+<b>SubGroup</b>: An ItemGroup that is hidden from the main page, for use in MultiGroup
 
 ## Machines
-Not yet completed
+<b>MenuBlock</b>: A SlimefunItem with a menu, providing overridable methods for setting up the menu
+
+<b>TickingMenuBlock</b>: A MenuBlock with slimefun ticker
+
+<b>AbstractMachineBlock</b>: A TickingMenuBlock which implements EnergyNetComponent and provides a process method
+
+<b>MachineBlock</b>: An AbstractMachineBlock which makes it easy to create simple input-output machines
+
+
+# How to use
 
 First you need to add InfinityLib to the `dependencies` section in your `pom.xml`:
 
@@ -88,3 +96,8 @@ Under the `build` section in your `pom.xml`, you should have the following:
     </plugin>
 </plugins>
 ```
+
+Then change your main plugin class to extend `AbstractAddon` and implement the constructor.
+You will need to use `enable()` and `disable()` instead of `onEnable()` and `onDisable`.
+Make sure you don't call `super.onEnable/Disable`.
+Your updater and config setup is now handled, make sure to test that it's working though!

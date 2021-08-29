@@ -23,7 +23,7 @@ jobs:
           WITH_V: false
       - id: update_version
         run: |
-          git merge --no-commit breaking-changes
+          git merge --no-commit origin/breaking-changes
           mvn versions:set -DnewVersion=${{ steps.get_version.outputs.new_tag }}
           git add pom.xml
           git commit -m "Release v${{ steps.get_version.outputs.new_tag }}"
