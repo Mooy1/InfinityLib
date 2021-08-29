@@ -25,7 +25,7 @@ jobs:
           echo ${{ github.owner }}
           echo ${{ job.build.conclusion }}
   release:
-    if: github.owner == Mooy1 && job.build.conclusion == success
+    if: github.repository_owner == `Mooy1` && job.build.conclusion == `success`
     runs-on: ubuntu-latest
     steps:
       - id: checkout
