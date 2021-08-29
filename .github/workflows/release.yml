@@ -37,23 +37,21 @@ jobs:
         run: |
           mvn versions:set -DnewVersion=${{ steps.get_version.outputs.new_tag }}
           git add pom.xml
-          git commit -m "Release ${{ steps.get_version.outputs.new_tag }}"
+          git commit -m "update version to ${{ steps.get_version.outputs.new_tag }}"
           git push origin release
       - id: maven
         run: mvn package
-      - id: changelog
-        uses: Bullrich/generate-release-changelog@master
-        env:
-          REPO: ${{ github.repository }}
-      - id: test
-        run: echo ${{ steps.changelog.outputs.changelog }}
+      #- id: changelog
+      #  uses: Bullrich/generate-release-changelog@2.0.1
+      #  env:
+      #    REPO: ${{ github.repository }}
       - id: release
-        uses: actions/create-release@latest
+        uses: actions/create-release@v1.1.4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ steps.get_version.outputs.new_tag }}
           release_name: Release ${{ steps.get_version.outputs.new_tag }}
-          body: ${{ steps.changelog.outputs.changelog }}
+          body: '' # ${{ steps.changelog.outputs.changelog }}
           draft: false
           prerelease: false
