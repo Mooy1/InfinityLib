@@ -2,11 +2,9 @@ name: Java CI
 
 on:
   push:
-    branches:
-      - master
+    branches-ignore: [releases]
   pull_request:
-    branches:
-      - master
+    branches-ignore: [releases]
 
 jobs:
   build:

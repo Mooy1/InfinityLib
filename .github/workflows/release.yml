@@ -1,12 +1,16 @@
 name: Release
 
 on:
-  push:
-    branches:
-      - breaking-changes
+  workflow_run:
+    workflows: ["Java CI"]
+    branches: [master]
+    types:
+      - completed
+      - requested
 
 jobs:
-  build:
+  release:
+    if: github.owner == `Mooy1` && github.event.workflow_run.conclusion == `success`
     runs-on: ubuntu-latest
     steps:
       - id: checkout
