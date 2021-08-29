@@ -9,7 +9,7 @@ import lombok.experimental.UtilityClass;
 public final class InfinityLib {
 
     /**
-     * The version of this InfinityLib package, for example v1.2.3 or Unofficial
+     * The version of this InfinityLib package, for example 1.2.3 or Unofficial
      */
     public static final String VERSION = "${project.version}";
 
