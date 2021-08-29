@@ -9,6 +9,12 @@ on:
       - requested
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo ${{ github.owner }}
+          echo ${{ github.event.workflow_run.conclusion }}
   release:
     if: github.owner == `Mooy1` && github.event.workflow_run.conclusion == `success`
     runs-on: ubuntu-latest
