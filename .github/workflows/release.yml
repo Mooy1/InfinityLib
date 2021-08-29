@@ -39,8 +39,6 @@ jobs:
           git add pom.xml
           git commit -m "Release ${{ steps.get_version.outputs.new_tag }}"
           git push origin release
-          git tag -d 0.0.1
-          git push origin :0.0.1
       - id: maven
         run: mvn package
       - id: changelog
@@ -49,13 +47,13 @@ jobs:
           REPO: ${{ github.repository }}
       - id: test
         run: echo ${{ steps.changelog.outputs.changelog }}
-      #- id: release
-      #  uses: actions/create-release@latest
-      #  env:
-      #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #  with:
-      #    tag_name: ${{ steps.get_version.outputs.new_tag }}
-      #    release_name: Release ${{ steps.get_version.outputs.new_tag }}
-      #    body: ${{ steps.changelog.outputs.changelog }}
-      #    draft: false
-      #    prerelease: false
+      - id: release
+        uses: actions/create-release@latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.get_version.outputs.new_tag }}
+          release_name: Release ${{ steps.get_version.outputs.new_tag }}
+          body: ${{ steps.changelog.outputs.changelog }}
+          draft: false
+          prerelease: false
