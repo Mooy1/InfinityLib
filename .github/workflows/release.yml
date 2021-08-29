@@ -38,8 +38,7 @@ jobs:
           git add pom.xml
           git commit -m "set version to ${{ steps.get_version.outputs.new_tag }}"
           git push origin release
-          commit=$(git rev-parse HEAD)
-          echo '::set-output name=commit::$commit'
+          echo ::set-output name=commit::$(git rev-parse HEAD)
       - id: maven
         run: mvn package
       # - id: changelog
