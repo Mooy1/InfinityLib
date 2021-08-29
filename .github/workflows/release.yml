@@ -2,7 +2,7 @@ name: Release
 
 on:
   workflow_run:
-    workflows: ["Java CIaaaa"]
+    workflows: [Java CI]
     #branches: [breaking-changes]
     #types:
     #  - completed
