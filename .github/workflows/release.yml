@@ -34,10 +34,6 @@ jobs:
           DRY_RUN: true
       - id: update_version
         run: |
-          git tag -d 0.0.1
-          git push origin :0.0.1
-          git tag -d 0.1.0
-          git push origin :0.1.0
           mvn versions:set -DnewVersion=${{ steps.get_version.outputs.new_tag }}
           git add pom.xml
           git commit -m "set version to ${{ steps.get_version.outputs.new_tag }}"
@@ -57,4 +53,4 @@ jobs:
           tag_name: ${{ steps.get_version.outputs.new_tag }}
           release_name: ${{ steps.get_version.outputs.new_tag }}
           body: ""# ${{ steps.changelog.outputs.changelog }}
-          commitish: steps.update_version.outputs.commit
+          commitish: ${{ steps.update_version.outputs.commit }}
