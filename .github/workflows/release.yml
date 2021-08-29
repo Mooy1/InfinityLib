@@ -38,8 +38,9 @@ jobs:
           mvn versions:set -DnewVersion=${{ steps.get_version.outputs.new_tag }}
           git add pom.xml
           git commit -m "Release ${{ steps.get_version.outputs.new_tag }}"
-          git tag -d 0.0.1
           git push origin release
+          git tag -d 0.0.1
+          git push origin :0.0.1
       - id: maven
         run: mvn package
 
