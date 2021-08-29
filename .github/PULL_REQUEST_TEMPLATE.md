@@ -17,5 +17,6 @@
 - [ ] I have also tested the proposed changes with an addon.
 - [ ] I followed the existing code standards and didn't mess up the formatting.
 - [ ] I have added `Nullable` or `Nonnull` annotations to my methods
-and/or `ParametersAreNonnullByDefault` annotations to my classes
-- [ ] I added sufficient Unit Tests to cover my code.
+- [ ] I have added sufficient Unit Tests to cover my code.
+- [ ] My pull request does not target the `releases` branch.
+- [ ] I did not change the version in `pom.xml`. It is still `Unofficial`.
