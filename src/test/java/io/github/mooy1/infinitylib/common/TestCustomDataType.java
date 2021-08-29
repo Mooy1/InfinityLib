@@ -41,14 +41,14 @@ class TestCustomDataType {
 
     @Test
     @Disabled(value = "MockBukkit issue")
-    void testItemStack() {
+    void testItemStackOld() {
         ItemStack item = new ItemStack(Material.OBSIDIAN);
-        container.set(key, CustomDataType.ITEM_STACK, item);
-        Assertions.assertEquals(item, container.get(key, CustomDataType.ITEM_STACK));
+        container.set(key, CustomDataType.ITEM_STACK_OLD, item);
+        Assertions.assertEquals(item, container.get(key, CustomDataType.ITEM_STACK_OLD));
 
         item = SlimefunItems.ANCIENT_ALTAR;
-        container.set(key, CustomDataType.ITEM_STACK, item);
-        Assertions.assertEquals(item, container.get(key, CustomDataType.ITEM_STACK));
+        container.set(key, CustomDataType.ITEM_STACK_OLD, item);
+        Assertions.assertEquals(item, container.get(key, CustomDataType.ITEM_STACK_OLD));
     }
 
     @Test

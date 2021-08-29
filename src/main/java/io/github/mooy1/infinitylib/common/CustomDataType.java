@@ -30,7 +30,9 @@ import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
 @RequiredArgsConstructor
 public final class CustomDataType<T, Z> implements PersistentDataType<T, Z> {
 
-    public static final PersistentDataType<String, ItemStack> ITEM_STACK = new CustomDataType<>(
+    // TODO add new item stack type
+    @Deprecated
+    public static final PersistentDataType<String, ItemStack> ITEM_STACK_OLD = new CustomDataType<>(
             String.class, ItemStack.class,
             itemStack -> {
                 YamlConfiguration config = new YamlConfiguration();
