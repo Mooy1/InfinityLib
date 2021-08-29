@@ -43,4 +43,19 @@ jobs:
           git push origin :0.0.1
       - id: maven
         run: mvn package
-
+      - id: changelog
+        uses: Bullrich/generate-release-changelog@master
+        env:
+          REPO: ${{ github.repository }}
+      - id: test
+        run: echo ${{ steps.changelog.outputs.changelog }}
+      #- id: release
+      #  uses: actions/create-release@latest
+      #  env:
+      #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #  with:
+      #    tag_name: ${{ steps.get_version.outputs.new_tag }}
+      #    release_name: Release ${{ steps.get_version.outputs.new_tag }}
+      #    body: ${{ steps.changelog.outputs.changelog }}
+      #    draft: false
+      #    prerelease: false
