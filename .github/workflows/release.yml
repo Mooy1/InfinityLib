@@ -41,10 +41,10 @@ jobs:
           echo ::set-output name=commit::$(git rev-parse HEAD)
       - id: maven
         run: mvn package
-       - id: changelog
-         uses: Bullrich/generate-release-changelog@2.0.1
-         env:
-           REPO: ${{ github.repository }}
+      - id: changelog
+        uses: Bullrich/generate-release-changelog@2.0.1
+        env:
+          REPO: ${{ github.repository }}
       - id: release
         uses: actions/create-release@v1.1.4
         env:
