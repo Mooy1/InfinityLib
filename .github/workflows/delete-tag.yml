@@ -11,9 +11,10 @@ jobs:
   delete-tag:
     runs-on: ubuntu-latest
     steps:
-      - id: checkout
-        uses: actions/checkout@v2.3.3
       - id: delete-tag
-        run: |
-          git tag -d ${{ github.event.inputs.tag }}
-          git push origin :${{ github.event.inputs.tag }}
+        uses: dev-drprasad/delete-tag-and-release@v0.2.0
+        with:
+          delete_release: true
+          tag_name: ${{ github.event.inputs.tag }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
