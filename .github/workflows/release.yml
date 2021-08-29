@@ -23,7 +23,7 @@ jobs:
     steps:
       - run: |
           echo ${{ github.owner }}
-          echo ${{ jobs.build.conclusion }}
+          echo ${{ job.build.conclusion }}
   release:
     if: github.owner == `Mooy1` && job.build.conclusion == `success`
     runs-on: ubuntu-latest
