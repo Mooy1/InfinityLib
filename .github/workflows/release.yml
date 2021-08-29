@@ -9,6 +9,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - id: checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          ref: releases
       - id: get_version
         uses: anothrNick/github-tag-action@1.34.0
         env:
@@ -17,10 +22,6 @@ jobs:
           DRY_RUN: true
           WITH_V: false
       - id: update_version
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-          ref: releases
         run: |
           git merge --no-commit breaking-changes
           mvn versions:set -DnewVersion=${{ steps.get_version.outputs.new_tag }}
