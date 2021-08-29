@@ -5,6 +5,7 @@ on:
     branches-ignore:
       - releases
       - master
+      - breaking-changes
   pull_request:
     branches-ignore:
       - releases
