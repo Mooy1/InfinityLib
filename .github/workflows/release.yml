@@ -23,9 +23,9 @@ jobs:
     steps:
       - run: |
           echo ${{ github.owner }}
-          echo ${{ job.build.conclusion }}
+          echo ${{ jobs.build.conclusion }}
   release:
-    if: github.repository_owner == 'Mooy1' && job.build.conclusion == 'success'
+    if: github.repository_owner == 'Mooy1' && jobs.build.conclusion == 'success'
     runs-on: ubuntu-latest
     steps:
       - id: checkout
