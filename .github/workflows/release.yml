@@ -2,11 +2,11 @@ name: Release
 
 on:
   workflow_run:
-    workflows: ["Java CI"]
-    branches: [breaking-changes]
-    types:
-      - completed
-      - requested
+    #workflows: ["Java CI"]
+    #branches: [breaking-changes]
+    #types:
+    #  - completed
+    #  - requested
 
 jobs:
   test:
