@@ -53,7 +53,7 @@ jobs:
             echo ::set-output name=version::0.0.1
           else
             commits=$(git log --pretty=format:'%s' "$tag"..HEAD)
-            echo "$commits" # todo remove once ready
+            git log --pretty=format:'%s' "$tag"..HEAD # todo remove once ready
             case "$commits" in
               *major*)
                 echo ::set-output name=version::${{ steps.get_next_version.outputs.major }} ;;
