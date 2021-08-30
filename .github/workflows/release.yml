@@ -48,12 +48,13 @@ jobs:
 
       - id: get_version
         run: |
-          if [[ ${{ steps.get_previous_version.outputs.tag }} == "0.0.0" ]] then
+          tag="${{ steps.get_previous_version.outputs.tag }}"
+          if [[ $tag == "0.0.0" ]]; then
             echo ::set-output name=version::0.0.1
           else
-            commits = $(git log --pretty=format:'%s' $LAST_TAG..HEAD)
-            echo $commits # todo remove once ready
-            case "$string" in
+            commits=$(git log --pretty=format:'%s' "$tag"..HEAD)
+            echo "$commits" # todo remove once ready
+            case "$commits" in
               *major*)
                 echo ::set-output name=version::${{ steps.get_next_version.outputs.major }} ;;
               *minor*)
