@@ -77,7 +77,7 @@ jobs:
           mvn versions:set -DnewVersion=${{ steps.get_version.outputs.version }}
 
       - id: setup_java
-        uses: actions/setup-java@v2.3.4
+        uses: actions/setup-java@v2.3.0
         with:
           distribution: adopt
           java-version: '8'
