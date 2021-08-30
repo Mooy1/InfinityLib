@@ -87,7 +87,7 @@ jobs:
         run: mvn package --file pom.xml
 
       - id: changelog
-        if: ${{ steps.get_previous_version.outputs.tag }} != '0.0.0'
+        if: steps.get_previous_version.outputs.tag != '0.0.0'
         uses: Bullrich/generate-release-changelog@2.0.1
         env:
           REPO: ${{ github.repository }}
