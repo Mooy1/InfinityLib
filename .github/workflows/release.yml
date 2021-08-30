@@ -4,11 +4,11 @@ on:
   push:
     branches:
       - master
-      - breaking-changes
+      - breaking-changes # todo remove once ready
 
 jobs:
-  delete:
-    if: github.repository_owner != 'Mooy1'
+  delete: # todo remove once ready
+    if: github.repository_owner == 'Mooy1'
     runs-on: ubuntu-latest
     steps:
     - id: delete_tag
@@ -23,11 +23,6 @@ jobs:
     if: github.repository_owner == 'Mooy1'
     runs-on: ubuntu-latest
     steps:
-      - id: setup_java
-        uses: actions/setup-java@v2.3.0
-        with:
-          java-version: 8
-          distribution: adopt
 
       - id: checkout
         uses: actions/checkout@v2.3.3
@@ -40,26 +35,58 @@ jobs:
           git config user.name github-actions
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
           git merge --no-commit origin/breaking-changes
-          echo $(git rev-list -n 1 $tag)
-          echo $(git rev-parse HEAD)
+
+      - id: get_previous_version
+        uses: "WyriHaximus/github-action-get-previous-tag@v1.1.0"
+        with:
+          fallback: 0.0.0
+
+      - id: get_next_version
+        uses: "WyriHaximus/github-action-next-semvers@v1.1.0"
+        with:
+          version: ${{ steps.get_previous_version.outputs.tag }}
 
       - id: get_version
-        uses: anothrNick/github-tag-action@1.34.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          RELEASE_BRANCHES: release
-          TAG_CONTEXT: branch
-          DRY_RUN: true
-          #CUSTOM_TAG: 0.0.1
+        run: |
+          if [[ ${{ steps.get_previous_version.outputs.tag }} == "0.0.0" ]] then
+            echo ::set-output name=version::0.0.1
+          else
+            commits = $(git log --pretty=format:'%s' $LAST_TAG..HEAD)
+            echo $commits # todo remove once ready
+            case "$string" in
+              *major*)
+                echo ::set-output name=version::${{ steps.get_next_version.outputs.major }} ;;
+              *minor*)
+                echo ::set-output name=version::${{ steps.get_next_version.outputs.minor }} ;;
+              *patch*)
+                echo ::set-output name=version::${{ steps.get_next_version.outputs.patch }} ;;
+              *)
+                echo ::set-output name=version::${{ steps.get_next_version.outputs.minor }} ;;
+            esac
+          fi
+
+      - id: cache_maven
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
 
       - id: set_version
         run: |
-          mvn versions:set -DnewVersion=${{ steps.get_version.outputs.new_tag }}
+          mvn versions:set -DnewVersion=${{ steps.get_version.outputs.version }}
 
-      - id: maven
-        run: mvn package
+      - id: setup_java
+        uses: actions/setup-java@v2.3.4
+        with:
+          distribution: adopt
+          java-version: '8'
+
+      - id: build
+        run: mvn package --file pom.xml
 
       - id: changelog
+        if: ${{ steps.get_previous_version.outputs.tag }} != '0.0.0'
         uses: Bullrich/generate-release-changelog@2.0.1
         env:
           REPO: ${{ github.repository }}
@@ -67,7 +94,7 @@ jobs:
       - id: update_version
         run: |
           git add pom.xml
-          git commit -m "set version to ${{ steps.get_version.outputs.new_tag }}"
+          git commit -m "set version to ${{ steps.get_version.outputs.version }}"
           git push origin release
           echo ::set-output name=commit::$(git rev-parse HEAD)
 
@@ -76,7 +103,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ steps.get_version.outputs.new_tag }}
-          release_name: ${{ steps.get_version.outputs.new_tag }}
+          tag_name: ${{ steps.get_version.outputs.version }}
+          release_name: ${{ steps.get_version.outputs.version }}
           body: ${{ steps.changelog.outputs.changelog }}
           commitish: ${{ steps.update_version.outputs.commit }}
