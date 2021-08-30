@@ -8,7 +8,7 @@ on:
 
 jobs:
   delete: # todo remove once ready
-    if: github.repository_owner == 'Mooy1'
+    if: github.repository_owner != 'Mooy1'
     runs-on: ubuntu-latest
     steps:
     - id: delete_tag
@@ -105,6 +105,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ steps.get_version.outputs.version }}
-          release_name: ${{ steps.get_version.outputs.version }}
+          release_name: Release v${{ steps.get_version.outputs.version }}
           body: ${{ steps.changelog.outputs.changelog }}
           commitish: ${{ steps.update_version.outputs.commit }}
