@@ -3,7 +3,6 @@ name: Build
 on:
   push:
     branches-ignore:
-      - release
       - master
       - breaking-changes # TODO remove this once merged
     paths:
