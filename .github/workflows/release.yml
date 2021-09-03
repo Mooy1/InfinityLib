@@ -31,13 +31,10 @@ jobs:
           echo New Version: $newVersion
           echo ::set-output name=new-version::$newVersion
 
-          git tag
-          git tag --sort version:refname
-          git tag --sort version:refname | tail -n 2
-          git tag --sort version:refname | tail -n 2 | head -n 1
+          git tag | sort -r --version-sort | head -n1
 
           # Modified From: https://github.com/Bullrich/generate-release-changelog
-          tag=$(git tag --sort version:refname | tail -n 2 | head -n 1)
+          tag=$(git tag | sort -r --version-sort | head -n1)
 
           if [ "$tag" ]; then
             changelog=$(git log --oneline --no-decorate $tag..HEAD)
