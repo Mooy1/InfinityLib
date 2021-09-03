@@ -31,6 +31,11 @@ jobs:
           echo New Version: $newVersion
           echo ::set-output name=new-version::$newVersion
 
+          git tag
+          git tag --sort version:refname
+          git tag --sort version:refname | tail -n 2
+          git tag --sort version:refname | tail -n 2 | head -n 1
+
           # Modified From: https://github.com/Bullrich/generate-release-changelog
           tag=$(git tag --sort version:refname | tail -n 2 | head -n 1)
 
@@ -47,6 +52,7 @@ jobs:
           changelog="${changelog//'%'/'%25'}"
           changelog="${changelog//$'\n'/'%0A' - }"
           changelog=" - ${changelog//$'\r'/'%0D'}"
+          echo "$changelog"
           echo ::set-output name=changelog::$changelog
 
       - uses: madhead/semver-utils@1.4.3
