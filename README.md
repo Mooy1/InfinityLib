@@ -1,5 +1,5 @@
 # InfinityLib
-A shaded library for slimefun addons that adds a bunch of useful stuff.
+A shaded library for Slimefun addons which adds a bunch of useful classes and utilities.
 
 [![Release](https://jitpack.io/v/Mooy1/InfinityLib.svg)](https://jitpack.io/#Mooy1/InfinityLib)
 
@@ -53,7 +53,7 @@ First you need to add InfinityLib to the `dependencies` section in your `pom.xml
 <dependency>
     <groupId>io.github.mooy1</groupId>
     <artifactId>InfinityLib</artifactId>
-    <version>RELEASE TAG HERE</version>
+    <version>SPECIFY VERSION HERE</version>
     <scope>compile</scope>
 </dependency>
 ```

@@ -18,43 +18,44 @@ jobs:
           java-version: '8'
           cache: 'maven'
 
-      - run: mvn package --file pom.xml
+      - id: run
+        run: |
+          mvn package --file pom.xml
 
-      - uses: nrwl/last-successful-commit-action@v1
-        id: last_commit
-        with:
-          branch: master
-          workflow_id: release.yml
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-
-      - run: |
           newVersion=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
-          echo "New Version: $newVersion"
+          echo New Version: $newVersion
           echo ::set-output name=new-version::$newVersion
-          git checkout ${{ steps.last_commit.outputs.commit_hash }}
-          oldVersion=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
-          echo "Old Version: $oldVersion"
-          echo ::set-output name=old-version::$oldVersion
-        id: version
+
+          # Modified From: https://github.com/Bullrich/generate-release-changelog
+          tag=$(git tag --sort version:refname | tail -n 2 | head -n 1)
+
+          if [ "$tag" ]; then
+            changelog=$(git log --oneline --no-decorate $tag..HEAD)
+          else
+            changelog=$(git log --oneline --no-decorate)
+            tag="0.0.0"
+          fi
+
+          echo Old Version: $tag
+          echo ::set-output name=old-version::$tag
+
+          changelog="${changelog//'%'/'%25'}"
+          changelog="${changelog//$'\n'/'%0A' - }"
+          changelog=" - ${changelog//$'\r'/'%0D'}"
+          echo ::set-output name=changelog::$changelog
 
       - uses: madhead/semver-utils@1.4.3
         id: comparison
         with:
-          version: ${{ steps.version.outputs.new-version }}
-          compare-to: ${{ steps.version.outputs.old-version }}
+          version: ${{ steps.run.outputs.new-version }}
+          compare-to: ${{ steps.run.outputs.old-version }}
 
-      - run: '[[ "=" == "${{ steps.comparison.outputs.comparison-result }}" ]]'
-
-      - uses: Bullrich/generate-release-changelog@2.0.1
-        if: steps.version.outputs.version != '0.0.1'
-        id: changelog
-        env:
-          REPO: ${{ github.repository }}
+      - run: '[[ ">" == "${{ steps.comparison.outputs.comparison-result }}" ]]'
 
       - uses: actions/create-release@v1.1.4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ steps.version.outputs.new-version }}
-          release_name: Release v${{ steps.version.outputs.new-version }}
-          body: ${{ steps.changelog.outputs.changelog }}
+          tag_name: ${{ steps.run.outputs.new-version }}
+          release_name: Release v${{ steps.run.outputs.new-version }}
+          body: ${{ steps.run.outputs.changelog }}

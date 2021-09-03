@@ -12,27 +12,26 @@ jobs:
     steps:
       - uses: actions/checkout@v2.3.4
 
-      - uses: nrwl/last-successful-commit-action@v1
-        id: last_commit
-        with:
-          branch: master
-          workflow_id: release.yml
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-
-      - run: |
+      - id: run
+        run: |
           newVersion=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
-          echo "New Version: $newVersion"
+          echo New Version: $newVersion
           echo ::set-output name=new-version::$newVersion
-          git checkout ${{ steps.last_commit.outputs.commit_hash }}
-          oldVersion=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
-          echo "Old Version: $oldVersion"
-          echo ::set-output name=old-version::$oldVersion
-        id: version
+
+          # Modified From: https://github.com/Bullrich/generate-release-changelog
+          tag=$(git tag --sort version:refname | tail -n 2 | head -n 1)
+
+          if [ ! "$tag" ]; then
+            tag="0.0.0"
+          fi
+
+          echo Old Version: $tag
+          echo ::set-output name=old-version::$tag
 
       - uses: madhead/semver-utils@1.4.3
         id: comparison
         with:
-          version: ${{ steps.version.outputs.new-version }}
-          compare-to: ${{ steps.version.outputs.old-version }}
+          version: ${{ steps.run.outputs.new-version }}
+          compare-to: ${{ steps.run.outputs.old-version }}
 
       - run: '[[ ">" == "${{ steps.comparison.outputs.comparison-result }}" ]]'
