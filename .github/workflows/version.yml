@@ -12,13 +12,20 @@ jobs:
     steps:
       - uses: actions/checkout@v2.3.4
 
-      - run: | # todo test echo and add to release
+      - uses: nrwl/last-successful-commit-action@v1
+        id: last_commit
+        with:
+          branch: master
+          workflow_id: release.yml
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - run: |
           newVersion=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
-          echo "$newVersion"
+          echo "New Version: $newVersion"
           echo ::set-output name=new-version::$newVersion
-          git checkout master
+          git checkout ${{ steps.last_commit.outputs.commit_hash }}
           oldVersion=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
-          echo "$oldVersion"
+          echo "Old Version: $oldVersion"
           echo ::set-output name=old-version::$oldVersion
         id: version
 
