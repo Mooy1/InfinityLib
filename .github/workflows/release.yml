@@ -31,8 +31,6 @@ jobs:
           echo New Version: $newVersion
           echo ::set-output name=new-version::$newVersion
 
-          git tag | sort -r --version-sort | head -n1
-
           # Modified From: https://github.com/Bullrich/generate-release-changelog
           tag=$(git tag | sort -r --version-sort | head -n1)
 
