@@ -1,0 +1,31 @@
+name: Check Version
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  check:
+    if: github.repository_owner == 'Mooy1'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2.3.4
+
+      - run: | # todo test echo and add to release
+          newVersion=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          echo "$newVersion"
+          echo '::set-output name=new-version::$newVersion'
+          git checkout master
+          oldVersion=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          echo "$oldVersion"
+          echo '::set-output name=old-version::$oldVersion'
+        id: version
+
+      - uses: madhead/semver-utils@1.4.3
+        id: comparison
+        with:
+          version: ${{ steps.version.outputs.new-version }}
+          compare-to: ${{ steps.version.outputs.old-version }}
+
+      - run: '[[ ">" == "${{ steps.comparison.outputs.comparison-result }}" ]]'

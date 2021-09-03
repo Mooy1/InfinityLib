@@ -1,7 +1,10 @@
 name: MockAddon
-version: Mock
-main: io.github.mooy1.infinitylib.mocks.MockCommandAddon
+version: Testing
+main: io.github.mooy1.infinitylib.core.MockAddon
+depend: [Slimefun]
 
 commands:
   mockaddon:
-    description: Mock Addon Command
+    description: MockAddon command
+  test:
+    description: Testing command

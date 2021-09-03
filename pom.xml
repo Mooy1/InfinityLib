@@ -6,13 +6,12 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.github.mooy1</groupId>
     <artifactId>InfinityLib</artifactId>
-    <version>MODIFIED</version>
+    <version>0.0.1</version>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <author>Mooy1</author>
     </properties>
 
     <repositories>
@@ -38,7 +37,7 @@
         <dependency>
             <groupId>com.github.TheBusyBiscuit</groupId>
             <artifactId>Slimefun4</artifactId>
-            <version>RC-26</version>
+            <version>breaking-changes~class-relocation-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
 
@@ -86,6 +85,12 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-help-plugin</artifactId>
+                <version>3.2.0</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
                 <version>3.2.1</version>
                 <executions>
@@ -110,6 +115,21 @@
             </plugin>
 
             <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>templating-maven-plugin</artifactId>
+                <version>1.0.0</version>
+
+                <executions>
+                    <execution>
+                        <id>filter-src</id>
+                        <goals>
+                            <goal>filter-sources</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>3.2.4</version>
@@ -117,8 +137,8 @@
                 <configuration>
                     <relocations>
                         <relocation>
-                            <pattern>org.bstats</pattern>
-                            <shadedPattern>io.github.mooy1.infinitylib.bstats</shadedPattern>
+                            <pattern>org.bstats.bukkit</pattern>
+                            <shadedPattern>io.github.mooy1.infinitylib.metrics</shadedPattern>
                         </relocation>
                     </relocations>
                     <filters>
