@@ -30,11 +30,11 @@ jobs:
       - run: | # todo test echo and add to release
           newVersion=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
           echo "$newVersion"
-          echo '::set-output name=new-version::$newVersion'
+          echo ::set-output name=new-version::$newVersion
           git checkout master
           oldVersion=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
           echo "$oldVersion"
-          echo '::set-output name=old-version::$oldVersion'
+          echo ::set-output name=old-version::$oldVersion
         id: version
 
       - uses: madhead/semver-utils@1.4.3
