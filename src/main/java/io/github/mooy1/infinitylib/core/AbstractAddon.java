@@ -15,7 +15,6 @@ import org.bukkit.plugin.java.JavaPluginLoader;
 
 import io.github.mooy1.infinitylib.InfinityLib;
 import io.github.mooy1.infinitylib.commands.AddonCommand;
-import io.github.mooy1.infinitylib.commands.ParentCommand;
 import io.github.mooy1.infinitylib.common.Scheduler;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
@@ -257,15 +256,15 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
      * Gets the command of the same name as this addon
      */
     @Nonnull
-    protected final ParentCommand getCommand() {
-        return command;
+    protected final AddonCommand getAddonCommand() {
+        return instance().command;
     }
 
     /**
      * Returns whether auto updates are enabled, for use in metrics
      */
     protected final boolean autoUpdatesEnabled() {
-        return autoUpdatesEnabled;
+        return instance().autoUpdatesEnabled;
     }
 
     @Nonnull
@@ -283,17 +282,17 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
     @Nonnull
     @Override
     public final AddonConfig getConfig() {
-        return config;
+        return instance().config;
     }
 
     @Override
     public final void reloadConfig() {
-        config.reload();
+        instance().config.reload();
     }
 
     @Override
     public final void saveConfig() {
-        config.save();
+        instance().config.save();
     }
 
     @Override

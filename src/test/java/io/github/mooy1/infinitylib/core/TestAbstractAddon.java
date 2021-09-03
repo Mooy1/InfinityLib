@@ -58,7 +58,7 @@ class TestAbstractAddon {
 
     @Test
     void testCommand() {
-        Assertions.assertNotNull(MockAddon.instance().getCommand());
+        Assertions.assertNotNull(MockAddon.instance().getAddonCommand());
         server.executeConsole("mockaddon").assertSucceeded();
     }
 
