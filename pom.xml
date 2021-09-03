@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.github.mooy1</groupId>
     <artifactId>InfinityLib</artifactId>
-    <version>0.0.2</version>
+    <version>0.0.3</version>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -137,7 +137,7 @@
                 <configuration>
                     <relocations>
                         <relocation>
-                            <pattern>org.bstats.bukkit</pattern>
+                            <pattern>org.bstats</pattern>
                             <shadedPattern>io.github.mooy1.infinitylib.metrics</shadedPattern>
                         </relocation>
                     </relocations>

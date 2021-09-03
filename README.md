@@ -44,6 +44,10 @@ It also adds some default commands such as an addon info, aliases, and help comm
 
 <b>MachineBlock</b>: An AbstractMachineBlock which makes it easy to create simple input-output machines
 
+## Future Additions
+<b>Translation Utility</b>: Some sort of easy way to create translatable strings for your addon's and infinitylibs's strings
+
+<b>InfinityLib Metrics</b>: Metrics to see which versions or even classes are being used
 
 # How to use
 
@@ -69,10 +73,10 @@ Under the `build` section in your `pom.xml`, you should have the following:
         <artifactId>maven-shade-plugin</artifactId>
         <version>3.2.4</version>
         <configuration>
-            <!-- This will exclude any unused classes from libraries to reduce file size -->
+            <!-- This will exclude any unused classes from libraries to reduce file size, not required -->
             <minimizeJar>true</minimizeJar>
             <relocations>
-                <!-- This is the relocation, make sure to replace the package name -->
+                <!-- This is the relocation, make sure to replace the package name, REQUIRED -->
                 <relocation>
                     <pattern>io.github.mooy1.infinitylib</pattern>
                     <shadedPattern>YOUR.MAIN.PACKAGE.HERE.infinitylib</shadedPattern>

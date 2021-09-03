@@ -4,6 +4,9 @@ on:
   pull_request:
     branches:
       - master
+    paths:
+      - 'src/**'
+      - 'pom.xml'
 
 jobs:
   check:
