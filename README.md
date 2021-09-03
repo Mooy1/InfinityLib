@@ -1,6 +1,9 @@
 # InfinityLib
 A shaded library for slimefun addons that adds a bunch of useful stuff.
 
+[![Release](https://jitpack.io/v/Mooy1/InfinityLib.svg)]
+(https://jitpack.io/#Mooy1/InfinityLib)
+
 # Packages & Features
 ## Core
 <b>AbstractAddon</b>: An implementation of JavaPlugin
@@ -15,7 +18,7 @@ and removing unused/old keys from the user's config.
 ## Common
 <b>CoolDowns</b>: A utility object for keeping track of cool downs of players/uuids
 
-<b>CustomDataType</b>: Contains some PersistentDataTypes for
+<b>PersistentType</b>: Contains some PersistentDataTypes for
 ItemStack's, ItemStack Array's, Locations, and String Arrays.
 Also provides a constructor for PersistentDataType that uses lambda parameters.
 

@@ -28,33 +28,34 @@ import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
  * @author Mooy1
  */
 @RequiredArgsConstructor
-public final class CustomDataType<T, Z> implements PersistentDataType<T, Z> {
+public final class PersistentType<T, Z> implements PersistentDataType<T, Z> {
 
-    // TODO add new item stack type
-    @Deprecated
-    public static final PersistentDataType<String, ItemStack> ITEM_STACK_OLD = new CustomDataType<>(
-            String.class, ItemStack.class,
+    public static final PersistentDataType<byte[], ItemStack> ITEM_STACK = new PersistentType<>(
+            byte[].class, ItemStack.class,
             itemStack -> {
-                YamlConfiguration config = new YamlConfiguration();
-                config.set("item", itemStack);
-                return config.saveToString();
-            },
-            string -> {
-                YamlConfiguration config = new YamlConfiguration();
-                try {
-                    config.loadFromString(string);
+                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                try (BukkitObjectOutputStream output = new BukkitObjectOutputStream(bytes)) {
+                    output.writeObject(itemStack);
                 }
-                catch (InvalidConfigurationException e) {
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return bytes.toByteArray();
+            },
+            arr -> {
+                ByteArrayInputStream bytes = new ByteArrayInputStream(arr);
+                try (BukkitObjectInputStream input = new BukkitObjectInputStream(bytes)) {
+                    return (ItemStack) input.readObject();
+                }
+                catch (Exception e) {
                     e.printStackTrace();
                     return new CustomItemStack(Material.STONE, "&cERROR");
                 }
-                ItemStack item = config.getItemStack("item");
-                return item != null ? item : new CustomItemStack(Material.STONE, "&cERROR");
             }
     );
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    public static final PersistentDataType<byte[], List<ItemStack>> ITEM_STACK_LIST = new CustomDataType<byte[], List<ItemStack>>(
+    public static final PersistentDataType<byte[], List<ItemStack>> ITEM_STACK_LIST = new PersistentType<byte[], List<ItemStack>>(
             byte[].class, (Class) List.class,
             list -> {
                 ByteArrayOutputStream bytes = new ByteArrayOutputStream();
@@ -83,7 +84,7 @@ public final class CustomDataType<T, Z> implements PersistentDataType<T, Z> {
             }
     );
 
-    public static final PersistentDataType<byte[], Location> LOCATION = new CustomDataType<>(
+    public static final PersistentDataType<byte[], Location> LOCATION = new PersistentType<>(
             byte[].class, Location.class,
             location -> {
                 ByteArrayOutputStream bytes = new ByteArrayOutputStream();
@@ -108,7 +109,7 @@ public final class CustomDataType<T, Z> implements PersistentDataType<T, Z> {
     );
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    public static final PersistentDataType<byte[], List<String>> STRING_LIST = new CustomDataType<byte[], List<String>>(
+    public static final PersistentDataType<byte[], List<String>> STRING_LIST = new PersistentType<byte[], List<String>>(
             byte[].class, (Class) List.class,
             list -> {
                 ByteArrayOutputStream bytes = new ByteArrayOutputStream(list.size() * 20);
@@ -133,6 +134,31 @@ public final class CustomDataType<T, Z> implements PersistentDataType<T, Z> {
                     e.printStackTrace();
                 }
                 return list;
+            }
+    );
+
+    /**
+     * Only use this if you were using it prior to the slimefun breaking changes
+     */
+    @Deprecated
+    public static final PersistentDataType<String, ItemStack> ITEM_STACK_OLD = new PersistentType<>(
+            String.class, ItemStack.class,
+            itemStack -> {
+                YamlConfiguration config = new YamlConfiguration();
+                config.set("item", itemStack);
+                return config.saveToString();
+            },
+            string -> {
+                YamlConfiguration config = new YamlConfiguration();
+                try {
+                    config.loadFromString(string);
+                }
+                catch (InvalidConfigurationException e) {
+                    e.printStackTrace();
+                    return new CustomItemStack(Material.STONE, "&cERROR");
+                }
+                ItemStack item = config.getItemStack("item");
+                return item != null ? item : new CustomItemStack(Material.STONE, "&cERROR");
             }
     );
 

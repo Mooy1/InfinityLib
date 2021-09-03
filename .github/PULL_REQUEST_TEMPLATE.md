@@ -18,5 +18,4 @@
 - [ ] I followed the existing code standards and didn't mess up the formatting.
 - [ ] I have added `Nullable` or `Nonnull` annotations to my methods
 - [ ] I have added sufficient Unit Tests to cover my code.
-- [ ] My pull request does not target the `releases` branch.
-- [ ] I did not change the version in `pom.xml`. It is still `Unofficial`.
+- [ ] I updated the version in pom.xml according to semantic versioning.

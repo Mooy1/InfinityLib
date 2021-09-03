@@ -21,7 +21,7 @@ import be.seeseemelk.mockbukkit.WorldMock;
 import be.seeseemelk.mockbukkit.persistence.PersistentDataContainerMock;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 
-class TestCustomDataType {
+class TestPersistentType {
 
     private static ServerMock server;
     private static PersistentDataContainer container;
@@ -41,26 +41,38 @@ class TestCustomDataType {
 
     @Test
     @Disabled(value = "MockBukkit issue")
-    void testItemStackOld() {
+    void testItemStack() {
         ItemStack item = new ItemStack(Material.OBSIDIAN);
-        container.set(key, CustomDataType.ITEM_STACK_OLD, item);
-        Assertions.assertEquals(item, container.get(key, CustomDataType.ITEM_STACK_OLD));
+        container.set(key, PersistentType.ITEM_STACK, item);
+        Assertions.assertEquals(item, container.get(key, PersistentType.ITEM_STACK));
 
         item = SlimefunItems.ANCIENT_ALTAR;
-        container.set(key, CustomDataType.ITEM_STACK_OLD, item);
-        Assertions.assertEquals(item, container.get(key, CustomDataType.ITEM_STACK_OLD));
+        container.set(key, PersistentType.ITEM_STACK, item);
+        Assertions.assertEquals(item, container.get(key, PersistentType.ITEM_STACK));
+    }
+
+    @Test
+    @Disabled(value = "MockBukkit issue")
+    void testItemStackOld() {
+        ItemStack item = new ItemStack(Material.OBSIDIAN);
+        container.set(key, PersistentType.ITEM_STACK_OLD, item);
+        Assertions.assertEquals(item, container.get(key, PersistentType.ITEM_STACK_OLD));
+
+        item = SlimefunItems.ANCIENT_ALTAR;
+        container.set(key, PersistentType.ITEM_STACK_OLD, item);
+        Assertions.assertEquals(item, container.get(key, PersistentType.ITEM_STACK_OLD));
     }
 
     @Test
     @Disabled(value = "MockBukkit issue")
     void testItemStackList() {
         List<ItemStack> list = new ArrayList<>();
-        container.set(key, CustomDataType.ITEM_STACK_LIST, list);
-        Assertions.assertEquals(list, container.get(key, CustomDataType.ITEM_STACK_LIST));
+        container.set(key, PersistentType.ITEM_STACK_LIST, list);
+        Assertions.assertEquals(list, container.get(key, PersistentType.ITEM_STACK_LIST));
 
         list = Arrays.asList(new ItemStack(Material.PUMPKIN), SlimefunItems.ADVANCED_CIRCUIT_BOARD);
-        container.set(key, CustomDataType.ITEM_STACK_LIST, list);
-        Assertions.assertEquals(list, container.get(key, CustomDataType.ITEM_STACK_LIST));
+        container.set(key, PersistentType.ITEM_STACK_LIST, list);
+        Assertions.assertEquals(list, container.get(key, PersistentType.ITEM_STACK_LIST));
     }
 
     @Test
@@ -69,23 +81,23 @@ class TestCustomDataType {
         server.addWorld(world);
 
         Location location = new Location(null, 1, 2, 3);
-        container.set(key, CustomDataType.LOCATION, location);
-        Assertions.assertEquals(location, container.get(key, CustomDataType.LOCATION));
+        container.set(key, PersistentType.LOCATION, location);
+        Assertions.assertEquals(location, container.get(key, PersistentType.LOCATION));
 
         location = new Location(world, 1, 2, 3);
-        container.set(key, CustomDataType.LOCATION, location);
-        Assertions.assertEquals(location, container.get(key, CustomDataType.LOCATION));
+        container.set(key, PersistentType.LOCATION, location);
+        Assertions.assertEquals(location, container.get(key, PersistentType.LOCATION));
     }
 
     @Test
     void testStringList() {
         List<String> list = new ArrayList<>();
-        container.set(key, CustomDataType.STRING_LIST, list);
-        Assertions.assertEquals(list, container.get(key, CustomDataType.STRING_LIST));
+        container.set(key, PersistentType.STRING_LIST, list);
+        Assertions.assertEquals(list, container.get(key, PersistentType.STRING_LIST));
 
         list = Arrays.asList("a", "b", "c");
-        container.set(key, CustomDataType.STRING_LIST, list);
-        Assertions.assertEquals(list, container.get(key, CustomDataType.STRING_LIST));
+        container.set(key, PersistentType.STRING_LIST, list);
+        Assertions.assertEquals(list, container.get(key, PersistentType.STRING_LIST));
     }
 
 }
