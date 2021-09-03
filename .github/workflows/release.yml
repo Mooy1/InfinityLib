@@ -43,7 +43,7 @@ jobs:
           version: ${{ steps.version.outputs.new-version }}
           compare-to: ${{ steps.version.outputs.old-version }}
 
-      - run: '[[ ">" == "${{ steps.comparison.outputs.comparison-result }}" ]]'
+      - run: '[[ "=" == "${{ steps.comparison.outputs.comparison-result }}" ]]'
 
       - uses: Bullrich/generate-release-changelog@2.0.1
         if: steps.version.outputs.version != '0.0.1'

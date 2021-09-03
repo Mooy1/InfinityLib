@@ -1,8 +1,7 @@
 # InfinityLib
 A shaded library for slimefun addons that adds a bunch of useful stuff.
 
-[![Release](https://jitpack.io/v/Mooy1/InfinityLib.svg)]
-(https://jitpack.io/#Mooy1/InfinityLib)
+[![Release](https://jitpack.io/v/Mooy1/InfinityLib.svg)](https://jitpack.io/#Mooy1/InfinityLib)
 
 # Packages & Features
 ## Core
