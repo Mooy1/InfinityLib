@@ -20,10 +20,10 @@ jobs:
           java-version: '8'
           cache: 'maven'
 
+      - run: mvn package --file pom.xml
+
       - id: run
         run: |
-          mvn package --file pom.xml
-
           newVersion=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
           echo New Version: $newVersion
           echo ::set-output name=new-version::$newVersion
