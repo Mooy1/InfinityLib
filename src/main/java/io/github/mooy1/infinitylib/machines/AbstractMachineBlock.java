@@ -20,6 +20,7 @@ import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
+import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 
 @Setter
 @ParametersAreNonnullByDefault
@@ -55,7 +56,7 @@ public abstract class AbstractMachineBlock extends TickingMenuBlock implements E
     protected abstract boolean process(Block b, BlockMenu menu);
 
     @Override
-    protected void setup(MenuBlockPreset preset) {
+    protected void setup(BlockMenuPreset preset) {
         preset.drawBackground(OUTPUT_BORDER, layout.outputBorder());
         preset.drawBackground(INPUT_BORDER, layout.inputBorder());
         preset.drawBackground(BACKGROUND_ITEM, layout.background());
