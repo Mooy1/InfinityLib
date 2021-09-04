@@ -1,5 +1,7 @@
 package io.github.mooy1.infinitylib.machines;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 
@@ -12,6 +14,7 @@ import me.mrCookieSlime.Slimefun.Objects.handlers.BlockTicker;
 import me.mrCookieSlime.Slimefun.api.BlockStorage;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 
+@ParametersAreNonnullByDefault
 public abstract class TickingMenuBlock extends MenuBlock {
 
     public TickingMenuBlock(ItemGroup category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {

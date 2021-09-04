@@ -6,6 +6,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import org.bukkit.NamespacedKey;
 import org.bukkit.command.PluginCommand;
@@ -25,6 +26,7 @@ import io.github.thebusybiscuit.slimefun4.libraries.dough.updater.GitHubBuildsUp
  *
  * @author Mooy1
  */
+@ParametersAreNonnullByDefault
 public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon {
 
     private static AbstractAddon instance;
@@ -178,10 +180,7 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
 
         // Get plugin command
         PluginCommand pluginCommand = getCommand(getName());
-        if (pluginCommand == null) {
-            handle(new IllegalStateException("Command named '" + getName() + "' missing from plugin.yml!"));
-        }
-        else {
+        if (pluginCommand != null) {
             command = new AddonCommand(pluginCommand);
         }
 
@@ -257,7 +256,7 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
      */
     @Nonnull
     protected final AddonCommand getAddonCommand() {
-        return instance().command;
+        return Objects.requireNonNull(instance().command, "Command '" + getName() + "' missing from plugin.yml!");
     }
 
     /**
@@ -298,17 +297,6 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
     @Override
     public final void saveDefaultConfig() {
         // Do nothing, it's covered in onEnable()
-    }
-
-    @Nonnull
-    @Override
-    public final String getPluginVersion() {
-        return getDescription().getVersion();
-    }
-
-    @Override
-    public final boolean hasDependency(String dependency) {
-        return SlimefunAddon.super.hasDependency(dependency);
     }
 
     @Nonnull

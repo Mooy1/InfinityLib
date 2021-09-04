@@ -3,14 +3,11 @@ package io.github.mooy1.infinitylib.core;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Nonnull;
-
 final class PathBuilder {
 
     List<String> path = new ArrayList<>();
 
-    @Nonnull
-    PathBuilder append(@Nonnull String line) {
+    PathBuilder append(String line) {
         // count indent
         int indent = 0;
         for (char c : line.toCharArray()) {
@@ -47,7 +44,6 @@ final class PathBuilder {
         return path.size() == 1;
     }
 
-    @Nonnull
     String build() {
         StringBuilder builder = new StringBuilder();
         if (path.size() > 0) {

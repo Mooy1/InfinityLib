@@ -6,17 +6,19 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 
+import io.github.mooy1.infinitylib.common.StackUtils;
 import io.github.mooy1.infinitylib.core.AbstractAddon;
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
 import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
-import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 
+@ParametersAreNonnullByDefault
 public final class MachineBlock extends AbstractMachineBlock {
 
     private final List<MachineBlockRecipe> recipes = new ArrayList<>();
@@ -24,6 +26,22 @@ public final class MachineBlock extends AbstractMachineBlock {
 
     public MachineBlock(ItemGroup category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
         super(category, item, recipeType, recipe);
+    }
+
+    @Nonnull
+    public MachineBlock addRecipe(ItemStack output, ItemStack... inputs) {
+        if (inputs.length == 0) {
+            throw new IllegalArgumentException("Cannot add recipe with no input!");
+        }
+        MachineBlockRecipe recipe = new MachineBlockRecipe(output, inputs);
+        recipes.add(recipe);
+        return this;
+    }
+
+    @Nonnull
+    public MachineBlock addRecipesFrom(MachineRecipeType recipeType) {
+        recipeType.sendRecipesTo((in, out) -> addRecipe(out, in));
+        return this;
     }
 
     @Nonnull
@@ -53,7 +71,10 @@ public final class MachineBlock extends AbstractMachineBlock {
         for (int slot : getInputSlots()) {
             ItemStack item = menu.getItemInSlot(slot);
             if (item != null) {
-                String string = Slimefun.getItemDataService().getItemData(item).orElseGet(() -> item.getType().name());
+                String string = StackUtils.getId(item);
+                if (string == null) {
+                    string = item.getType().name();
+                }
                 map.compute(string, (str, input) -> input == null ? new MachineInput(item) : input.add(item));
             }
         }
@@ -74,23 +95,6 @@ public final class MachineBlock extends AbstractMachineBlock {
 
         updateStatus(menu, IDLE_ITEM);
         return false;
-    }
-
-    public MachineBlock addRecipe(ItemStack output, ItemStack... inputs) {
-        if (inputs.length == 0) {
-            throw new IllegalArgumentException("Cannot add recipe with no input!");
-        }
-        MachineBlockRecipe recipe = new MachineBlockRecipe(output);
-        for (ItemStack item : inputs) {
-            recipe.add(item);
-        }
-        recipes.add(recipe);
-        return this;
-    }
-
-    public MachineBlock subscribe(MachineRecipeType type) {
-        type.subscribe((inputs, outputs) -> addRecipe(outputs, inputs));
-        return this;
     }
 
 }

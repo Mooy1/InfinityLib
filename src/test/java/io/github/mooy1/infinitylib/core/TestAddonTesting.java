@@ -33,11 +33,6 @@ class TestAddonTesting {
     }
 
     @Test
-    void testNullInstance() {
-        Assertions.assertThrows(NullPointerException.class, AbstractAddon::instance);
-    }
-
-    @Test
     void testSharedInfinityLib() {
         PluginDescriptionFile desc = new PluginDescriptionFile("MockAddon", "", MockOtherAddon.class.getName());
         Assertions.assertThrows(RuntimeException.class, () -> MockBukkit.load(MockOtherAddon.class, desc, Environment.TESTING));

@@ -2,6 +2,8 @@ package io.github.mooy1.infinitylib.common;
 
 import java.util.function.Consumer;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -17,6 +19,7 @@ import io.github.mooy1.infinitylib.core.AbstractAddon;
  *
  * @author Mooy1
  */
+@ParametersAreNonnullByDefault
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Events implements Listener {
 

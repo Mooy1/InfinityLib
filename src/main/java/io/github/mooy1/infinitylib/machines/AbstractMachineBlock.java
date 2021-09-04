@@ -18,7 +18,6 @@ import io.github.thebusybiscuit.slimefun4.core.attributes.EnergyNetComponent;
 import io.github.thebusybiscuit.slimefun4.core.networks.energy.EnergyNetComponentType;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
-import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 
@@ -26,16 +25,11 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 @ParametersAreNonnullByDefault
 public abstract class AbstractMachineBlock extends TickingMenuBlock implements EnergyNetComponent {
 
-    protected static final ItemStack PROCESSING_ITEM = new CustomItemStack(Material.LIME_STAINED_GLASS_PANE, "&aProcessing...");
-    protected static final ItemStack NO_ENERGY_ITEM = new CustomItemStack(Material.RED_STAINED_GLASS_PANE, "&cNot enough energy!");
-    protected static final ItemStack NO_ROOM_ITEM = new CustomItemStack(Material.ORANGE_STAINED_GLASS_PANE, "&6Not enough room!");
-    protected static final ItemStack OUTPUT_BORDER = new CustomItemStack(ChestMenuUtils.getOutputSlotTexture(), "&6Output");
-    protected static final ItemStack INPUT_BORDER = new CustomItemStack(ChestMenuUtils.getInputSlotTexture(), "&9Input");
-    protected static final ItemStack IDLE_ITEM = new CustomItemStack(Material.BLACK_STAINED_GLASS_PANE, "&8Idle");
-    protected static final ChestMenu.MenuClickHandler EMPTY_CLICK_HANDLER = ChestMenuUtils.getEmptyClickHandler();
-    protected static final ItemStack BACKGROUND_ITEM = ChestMenuUtils.getBackground();
+    public static final ItemStack PROCESSING_ITEM = new CustomItemStack(Material.LIME_STAINED_GLASS_PANE, "&aProcessing...");
+    public static final ItemStack NO_ENERGY_ITEM = new CustomItemStack(Material.RED_STAINED_GLASS_PANE, "&cNot enough energy!");
+    public static final ItemStack IDLE_ITEM = new CustomItemStack(Material.BLACK_STAINED_GLASS_PANE, "&8Idle");
 
-    protected MachineLayout layout;
+    protected MachineLayout layout = MachineLayout.MACHINE_DEFAULT;
     protected int energyPerTick = -1;
     protected int energyCapacity = -1;
 
@@ -60,7 +54,7 @@ public abstract class AbstractMachineBlock extends TickingMenuBlock implements E
         preset.drawBackground(OUTPUT_BORDER, layout.outputBorder());
         preset.drawBackground(INPUT_BORDER, layout.inputBorder());
         preset.drawBackground(BACKGROUND_ITEM, layout.background());
-        preset.addItem(layout.statusSlot(), IDLE_ITEM, EMPTY_CLICK_HANDLER);
+        preset.addItem(layout.statusSlot(), IDLE_ITEM, ChestMenuUtils.getEmptyClickHandler());
     }
 
     @Override
@@ -91,9 +85,6 @@ public abstract class AbstractMachineBlock extends TickingMenuBlock implements E
         }
         if (energyCapacity == -1) {
             energyCapacity = energyPerTick * 2;
-        }
-        if (layout == null) {
-            layout = MachineLayout.DEFAULT;
         }
         super.register(addon);
     }

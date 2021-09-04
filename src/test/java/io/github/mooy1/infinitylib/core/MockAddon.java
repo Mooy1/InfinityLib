@@ -14,7 +14,6 @@ public class MockAddon extends AbstractAddon {
 
     private final MockAddonTest test;
 
-    @SuppressWarnings("unused")
     public MockAddon(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file) {
         this(loader, description, dataFolder, file, Environment.LIBRARY_TESTING, null);
     }

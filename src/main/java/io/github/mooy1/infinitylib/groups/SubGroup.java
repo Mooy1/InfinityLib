@@ -1,5 +1,7 @@
 package io.github.mooy1.infinitylib.groups;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -11,6 +13,7 @@ import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
  *
  * @author Mooy1
  */
+@ParametersAreNonnullByDefault
 public final class SubGroup extends ItemGroup {
 
     public SubGroup(String key, ItemStack item) {

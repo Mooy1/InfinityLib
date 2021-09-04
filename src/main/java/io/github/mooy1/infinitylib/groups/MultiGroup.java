@@ -3,6 +3,8 @@ package io.github.mooy1.infinitylib.groups;
 import java.util.Arrays;
 import java.util.Comparator;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -27,6 +29,7 @@ import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
  * @author Mooy1
  */
 // TODO check if it works in cheat mode
+@ParametersAreNonnullByDefault
 public final class MultiGroup extends FlexItemGroup {
 
     private final ItemGroup[] subGroups;

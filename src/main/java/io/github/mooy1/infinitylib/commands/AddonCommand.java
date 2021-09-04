@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
@@ -24,6 +26,7 @@ import io.github.mooy1.infinitylib.core.AbstractAddon;
  *
  * @author Mooy1
  */
+@ParametersAreNonnullByDefault
 public final class AddonCommand extends ParentCommand implements TabExecutor, Listener {
 
     private final String help;

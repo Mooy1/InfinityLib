@@ -26,7 +26,7 @@ public final class MachineRecipeType extends RecipeType {
         recipes.put(recipe, result);
     }
 
-    public void subscribe(BiConsumer<ItemStack[], ItemStack> callback) {
+    public void sendRecipesTo(BiConsumer<ItemStack[], ItemStack> callback) {
         recipes.forEach(callback);
         callbacks.add(callback);
     }

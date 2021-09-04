@@ -36,6 +36,13 @@ class TestAddonLive {
     }
 
     @Test
+    void testNoCommand() {
+        Assertions.assertDoesNotThrow(() -> MockBukkit.loadWith(MockAddon.class,
+                new PluginDescriptionFile("MockAddon", "", MockAddon.class.getName())));
+        Assertions.assertThrows(NullPointerException.class, () -> MockAddon.instance().getAddonCommand());
+    }
+
+    @Test
     void testSharedInfinityLib() {
         PluginDescriptionFile desc = new PluginDescriptionFile("MockAddon", "", MockOtherAddon.class.getName());
         Assertions.assertThrows(RuntimeException.class, () -> MockBukkit.load(MockOtherAddon.class, desc, Environment.LIBRARY_TESTING));

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.function.Function;
 
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import lombok.RequiredArgsConstructor;
 
@@ -28,6 +29,7 @@ import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
  * @author Mooy1
  */
 @RequiredArgsConstructor
+@ParametersAreNonnullByDefault
 public final class PersistentType<T, Z> implements PersistentDataType<T, Z> {
 
     public static final PersistentDataType<byte[], ItemStack> ITEM_STACK = new PersistentType<>(

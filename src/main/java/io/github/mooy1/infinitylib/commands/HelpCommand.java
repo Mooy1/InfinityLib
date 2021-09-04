@@ -2,9 +2,12 @@ package io.github.mooy1.infinitylib.commands;
 
 import java.util.List;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
+@ParametersAreNonnullByDefault
 final class HelpCommand extends SubCommand {
 
     private final ParentCommand command;

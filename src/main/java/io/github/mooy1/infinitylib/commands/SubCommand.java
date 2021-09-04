@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.function.Predicate;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import org.bukkit.command.CommandSender;
 
 /**
@@ -11,6 +13,7 @@ import org.bukkit.command.CommandSender;
  *
  * @author Mooy1
  */
+@ParametersAreNonnullByDefault
 public abstract class SubCommand {
 
     private final Predicate<CommandSender> permission;

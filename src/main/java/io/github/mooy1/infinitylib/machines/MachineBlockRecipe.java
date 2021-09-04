@@ -1,47 +1,35 @@
 package io.github.mooy1.infinitylib.machines;
 
+import java.util.HashMap;
 import java.util.Map;
-
-import javax.annotation.Nullable;
-
-import lombok.RequiredArgsConstructor;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.inventory.ItemStack;
 
-import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
+import io.github.mooy1.infinitylib.common.StackUtils;
 
-@RequiredArgsConstructor
 final class MachineBlockRecipe {
 
-    private String[] strings = ArrayUtils.EMPTY_STRING_ARRAY;
-    private int[] amounts = ArrayUtils.EMPTY_INT_ARRAY;
+    private final String[] strings;
+    private final int[] amounts;
     final ItemStack output;
 
-    void add(@Nullable ItemStack item) {
-        if (item != null && !item.getType().isAir()) {
-            String string = Slimefun.getItemDataService().getItemData(item).orElseGet(() -> item.getType().name());
+    MachineBlockRecipe(ItemStack output, ItemStack[] input) {
+        this.output = output;
 
-            int len = strings.length;
-            for (int i = 0; i < len; i++) {
-                if (strings[i].equals(string)) {
-                    amounts[i] += item.getAmount();
-                    return;
+        Map<String, Integer> strings = new HashMap<>();
+        for (ItemStack item : input) {
+            if (item != null && !item.getType().isAir()) {
+                String string = StackUtils.getId(item);
+                if (string == null) {
+                    string = item.getType().name();
                 }
+                strings.compute(string, (k, v) -> v == null ? item.getAmount() : v + item.getAmount());
             }
-
-            String[] expanded = new String[len + 1];
-            int[] expandedAmounts = new int[len + 1];
-
-            System.arraycopy(strings, 0, expanded, 0, len);
-            System.arraycopy(amounts, 0, expandedAmounts, 0, len);
-
-            expanded[len] = string;
-            expandedAmounts[len] = item.getAmount();
-
-            strings = expanded;
-            amounts = expandedAmounts;
         }
+
+        this.strings = strings.keySet().toArray(new String[0]);
+        this.amounts = ArrayUtils.toPrimitive(strings.values().toArray(new Integer[0]));
     }
 
     boolean check(Map<String, MachineInput> map) {

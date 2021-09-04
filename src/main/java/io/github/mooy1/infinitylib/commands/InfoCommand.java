@@ -3,12 +3,15 @@ package io.github.mooy1.infinitylib.commands;
 import java.util.List;
 import java.util.Objects;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import org.bukkit.command.CommandSender;
 
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.common.ChatColors;
 
+@ParametersAreNonnullByDefault
 final class InfoCommand extends SubCommand {
 
     private final String[] message;

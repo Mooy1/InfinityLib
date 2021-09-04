@@ -67,7 +67,7 @@ class TestMachineBlock {
 
         Assertions.assertDoesNotThrow(() -> machine.register(addon));
         Assertions.assertEquals(20, machine.energyCapacity);
-        Assertions.assertSame(MachineLayout.DEFAULT, machine.layout);
+        Assertions.assertSame(MachineLayout.MACHINE_DEFAULT, machine.layout);
     }
 
     @Test
@@ -81,7 +81,6 @@ class TestMachineBlock {
     @Test
     @Order(2)
     void testAddRecipes() {
-        // TODO test subscribe
         machine.addRecipe(output, input1, input2);
         Assertions.assertThrows(IllegalArgumentException.class, () -> machine.addRecipe(output));
     }

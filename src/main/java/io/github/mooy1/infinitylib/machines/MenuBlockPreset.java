@@ -1,5 +1,7 @@
 package io.github.mooy1.infinitylib.machines;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -11,6 +13,7 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 import me.mrCookieSlime.Slimefun.api.item_transport.ItemTransportFlow;
 
+@ParametersAreNonnullByDefault
 final class MenuBlockPreset extends BlockMenuPreset {
 
     private final MenuBlock menuBlock;

@@ -11,6 +11,7 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -20,6 +21,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
  *
  * @author Mooy1
  */
+@ParametersAreNonnullByDefault
 public final class AddonConfig extends YamlConfiguration {
 
     private final YamlConfiguration defaults = new YamlConfiguration();
