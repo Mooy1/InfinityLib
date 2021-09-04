@@ -72,14 +72,11 @@ public class CraftingBlock extends TickingMenuBlock {
             CraftingBlockRecipe recipe = getOutput(b, input);
             if (recipe != null) {
                 if (recipe.check(p)) {
-                    if (menu.fits(recipe.output, layout.outputSlots())) {
-                        ItemStack item = recipe.output.clone();
-                        onSuccessfulCraft(b, menu, p, recipe.output);
-                        menu.pushItem(item, layout.outputSlots());
+                    ItemStack output = recipe.output.clone();
+                    if (output(b, menu, p, output)) {
+                        onSuccessfulCraft(b, menu, p, output);
                         recipe.consume(input);
                         tick(b, menu);
-                    } else {
-                        onNoRoom(p);
                     }
                 }
             } else {
@@ -138,6 +135,16 @@ public class CraftingBlock extends TickingMenuBlock {
             return INVALID_RECIPE;
         } else {
             return CLICK_TO_CRAFT;
+        }
+    }
+
+    protected boolean output(Block b, BlockMenu menu, Player p, ItemStack output) {
+        if (menu.fits(output, layout.outputSlots())) {
+            menu.pushItem(output, layout.outputSlots());
+            return true;
+        } else {
+            onNoRoom(p);
+            return false;
         }
     }
 
