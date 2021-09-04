@@ -66,7 +66,7 @@ public class CraftingBlock extends TickingMenuBlock {
         menu.addMenuClickHandler(layout.statusSlot(), (player, i, itemStack, clickAction) -> craft(b, menu, player));
     }
 
-    private boolean craft(Block b, BlockMenu menu, Player p) {
+    protected final boolean craft(Block b, BlockMenu menu, Player p) {
         if (canCraft(b, p)) {
             ItemStack[] input = getInput(menu);
             CraftingBlockRecipe recipe = getOutput(b, input);

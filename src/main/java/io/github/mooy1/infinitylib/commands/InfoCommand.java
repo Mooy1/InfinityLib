@@ -17,12 +17,12 @@ final class InfoCommand extends SubCommand {
     private final String[] message;
 
     InfoCommand(SlimefunAddon addon) {
-        super("info", "Gives addon and machines version and discord links");
+        super("info", "Gives addon and slimefun version and discord links");
         message = new String[] {
                 "",
                 ChatColors.color("&b" + addon.getName() + " Info"),
                 ChatColors.color("&bSlimefun Version: &7" + Objects.requireNonNull(Slimefun.instance()).getPluginVersion()),
-                ChatColors.color("&bSlimefun Discord: &7Discord.gg/machines"),
+                ChatColors.color("&bSlimefun Discord: &7Discord.gg/slimefun"),
                 ChatColors.color("&bAddon Version: &7" + addon.getPluginVersion()),
                 ChatColors.color("&bAddon Community: &7Discord.gg/SqD3gg5SAU"),
                 ChatColors.color("&bGithub: &7" + addon.getBugTrackerURL()),
