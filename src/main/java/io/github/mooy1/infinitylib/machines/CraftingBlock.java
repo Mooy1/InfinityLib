@@ -54,7 +54,7 @@ public class CraftingBlock extends TickingMenuBlock {
     }
 
     @Override
-    protected final void setup(BlockMenuPreset preset) {
+    protected void setup(BlockMenuPreset preset) {
         preset.drawBackground(OUTPUT_BORDER, layout.outputBorder());
         preset.drawBackground(INPUT_BORDER, layout.inputBorder());
         preset.drawBackground(BACKGROUND_ITEM, layout.background());
@@ -62,12 +62,12 @@ public class CraftingBlock extends TickingMenuBlock {
     }
 
     @Override
-    protected final void onNewInstance(BlockMenu menu, Block b) {
+    protected void onNewInstance(BlockMenu menu, Block b) {
         menu.addMenuClickHandler(layout.statusSlot(), (player, i, itemStack, clickAction) -> craft(b, menu, player));
     }
 
     private boolean craft(Block b, BlockMenu menu, Player p) {
-        if (canCraft(b)) {
+        if (canCraft(b, p)) {
             ItemStack[] input = getInput(menu);
             CraftingBlockRecipe recipe = getOutput(b, input);
             if (recipe != null) {
@@ -141,7 +141,7 @@ public class CraftingBlock extends TickingMenuBlock {
         }
     }
 
-    protected boolean canCraft(Block b) {
+    protected boolean canCraft(Block b, Player p) {
         return true;
     }
 
