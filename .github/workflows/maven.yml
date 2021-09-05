@@ -25,3 +25,4 @@ jobs:
           cache: 'maven'
 
       - run: mvn package --file pom.xml
+
