@@ -8,6 +8,8 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import lombok.Setter;
+
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 
@@ -16,11 +18,15 @@ import io.github.mooy1.infinitylib.core.AbstractAddon;
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
 import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
+import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
+import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 
 @ParametersAreNonnullByDefault
 public final class MachineBlock extends AbstractMachineBlock {
 
+    @Setter
+    private MachineLayout layout = MachineLayout.MACHINE_DEFAULT;
     private final List<MachineBlockRecipe> recipes = new ArrayList<>();
     private int ticksPerOutput = -1;
 
@@ -54,6 +60,24 @@ public final class MachineBlock extends AbstractMachineBlock {
     }
 
     @Override
+    protected void setup(BlockMenuPreset preset) {
+        preset.drawBackground(OUTPUT_BORDER, layout.outputBorder());
+        preset.drawBackground(INPUT_BORDER, layout.inputBorder());
+        preset.drawBackground(BACKGROUND_ITEM, layout.background());
+        preset.addItem(layout.statusSlot(), IDLE_ITEM, ChestMenuUtils.getEmptyClickHandler());
+    }
+
+    @Override
+    protected final int[] getInputSlots() {
+        return layout.inputSlots();
+    }
+
+    @Override
+    protected final int[] getOutputSlots() {
+        return layout.outputSlots();
+    }
+
+    @Override
     public void preRegister() {
         if (ticksPerOutput == -1) {
             throw new IllegalStateException("You must call .ticksPerOutput() before registering!");
@@ -81,20 +105,32 @@ public final class MachineBlock extends AbstractMachineBlock {
 
         for (MachineBlockRecipe recipe : recipes) {
             if (recipe.check(map)) {
-                if (quickPush(recipe.output.clone(), menu)) {
+                ItemStack rem = menu.pushItem(recipe.output.clone(), layout.outputSlots());
+                if (rem == null || rem.getAmount() < recipe.output.getAmount()) {
                     recipe.consume(map);
-                    updateStatus(menu, PROCESSING_ITEM);
+                    if (menu.hasViewer()) {
+                        menu.replaceExistingItem(getStatusSlot(), PROCESSING_ITEM);
+                    }
                     return true;
                 }
                 else {
-                    updateStatus(menu, NO_ROOM_ITEM);
+                    if (menu.hasViewer()) {
+                        menu.replaceExistingItem(getStatusSlot(), NO_ROOM_ITEM);
+                    }
                     return false;
                 }
             }
         }
 
-        updateStatus(menu, IDLE_ITEM);
+        if (menu.hasViewer()) {
+            menu.replaceExistingItem(getStatusSlot(), IDLE_ITEM);
+        }
         return false;
+    }
+
+    @Override
+    protected int getStatusSlot() {
+        return layout.statusSlot();
     }
 
 }
