@@ -26,7 +26,7 @@ import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 public final class MachineBlock extends AbstractMachineBlock {
 
     @Setter
-    private MachineLayout layout = MachineLayout.MACHINE_DEFAULT;
+    protected MachineLayout layout = MachineLayout.MACHINE_DEFAULT;
     private final List<MachineBlockRecipe> recipes = new ArrayList<>();
     private int ticksPerOutput = -1;
 
