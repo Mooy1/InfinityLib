@@ -51,7 +51,7 @@ public class CraftingBlock extends MenuBlock {
             if (recipe.check(p)) {
                 if (menu.fits(recipe.output, layout.outputSlots())) {
                     ItemStack output = recipe.output.clone();
-                    modifyOutput(menu, output);
+                    onSuccessfulCraft(menu, output);
                     menu.pushItem(output, layout.outputSlots());
                     recipe.consume(input);
                     p.sendMessage(ChatColor.GREEN + "Successfully Crafted: " + ItemUtils.getItemName(output));
@@ -64,7 +64,7 @@ public class CraftingBlock extends MenuBlock {
         }
     }
 
-    protected void modifyOutput(BlockMenu menu, ItemStack toOutput) {
+    protected void onSuccessfulCraft(BlockMenu menu, ItemStack toOutput) {
 
     }
 
