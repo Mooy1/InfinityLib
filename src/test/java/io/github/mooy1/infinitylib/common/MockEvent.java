@@ -16,7 +16,6 @@ public final class MockEvent extends Event {
     }
 
     @Nonnull
-    @SuppressWarnings("unused")
     public static HandlerList getHandlerList() {
         return handlers;
     }
