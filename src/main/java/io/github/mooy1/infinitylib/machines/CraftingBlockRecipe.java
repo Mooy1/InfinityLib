@@ -1,12 +1,15 @@
 package io.github.mooy1.infinitylib.machines;
 
+import lombok.Getter;
+
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.utils.SlimefunUtils;
 
-final class CraftingBlockRecipe {
+@Getter
+public final class CraftingBlockRecipe {
 
     private final ItemStack[] inputs;
     final ItemStack output;

@@ -9,6 +9,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import lombok.Setter;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -18,15 +19,15 @@ import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
 import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
+import io.github.thebusybiscuit.slimefun4.libraries.dough.items.ItemUtils;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 import me.mrCookieSlime.Slimefun.api.inventory.DirtyChestMenu;
 
 @ParametersAreNonnullByDefault
-public class CraftingBlock extends TickingMenuBlock {
+public class CraftingBlock extends MenuBlock {
 
-    public static final ItemStack INVALID_RECIPE = new CustomItemStack(Material.RED_STAINED_GLASS_PANE, "&cInvalid Recipe!");
     public static final ItemStack CLICK_TO_CRAFT = new CustomItemStack(Material.LIME_STAINED_GLASS_PANE, "&aClick To Craft!");
 
     @Setter
@@ -35,6 +36,52 @@ public class CraftingBlock extends TickingMenuBlock {
 
     public CraftingBlock(ItemGroup category, SlimefunItemStack item, RecipeType recipeType, ItemStack[] recipe) {
         super(category, item, recipeType, recipe);
+    }
+
+    protected void craft(Block b, BlockMenu menu, Player p) {
+        int[] slots = layout.inputSlots();
+        ItemStack[] input = new ItemStack[slots.length];
+        for (int i = 0; i < slots.length; i++) {
+            input[i] = menu.getItemInSlot(slots[i]);
+        }
+
+        CraftingBlockRecipe recipe = getOutput(input);
+
+        if (recipe != null) {
+            if (recipe.check(p)) {
+                if (menu.fits(recipe.output, layout.outputSlots())) {
+                    ItemStack output = recipe.output.clone();
+                    modifyOutput(menu, output);
+                    menu.pushItem(output, layout.outputSlots());
+                    recipe.consume(input);
+                    p.sendMessage(ChatColor.GREEN + "Successfully Crafted: " + ItemUtils.getItemName(output));
+                } else {
+                    p.sendMessage(ChatColor.GOLD + "Not Enough Room!");
+                }
+            }
+        } else {
+            p.sendMessage(ChatColor.RED + "Invalid Recipe!");
+        }
+    }
+
+    protected void modifyOutput(BlockMenu menu, ItemStack toOutput) {
+
+    }
+
+    @Override
+    protected void setup(BlockMenuPreset preset) {
+        preset.drawBackground(OUTPUT_BORDER, layout.outputBorder());
+        preset.drawBackground(INPUT_BORDER, layout.inputBorder());
+        preset.drawBackground(BACKGROUND_ITEM, layout.background());
+        preset.addItem(layout.statusSlot(), CLICK_TO_CRAFT, ChestMenuUtils.getEmptyClickHandler());
+    }
+
+    @Override
+    protected void onNewInstance(BlockMenu menu, Block b) {
+        menu.addMenuClickHandler(layout.statusSlot(), (player, i, itemStack, clickAction) -> {
+            craft(b, menu, player);
+            return false;
+        });
     }
 
     @Nonnull
@@ -53,38 +100,14 @@ public class CraftingBlock extends TickingMenuBlock {
         return this;
     }
 
-    @Override
-    protected void setup(BlockMenuPreset preset) {
-        preset.drawBackground(OUTPUT_BORDER, layout.outputBorder());
-        preset.drawBackground(INPUT_BORDER, layout.inputBorder());
-        preset.drawBackground(BACKGROUND_ITEM, layout.background());
-        preset.addItem(layout.statusSlot(), INVALID_RECIPE, ChestMenuUtils.getEmptyClickHandler());
-    }
-
-    @Override
-    protected void onNewInstance(BlockMenu menu, Block b) {
-        menu.addMenuClickHandler(layout.statusSlot(), (player, i, itemStack, clickAction) -> craft(b, menu, player));
-    }
-
-    protected final boolean craft(Block b, BlockMenu menu, Player p) {
-        if (canCraft(b, p)) {
-            ItemStack[] input = getInput(menu);
-            CraftingBlockRecipe recipe = getOutput(b, input);
-            if (recipe != null) {
-                if (recipe.check(p)) {
-                    ItemStack output = recipe.output.clone();
-                    if (output(b, menu, p, output)) {
-                        onSuccessfulCraft(b, menu, p, output);
-                        recipe.consume(input);
-                        tick(b, menu);
-                    }
-                }
-            } else {
-                onInvalidRecipe(p);
+    @Nullable
+    protected final CraftingBlockRecipe getOutput(ItemStack[] input) {
+        for (CraftingBlockRecipe recipe : recipes) {
+            if (recipe.check(input)) {
+                return recipe;
             }
         }
-
-        return false;
+        return null;
     }
 
     @Override
@@ -100,68 +123,6 @@ public class CraftingBlock extends TickingMenuBlock {
     @Override
     protected final int[] getOutputSlots() {
         return layout.outputSlots();
-    }
-
-    @Override
-    protected final void tick(Block b, BlockMenu menu) {
-        if (menu.hasViewer()) {
-            menu.replaceExistingItem(layout.statusSlot(), getStatus(b, menu));
-        }
-    }
-
-    @Nonnull
-    final ItemStack[] getInput(BlockMenu menu) {
-        int[] slots = layout.inputSlots();
-        ItemStack[] input = new ItemStack[slots.length];
-        for (int i = 0; i < slots.length; i++) {
-            input[i] = menu.getItemInSlot(slots[i]);
-        }
-        return input;
-    }
-
-    @Nullable
-    final CraftingBlockRecipe getOutput(Block b, ItemStack[] input) {
-        for (CraftingBlockRecipe recipe : recipes) {
-            if (recipe.check(input)) {
-                return recipe;
-            }
-        }
-        return null;
-    }
-
-    @Nonnull
-    protected ItemStack getStatus(Block b, BlockMenu menu) {
-        if (getOutput(b, getInput(menu)) == null) {
-            return INVALID_RECIPE;
-        } else {
-            return CLICK_TO_CRAFT;
-        }
-    }
-
-    protected boolean output(Block b, BlockMenu menu, Player p, ItemStack output) {
-        if (menu.fits(output, layout.outputSlots())) {
-            menu.pushItem(output, layout.outputSlots());
-            return true;
-        } else {
-            onNoRoom(p);
-            return false;
-        }
-    }
-
-    protected boolean canCraft(Block b, Player p) {
-        return true;
-    }
-
-    protected void onInvalidRecipe(Player p) {
-
-    }
-
-    protected void onNoRoom(Player p) {
-
-    }
-
-    protected void onSuccessfulCraft(Block b, BlockMenu menu, Player p, ItemStack output) {
-
     }
 
 }
