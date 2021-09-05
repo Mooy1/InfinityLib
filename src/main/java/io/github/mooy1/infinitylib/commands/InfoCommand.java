@@ -1,7 +1,6 @@
 package io.github.mooy1.infinitylib.commands;
 
 import java.util.List;
-import java.util.Objects;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -18,10 +17,11 @@ final class InfoCommand extends SubCommand {
 
     InfoCommand(SlimefunAddon addon) {
         super("info", "Gives addon and slimefun version and discord links");
+        Slimefun slimefun = Slimefun.instance();
         message = new String[] {
                 "",
                 ChatColors.color("&b" + addon.getName() + " Info"),
-                ChatColors.color("&bSlimefun Version: &7" + Objects.requireNonNull(Slimefun.instance()).getPluginVersion()),
+                ChatColors.color("&bSlimefun Version: &7" + (slimefun == null ? "null" : slimefun.getPluginVersion())),
                 ChatColors.color("&bSlimefun Discord: &7Discord.gg/slimefun"),
                 ChatColors.color("&bAddon Version: &7" + addon.getPluginVersion()),
                 ChatColors.color("&bAddon Community: &7Discord.gg/SqD3gg5SAU"),

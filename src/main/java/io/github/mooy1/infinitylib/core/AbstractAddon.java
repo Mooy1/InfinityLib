@@ -66,7 +66,7 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
     /**
      * Addon Testing Constructor
      */
-    protected AbstractAddon(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file,
+    public AbstractAddon(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file,
                             String githubUserName, String githubRepo, String autoUpdateBranch, String autoUpdateKey) {
         this(loader, description, dataFolder, file, githubUserName, githubRepo, autoUpdateBranch, autoUpdateKey, Environment.TESTING);
     }
