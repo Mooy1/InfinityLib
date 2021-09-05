@@ -57,7 +57,7 @@ jobs:
           compare-to: ${{ steps.run.outputs.old-version }}
 
       - uses: actions/create-release@v1.1.4
-        if: ">" == steps.comparison.outputs.comparison-result"
+        if: '">" == steps.comparison.outputs.comparison-result'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
