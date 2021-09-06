@@ -24,7 +24,7 @@ public final class CraftingBlockRecipe {
 
     boolean check(ItemStackSnapshot[] input) {
         for (int i = 0; i < inputs.length; i++) {
-            if (!SlimefunUtils.isItemSimilar(input[i], inputs[i], true, true)) {
+            if (!SlimefunUtils.isItemSimilar(input[i], inputs[i], false, true)) {
                 return false;
             }
         }

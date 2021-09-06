@@ -28,7 +28,6 @@ import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.ChestMenu;
  *
  * @author Mooy1
  */
-// TODO check if it works in cheat mode
 @ParametersAreNonnullByDefault
 public final class MultiGroup extends FlexItemGroup {
 
@@ -48,7 +47,7 @@ public final class MultiGroup extends FlexItemGroup {
 
     @Override
     public boolean isVisible(Player p, PlayerProfile profile, SlimefunGuideMode mode) {
-        return true;
+        return mode == SlimefunGuideMode.SURVIVAL_MODE;
     }
 
     @Override

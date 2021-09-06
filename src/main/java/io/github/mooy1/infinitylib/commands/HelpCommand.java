@@ -7,6 +7,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
+import io.github.thebusybiscuit.slimefun4.libraries.dough.common.ChatColors;
+
 @ParametersAreNonnullByDefault
 final class HelpCommand extends SubCommand {
 
@@ -20,7 +22,7 @@ final class HelpCommand extends SubCommand {
     @Override
     public void execute(CommandSender sender, String[] args) {
         sender.sendMessage("");
-        sender.sendMessage("&7----------&b /" + command.fullName() + " Help &7----------");
+        sender.sendMessage(ChatColors.color("&7----------&b /" + command.fullName() + " Help &7----------"));
         sender.sendMessage("");
         for (SubCommand sub : command.available(sender)) {
             sender.sendMessage("/" + sub.fullName() + ChatColor.YELLOW + " - " + sub.description());

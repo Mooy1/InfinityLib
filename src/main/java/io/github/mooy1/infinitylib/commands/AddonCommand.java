@@ -30,7 +30,6 @@ import io.github.mooy1.infinitylib.core.AbstractAddon;
 public final class AddonCommand extends ParentCommand implements TabExecutor, Listener {
 
     private final String help;
-    private final String slashHelp;
 
     public AddonCommand(String command) {
         this(Objects.requireNonNull(AbstractAddon.instance().getCommand(command),
@@ -46,13 +45,11 @@ public final class AddonCommand extends ParentCommand implements TabExecutor, Li
         Events.registerListener(this);
 
         help = "help" + command.getName();
-        slashHelp = "/" + help;
 
         addSub(new InfoCommand(AbstractAddon.instance()));
         addSub(new AliasesCommand(command));
     }
 
-    // TODO test
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     private void onServerCommand(ServerCommandEvent e) {
         if (e.getCommand().toLowerCase(Locale.ROOT).startsWith(help)) {
@@ -60,11 +57,10 @@ public final class AddonCommand extends ParentCommand implements TabExecutor, Li
         }
     }
 
-    // TODO test
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     private void onPlayerCommand(PlayerCommandPreprocessEvent e) {
-        if (e.getMessage().toLowerCase(Locale.ROOT).startsWith(slashHelp)) {
-            e.setMessage("/" + name());
+        if (e.getMessage().toLowerCase(Locale.ROOT).startsWith(help)) {
+            e.setMessage(name());
         }
     }
 

@@ -14,7 +14,7 @@ final class AliasesCommand extends SubCommand {
 
     AliasesCommand(PluginCommand command) {
         super("aliases", "lists the available aliases for this command");
-        message = "Aliases for /" + command.getName() + command.getAliases();
+        message = "Aliases for /" + command.getName() + ": " + command.getAliases();
     }
 
     @Override
