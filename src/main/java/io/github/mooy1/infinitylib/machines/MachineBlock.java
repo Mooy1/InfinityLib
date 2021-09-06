@@ -68,12 +68,12 @@ public final class MachineBlock extends AbstractMachineBlock {
     }
 
     @Override
-    protected final int[] getInputSlots() {
+    protected int[] getInputSlots() {
         return layout.inputSlots();
     }
 
     @Override
-    protected final int[] getOutputSlots() {
+    protected int[] getOutputSlots() {
         return layout.outputSlots();
     }
 

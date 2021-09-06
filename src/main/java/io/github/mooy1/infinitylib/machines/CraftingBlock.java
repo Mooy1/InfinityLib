@@ -19,6 +19,7 @@ import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
 import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
+import io.github.thebusybiscuit.slimefun4.libraries.dough.items.ItemStackSnapshot;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.items.ItemUtils;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
@@ -102,8 +103,9 @@ public class CraftingBlock extends MenuBlock {
 
     @Nullable
     protected final CraftingBlockRecipe getOutput(ItemStack[] input) {
+        ItemStackSnapshot[] snapshots = ItemStackSnapshot.wrapArray(input);
         for (CraftingBlockRecipe recipe : recipes) {
-            if (recipe.check(input)) {
+            if (recipe.check(snapshots)) {
                 return recipe;
             }
         }

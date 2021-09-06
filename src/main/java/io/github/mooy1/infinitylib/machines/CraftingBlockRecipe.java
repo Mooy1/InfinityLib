@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
+import io.github.thebusybiscuit.slimefun4.libraries.dough.items.ItemStackSnapshot;
 import io.github.thebusybiscuit.slimefun4.utils.SlimefunUtils;
 
 @Getter
@@ -17,11 +18,11 @@ public final class CraftingBlockRecipe {
 
     CraftingBlockRecipe(ItemStack output, ItemStack[] inputs) {
         this.output = output;
-        this.inputs = inputs;
+        this.inputs = ItemStackSnapshot.wrapArray(inputs);
         this.item = SlimefunItem.getByItem(output);
     }
 
-    boolean check(ItemStack[] input) {
+    boolean check(ItemStackSnapshot[] input) {
         for (int i = 0; i < inputs.length; i++) {
             if (!SlimefunUtils.isItemSimilar(input[i], inputs[i], true, true)) {
                 return false;
