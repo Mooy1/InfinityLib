@@ -87,7 +87,7 @@ public final class MultiGroup extends FlexItemGroup {
             ItemGroup category = subGroups[target];
             menu.addItem(index, category.getItem(p));
             menu.addMenuClickHandler(index, (pl, slot, item, action) -> {
-                SlimefunGuide.openCategory(profile, category, mode, 1);
+                SlimefunGuide.openItemGroup(profile, category, mode, 1);
                 return false;
             });
 
