@@ -7,6 +7,7 @@ import org.bukkit.inventory.ItemStack;
 
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.items.ItemStackSnapshot;
+import io.github.thebusybiscuit.slimefun4.libraries.dough.items.ItemUtils;
 import io.github.thebusybiscuit.slimefun4.utils.SlimefunUtils;
 
 @Getter
@@ -38,7 +39,7 @@ public final class CraftingBlockRecipe {
     void consume(ItemStack[] input) {
         for (int i = 0; i < inputs.length; i++) {
             if (inputs[i] != null) {
-                input[i].setAmount(input[i].getAmount() - inputs[i].getAmount());
+                ItemUtils.consumeItem(input[i], inputs[i].getAmount(), true);
             }
         }
     }

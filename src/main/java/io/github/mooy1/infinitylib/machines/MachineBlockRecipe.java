@@ -7,6 +7,7 @@ import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.inventory.ItemStack;
 
 import io.github.mooy1.infinitylib.common.StackUtils;
+import io.github.thebusybiscuit.slimefun4.libraries.dough.items.ItemUtils;
 
 final class MachineBlockRecipe {
 
@@ -48,11 +49,11 @@ final class MachineBlockRecipe {
             for (ItemStack item : map.get(strings[i]).items) {
                 int amt = item.getAmount();
                 if (amt >= consume) {
-                    item.setAmount(amt - consume);
+                    ItemUtils.consumeItem(item, consume, true);
                     break;
                 }
                 else {
-                    item.setAmount(0);
+                    ItemUtils.consumeItem(item, amt, true);
                     consume -= amt;
                 }
             }

@@ -13,7 +13,7 @@ import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.implementation.setup.SlimefunItemSetup;
 
-public final class TestStackUtils {
+class TestStackUtils {
 
     @BeforeAll
     public static void load() {
