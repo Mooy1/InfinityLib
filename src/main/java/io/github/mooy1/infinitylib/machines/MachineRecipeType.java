@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
+import lombok.Getter;
+
 import org.bukkit.inventory.ItemStack;
 
 import io.github.mooy1.infinitylib.core.AbstractAddon;
@@ -13,6 +15,7 @@ import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
 
 public final class MachineRecipeType extends RecipeType {
 
+    @Getter
     private final Map<ItemStack[], ItemStack> recipes = new LinkedHashMap<>();
     private final List<BiConsumer<ItemStack[], ItemStack>> callbacks = new ArrayList<>();
 
