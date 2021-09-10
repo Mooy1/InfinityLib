@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import lombok.Setter;
@@ -91,9 +92,40 @@ public final class MachineBlock extends AbstractMachineBlock {
             return true;
         }
 
+        int[] slots = layout.inputSlots();
+        ItemStack[] input = new ItemStack[slots.length];
+        for (int i = 0; i < slots.length; i++) {
+            input[i] = menu.getItemInSlot(slots[i]);
+        }
+
+        MachineBlockRecipe recipe = getOutput(input);
+        if (recipe != null) {
+            ItemStack rem = menu.pushItem(recipe.output.clone(), layout.outputSlots());
+            if (rem == null || rem.getAmount() < recipe.output.getAmount()) {
+                recipe.consume();
+                if (menu.hasViewer()) {
+                    menu.replaceExistingItem(getStatusSlot(), PROCESSING_ITEM);
+                }
+                return true;
+            }
+            else {
+                if (menu.hasViewer()) {
+                    menu.replaceExistingItem(getStatusSlot(), NO_ROOM_ITEM);
+                }
+                return false;
+            }
+        }
+
+        if (menu.hasViewer()) {
+            menu.replaceExistingItem(getStatusSlot(), IDLE_ITEM);
+        }
+        return false;
+    }
+
+    @Nullable
+    MachineBlockRecipe getOutput(ItemStack[] items) {
         Map<String, MachineInput> map = new HashMap<>(2, 1F);
-        for (int slot : getInputSlots()) {
-            ItemStack item = menu.getItemInSlot(slot);
+        for (ItemStack item : items) {
             if (item != null) {
                 String string = StackUtils.getId(item);
                 if (string == null) {
@@ -105,27 +137,10 @@ public final class MachineBlock extends AbstractMachineBlock {
 
         for (MachineBlockRecipe recipe : recipes) {
             if (recipe.check(map)) {
-                ItemStack rem = menu.pushItem(recipe.output.clone(), layout.outputSlots());
-                if (rem == null || rem.getAmount() < recipe.output.getAmount()) {
-                    recipe.consume(map);
-                    if (menu.hasViewer()) {
-                        menu.replaceExistingItem(getStatusSlot(), PROCESSING_ITEM);
-                    }
-                    return true;
-                }
-                else {
-                    if (menu.hasViewer()) {
-                        menu.replaceExistingItem(getStatusSlot(), NO_ROOM_ITEM);
-                    }
-                    return false;
-                }
+                return recipe;
             }
         }
-
-        if (menu.hasViewer()) {
-            menu.replaceExistingItem(getStatusSlot(), IDLE_ITEM);
-        }
-        return false;
+        return null;
     }
 
     @Override

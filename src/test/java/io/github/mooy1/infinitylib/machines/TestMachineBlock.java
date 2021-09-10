@@ -1,7 +1,6 @@
 package io.github.mooy1.infinitylib.machines;
 
 import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -11,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
-import be.seeseemelk.mockbukkit.ServerMock;
 import io.github.mooy1.infinitylib.core.MockAddon;
 import io.github.mooy1.infinitylib.groups.SubGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
@@ -19,39 +17,31 @@ import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
-import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
-import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class TestMachineBlock {
 
-    private static ServerMock server;
     private static MockAddon addon;
     private static MachineBlock machine;
-    private static Block block;
     private static ItemStack input1;
     private static ItemStack input2;
     private static ItemStack output;
-    private static BlockMenu menu;
 
     @BeforeAll
     public static void load() {
-        server = MockBukkit.mock();
+        MockBukkit.mock();
         addon = MockBukkit.load(MockAddon.class);
         Slimefun.getCfg().setValue("URID.enable-tickers", true);
         machine = new MachineBlock(new SubGroup("key", new ItemStack(Material.DIAMOND)),
                 new SlimefunItemStack("ID", Material.STONE, "name"),
                 RecipeType.ANCIENT_ALTAR, new ItemStack[0]);
-        block = server.addSimpleWorld("").getBlockAt(0, 0, 0);
         output = new CustomItemStack(SlimefunItems.SALT, 2);
         input1 = SlimefunItems.COPPER_DUST;
         input2 = new ItemStack(Material.NETHERITE_BLOCK, 2);
@@ -80,102 +70,40 @@ class TestMachineBlock {
 
     @Test
     @Order(1)
-    void testBlockMenuPreset() {
-        BlockMenuPreset preset = BlockMenuPreset.getPreset(machine.getId());
-        assertNotNull(preset);
-        menu = new BlockMenu(preset, block.getLocation());
-    }
-
-    @Test
-    @Order(2)
     void testAddRecipes() {
         machine.addRecipe(output, input1, input2);
         assertThrows(IllegalArgumentException.class, () -> machine.addRecipe(output));
     }
 
     @Test
-    @Order(3)
-    void testTicksPerOutput() {
-        assertFalse(machine.process(block, menu));
-        server.getScheduler().performOneTick();
-        assertTrue(machine.process(block, menu));
-        server.getScheduler().performOneTick();
-        assertFalse(machine.process(block, menu));
-    }
-
-    @Test
     void testProcess() {
-        assertFalse(machine.process(block, menu));
+        ItemStack[] input = new ItemStack[2];
+        assertNull(machine.getOutput(input));
 
-        menu.replaceExistingItem(19, input1.clone());
-        menu.replaceExistingItem(20, input2.clone());
-        menu.replaceExistingItem(24, null);
-        menu.replaceExistingItem(24, null);
+        input[0] = input1.clone();
+        input[1] = input2.clone();
+        MachineBlockRecipe out = machine.getOutput(input);
 
-        assertTrue(machine.process(block, menu));
-        assertNotSame(output, menu.getItemInSlot(24));
-        assertEquals(output, menu.getItemInSlot(24));
-        assertEquals(0, menu.getItemInSlot(19).getAmount());
-        assertEquals(0, menu.getItemInSlot(20).getAmount());
-    }
+        assertNotNull(out);
+        assertSame(output, out.output);
 
-    @Test
-    void testShapelessProcessTwice() {
-        menu.replaceExistingItem(19, new CustomItemStack(input2, 4));
-        menu.replaceExistingItem(20, new CustomItemStack(input1, 2));
-        menu.replaceExistingItem(24, null);
-        menu.replaceExistingItem(25, null);
+        out.consume();
 
-        assertTrue(machine.process(block, menu));
-        assertEquals(2, menu.getItemInSlot(24).getAmount());
-        assertEquals(2, menu.getItemInSlot(19).getAmount());
-        assertEquals(1, menu.getItemInSlot(20).getAmount());
+        assertEquals(0, input[0].getAmount());
+        assertEquals(0, input[1].getAmount());
+        assertNull(machine.getOutput(input));
 
-        assertTrue(machine.process(block, menu));
-        assertEquals(4, menu.getItemInSlot(24).getAmount());
-        assertEquals(0, menu.getItemInSlot(19).getAmount());
-        assertEquals(0, menu.getItemInSlot(20).getAmount());
-    }
+        input[0] = new CustomItemStack(input2, 4);
+        input[1] = new CustomItemStack(input1, 2);
 
-    @Test
-    void testSplitOutput() {
-        menu.replaceExistingItem(19, new CustomItemStack(input2, 2));
-        menu.replaceExistingItem(20, new CustomItemStack(input1, 1));
-        menu.replaceExistingItem(24, new CustomItemStack(output, 63));
-        menu.replaceExistingItem(25, null);
+        out = machine.getOutput(input);
 
-        assertTrue(machine.process(block, menu));
-        assertEquals(64, menu.getItemInSlot(24).getAmount());
-        assertEquals(output, menu.getItemInSlot(25));
-    }
+        assertNotNull(out);
 
-    @Test
-    void testPartialOutput() {
-        menu.replaceExistingItem(19, new CustomItemStack(input2, 2));
-        menu.replaceExistingItem(20, new CustomItemStack(input1, 1));
-        menu.replaceExistingItem(24, new CustomItemStack(output, 64));
-        menu.replaceExistingItem(25, new CustomItemStack(output, 63));
+        out.consume();
 
-        assertTrue(machine.process(block, menu));
-        assertEquals(64, menu.getItemInSlot(24).getAmount());
-        assertEquals(64, menu.getItemInSlot(25).getAmount());
-        assertEquals(0, menu.getItemInSlot(19).getAmount());
-        assertEquals(0, menu.getItemInSlot(20).getAmount());
-    }
-
-    @Test
-    void testNoRoom() {
-        menu.replaceExistingItem(19, new CustomItemStack(input2, 2));
-        menu.replaceExistingItem(20, new CustomItemStack(input1, 1));
-        menu.replaceExistingItem(24, new CustomItemStack(output, 64));
-        menu.replaceExistingItem(25, new CustomItemStack(output, 64));
-
-        assertFalse(machine.process(block, menu));
-
-        menu.replaceExistingItem(24, new CustomItemStack(input1, 1));
-        menu.replaceExistingItem(25, new CustomItemStack(input2, 1));
-
-        assertFalse(machine.process(block, menu));
+        assertEquals(2, input[0].getAmount());
+        assertEquals(1, input[1].getAmount());
     }
 
 }

@@ -14,6 +14,7 @@ final class MachineBlockRecipe {
     private final String[] strings;
     private final int[] amounts;
     final ItemStack output;
+    private Map<String, MachineInput> lastMatch;
 
     MachineBlockRecipe(ItemStack output, ItemStack[] input) {
         this.output = output;
@@ -40,13 +41,14 @@ final class MachineBlockRecipe {
                 return false;
             }
         }
+        lastMatch = map;
         return true;
     }
 
-    void consume(Map<String, MachineInput> map) {
+    void consume() {
         for (int i = 0; i < strings.length; i++) {
             int consume = amounts[i];
-            for (ItemStack item : map.get(strings[i]).items) {
+            for (ItemStack item : lastMatch.get(strings[i]).items) {
                 int amt = item.getAmount();
                 if (amt >= consume) {
                     ItemUtils.consumeItem(item, consume, true);

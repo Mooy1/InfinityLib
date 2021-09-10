@@ -26,7 +26,7 @@ public final class CraftingBlockRecipe {
     boolean check(ItemStackSnapshot[] input) {
         for (int i = 0; i < recipe.length; i++) {
             boolean similar = StackUtils.isSimilar(input[i], recipe[i]);
-            if (!similar && (recipe[i] == null || recipe[i].getAmount() > input[i].getAmount())) {
+            if (!similar || (recipe[i] != null && recipe[i].getAmount() > input[i].getAmount())) {
                 return false;
             }
         }
