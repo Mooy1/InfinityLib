@@ -15,6 +15,11 @@ import be.seeseemelk.mockbukkit.entity.PlayerMock;
 import io.github.mooy1.infinitylib.core.AbstractAddon;
 import io.github.mooy1.infinitylib.core.MockAddon;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 class TestAddonCommand {
 
     private static AddonCommand addonCommand;
