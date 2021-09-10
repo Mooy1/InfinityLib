@@ -11,7 +11,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -24,6 +23,11 @@ import io.github.thebusybiscuit.slimefun4.api.player.PlayerProfile;
 import io.github.thebusybiscuit.slimefun4.core.guide.SlimefunGuideMode;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import me.mrCookieSlime.CSCoreLibPlugin.general.Inventory.MenuListener;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class TestGroups {
 
@@ -53,20 +57,20 @@ class TestGroups {
         multi.register(addon);
         multi.open(p, profile.get(), SlimefunGuideMode.SURVIVAL_MODE);
 
-        Assertions.assertTrue(sub.isRegistered());
-        Assertions.assertTrue(sub.isHidden(p));
-        Assertions.assertFalse(multi.isHidden(p));
-        Assertions.assertEquals(sub.getItem(p), p.getOpenInventory().getItem(9));
+        assertTrue(sub.isRegistered());
+        assertTrue(sub.isHidden(p));
+        assertFalse(multi.isHidden(p));
+        assertEquals(sub.getItem(p), p.getOpenInventory().getItem(9));
 
         Events.call(new InventoryClickEvent(p.getOpenInventory(), InventoryType.SlotType.CONTAINER,
                 9, ClickType.LEFT, InventoryAction.PICKUP_ALL));
 
-        Assertions.assertNull(p.getOpenInventory().getItem(9));
+        assertNull(p.getOpenInventory().getItem(9));
 
         Events.call(new InventoryClickEvent(p.getOpenInventory(), InventoryType.SlotType.CONTAINER,
                 1, ClickType.LEFT, InventoryAction.PICKUP_ALL));
 
-        Assertions.assertEquals(sub.getItem(p), p.getOpenInventory().getItem(9));
+        assertEquals(sub.getItem(p), p.getOpenInventory().getItem(9));
     }
 
 }

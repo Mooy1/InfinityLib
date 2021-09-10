@@ -10,7 +10,6 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -20,6 +19,8 @@ import be.seeseemelk.mockbukkit.ServerMock;
 import be.seeseemelk.mockbukkit.WorldMock;
 import be.seeseemelk.mockbukkit.persistence.PersistentDataContainerMock;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class TestPersistentType {
 
@@ -44,11 +45,11 @@ class TestPersistentType {
     void testItemStack() {
         ItemStack item = new ItemStack(Material.OBSIDIAN);
         container.set(key, PersistentType.ITEM_STACK, item);
-        Assertions.assertEquals(item, container.get(key, PersistentType.ITEM_STACK));
+        assertEquals(item, container.get(key, PersistentType.ITEM_STACK));
 
         item = SlimefunItems.ANCIENT_ALTAR;
         container.set(key, PersistentType.ITEM_STACK, item);
-        Assertions.assertEquals(item, container.get(key, PersistentType.ITEM_STACK));
+        assertEquals(item, container.get(key, PersistentType.ITEM_STACK));
     }
 
     @Test
@@ -56,11 +57,11 @@ class TestPersistentType {
     void testItemStackOld() {
         ItemStack item = new ItemStack(Material.OBSIDIAN);
         container.set(key, PersistentType.ITEM_STACK_OLD, item);
-        Assertions.assertEquals(item, container.get(key, PersistentType.ITEM_STACK_OLD));
+        assertEquals(item, container.get(key, PersistentType.ITEM_STACK_OLD));
 
         item = SlimefunItems.ANCIENT_ALTAR;
         container.set(key, PersistentType.ITEM_STACK_OLD, item);
-        Assertions.assertEquals(item, container.get(key, PersistentType.ITEM_STACK_OLD));
+        assertEquals(item, container.get(key, PersistentType.ITEM_STACK_OLD));
     }
 
     @Test
@@ -68,11 +69,11 @@ class TestPersistentType {
     void testItemStackList() {
         List<ItemStack> list = new ArrayList<>();
         container.set(key, PersistentType.ITEM_STACK_LIST, list);
-        Assertions.assertEquals(list, container.get(key, PersistentType.ITEM_STACK_LIST));
+        assertEquals(list, container.get(key, PersistentType.ITEM_STACK_LIST));
 
         list = Arrays.asList(new ItemStack(Material.PUMPKIN), SlimefunItems.ADVANCED_CIRCUIT_BOARD);
         container.set(key, PersistentType.ITEM_STACK_LIST, list);
-        Assertions.assertEquals(list, container.get(key, PersistentType.ITEM_STACK_LIST));
+        assertEquals(list, container.get(key, PersistentType.ITEM_STACK_LIST));
     }
 
     @Test
@@ -82,22 +83,22 @@ class TestPersistentType {
 
         Location location = new Location(null, 1, 2, 3);
         container.set(key, PersistentType.LOCATION, location);
-        Assertions.assertEquals(location, container.get(key, PersistentType.LOCATION));
+        assertEquals(location, container.get(key, PersistentType.LOCATION));
 
         location = new Location(world, 1, 2, 3);
         container.set(key, PersistentType.LOCATION, location);
-        Assertions.assertEquals(location, container.get(key, PersistentType.LOCATION));
+        assertEquals(location, container.get(key, PersistentType.LOCATION));
     }
 
     @Test
     void testStringList() {
         List<String> list = new ArrayList<>();
         container.set(key, PersistentType.STRING_LIST, list);
-        Assertions.assertEquals(list, container.get(key, PersistentType.STRING_LIST));
+        assertEquals(list, container.get(key, PersistentType.STRING_LIST));
 
         list = Arrays.asList("a", "b", "c");
         container.set(key, PersistentType.STRING_LIST, list);
-        Assertions.assertEquals(list, container.get(key, PersistentType.STRING_LIST));
+        assertEquals(list, container.get(key, PersistentType.STRING_LIST));
     }
 
 }

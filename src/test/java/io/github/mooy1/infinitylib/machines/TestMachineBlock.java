@@ -4,7 +4,6 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -22,6 +21,15 @@ import io.github.thebusybiscuit.slimefun4.implementation.SlimefunItems;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.items.CustomItemStack;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
+
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class TestMachineBlock {
@@ -57,24 +65,24 @@ class TestMachineBlock {
     @Test
     @Order(0)
     void testRegister() {
-        Assertions.assertThrows(IllegalStateException.class, () -> machine.register(addon));
+        assertThrows(IllegalStateException.class, () -> machine.register(addon));
 
         machine.ticksPerOutput(2);
 
-        Assertions.assertThrows(IllegalStateException.class, () -> machine.register(addon));
+        assertThrows(IllegalStateException.class, () -> machine.register(addon));
 
         machine.energyPerTick(10);
 
-        Assertions.assertDoesNotThrow(() -> machine.register(addon));
-        Assertions.assertEquals(20, machine.energyCapacity);
-        Assertions.assertSame(MachineLayout.MACHINE_DEFAULT, machine.layout);
+        assertDoesNotThrow(() -> machine.register(addon));
+        assertEquals(20, machine.energyCapacity);
+        assertSame(MachineLayout.MACHINE_DEFAULT, machine.layout);
     }
 
     @Test
     @Order(1)
     void testBlockMenuPreset() {
         BlockMenuPreset preset = BlockMenuPreset.getPreset(machine.getId());
-        Assertions.assertNotNull(preset);
+        assertNotNull(preset);
         menu = new BlockMenu(preset, block.getLocation());
     }
 
@@ -82,33 +90,33 @@ class TestMachineBlock {
     @Order(2)
     void testAddRecipes() {
         machine.addRecipe(output, input1, input2);
-        Assertions.assertThrows(IllegalArgumentException.class, () -> machine.addRecipe(output));
+        assertThrows(IllegalArgumentException.class, () -> machine.addRecipe(output));
     }
 
     @Test
     @Order(3)
     void testTicksPerOutput() {
-        Assertions.assertFalse(machine.process(block, menu));
+        assertFalse(machine.process(block, menu));
         server.getScheduler().performOneTick();
-        Assertions.assertTrue(machine.process(block, menu));
+        assertTrue(machine.process(block, menu));
         server.getScheduler().performOneTick();
-        Assertions.assertFalse(machine.process(block, menu));
+        assertFalse(machine.process(block, menu));
     }
 
     @Test
     void testProcess() {
-        Assertions.assertFalse(machine.process(block, menu));
+        assertFalse(machine.process(block, menu));
 
         menu.replaceExistingItem(19, input1.clone());
         menu.replaceExistingItem(20, input2.clone());
         menu.replaceExistingItem(24, null);
         menu.replaceExistingItem(24, null);
 
-        Assertions.assertTrue(machine.process(block, menu));
-        Assertions.assertNotSame(output, menu.getItemInSlot(24));
-        Assertions.assertEquals(output, menu.getItemInSlot(24));
-        Assertions.assertEquals(0, menu.getItemInSlot(19).getAmount());
-        Assertions.assertEquals(0, menu.getItemInSlot(20).getAmount());
+        assertTrue(machine.process(block, menu));
+        assertNotSame(output, menu.getItemInSlot(24));
+        assertEquals(output, menu.getItemInSlot(24));
+        assertEquals(0, menu.getItemInSlot(19).getAmount());
+        assertEquals(0, menu.getItemInSlot(20).getAmount());
     }
 
     @Test
@@ -118,15 +126,15 @@ class TestMachineBlock {
         menu.replaceExistingItem(24, null);
         menu.replaceExistingItem(25, null);
 
-        Assertions.assertTrue(machine.process(block, menu));
-        Assertions.assertEquals(2, menu.getItemInSlot(24).getAmount());
-        Assertions.assertEquals(2, menu.getItemInSlot(19).getAmount());
-        Assertions.assertEquals(1, menu.getItemInSlot(20).getAmount());
+        assertTrue(machine.process(block, menu));
+        assertEquals(2, menu.getItemInSlot(24).getAmount());
+        assertEquals(2, menu.getItemInSlot(19).getAmount());
+        assertEquals(1, menu.getItemInSlot(20).getAmount());
 
-        Assertions.assertTrue(machine.process(block, menu));
-        Assertions.assertEquals(4, menu.getItemInSlot(24).getAmount());
-        Assertions.assertEquals(0, menu.getItemInSlot(19).getAmount());
-        Assertions.assertEquals(0, menu.getItemInSlot(20).getAmount());
+        assertTrue(machine.process(block, menu));
+        assertEquals(4, menu.getItemInSlot(24).getAmount());
+        assertEquals(0, menu.getItemInSlot(19).getAmount());
+        assertEquals(0, menu.getItemInSlot(20).getAmount());
     }
 
     @Test
@@ -136,9 +144,9 @@ class TestMachineBlock {
         menu.replaceExistingItem(24, new CustomItemStack(output, 63));
         menu.replaceExistingItem(25, null);
 
-        Assertions.assertTrue(machine.process(block, menu));
-        Assertions.assertEquals(64, menu.getItemInSlot(24).getAmount());
-        Assertions.assertEquals(output, menu.getItemInSlot(25));
+        assertTrue(machine.process(block, menu));
+        assertEquals(64, menu.getItemInSlot(24).getAmount());
+        assertEquals(output, menu.getItemInSlot(25));
     }
 
     @Test
@@ -148,11 +156,11 @@ class TestMachineBlock {
         menu.replaceExistingItem(24, new CustomItemStack(output, 64));
         menu.replaceExistingItem(25, new CustomItemStack(output, 63));
 
-        Assertions.assertTrue(machine.process(block, menu));
-        Assertions.assertEquals(64, menu.getItemInSlot(24).getAmount());
-        Assertions.assertEquals(64, menu.getItemInSlot(25).getAmount());
-        Assertions.assertEquals(0, menu.getItemInSlot(19).getAmount());
-        Assertions.assertEquals(0, menu.getItemInSlot(20).getAmount());
+        assertTrue(machine.process(block, menu));
+        assertEquals(64, menu.getItemInSlot(24).getAmount());
+        assertEquals(64, menu.getItemInSlot(25).getAmount());
+        assertEquals(0, menu.getItemInSlot(19).getAmount());
+        assertEquals(0, menu.getItemInSlot(20).getAmount());
     }
 
     @Test
@@ -162,12 +170,12 @@ class TestMachineBlock {
         menu.replaceExistingItem(24, new CustomItemStack(output, 64));
         menu.replaceExistingItem(25, new CustomItemStack(output, 64));
 
-        Assertions.assertFalse(machine.process(block, menu));
+        assertFalse(machine.process(block, menu));
 
         menu.replaceExistingItem(24, new CustomItemStack(input1, 1));
         menu.replaceExistingItem(25, new CustomItemStack(input2, 1));
 
-        Assertions.assertFalse(machine.process(block, menu));
+        assertFalse(machine.process(block, menu));
     }
 
 }

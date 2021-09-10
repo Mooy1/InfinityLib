@@ -1,23 +1,25 @@
 package io.github.mooy1.infinitylib;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class TestInfinityLib {
 
     @Test
     void testVersion() {
-        Assertions.assertNotEquals("${project.version}", InfinityLib.VERSION);
+        assertNotEquals("${project.version}", InfinityLib.VERSION);
     }
 
     @Test
     void testPackage() {
-        Assertions.assertEquals("io.github.mooy1.infinitylib", InfinityLib.PACKAGE);
+        assertEquals("io.github.mooy1.infinitylib", InfinityLib.PACKAGE);
     }
 
     @Test
     void testAddonPackage() {
-        Assertions.assertEquals("io.github.mooy1", InfinityLib.ADDON_PACKAGE);
+        assertEquals("io.github.mooy1", InfinityLib.ADDON_PACKAGE);
     }
 
 }

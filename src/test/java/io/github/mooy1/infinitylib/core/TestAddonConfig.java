@@ -1,11 +1,13 @@
 package io.github.mooy1.infinitylib.core;
 
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class TestAddonConfig {
 
@@ -25,14 +27,14 @@ class TestAddonConfig {
 
     @Test
     void testNoDefaults() {
-        Assertions.assertThrows(IllegalStateException.class, () -> new AddonConfig("fail.yml"));
+        assertThrows(IllegalStateException.class, () -> new AddonConfig("fail.yml"));
     }
 
     @Test
     void testComments() {
-        Assertions.assertEquals("\n# test\n", config.getComment("test"));
-        Assertions.assertEquals("\n# line a\n# line b\n", config.getComment("section"));
-        Assertions.assertEquals("\n  # test\n", config.getComment("section.test"));
+        assertEquals("\n# test\n", config.getComment("test"));
+        assertEquals("\n# line a\n# line b\n", config.getComment("section"));
+        assertEquals("\n  # test\n", config.getComment("section.test"));
     }
 
     @Test
@@ -53,7 +55,7 @@ class TestAddonConfig {
                         "\n" +
                         "  # test\n" +
                         "  test: test\n";
-        Assertions.assertEquals(correct, config.saveToString());
+        assertEquals(correct, config.saveToString());
     }
 
 }

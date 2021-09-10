@@ -2,7 +2,6 @@ package io.github.mooy1.infinitylib.core;
 
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,6 +9,9 @@ import org.junit.jupiter.api.Test;
 import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.plugin.PluginManagerMock;
 import io.github.mooy1.otheraddon.MockOtherAddon;
+
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class TestAddonLive {
 
@@ -32,47 +34,47 @@ class TestAddonLive {
 
     @Test
     void testNullInstance() {
-        Assertions.assertThrows(NullPointerException.class, AbstractAddon::instance);
+        assertThrows(NullPointerException.class, AbstractAddon::instance);
     }
 
     @Test
     void testNoCommand() {
-        Assertions.assertDoesNotThrow(() -> MockBukkit.loadWith(MockAddon.class,
+        assertDoesNotThrow(() -> MockBukkit.loadWith(MockAddon.class,
                 new PluginDescriptionFile("MockAddon", "", MockAddon.class.getName())));
-        Assertions.assertThrows(NullPointerException.class, () -> MockAddon.instance().getAddonCommand());
+        assertThrows(NullPointerException.class, () -> MockAddon.instance().getAddonCommand());
     }
 
     @Test
     void testSharedInfinityLib() {
         PluginDescriptionFile desc = new PluginDescriptionFile("MockAddon", "", MockOtherAddon.class.getName());
-        Assertions.assertThrows(RuntimeException.class, () -> MockBukkit.load(MockOtherAddon.class, desc, Environment.LIBRARY_TESTING));
+        assertThrows(RuntimeException.class, () -> MockBukkit.load(MockOtherAddon.class, desc, Environment.LIBRARY_TESTING));
     }
 
     @Test
     void testBadGithubStrings() {
-        Assertions.assertThrows(RuntimeException.class,
+        assertThrows(RuntimeException.class,
                 () -> MockBukkit.load(MockAddon.class, Environment.LIBRARY_TESTING, MockAddonTest.BAD_GITHUB_PATH));
     }
 
     @Test
     void testMissingAutoUpdateKey() {
-        Assertions.assertDoesNotThrow(
+        assertDoesNotThrow(
                 () -> MockBukkit.load(MockAddon.class, Environment.LIBRARY_TESTING, MockAddonTest.MISSING_KEY));
     }
 
     @Test
     void testSuperEnable() {
-        Assertions.assertDoesNotThrow(
+        assertDoesNotThrow(
                 () -> MockBukkit.load(MockAddon.class, Environment.LIBRARY_TESTING, MockAddonTest.CALL_SUPER));
-        Assertions.assertDoesNotThrow(
+        assertDoesNotThrow(
                 () -> manager.disablePlugin(MockAddon.instance()));
     }
 
     @Test
     void testErrorThrown() {
-        Assertions.assertDoesNotThrow(
+        assertDoesNotThrow(
                 () -> MockBukkit.load(MockAddon.class, Environment.LIBRARY_TESTING, MockAddonTest.THROW_EXCEPTION));
-        Assertions.assertDoesNotThrow(
+        assertDoesNotThrow(
                 () -> manager.disablePlugin(MockAddon.instance()));
     }
 

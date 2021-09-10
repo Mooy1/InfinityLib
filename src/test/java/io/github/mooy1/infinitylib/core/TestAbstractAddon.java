@@ -1,13 +1,18 @@
 package io.github.mooy1.infinitylib.core;
 
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.ThrowingSupplier;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.ServerMock;
+
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class TestAbstractAddon {
 
@@ -27,54 +32,54 @@ class TestAbstractAddon {
 
     @Test
     void testNotNullEnvironment() {
-        Assertions.assertNotNull(MockAddon.environment());
+        assertNotNull(MockAddon.environment());
     }
 
     @Test
     void testNotNullConfig() {
-        Assertions.assertNotNull(MockAddon.config());
+        assertNotNull(MockAddon.config());
     }
 
     @Test
     void testCreateKey() {
-        Assertions.assertNotNull(MockAddon.createKey("test"));
+        assertNotNull(MockAddon.createKey("test"));
     }
 
     @Test
     void testAutoUpdatedDisabled() {
-        Assertions.assertFalse(addon.autoUpdatesEnabled());
+        assertFalse(addon.autoUpdatesEnabled());
     }
 
     @Test
     void testBugTrackerURL() {
-        Assertions.assertEquals("https://github.com/Mooy1/InfinityLib/issues", addon.getBugTrackerURL());
+        assertEquals("https://github.com/Mooy1/InfinityLib/issues", addon.getBugTrackerURL());
     }
 
     @Test
     void testGlobalTick() {
         server.getScheduler().performOneTick();
-        Assertions.assertEquals(1, MockAddon.slimefunTickCount());
+        assertEquals(1, MockAddon.slimefunTickCount());
     }
 
     @Test
     void testCommand() {
-        Assertions.assertNotNull(MockAddon.instance().getAddonCommand());
+        assertNotNull(MockAddon.instance().getAddonCommand());
         server.executeConsole("mockaddon").assertSucceeded();
     }
 
     @Test
     void testInstance() {
-        Assertions.assertDoesNotThrow((ThrowingSupplier<Object>) MockAddon::instance);
+        assertDoesNotThrow((ThrowingSupplier<Object>) MockAddon::instance);
     }
 
     @Test
     void testDuplicateInstance() {
-        Assertions.assertThrows(RuntimeException.class, () -> MockBukkit.load(MockAddon.class));
+        assertThrows(RuntimeException.class, () -> MockBukkit.load(MockAddon.class));
     }
 
     @Test
     void testNotRelocatedLive() {
-        Assertions.assertThrows(RuntimeException.class, () -> MockBukkit.load(MockAddon.class, Environment.LIVE, null));
+        assertThrows(RuntimeException.class, () -> MockBukkit.load(MockAddon.class, Environment.LIVE, null));
     }
 
 }

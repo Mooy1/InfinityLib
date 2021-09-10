@@ -6,13 +6,20 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.scheduler.BukkitSchedulerMock;
 import io.github.mooy1.infinitylib.core.MockAddon;
+
+import static io.github.mooy1.infinitylib.common.Scheduler.repeat;
+import static io.github.mooy1.infinitylib.common.Scheduler.repeatAsync;
+import static io.github.mooy1.infinitylib.common.Scheduler.run;
+import static io.github.mooy1.infinitylib.common.Scheduler.runAsync;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class TestScheduler {
 
@@ -34,13 +41,13 @@ class TestScheduler {
         AtomicBoolean a = new AtomicBoolean();
         CompletableFuture<Boolean> b = new CompletableFuture<>();
 
-        Scheduler.run(() -> a.set(true));
-        Scheduler.runAsync(() -> b.complete(true));
+        run(() -> a.set(true));
+        runAsync(() -> b.complete(true));
 
         scheduler.performOneTick();
 
-        Assertions.assertTrue(a.get());
-        Assertions.assertTrue(b.get());
+        assertTrue(a.get());
+        assertTrue(b.get());
     }
 
     @Test
@@ -48,18 +55,18 @@ class TestScheduler {
         AtomicBoolean a = new AtomicBoolean();
         CompletableFuture<Boolean> b = new CompletableFuture<>();
 
-        Scheduler.run(2, () -> a.set(true));
-        Scheduler.runAsync(2, () -> b.complete(true));
+        run(2, () -> a.set(true));
+        runAsync(2, () -> b.complete(true));
 
         scheduler.performOneTick();
 
-        Assertions.assertFalse(a.get());
-        Assertions.assertFalse(b.isDone());
+        assertFalse(a.get());
+        assertFalse(b.isDone());
 
         scheduler.performOneTick();
 
-        Assertions.assertTrue(a.get());
-        Assertions.assertTrue(b.get());
+        assertTrue(a.get());
+        assertTrue(b.get());
     }
 
     @Test
@@ -69,8 +76,8 @@ class TestScheduler {
         AtomicInteger b = new AtomicInteger();
         CompletableFuture<Boolean> c = new CompletableFuture<>();
 
-        Scheduler.repeat(1, a::incrementAndGet);
-        Scheduler.repeatAsync(1, () -> {
+        repeat(1, a::incrementAndGet);
+        repeatAsync(1, () -> {
             if (b.incrementAndGet() == times) {
                 c.complete(true);
             }
@@ -80,8 +87,8 @@ class TestScheduler {
             scheduler.performOneTick();
         }
 
-        Assertions.assertEquals(times, a.get());
-        Assertions.assertTrue(c.get());
+        assertEquals(times, a.get());
+        assertTrue(c.get());
     }
 
     @Test
@@ -91,8 +98,8 @@ class TestScheduler {
         AtomicInteger b = new AtomicInteger();
         CompletableFuture<Boolean> c = new CompletableFuture<>();
 
-        Scheduler.repeat(1, 2, a::incrementAndGet);
-        Scheduler.repeatAsync(1, 2, () -> {
+        repeat(1, 2, a::incrementAndGet);
+        repeatAsync(1, 2, () -> {
             if (b.incrementAndGet() == times) {
                 c.complete(true);
             }
@@ -102,8 +109,8 @@ class TestScheduler {
             scheduler.performOneTick();
         }
 
-        Assertions.assertEquals(times, a.get());
-        Assertions.assertTrue(c.get());
+        assertEquals(times, a.get());
+        assertTrue(c.get());
     }
 
 }

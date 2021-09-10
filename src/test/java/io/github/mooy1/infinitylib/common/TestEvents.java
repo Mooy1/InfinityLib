@@ -6,12 +6,16 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import be.seeseemelk.mockbukkit.MockBukkit;
 import io.github.mooy1.infinitylib.core.MockAddon;
+
+import static io.github.mooy1.infinitylib.common.Events.addHandler;
+import static io.github.mooy1.infinitylib.common.Events.call;
+import static io.github.mooy1.infinitylib.common.Events.registerListener;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class TestEvents implements Listener {
 
@@ -30,23 +34,23 @@ class TestEvents implements Listener {
 
     @Test
     void testCallEvent() {
-        Events.call(new MockEvent());
+        call(new MockEvent());
         MockBukkit.getMock().getPluginManager().assertEventFired(MockEvent.class);
     }
 
     @Test
     void testRegisterListener() {
-        Events.registerListener(this);
-        Events.call(new MockEvent());
-        Assertions.assertTrue(listenerCalled);
+        registerListener(this);
+        call(new MockEvent());
+        assertTrue(listenerCalled);
     }
 
     @Test
     void testAddHandler() {
         AtomicBoolean called = new AtomicBoolean();
-        Events.addHandler(MockEvent.class, EventPriority.MONITOR, true, e -> called.set(true));
-        Events.call(new MockEvent());
-        Assertions.assertTrue(called.get());
+        addHandler(MockEvent.class, EventPriority.MONITOR, true, e -> called.set(true));
+        call(new MockEvent());
+        assertTrue(called.get());
     }
 
     @EventHandler
