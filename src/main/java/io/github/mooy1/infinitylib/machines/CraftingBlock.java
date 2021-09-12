@@ -56,11 +56,13 @@ public class CraftingBlock extends MenuBlock {
                     menu.pushItem(output, layout.outputSlots());
                     recipe.consume(input);
                     p.sendMessage(ChatColor.GREEN + "Successfully Crafted: " + ItemUtils.getItemName(output));
-                } else {
+                }
+                else {
                     p.sendMessage(ChatColor.GOLD + "Not Enough Room!");
                 }
             }
-        } else {
+        }
+        else {
             p.sendMessage(ChatColor.RED + "Invalid Recipe!");
         }
     }

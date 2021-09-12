@@ -44,5 +44,5 @@ public final class CraftingBlockRecipe {
             }
         }
     }
-    
+
 }

@@ -26,9 +26,11 @@ public final class StackUtils {
     public static String getId(ItemStack item) {
         if (item instanceof SlimefunItemStack) {
             return ((SlimefunItemStack) item).getItemId();
-        } else if (item.hasItemMeta()) {
+        }
+        else if (item.hasItemMeta()) {
             return getId(item.getItemMeta());
-        } else {
+        }
+        else {
             return null;
         }
     }
@@ -42,10 +44,12 @@ public final class StackUtils {
     public static String getIdOrType(ItemStack item) {
         if (item instanceof SlimefunItemStack) {
             return ((SlimefunItemStack) item).getItemId();
-        } else if (item.hasItemMeta()) {
+        }
+        else if (item.hasItemMeta()) {
             String id = getId(item.getItemMeta());
             return id == null ? item.getType().name() : id;
-        } else {
+        }
+        else {
             return item.getType().name();
         }
     }
@@ -64,16 +68,18 @@ public final class StackUtils {
 
     /**
      * Returns true when both items:
-     *  - Are null or air
-     *  - Have the same slimefun id
-     *  - Have the same type and display name or lack thereof
+     * - Are null or air
+     * - Have the same slimefun id
+     * - Have the same type and display name or lack thereof
      */
     public static boolean isSimilar(@Nullable ItemStack first, @Nullable ItemStack second) {
         if (first == null || first.getType().isAir()) {
             return second == null || second.getType().isAir();
-        } else if (second == null || second.getType().isAir()) {
+        }
+        else if (second == null || second.getType().isAir()) {
             return false;
-        } else if (first.hasItemMeta()) {
+        }
+        else if (first.hasItemMeta()) {
             if (second.hasItemMeta()) {
                 ItemMeta firstMeta = first.getItemMeta();
                 ItemMeta secondMeta = second.getItemMeta();
@@ -84,24 +90,31 @@ public final class StackUtils {
                             if (firstMeta.hasDisplayName()) {
                                 return secondMeta.hasDisplayName()
                                         && firstMeta.getDisplayName().equals(secondMeta.getDisplayName());
-                            } else {
+                            }
+                            else {
                                 return !secondMeta.hasDisplayName();
                             }
-                        } else {
+                        }
+                        else {
                             return false;
                         }
-                    } else {
+                    }
+                    else {
                         return false;
                     }
-                } else {
+                }
+                else {
                     return firstId.equals(getId(secondMeta));
                 }
-            } else {
+            }
+            else {
                 return false;
             }
-        } else if (second.hasItemMeta()) {
+        }
+        else if (second.hasItemMeta()) {
             return false;
-        } else {
+        }
+        else {
             return first.getType() == second.getType();
         }
     }
