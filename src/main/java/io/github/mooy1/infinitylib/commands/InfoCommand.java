@@ -7,6 +7,7 @@ import javax.annotation.Nonnull;
 
 import org.bukkit.command.CommandSender;
 
+import io.github.mooy1.infinitylib.common.Translations;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 import me.mrCookieSlime.Slimefun.cscorelib2.chat.ChatColors;
@@ -16,14 +17,16 @@ final class InfoCommand extends AbstractCommand {
     private final String[] message;
 
     InfoCommand(SlimefunAddon addon) {
-        super("info", "Gives addon version information", false);
-        this.message = new String[] {
+        super("info", Translations.get("commands.info.description",
+                "Gives versions, github link, and discord invites"));
+        Slimefun slimefun = Slimefun.instance();
+        message = new String[] {
                 "",
                 ChatColors.color("&b" + addon.getName() + " Info"),
-                ChatColors.color("&bSlimefun Version: &7" + Objects.requireNonNull(SlimefunPlugin.instance()).getPluginVersion()),
+                ChatColors.color("&bVersion: " + addon.getPluginVersion()),
+                ChatColors.color("&bSlimefun: &7" + (slimefun == null ? "null" : slimefun.getPluginVersion())),
                 ChatColors.color("&bSlimefun Discord: &7Discord.gg/slimefun"),
-                ChatColors.color("&bAddon Version: &7" + addon.getPluginVersion()),
-                ChatColors.color("&bAddon Community: &7Discord.gg/SqD3gg5SAU"),
+                ChatColors.color("&bAddon Discord: &7Discord.gg/SqD3gg5SAU"),
                 ChatColors.color("&bGithub: &7" + addon.getBugTrackerURL()),
                 ""
         };

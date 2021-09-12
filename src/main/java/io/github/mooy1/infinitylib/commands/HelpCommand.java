@@ -13,6 +13,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
 import me.mrCookieSlime.Slimefun.cscorelib2.chat.ChatColors;
+import io.github.mooy1.infinitylib.common.Translations;
+import io.github.thebusybiscuit.slimefun4.libraries.dough.common.ChatColors;
 
 final class HelpCommand extends AbstractCommand implements Listener {
 
@@ -22,15 +24,9 @@ final class HelpCommand extends AbstractCommand implements Listener {
     private final String header;
     private final String aliases;
 
-    HelpCommand(List<AbstractCommand> subCommands, PluginCommand command) {
-        super("help", "Displays this", false);
-        this.subCommands = subCommands;
-        this.help = "/help " + command.getName();
-        this.command = ChatColor.GOLD + "/" + command.getName() + " ";
-        this.aliases = ChatColors.color("&6Aliases: &e" + command.getAliases());
-        this.header = ChatColors.color("&7----------&b " + command.getPlugin().getName() + " Help &7----------");
-
-        Bukkit.getPluginManager().registerEvents(this, command.getPlugin());
+    HelpCommand(ParentCommand command) {
+        super("help", Translations.get("commands.help.description", "displays this"));
+        this.command = command;
     }
 
     @Override

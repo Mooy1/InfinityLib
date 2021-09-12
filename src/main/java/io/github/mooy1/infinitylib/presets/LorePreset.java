@@ -9,15 +9,18 @@ import lombok.experimental.UtilityClass;
 import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
 
 /**
- * Collection of utils for building item lore
+ * Utilities for making machine's lore
  *
  * @author Mooy1
  */
 @UtilityClass
 public final class LorePreset {
 
-    private static final DecimalFormat FORMAT = new DecimalFormat("###,###,###,###,###,###.#");
-    private static final double TPS = 20D / SlimefunPlugin.getTickerTask().getTickRate();
+    private static final DecimalFormat FORMAT = new DecimalFormat("###,###,###,###.#");
+    private static final double TPS = 20D / Slimefun.getTickerTask().getTickRate();
+    private static final String PREFIX = "&8\u21E8 &e\u26A1 &7";
+    private static final String BUFFER = " J " + Translations.get("machines.buffer", "Buffer");
+    private static final String SPEED = PREFIX + Translations.get("machines.speed", "Speed") + ": &b";
 
     @Nonnull
     public static String energyPerSecond(int energy) {
@@ -26,7 +29,7 @@ public final class LorePreset {
 
     @Nonnull
     public static String energyBuffer(int energy) {
-        return "&8\u21E8 &e\u26A1 &7" + format(energy) + " J Buffer";
+        return PREFIX + format(energy) + BUFFER;
     }
 
     @Nonnull
@@ -36,7 +39,7 @@ public final class LorePreset {
 
     @Nonnull
     public static String speed(int speed) {
-        return "&8\u21E8 &b\u26A1 &7Speed: &b" + speed + 'x';
+        return SPEED + speed + "x";
     }
 
     @Nonnull
