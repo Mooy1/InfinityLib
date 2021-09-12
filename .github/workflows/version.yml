@@ -1,0 +1,41 @@
+name: Check Version
+
+on:
+  pull_request:
+    branches:
+      - master
+    paths:
+      - 'src/**'
+      - 'pom.xml'
+
+jobs:
+  check:
+    if: github.repository_owner == 'Mooy1'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2.3.4
+        with:
+          fetch-depth: 0
+
+      - id: run
+        run: |
+          newVersion=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          echo New Version: $newVersion
+          echo ::set-output name=new-version::$newVersion
+
+          tag=$(git tag | sort -r --version-sort | head -n1)
+
+          if [ ! "$tag" ]; then
+            tag="0.0.0"
+          fi
+
+          echo Old Version: $tag
+          echo ::set-output name=old-version::$tag
+
+      - uses: madhead/semver-utils@1.4.3
+        id: comparison
+        with:
+          version: ${{ steps.run.outputs.new-version }}
+          compare-to: ${{ steps.run.outputs.old-version }}
+
+      - run: '[[ ">" == "${{ steps.comparison.outputs.comparison-result }}" ]]'

@@ -1,18 +1,18 @@
 package io.github.mooy1.infinitylib.commands;
 
 import java.util.List;
-import java.util.Objects;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import org.bukkit.command.CommandSender;
 
 import io.github.mooy1.infinitylib.common.Translations;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
-import io.github.thebusybiscuit.slimefun4.implementation.SlimefunPlugin;
-import me.mrCookieSlime.Slimefun.cscorelib2.chat.ChatColors;
+import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
+import io.github.thebusybiscuit.slimefun4.libraries.dough.common.ChatColors;
 
-final class InfoCommand extends AbstractCommand {
+@ParametersAreNonnullByDefault
+final class InfoCommand extends SubCommand {
 
     private final String[] message;
 
@@ -33,12 +33,12 @@ final class InfoCommand extends AbstractCommand {
     }
 
     @Override
-    public void onExecute(@Nonnull CommandSender sender, @Nonnull String[] args) {
-        sender.sendMessage(this.message);
+    protected void execute(CommandSender sender, String[] args) {
+        sender.sendMessage(message);
     }
 
     @Override
-    public void onTab(@Nonnull CommandSender sender, @Nonnull String[] args, @Nonnull List<String> tabs) {
+    protected void complete(CommandSender sender, String[] args, List<String> tabs) {
 
     }
 

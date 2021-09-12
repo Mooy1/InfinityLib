@@ -2,27 +2,18 @@ package io.github.mooy1.infinitylib.commands;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.PluginCommand;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
-import me.mrCookieSlime.Slimefun.cscorelib2.chat.ChatColors;
 import io.github.mooy1.infinitylib.common.Translations;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.common.ChatColors;
 
-final class HelpCommand extends AbstractCommand implements Listener {
+@ParametersAreNonnullByDefault
+final class HelpCommand extends SubCommand {
 
-    private final List<AbstractCommand> subCommands;
-    private final String command;
-    private final String help;
-    private final String header;
-    private final String aliases;
+    private final ParentCommand command;
 
     HelpCommand(ParentCommand command) {
         super("help", Translations.get("commands.help.description", "displays this"));
@@ -30,31 +21,19 @@ final class HelpCommand extends AbstractCommand implements Listener {
     }
 
     @Override
-    public void onExecute(@Nonnull CommandSender sender, @Nonnull String[] args) {
+    public void execute(CommandSender sender, String[] args) {
         sender.sendMessage("");
-        sender.sendMessage(this.header);
+        sender.sendMessage(ChatColors.color("&7----------&b /" + command.fullName() + " Help &7----------"));
         sender.sendMessage("");
-        for (AbstractCommand command : this.subCommands) {
-            if (command.hasPerm(sender)) {
-                sender.sendMessage(this.command + command.name + ChatColor.YELLOW + " - " + command.description);
-            }
+        for (SubCommand sub : command.available(sender)) {
+            sender.sendMessage("/" + sub.fullName() + ChatColor.YELLOW + " - " + sub.description());
         }
-        sender.sendMessage("");
-        sender.sendMessage(this.aliases);
         sender.sendMessage("");
     }
 
     @Override
-    public void onTab(@Nonnull CommandSender sender, @Nonnull String[] args, @Nonnull List<String> tabs) {
+    public void complete(CommandSender sender, String[] args, List<String> tabs) {
 
-    }
-
-    @EventHandler
-    public void onCommand(PlayerCommandPreprocessEvent e) {
-        if (e.getMessage().equalsIgnoreCase(this.help)) {
-            onExecute(e.getPlayer(), new String[0]);
-            e.setCancelled(true);
-        }
     }
 
 }

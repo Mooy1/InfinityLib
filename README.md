@@ -1,34 +1,85 @@
 # InfinityLib
-A shaded library for slimefun addons that adds a bunch of useful stuff.
+A shaded library for Slimefun addons which adds a bunch of useful classes and utilities.
 
-## How to Use
+[![Release](https://jitpack.io/v/Mooy1/InfinityLib.svg)](https://jitpack.io/#Mooy1/InfinityLib)
+
+# Packages & Features
+## Core
+<b>AbstractAddon</b>: An implementation of JavaPlugin
+which you will need to extend for many of the other features to work.
+It provides multiple utility methods and does some basic setup for you.
+
+<b>AddonConfig</b>: is an implementation of YamlConfiguration
+which makes comments available in the user's config
+and provides utility methods such as getting a value from within a range
+and removing unused/old keys from the user's config.
+
+## Common
+<b>CoolDowns</b>: A utility object for keeping track of cool downs of players/uuids
+
+<b>PersistentType</b>: Contains some PersistentDataTypes for
+ItemStack's, ItemStack Array's, Locations, and String Arrays.
+Also provides a constructor for PersistentDataType that uses lambda parameters.
+
+<b>Events</b>: Contains static utility methods for registering listeners, creating handlers, and calling events
+
+<b>Scheduler</b>: Contains static utility methods for running and repeating tasks
+
+## Commands
+<b>AddonCommand</b>: allows you to add commands easily with a parent-child structure,
+so you could have a command with a sub command which has a sub command.
+It also adds some default commands such as an addon info, aliases, and help command.
+
+## Groups
+<b>MultiGroup</b>: An implementation of ItemGroup which lets you organize your groups into SubGroups
+
+<b>SubGroup</b>: An ItemGroup that is hidden from the main page, for use in MultiGroup
+
+## Machines
+<b>MenuBlock</b>: A SlimefunItem with a menu, providing overridable methods for setting up the menu
+
+<b>TickingMenuBlock</b>: A MenuBlock with slimefun ticker
+
+<b>AbstractMachineBlock</b>: A TickingMenuBlock which implements EnergyNetComponent and provides a process method
+
+<b>MachineBlock</b>: An AbstractMachineBlock which makes it easy to create simple input-output machines
+
+## Future Additions
+<b>Translation Utility</b>: Some sort of easy way to create translatable strings for your addon's and infinitylibs's strings
+
+<b>InfinityLib Metrics</b>: Metrics to see which versions or even classes are being used
+
+# How to use
+
 First you need to add InfinityLib to the `dependencies` section in your `pom.xml`:
 
-```xml 
+```xml
 <dependency>
     <groupId>io.github.mooy1</groupId>
     <artifactId>InfinityLib</artifactId>
-    <version>SEVEN CHARACTER COMMIT HERE</version>
+    <version>SPECIFY VERSION HERE</version>
     <scope>compile</scope>
 </dependency>
 ```
 
 Then you need to relocate it into your own package so that it doesn't conflict with other addon's classes.
 
-Under your `build` section in your `pom.xml`, you should have the following:
+Under the `build` section in your `pom.xml`, you should have the following:
 
 ```xml
 <plugins>
     <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
-        <version>3.1.0</version>
+        <version>3.2.4</version>
         <configuration>
+            <!-- This will exclude any unused classes from libraries to reduce file size, not required -->
+            <minimizeJar>true</minimizeJar>
             <relocations>
-                <!-- This is the relocation, make sure to replace the package name -->
+                <!-- This is the relocation, make sure to replace the package name, REQUIRED -->
                 <relocation>
                     <pattern>io.github.mooy1.infinitylib</pattern>
-                    <shadedPattern>YOUR.MAIN.PACKAGE.NAME.infinitylib</shadedPattern>
+                    <shadedPattern>YOUR.MAIN.PACKAGE.HERE.infinitylib</shadedPattern>
                 </relocation>
             </relocations>
             <filters>
@@ -36,13 +87,6 @@ Under your `build` section in your `pom.xml`, you should have the following:
                     <artifact>*:*</artifact>
                     <excludes>
                         <exclude>META-INF/*</exclude>
-                    </excludes>
-                </filter>
-                <filter>
-                    <artifact>io.github.mooy1:InfinityLib</artifact>
-                    <excludes>
-                        <!-- Add unneeded packages here -->
-                        <exclude>**/infinitylib/EXAMPLE/**</exclude>
                     </excludes>
                 </filter>
             </filters>
@@ -59,52 +103,7 @@ Under your `build` section in your `pom.xml`, you should have the following:
 </plugins>
 ```
 
-# AbstractAddon
-You should extend `AbstractAddon` in your main class.
-
-It adds multiple utility methods as well as implementing auto updating, bstats, and some boilerplate configuration stuff.
-
-You should have a `private static` field for the instance of your plugin.
-
-Your instance field should have a short `public static` getter, something like `inst()` to access the utility methods from anywhere
-
-# Packages
-
-## BStats
-BStats is shaded into this library, so no need to shade it yourself.
-
-## Commands
-The `CommandUtils` class allows you to easily add commands and tab completion for them.
-It also adds a help and info command for you.
-
-Command functionality is created with the class `AbstractCommand`.
-
-## Configuration
-The `AddonConfig` class improves on some other config implementations by allowing for comments to be saved.
-It can only be used for configs with a default config in your `resources` folder.
-
-## Items
-`StackUtils` contains many static utility methods for modifying and reading `ItemStack`s.
-
-## Persistence
-Implementation of a few new `PersistantDataType`s including `Block`s, `ItemStack`s, and `ItemStack` Arrays.
-
-`PersistenceUtils` contains all the instances.
-
-## Players
-Utility classes relating to players.
-
-`CoolDownMap` is an implementation of a `HashMap<UUID, Long>` which makes it easier to have cooldowns on items.
-
-## Slimefun
-Contains a few SlimefunItem implementations to make it easier to create blocks with inventories and tickers.
-
-## Presets
-Utility methods for making lore and menus.
-
-## Categories
-Slimefun Category classes like a better `MultiCategory` implementation.
-
-# Recipes
-Contains `RecipeMap`, `RecipeOutput`, and a `ShapelessRecipe` and `ShapedRecipe` to be used in the `RecipeMap`.
-`RecipeMap` is a fast way to do recipe lookup rather than looping and checking every recipe.
+Then change your main plugin class to extend `AbstractAddon` and implement the constructor.
+You will need to use `enable()` and `disable()` instead of `onEnable()` and `onDisable`.
+Make sure you don't call `super.onEnable/Disable`.
+Your updater and config setup is now handled, make sure to test that it's working though!

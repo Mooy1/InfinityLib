@@ -1,0 +1,66 @@
+name: Create Release
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'src/**'
+      - 'pom.xml'
+
+jobs:
+  release:
+    if: github.repository_owner == 'Mooy1'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2.3.4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-java@v2.3.0
+        with:
+          distribution: adopt
+          java-version: '8'
+          cache: 'maven'
+
+      - run: mvn package --file pom.xml
+
+      - id: run
+        run: |
+          newVersion=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          echo New Version: $newVersion
+          echo ::set-output name=new-version::$newVersion
+
+          # Modified From: https://github.com/Bullrich/generate-release-changelog
+          tag=$(git tag | sort -r --version-sort | head -n1)
+
+          if [ "$tag" ]; then
+            changelog=$(git log --oneline --no-decorate $tag..HEAD)
+          else
+            changelog=$(git log --oneline --no-decorate)
+            tag="0.0.0"
+          fi
+
+          echo Old Version: $tag
+          echo ::set-output name=old-version::$tag
+
+          changelog="${changelog//'%'/'%25'}"
+          changelog="${changelog//$'\n'/'%0A' - }"
+          changelog=" - ${changelog//$'\r'/'%0D'}"
+          echo "$changelog"
+          echo ::set-output name=changelog::$changelog
+
+      - uses: madhead/semver-utils@1.4.3
+        id: comparison
+        with:
+          version: ${{ steps.run.outputs.new-version }}
+          compare-to: ${{ steps.run.outputs.old-version }}
+
+      - uses: actions/create-release@v1.1.4
+        if: steps.comparison.outputs.comparison-result == '>'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.run.outputs.new-version }}
+          release_name: Release v${{ steps.run.outputs.new-version }}
+          body: ${{ steps.run.outputs.changelog }}

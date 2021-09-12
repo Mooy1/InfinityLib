@@ -11,6 +11,7 @@ import io.github.mooy1.infinitylib.common.Translations;
 
 @ParametersAreNonnullByDefault
 final class AliasesCommand extends SubCommand {
+
     private final String message;
 
     AliasesCommand(PluginCommand command) {
@@ -28,6 +29,5 @@ final class AliasesCommand extends SubCommand {
     protected void complete(CommandSender sender, String[] args, List<String> completions) {
 
     }
-
 
 }
