@@ -30,7 +30,9 @@ public final class StackUtils {
         else if (item.hasItemMeta()) {
             return getId(item.getItemMeta());
         }
-        else return null;
+        else {
+            return null;
+        }
     }
 
     @Nullable
@@ -47,7 +49,9 @@ public final class StackUtils {
             String id = getId(item.getItemMeta());
             return id == null ? item.getType().name() : id;
         }
-        else return item.getType().name();
+        else {
+            return item.getType().name();
+        }
     }
 
     @Nullable
@@ -87,20 +91,32 @@ public final class StackUtils {
                                 return secondMeta.hasDisplayName()
                                         && firstMeta.getDisplayName().equals(secondMeta.getDisplayName());
                             }
-                            else return !secondMeta.hasDisplayName();
+                            else {
+                                return !secondMeta.hasDisplayName();
+                            }
                         }
-                        else return false;
+                        else {
+                            return false;
+                        }
                     }
-                    else return false;
+                    else {
+                        return false;
+                    }
                 }
-                else return firstId.equals(getId(secondMeta));
+                else {
+                    return firstId.equals(getId(secondMeta));
+                }
             }
-            else return false;
+            else {
+                return false;
+            }
         }
         else if (second.hasItemMeta()) {
             return false;
         }
-        else return first.getType() == second.getType();
+        else {
+            return first.getType() == second.getType();
+        }
     }
 
 }
