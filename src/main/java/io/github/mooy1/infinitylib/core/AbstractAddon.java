@@ -143,17 +143,11 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
         // Set static instance
         instance = this;
 
+        // Create Config
+        config = new AddonConfig("config.yml");
+
         // This is used to mark when the config is broken, so we should always auto update
         boolean brokenConfig = false;
-
-        // Create Config
-        try {
-            config = new AddonConfig("config.yml");
-        }
-        catch (RuntimeException e) {
-            brokenConfig = true;
-            e.printStackTrace();
-        }
 
         // Validate autoUpdateKey
         if (autoUpdateKey == null) {
@@ -164,7 +158,7 @@ public abstract class AbstractAddon extends JavaPlugin implements SlimefunAddon 
             brokenConfig = true;
             handle(new IllegalStateException("Empty auto update key!"));
         }
-        else if (!brokenConfig && !config.getDefaults().contains(autoUpdateKey, true)) {
+        else if (!config.getDefaults().contains(autoUpdateKey, true)) {
             brokenConfig = true;
             handle(new IllegalStateException("Auto update key missing from the default config!"));
         }

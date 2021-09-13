@@ -7,7 +7,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
-import io.github.mooy1.infinitylib.common.Translations;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.common.ChatColors;
 
 @ParametersAreNonnullByDefault
@@ -16,7 +15,7 @@ final class HelpCommand extends SubCommand {
     private final ParentCommand command;
 
     HelpCommand(ParentCommand command) {
-        super("help", Translations.get("commands.help.description", "displays this"));
+        super("help", "displays this");
         this.command = command;
     }
 

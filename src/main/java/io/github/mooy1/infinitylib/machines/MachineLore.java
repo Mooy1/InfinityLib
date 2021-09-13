@@ -6,7 +6,6 @@ import javax.annotation.Nonnull;
 
 import lombok.experimental.UtilityClass;
 
-import io.github.mooy1.infinitylib.common.Translations;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 
 /**
@@ -20,8 +19,8 @@ public final class MachineLore {
     private static final DecimalFormat FORMAT = new DecimalFormat("###,###,###,###.#");
     private static final double TPS = 20D / Slimefun.getTickerTask().getTickRate();
     private static final String PREFIX = "&8\u21E8 &e\u26A1 &7";
-    private static final String BUFFER = " J " + Translations.get("machines.buffer", "Buffer");
-    private static final String SPEED = PREFIX + Translations.get("machines.speed", "Speed") + ": &b";
+    private static final String SPEED = PREFIX + "Speed: &b";
+    private static final String BUFFER = " J Buffer";
 
     @Nonnull
     public static String energyPerSecond(int energy) {

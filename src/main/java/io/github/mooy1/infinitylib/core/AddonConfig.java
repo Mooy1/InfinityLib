@@ -28,31 +28,65 @@ public final class AddonConfig extends YamlConfiguration {
     private final Map<String, String> comments = new HashMap<>();
     private final File file;
 
+    /**
+     * Loads a config from within the addons' data folder, and uses the addon's defaults
+     */
     public AddonConfig(String path) {
-        AbstractAddon addon = AbstractAddon.instance();
-        file = new File(addon.getDataFolder(), path);
-        super.defaults = defaults;
-        loadDefaults(addon, path);
+        this(new File(AbstractAddon.instance().getDataFolder(), path));
+
+        AbstractAddon instance = AbstractAddon.instance();
+        try (InputStream stream = instance.getResource(path)) {
+            if (stream != null) {
+                String def = readDefaults(stream);
+                defaults.loadFromString(def);
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        save();
     }
 
+    /**
+     * Loads a config from the given file with no defaults
+     */
+    public AddonConfig(File file) {
+        super.defaults = defaults;
+        this.file = file;
+        reload();
+    }
+
+    /**
+     * Gets an integer within the given range, inclusive
+     */
     public int getInt(String path, int min, int max) {
         int val = getInt(path);
-        if (val < min || val > max) {
-            set(path, val = getDefaults().getInt(path));
+        if (val < min) {
+            set(path, val = min);
         }
-        return val;
-    }
-
-    public double getDouble(String path, double min, double max) {
-        double val = getDouble(path);
-        if (val < min || val > max) {
-            set(path, val = getDefaults().getDouble(path));
+        else if (val > max) {
+            set(path, val = max);
         }
         return val;
     }
 
     /**
-     * Removes unused/old keys from the users config
+     * Gets a double within the given range, inclusive
+     */
+    public double getDouble(String path, double min, double max) {
+        double val = getDouble(path);
+        if (val < min) {
+            set(path, val = min);
+        }
+        else if (val > max) {
+            set(path, val = max);
+        }
+        return val;
+    }
+
+    /**
+     * Removes keys from the config which are not present in the defaults. This will clean out old keys.
      */
     public void removeUnusedKeys() {
         for (String key : getKeys(true)) {
@@ -87,7 +121,6 @@ public final class AddonConfig extends YamlConfiguration {
                 e.printStackTrace();
             }
         }
-        save();
     }
 
     @Nonnull
@@ -99,12 +132,6 @@ public final class AddonConfig extends YamlConfiguration {
     @Nullable
     String getComment(String key) {
         return comments.get(key);
-    }
-
-    @Nonnull
-    @Override
-    protected String buildHeader() {
-        return "";
     }
 
     @Nonnull
@@ -136,25 +163,6 @@ public final class AddonConfig extends YamlConfiguration {
         }
     }
 
-    private void loadDefaults(AbstractAddon addon, String name) {
-        InputStream stream = addon.getResource(name);
-
-        if (stream == null) {
-            throw new IllegalStateException("No default config for " + name + "!");
-        }
-        else {
-            try {
-                String def = readDefaults(stream);
-                defaults.loadFromString(def);
-            }
-            catch (Throwable e) {
-                e.printStackTrace();
-            }
-        }
-
-        reload();
-    }
-
     private String readDefaults(@Nonnull InputStream inputStream) throws IOException {
         BufferedReader input = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
         StringBuilder yamlBuilder = new StringBuilder();
@@ -166,36 +174,28 @@ public final class AddonConfig extends YamlConfiguration {
             yamlBuilder.append(line).append('\n');
 
             if (StringUtils.isBlank(line)) {
-                // Skip
                 continue;
             }
 
             if (line.contains("#")) {
-                // Add to comment of next path
                 commentBuilder.append(line).append('\n');
                 continue;
             }
 
             if (line.contains(":")) {
-                // Its part of a path
                 pathBuilder.append(line);
-            }
-            else {
-                continue;
-            }
 
-            if (commentBuilder.length() != 1) {
-                // Add the comment to the path and clear
-                comments.put(pathBuilder.build(), commentBuilder.toString());
-                commentBuilder = new StringBuilder("\n");
-            }
-            else if (pathBuilder.inMainSection()) {
-                // The main section should always have spaces between keys
-                comments.put(pathBuilder.build(), "\n");
+                if (commentBuilder.length() != 1) {
+                    // Add the comment to the path and clear
+                    comments.put(pathBuilder.build(), commentBuilder.toString());
+                    commentBuilder = new StringBuilder("\n");
+                }
+                else if (pathBuilder.inMainSection()) {
+                    // The main section should always have spaces between keys
+                    comments.put(pathBuilder.build(), "\n");
+                }
             }
         }
-
-        input.close();
 
         return yamlBuilder.toString();
     }

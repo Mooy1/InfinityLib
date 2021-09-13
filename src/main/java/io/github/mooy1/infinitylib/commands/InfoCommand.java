@@ -6,7 +6,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import org.bukkit.command.CommandSender;
 
-import io.github.mooy1.infinitylib.common.Translations;
 import io.github.thebusybiscuit.slimefun4.api.SlimefunAddon;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.common.ChatColors;
@@ -17,8 +16,7 @@ final class InfoCommand extends SubCommand {
     private final String[] message;
 
     InfoCommand(SlimefunAddon addon) {
-        super("info", Translations.get("commands.info.description",
-                "Gives versions, github link, and discord invites"));
+        super("info", "Gives versions, github link, and discord invites");
         Slimefun slimefun = Slimefun.instance();
         message = new String[] {
                 "",
