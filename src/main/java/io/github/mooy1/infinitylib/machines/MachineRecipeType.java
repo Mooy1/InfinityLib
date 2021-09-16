@@ -8,6 +8,7 @@ import java.util.function.BiConsumer;
 
 import lombok.Getter;
 
+import org.apache.commons.lang.Validate;
 import org.bukkit.inventory.ItemStack;
 
 import io.github.mooy1.infinitylib.core.AbstractAddon;
@@ -25,6 +26,7 @@ public final class MachineRecipeType extends RecipeType {
 
     @Override
     public void register(ItemStack[] recipe, ItemStack result) {
+        if (recipe == null || result == null) return;
         callbacks.forEach(c -> c.accept(recipe, result));
         recipes.put(recipe, result);
     }
