@@ -151,7 +151,7 @@ public final class MachineBlock extends AbstractMachineBlock {
             //Get the Item in the Slot and Check if it's an Actual Item
             ItemStack itemStack = menu.getItemInSlot(slotNumber);
             if (itemStack == null || itemStack.getType() == Material.AIR) {
-                freeSpace += 64;
+                freeSpace += toWrap.getMaxStackSize();
                 continue;
             }
 
