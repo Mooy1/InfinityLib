@@ -161,7 +161,7 @@ public final class MachineBlock extends AbstractMachineBlock {
             }
 
             //Add the Amount of FreeSpace that is Left in the Stack
-            freeSpace += 64 - itemStack.getAmount();
+            freeSpace += itemStack.getMaxStackSize() - itemStack.getAmount();
         }
 
         return freeSpace;
