@@ -11,6 +11,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import lombok.Setter;
 
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 
@@ -19,6 +20,7 @@ import io.github.mooy1.infinitylib.core.AbstractAddon;
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
 import io.github.thebusybiscuit.slimefun4.api.recipes.RecipeType;
+import io.github.thebusybiscuit.slimefun4.libraries.dough.items.ItemUtils;
 import io.github.thebusybiscuit.slimefun4.utils.ChestMenuUtils;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenuPreset;
@@ -99,26 +101,26 @@ public final class MachineBlock extends AbstractMachineBlock {
         }
 
         MachineBlockRecipe recipe = getOutput(input);
+
         if (recipe != null) {
+            if (getFreeSpace(layout.outputSlots(), recipe.output.clone(), menu) < recipe.output.getAmount()) {
+                displayIfViewer(menu, NO_ROOM_ITEM);
+                return false;
+            }
+
             ItemStack rem = menu.pushItem(recipe.output.clone(), layout.outputSlots());
-            if (rem == null || rem.getAmount() < recipe.output.getAmount()) {
+            if (rem == null) {
                 recipe.consume();
-                if (menu.hasViewer()) {
-                    menu.replaceExistingItem(getStatusSlot(), PROCESSING_ITEM);
-                }
+                displayIfViewer(menu, PROCESSING_ITEM);
                 return true;
             }
             else {
-                if (menu.hasViewer()) {
-                    menu.replaceExistingItem(getStatusSlot(), NO_ROOM_ITEM);
-                }
+                displayIfViewer(menu, NO_ROOM_ITEM);
                 return false;
             }
         }
 
-        if (menu.hasViewer()) {
-            menu.replaceExistingItem(getStatusSlot(), IDLE_ITEM);
-        }
+        displayIfViewer(menu, IDLE_ITEM);
         return false;
     }
 
@@ -141,6 +143,34 @@ public final class MachineBlock extends AbstractMachineBlock {
             }
         }
         return null;
+    }
+
+    int getFreeSpace(int[] slots, ItemStack toWrap, BlockMenu menu) {
+        int freeSpace = 0;
+        for (int slotNumber : slots) {
+            //Get the Item in the Slot and Check if it's an Actual Item
+            ItemStack itemStack = menu.getItemInSlot(slotNumber);
+            if (itemStack == null || itemStack.getType() == Material.AIR) {
+                freeSpace += toWrap.getMaxStackSize();
+                continue;
+            }
+
+            //If the Items can't stack then continue to the next Slot
+            if (!ItemUtils.canStack(toWrap, itemStack)) {
+                continue;
+            }
+
+            //Add the Amount of FreeSpace that is Left in the Stack
+            freeSpace += itemStack.getMaxStackSize() - itemStack.getAmount();
+        }
+
+        return freeSpace;
+    }
+
+    void displayIfViewer(@Nonnull BlockMenu menu, @Nonnull ItemStack toDisplay) {
+        if (menu.hasViewer()) {
+            menu.replaceExistingItem(getStatusSlot(), toDisplay);
+        }
     }
 
     @Override
