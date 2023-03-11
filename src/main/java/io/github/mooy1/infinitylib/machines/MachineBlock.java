@@ -153,6 +153,7 @@ public final class MachineBlock extends AbstractMachineBlock {
      * Returns an unmodifiable version of {@link MachineBlock#recipes}
      * @return {@link List}
      */
+    @Nonnull
     public List<MachineBlockRecipe> getRecipes() {
         return Collections.unmodifiableList(this.recipes);
     }

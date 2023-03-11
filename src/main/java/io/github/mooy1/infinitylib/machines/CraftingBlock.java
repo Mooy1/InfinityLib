@@ -132,6 +132,7 @@ public class CraftingBlock extends MenuBlock {
      * Returns an unmodifiable version of {@link CraftingBlock#recipes}
      * @return {@link List}
      */
+    @Nonnull
     public List<CraftingBlockRecipe> getRecipes() {
         return Collections.unmodifiableList(this.recipes);
     }
