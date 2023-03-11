@@ -1,6 +1,7 @@
 package io.github.mooy1.infinitylib.machines;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Nonnull;
@@ -127,4 +128,11 @@ public class CraftingBlock extends MenuBlock {
         return layout.outputSlots();
     }
 
+    /**
+     * Returns an unmodifiable version of {@link CraftingBlock#recipes}
+     * @return {@link List}
+     */
+    public List<CraftingBlockRecipe> getRecipes() {
+        return Collections.unmodifiableList(this.recipes);
+    }
 }

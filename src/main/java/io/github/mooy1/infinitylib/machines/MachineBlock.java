@@ -1,6 +1,7 @@
 package io.github.mooy1.infinitylib.machines;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -148,4 +149,11 @@ public final class MachineBlock extends AbstractMachineBlock {
         return layout.statusSlot();
     }
 
+    /**
+     * Returns an unmodifiable version of {@link MachineBlock#recipes}
+     * @return {@link List}
+     */
+    public List<MachineBlockRecipe> getRecipes() {
+        return Collections.unmodifiableList(this.recipes);
+    }
 }
