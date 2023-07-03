@@ -3,7 +3,6 @@ package io.github.mooy1.infinitylib.machines;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.inventory.ItemStack;
 
 import io.github.mooy1.infinitylib.common.StackUtils;
@@ -31,7 +30,7 @@ final class MachineBlockRecipe {
         }
 
         this.strings = strings.keySet().toArray(new String[0]);
-        this.amounts = ArrayUtils.toPrimitive(strings.values().toArray(new Integer[0]));
+        this.amounts = strings.values().stream().mapToInt(i -> i).toArray();
     }
 
     boolean check(Map<String, MachineInput> map) {

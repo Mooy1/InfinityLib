@@ -13,7 +13,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import org.apache.commons.lang.StringUtils;
+import io.github.mooy1.infinitylib.common.StringUtils;
+
 import org.bukkit.configuration.file.YamlConfiguration;
 
 /**
