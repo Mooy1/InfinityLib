@@ -43,6 +43,10 @@ public abstract class AbstractMachineBlock extends TickingMenuBlock implements E
 
     protected abstract int getStatusSlot();
 
+    public final int getEnergyPerTick() {
+        return energyPerTick;
+    }
+
     @Override
     public final int getCapacity() {
         return energyCapacity;
